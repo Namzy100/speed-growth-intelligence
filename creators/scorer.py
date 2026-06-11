@@ -41,23 +41,30 @@ class CreatorScorer:
                 name (str), platform (str), followers (int),
                 engagement_rate (float 0–1), engagement_quality (int 1–10),
                 crypto_content_pct (float 0–1), fintech_content_pct (float 0–1),
-                sponsorship_count (int), niche_tags (list[str]).
+                sponsorship_count (int), niche_tags (list[str]),
+                purchase_intent_signals (float 0–1, default 0.5).
 
         Returns:
             Dict with:
-                scores        — dict of 5 dimension scores, each float /20
-                composite_score — float /100
-                segment_tag   — "remittance" | "iGaming" | "crypto-curious" | "general"
-                reasoning     — plain-English summary of the score
+                scores               — dict of dimension scores, each float /20
+                deposit_relevance_score — float /20; likelihood of USD deposit completion
+                composite_score      — float /100 (audience_fit + engagement +
+                                       content_alignment + deposit_relevance + sponsorship)
+                segment_tag          — "remittance" | "iGaming" | "crypto-curious" | "general"
+                reasoning            — plain-English summary of the score
         """
         audience_fit, segment_tag, audience_notes = self._score_audience_fit(creator)
         engagement, engagement_notes = self._score_engagement_quality(creator)
         content, content_notes = self._score_content_alignment(creator)
         acquisition, acq_notes = self._score_acquisition_potential(creator, audience_fit)
         sponsorship, sponsor_notes = self._score_sponsorship_history(creator)
+        deposit_rel, deposit_notes = self._score_deposit_relevance(creator, audience_fit, content)
 
+        # acquisition_potential is retained in scores for reference but excluded from
+        # the composite; deposit_relevance_score fills that 20-point slot because
+        # USD deposits — not installs — are Speed's primary conversion goal.
         composite = round(
-            audience_fit + engagement + content + acquisition + sponsorship, 1
+            audience_fit + engagement + content + deposit_rel + sponsorship, 1
         )
 
         return {
@@ -70,12 +77,13 @@ class CreatorScorer:
                 "acquisition_potential": round(acquisition, 1),
                 "sponsorship_history": round(sponsorship, 1),
             },
+            "deposit_relevance_score": round(deposit_rel, 1),
             "composite_score": composite,
             "segment_tag": segment_tag,
             "reasoning": self._build_reasoning(
                 creator, composite, segment_tag,
                 audience_notes, engagement_notes,
-                content_notes, acq_notes, sponsor_notes,
+                content_notes, acq_notes, sponsor_notes, deposit_notes,
             ),
         }
 
@@ -164,6 +172,29 @@ class CreatorScorer:
         score = min(math.log2(count + 1) / math.log2(21) * 20, 20.0)
         return score, f"{count} brand deal(s)"
 
+    def _score_deposit_relevance(
+        self, creator: dict, audience_fit_score: float, content_score: float
+    ) -> tuple[float, str]:
+        """Likelihood that this creator's audience will complete a USD deposit (0–20).
+
+        Combines three signals:
+        - purchase_intent_signals (0–1): how often the creator's content discusses
+          actually buying/using crypto vs. just talking about it abstractly.
+          Defaults to 0.5 if not provided.
+        - content_alignment: understanding of crypto/fintech predicts KYC completion.
+        - audience_fit: segment match predicts deposit motivation.
+        """
+        intent = float(creator.get("purchase_intent_signals", 0.5))
+        intent = max(0.0, min(1.0, intent))  # clamp to valid range
+
+        fit_ratio = audience_fit_score / 20.0
+        content_ratio = content_score / 20.0
+
+        # Intent is the strongest deposit predictor (40%); content second (35%); fit third (25%).
+        raw = intent * 0.40 + content_ratio * 0.35 + fit_ratio * 0.25
+        score = round(raw * 20, 1)
+        return score, f"intent={intent:.0%}, content={content_ratio:.0%}, fit={fit_ratio:.0%}"
+
     # ------------------------------------------------------------------
 
     def _build_reasoning(
@@ -176,6 +207,7 @@ class CreatorScorer:
         content_notes: str,
         acq_notes: str,
         sponsor_notes: str,
+        deposit_notes: str,
     ) -> str:
         tier = "strong" if composite >= 75 else "moderate" if composite >= 50 else "weak"
         return (
@@ -184,7 +216,8 @@ class CreatorScorer:
             f"Audience fit: {audience_notes}. "
             f"Engagement: {engagement_notes}. "
             f"Content: {content_notes}. "
-            f"Reach: {acq_notes}. "
+            f"Deposit relevance: {deposit_notes}. "
+            f"Reach (ref): {acq_notes}. "
             f"Sponsorships: {sponsor_notes}."
         )
 
@@ -205,6 +238,7 @@ if __name__ == "__main__":
             "fintech_content_pct": 0.15,
             "sponsorship_count": 8,
             "niche_tags": ["bitcoin", "crypto", "lightning", "personal finance", "investing"],
+            "purchase_intent_signals": 0.75,  # regularly covers buying/stacking BTC
         },
         {
             "name": "DiasporaDaily",
@@ -216,6 +250,7 @@ if __name__ == "__main__":
             "fintech_content_pct": 0.40,
             "sponsorship_count": 3,
             "niche_tags": ["remittance", "expats", "send money", "diaspora"],
+            "purchase_intent_signals": 0.60,  # audience already transacts; some crypto crossover
         },
         {
             "name": "BetKing247",
@@ -227,6 +262,7 @@ if __name__ == "__main__":
             "fintech_content_pct": 0.05,
             "sponsorship_count": 15,
             "niche_tags": ["igaming", "sports betting", "casino", "poker"],
+            "purchase_intent_signals": 0.35,  # gambling focus; low crypto buying intent
         },
     ]
 
@@ -238,8 +274,10 @@ if __name__ == "__main__":
         print(f"Creator  : {result['name']} ({result['platform']})")
         print(f"Segment  : {result['segment_tag']}")
         print(f"Composite: {result['composite_score']} / 100")
-        print("Breakdown:")
+        print(f"Deposit relevance: {result['deposit_relevance_score']} / 20")
+        print("Breakdown (scores dict):")
         for dim, val in result["scores"].items():
             bar = "█" * int(val / 20 * 20)
-            print(f"  {dim:<26} {val:>4} / 20  {bar}")
+            note = " (ref only)" if dim == "acquisition_potential" else ""
+            print(f"  {dim:<26} {val:>4} / 20  {bar}{note}")
         print(f"\n{result['reasoning']}")
