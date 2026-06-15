@@ -364,6 +364,87 @@ def run_analysis(
 
 
 # ------------------------------------------------------------------
+# Combined cross-competitor summary
+# ------------------------------------------------------------------
+
+def write_combined_summary(competitor_names: list[str]) -> Path:
+    """Read saved analyses and write a cross-competitor markdown brief.
+
+    Reads data/processed/competitor_analysis_{slug}.json for each name,
+    calls Claude to compare patterns, and saves the result to
+    data/processed/competitor_analysis_combined.md.
+
+    Args:
+        competitor_names: List of competitor names whose JSON files already exist.
+
+    Returns:
+        Path to the saved markdown file.
+    """
+    analyses: dict[str, dict] = {}
+    for name in competitor_names:
+        slug = name.lower().replace(" ", "_")
+        path = _DATA_DIR / f"competitor_analysis_{slug}.json"
+        if not path.exists():
+            raise FileNotFoundError(
+                f"No saved analysis for '{name}'. Run run_analysis('{name}') first."
+            )
+        data = json.loads(path.read_text(encoding="utf-8"))
+        analyses[name] = data.get("messaging_analysis", {})
+
+    competitor_blocks = "\n\n".join(
+        f"### {name}\n{json.dumps(ma, indent=2)}"
+        for name, ma in analyses.items()
+    )
+
+    fetched_at = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+    prompt = f"""\
+You are a creative strategist for Speed Wallet, a Bitcoin Lightning payment app.
+Below are messaging analyses from Meta Ad Library for {len(analyses)} competitors: \
+{', '.join(analyses.keys())}.
+
+Write a strategic brief in GitHub-flavoured Markdown. Use exactly this structure:
+
+# Competitor Ad Analysis — Combined Summary
+*{fetched_at}*
+
+## Patterns common across all competitors
+[Paragraph covering messaging themes, formats, and tactics all three share]
+
+## What makes each competitor distinct
+[One paragraph per competitor — their unique angle, tone, or creative approach]
+
+## The biggest gap Speed can exploit
+[One focused paragraph on the most defensible, unclaimed messaging angle \
+across all three. Be specific — name the angle, why it's unclaimed, and how \
+Speed's product (zero fees, Lightning, Speed Stacks, remittance/iGaming/crypto-curious \
+segments) can own it.]
+
+Keep it under 600 words total. Write for a marketing strategist, not a data scientist.
+
+--- COMPETITOR ANALYSES ---
+{competitor_blocks}
+--- END ---"""
+
+    api_key = os.getenv("ANTHROPIC_API_KEY")
+    if not api_key:
+        raise EnvironmentError("ANTHROPIC_API_KEY must be set in .env")
+
+    client = Anthropic(api_key=api_key)
+    response = client.messages.create(
+        model="claude-sonnet-4-5",
+        max_tokens=1200,
+        messages=[{"role": "user", "content": prompt}],
+    )
+    markdown = response.content[0].text.strip()
+
+    _DATA_DIR.mkdir(parents=True, exist_ok=True)
+    out_path = _DATA_DIR / "competitor_analysis_combined.md"
+    out_path.write_text(markdown, encoding="utf-8")
+    return out_path
+
+
+# ------------------------------------------------------------------
 # Quick test
 # ------------------------------------------------------------------
 

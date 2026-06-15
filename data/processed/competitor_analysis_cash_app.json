@@ -1,0 +1,755 @@
+{
+  "competitor": "Cash App",
+  "platform": "all",
+  "fetched_at": "2026-06-11T21:02:07.929857+00:00",
+  "total_ads": 48,
+  "ads": [
+    {
+      "body": "Watch now to gain exclusive insights from Meta leadership as they unveil business messaging innovations across WhatsApp, Instagram and Messenger and share their vision for the future of connection, including strategies for harnessing AI to strengthen customer relationships and help drive business success. Whether you're looking to fuel marketing performance through deeper customer relationships and more valuable interactions, or optimize your customer communication strategy and streamline operations, this event is designed to help you achieve your goals.",
+      "title": "Meta Conversations 2025: Meta's Premier Business Messaging Event",
+      "cta": "",
+      "format": "video",
+      "days_running": 3,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK"
+      ],
+      "page_name": "Meta for Developers"
+    },
+    {
+      "body": "Earn up to 10% Cash Back with a single click! Install the Rakuten App to start applying coupons and promo codes to your purchases today. Earn up to 10% Cash Back with a single click! Install the Rakuten App to start applying coupons and promo codes to your purchases today. Earn up to 10% Cash Back with a single click! Install the Rakuten App to start applying coupons and promo codes to your purchases today. Earn up to 10% Cash Back with a single click! Install the Rakuten App to start applying coupons and promo codes to your purchases today. Earn up to 10% Cash Back with a single click! Install the Rakuten App to start applying coupons and promo codes to your purchases today. Earn up to 10% Cash Back with a single click! Install the Rakuten App to start applying coupons and promo codes to your purchases today. Earn up to 10% Cash Back with a single click! Install the Rakuten App to start applying coupons and promo codes to your purchases today.",
+      "title": "Get {{product.custom_label_1}} at {{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 498,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Rakuten"
+    },
+    {
+      "body": "Your purchases could earn up to 10% Cash Back! Install the Rakuten App to apply coupons and promo codes, and earn Cash Back with just one click. Your purchases could earn up to 10% Cash Back! Install the Rakuten App to apply coupons and promo codes, and earn Cash Back with just one click. Your purchases could earn up to 10% Cash Back! Install the Rakuten App to apply coupons and promo codes, and earn Cash Back with just one click. Your purchases could earn up to 10% Cash Back! Install the Rakuten App to apply coupons and promo codes, and earn Cash Back with just one click. Your purchases could earn up to 10% Cash Back! Install the Rakuten App to apply coupons and promo codes, and earn Cash Back with just one click. Your purchases could earn up to 10% Cash Back! Install the Rakuten App to apply coupons and promo codes, and earn Cash Back with just one click. Your purchases could earn up to 10% Cash Back! Install the Rakuten App to apply coupons and promo codes, and earn Cash Back with just one click.",
+      "title": "Get {{product.custom_label_1}} at {{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 829,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Rakuten"
+    },
+    {
+      "body": "{{product.brand}} Take control of your $$$ 🤑 Download Rocket Money Take control of your $$$ 🤑 Download Rocket Money Take control of your $$$ 🤑 Download Rocket Money",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 41,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM"
+      ],
+      "page_name": "Rocket Money"
+    },
+    {
+      "body": "Track Your Steps, Achieve Your Goals! \nStart your fitness journey with our easy-to-use Pedometer App. Count your steps, set daily goals, and stay motivated!",
+      "title": "Download Now and Start Stepping👉",
+      "cta": "Install now",
+      "format": "video",
+      "days_running": 219,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Tour Soft"
+    },
+    {
+      "body": "Practice english everyday with basic questions and challenges from this app. Download and Try it now viết dưới dạng code cho dễ copy",
+      "title": "",
+      "cta": "Install now",
+      "format": "video",
+      "days_running": 88,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "LunaSpeak - The Speaking AI Coach"
+    },
+    {
+      "body": "{{product.brand}} Go a little over? Cash App's got you covered — up to $200 at checkout. No stress. Go a little over? Cash App's got you covered — up to $200 at checkout. No stress.",
+      "title": "",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 27,
+      "is_active": true,
+      "platforms": [
+        "INSTAGRAM"
+      ],
+      "page_name": "Cash App"
+    },
+    {
+      "body": "{{product.brand}} Borrow up to $500 through Cash App. No credit check. No stress. For more little wins. Borrow up to $500 through Cash App. No credit check. No stress. For more little wins.",
+      "title": "",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 27,
+      "is_active": true,
+      "platforms": [
+        "INSTAGRAM"
+      ],
+      "page_name": "Cash App"
+    },
+    {
+      "body": "Dream OOTD? Bilhin mo na! 🛒\n\nPwede nang installment ang online payments when you pay with GGives. ZERO downpayment pa ‘yan!\n\nKaya today with GGives! 💙\n\nSubject to eligibility. Terms and conditions apply.\nGGIves is powered by Fuse Lending, Inc.\nGCash is supervised by the Bangko Sentral ng Pilipinas. \nFuse Lending, Inc. is supervised by the Bangko Sentral ng Pilipinas and regulated by the Securities and Exchange Commission. SEC Reg. No. CS201617622. Certificate of Authority (CA) No. 1897. \nKindly review the terms and conditions in the disclosure statement before proceeding with the loan transaction.\nChat with Gigi inside the GCash app or visit the Help Center to learn more.\n\nASC Reference No. G0015D090624G",
+      "title": "",
+      "cta": "Learn more",
+      "format": "image",
+      "days_running": 84,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM"
+      ],
+      "page_name": "GCash"
+    },
+    {
+      "body": "Free now",
+      "title": "Smart Currency Converter App",
+      "cta": "Install now",
+      "format": "image",
+      "days_running": 243,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM"
+      ],
+      "page_name": "Best App for You"
+    },
+    {
+      "body": "{{product.brand}} Earn Green status just by spending like you do. Higher limits, coverage, and more savings. Earn Green status just by spending like you do. Higher limits, coverage, and more savings.",
+      "title": "",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 27,
+      "is_active": true,
+      "platforms": [
+        "INSTAGRAM"
+      ],
+      "page_name": "Cash App"
+    },
+    {
+      "body": "{{product.brand}} Track spending. Find savings. One simple app. ⭐️ Track spending. Find savings. One simple app. ⭐️ Track spending. Find savings. One simple app. ⭐️ Track spending. Find savings. One simple app. ⭐️",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 16,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM"
+      ],
+      "page_name": "Rocket Money"
+    },
+    {
+      "body": "{{product.brand}} @ishowspeed approved card stamps for you and your crew. Order a Cash App Card. @ishowspeed approved card stamps for you and your crew. Order a Cash App Card.",
+      "title": "",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 27,
+      "is_active": false,
+      "platforms": [
+        "INSTAGRAM"
+      ],
+      "page_name": "Cash App"
+    },
+    {
+      "body": "Trip lang? Totohanin na ang travel! ✈️\n\nPwede nang installment ang online payments when you pay with GGives. ZERO downpayment pa ‘yan!\n\nKaya today with GGives! 💙\n\nSubject to eligibility. Terms and conditions apply.\nGGIves is powered by Fuse Lending, Inc.\nGCash is supervised by the Bangko Sentral ng Pilipinas. \nFuse Lending, Inc. is supervised by the Bangko Sentral ng Pilipinas and regulated by the Securities and Exchange Commission. SEC Reg. No. CS201617622. Certificate of Authority (CA) No. 1897. \nKindly review the terms and conditions in the disclosure statement before proceeding with the loan transaction.\nChat with Gigi inside the GCash app or visit the Help Center to learn more.\n\nASC Reference No. G0009D090624G",
+      "title": "",
+      "cta": "Learn more",
+      "format": "image",
+      "days_running": 84,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM"
+      ],
+      "page_name": "GCash"
+    },
+    {
+      "body": "Ever needed ₹5,000 urgently — and had nowhere to turn?\nKreditcall is India's fastest mini loan app. Apply in 2 minutes, get approved instantly, and see cash in your account within 10 minutes. No salary slip. No guarantor.\n\n💸 ₹3,000 to ₹5,000 credited instantly\n📱 100% app-based — zero paperwork\n🔒 Safe, RBI-compliant NBFC partners\n\nDownload the App now!",
+      "title": "Get Instant Loan in 5 min.",
+      "cta": "Install now",
+      "format": "video",
+      "days_running": 7,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "KreditCall"
+    },
+    {
+      "body": "Get new tires with NO MONEY DOWN! Pay weekly or monthly. Over 80 tire brands available. Free shipping on all orders.",
+      "title": "Buy tires now, pay over time",
+      "cta": "Shop now",
+      "format": "image",
+      "days_running": 618,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Tire Agent"
+    },
+    {
+      "body": "{{product.brand}} Lottery Rewards are here! Get points when you download the app and create your account. Lottery Rewards are here! Get points when you download the app and create your account. Lottery Rewards are here! Get points when you download the app and create your account. Lottery Rewards are here! Get points when you download the app and create your account. Lottery Rewards are here! Get points when you download the app and create your account.",
+      "title": "{{product.name}}",
+      "cta": "Sign up",
+      "format": "carousel",
+      "days_running": 79,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Virginia Lottery"
+    },
+    {
+      "body": "চরম সংকটে আশ্রম – এখনই সময় পাশে দাঁড়ানোর।\n\nদান-সহযোগিতা করুন-\n🎯 বিস্তারিত জানতে- Milton Samadder \n+88 01622220222\n+88 01633330333\n-----------------------------------------------------------------\n■■ Bank Details:\nA/C: Child And Old Age Care. \nA/N: 015011200000044\nBank Name: Premier Bank\nBranch: Shyamoli, Dhaka.\nSWIFT Code: PRMRBDDH\nRouting Number: 235264303\n\nA/C: Child And Old Age Care Foundation \nA/No: 4022788616324\nBank Name: AB Bank\nBranch Name: Rokeya Sarani\nSwift code: ABBLBDDH\nRouting Number: 020264000\n-----------------------------------------------------------------\n■■ বিকাশ ও নগদ এজেন্ট-\n01918660006 Agent (Cash Out)\n\n■■ বিকাশ, নগদ ও রকেট পার্সনাল\n01615554444 (Send Money)\n01626555222 (Send Money)\n01620555222 (Send Money)\n-----------------------------------------------------------------\n🎯 সরাসরি আশ্রয় কেন্দ্রের ঠিকানা- বাড়ি নং ৫৭৬/১, ব্লক: বি, রোড: বাহিরটেক রোড, ওয়ার্ড নং: ০৩, গ্রাম: কমলাপুর বাহিরটেক, ইউনিয়ন: ৭নং বিরুলিয়া, থানা: সাভার, জেলা: ঢাকা।\n\n🎯 ঢাকায় অফিসে সরাসরি যোগাযোগ করতে : Child & Old Age Care. \nঅফিস: হাউস # ৬২/২, প্রধান সড়ক কল্যাণপুর, মিরপুর, ঢাকা ১২০৭, (কল্যাণপুর গার্লস স্কুল এন্ড কলেজ-এর পাশে) বিস্তারিত জানতে- 01627779999 || WhatsApp- 01627779999  (ছুটির দিন ব্যতীত সকাল ৯:০০ থেকে বিকাল ৫:০০)",
+      "title": "চরম সংকটে আশ্রম – এখনই সময় পাশে দাঁড়ানোর।",
+      "cta": "",
+      "format": "video",
+      "days_running": 116,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK"
+      ],
+      "page_name": "Milton Samadder"
+    },
+    {
+      "body": "Get new tires with NO MONEY DOWN! Pay weekly or monthly. Over 80 tire brands available. Free shipping on all orders.",
+      "title": "Buy tires now, pay over time",
+      "cta": "Shop now",
+      "format": "image",
+      "days_running": 618,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Tire Agent"
+    },
+    {
+      "body": "{{product.brand}} ⭐ ⭐ ⭐ ⭐ ⭐  We’re rated 4.6 stars on the App Store from 100K+ reviews. \nCheck your eligibility faster than your phone dies at 1%. ⭐ ⭐ ⭐ ⭐ ⭐  We’re rated 4.6 stars on the App Store from 100K+ reviews. \nCheck your eligibility faster than your phone dies at 1%. ⭐ ⭐ ⭐ ⭐ ⭐  We’re rated 4.6 stars on the App Store from 100K+ reviews. \nCheck your eligibility faster than your phone dies at 1%.",
+      "title": "{{product.name}}",
+      "cta": "Download",
+      "format": "carousel",
+      "days_running": 14,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Cleo"
+    },
+    {
+      "body": "Travel plans? There’s an app for that. With our IHG One Rewards app, you can search, book, and use your points all in one place. Get our app at IHG.com/DownloadNow and start booking like a pro. \n\n📍 InterContinental Bangkok Sukhumvit",
+      "title": "",
+      "cta": "Learn more",
+      "format": "image",
+      "days_running": 114,
+      "is_active": true,
+      "platforms": [
+        "INSTAGRAM"
+      ],
+      "page_name": "IHG One Rewards"
+    },
+    {
+      "body": "Track Your Steps, Achieve Your Goals! \nStart your fitness journey with our easy-to-use Pedometer App. Count your steps, set daily goals, and stay motivated!",
+      "title": "Download Now and Start Stepping👉",
+      "cta": "Install now",
+      "format": "video",
+      "days_running": 219,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Tour Soft"
+    },
+    {
+      "body": "खोई हुई फ़ोटो और फ़ाइलें वापस पाएं",
+      "title": "",
+      "cta": "Install now",
+      "format": "video",
+      "days_running": 137,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "File Recovery & Photo Recovery"
+    },
+    {
+      "body": "{{product.brand}} We’re giving away $2M in FanCash – play to win your share now.\n\nPlay to win your share of $2M in FanCash at the fastest growing online casino. We’re giving away $2M in FanCash – play to win your share now.\n\nPlay to win your share of $2M in FanCash at the fastest growing online casino. We’re giving away $2M in FanCash – play to win your share now.\n\nPlay to win your share of $2M in FanCash at the fastest growing online casino.",
+      "title": "{{product.name}}",
+      "cta": "Download",
+      "format": "carousel",
+      "days_running": 33,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM"
+      ],
+      "page_name": "Fanatics Casino"
+    },
+    {
+      "body": "Practice english everyday with basic questions and challenges from this app. Download and Try it now viết dưới dạng code cho dễ copy",
+      "title": "",
+      "cta": "Install now",
+      "format": "video",
+      "days_running": 65,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "LunaSpeak - AI Language Tutor"
+    },
+    {
+      "body": "Real change in the Asian and Pacific Islander community requires real dialogue. Actress Jamie Chung is chatting with Samantha Wu, Global VP of Consumer Brand and Product Marketing for Facebook app to talk about the fight for representation, unapologetically taking up space and paving the way for change. \n\nCheck back every week this month for more powerful conversations with singer-songwriter NIKI, Top Chef winner Melissa King and comedian Sherry Cola. #StopAsianHate #MoreTogether",
+      "title": "See Us Hear Us with Jamie Chung and Samantha Wu",
+      "cta": "",
+      "format": "video",
+      "days_running": 2,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM"
+      ],
+      "page_name": "Facebook App"
+    },
+    {
+      "body": "{{product.brand}} We’re giving away $2M in FanCash – play to win your share now.\n\nPlay to win your share of $2M in FanCash at the fastest growing online casino. We’re giving away $2M in FanCash – play to win your share now.\n\nPlay to win your share of $2M in FanCash at the fastest growing online casino. We’re giving away $2M in FanCash – play to win your share now.\n\nPlay to win your share of $2M in FanCash at the fastest growing online casino.",
+      "title": "{{product.name}}",
+      "cta": "Download",
+      "format": "carousel",
+      "days_running": 33,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM"
+      ],
+      "page_name": "Fanatics Casino"
+    },
+    {
+      "body": "Need quick cash? 💵\nHere’s how to get up to $100 – fast:\n1️⃣ Sign up\n2️⃣ Link bank account\n3️⃣ Get up to $100 – fast\n\nSimple. Secure. No credit check >>",
+      "title": "Get Up to $100",
+      "cta": "Install now",
+      "format": "video",
+      "days_running": 114,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Credit Genie"
+    },
+    {
+      "body": "🎉 GIVEAWAY ALERT! 🎉\n🎁Win an UNFORGETTABLE Dining Experience in Shanghai! 🐼\n\nWe’re giving away TWO FREE feasts for ONE lucky winner at the most unique restaurant in Shanghai, China — 「TASTE OF CHINA」!✨\n====================\n🏆 Grand Prize ≈ Total Worth $300!!!\n🍽️「TASTE OF CHINA」 Dining Experience*2\n📍 B1 [LG1-03], The Bund · City Hall Plaza, No.270 Henan Middle Road, Huangpu District, Shanghai, China.\n\n🎯How to enter:\n1️⃣ FOLLOW @tasteofchinash 🙋🏻\n2️⃣ LIKE this post ❤️\n3️⃣ TAG 1 friend who loves China travel & COMMENT with your favorite Chinese cuisine or destination 💬\n\n🗓️ Deadline: Oct. 13th, 2025 at 11:59 PM (CST)\n🏅 Winners announced: Oct. 14th via IG Story\n✅ Make sure your DM are open! 🍀 GOOD LUCK 🍀\n====================\n📌 Terms & Conditions\n*One entry per person. \n*Open to participants aged 18+ with plans to visit Shanghai before Dec. 2025.\n*The account of participants must be public.\n*The winner is chosen based on creativity and must DM us back within 7 days to claim the prize.\n*No cash alternative is available.\n*Prize excludes premium purchases (e.g. costume styling).\n*Seating will be arranged by the restaurant on the day and cannot be reserved in advance.\n*「TASTE OF CHINA」reserves the right to the final interpretation of T&C.\n====================\n✨ BONUS FOR EVERYONE! ✨\nGrab your ￥100 OFF coupon NOW! 🔥\nSearch \"Taste of China\" on Trip.com app — one per person! 👉🎟️\n\n#tasteofchinashanghai #chinesefood #chineserestaurant #immersivedining #chinatravel #china #prize #giveaways #restaurantgiveaway",
+      "title": "",
+      "cta": "Visit Instagram profile",
+      "format": "image",
+      "days_running": 55,
+      "is_active": false,
+      "platforms": [
+        "INSTAGRAM"
+      ],
+      "page_name": "TASTE of CHINA Shanghai"
+    },
+    {
+      "body": "Watch now to gain exclusive insights from Meta leadership as they unveil business messaging innovations across WhatsApp, Instagram and Messenger and share their vision for the future of connection, including strategies for harnessing AI to strengthen customer relationships and help drive business success. Whether you're looking to fuel marketing performance through deeper customer relationships and more valuable interactions, or optimize your customer communication strategy and streamline operations, this event is designed to help you achieve your goals.",
+      "title": "Meta Conversations 2025: Meta's Premier Business Messaging Event",
+      "cta": "",
+      "format": "video",
+      "days_running": 3,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK"
+      ],
+      "page_name": "Meta for Developers"
+    },
+    {
+      "body": "{{product.brand}} Send a total of 9,000 SEK to Gambia in 1 or more transactions and get 500 GMD Cash Power FREE. Limited-time offer for our Sweden customers! Send a total of 9,000 SEK to Gambia in 1 or more transactions and get 500 GMD Cash Power FREE. Limited-time offer for our Sweden customers! Send a total of 9,000 SEK to Gambia in 1 or more transactions and get 500 GMD Cash Power FREE. Limited-time offer for our Sweden customers! Send a total of 9,000 SEK to Gambia in 1 or more transactions and get 500 GMD Cash Power FREE. Limited-time offer for our Sweden customers!",
+      "title": "{{product.name}}",
+      "cta": "Get offer",
+      "format": "carousel",
+      "days_running": 63,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Supersonicz Money Transfer"
+    },
+    {
+      "body": "Klarna's small loans can offer a quick and easy solution without the hassle of traditional lenders. Learn how with flexible repayment options and a user-friendly app, Klarna can help with managing short-term financial needs. Read more.",
+      "title": "",
+      "cta": "",
+      "format": "image",
+      "days_running": 92,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM"
+      ],
+      "page_name": "The Boost List"
+    },
+    {
+      "body": "{{product.brand}} Unexpected expense? Cover it with up to $500 in 5 min or less. dave.com/legal Unexpected expense? Cover it with up to $500 in 5 min or less. dave.com/legal",
+      "title": "{{product.name}}",
+      "cta": "Download",
+      "format": "carousel",
+      "days_running": 104,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "The Dave App"
+    },
+    {
+      "body": "Track Your Steps, Achieve Your Goals! \nStart your fitness journey with our easy-to-use Pedometer App. Count your steps, set daily goals, and stay motivated!",
+      "title": "Download Now and Start Stepping👉",
+      "cta": "Install now",
+      "format": "video",
+      "days_running": 112,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Tour Soft"
+    },
+    {
+      "body": "Une app qui te paye pour marcher ?",
+      "title": "Macadam - Du Cash En Marchant",
+      "cta": "Install now",
+      "format": "video",
+      "days_running": 461,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Macadam"
+    },
+    {
+      "body": "Over 6 million lives have been changed",
+      "title": "Free DownLoad",
+      "cta": "Install now",
+      "format": "image",
+      "days_running": 109,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Caroline Graves"
+    },
+    {
+      "body": "{{product.brand}} Reward yourself! Get points when you download the app and create your free account. So many ways to Play, Earn and Get Rewarded. Sign up and get 100 points instantly! Reward yourself! Get points when you download the app and create your free account. Reward yourself! Get points when you download the app and create your free account. Reward yourself! Get points when you download the app and create your free account.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 79,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Virginia Lottery"
+    },
+    {
+      "body": "📲 Your phone. Your POS terminal. Instant payments*. Accept card payments anywhere, no extra devices needed.\n\nNo waiting, no hidden fees. Only 1.99% per transaction.",
+      "title": "Turn your phone into a card reader!",
+      "cta": "Learn more",
+      "format": "video",
+      "days_running": 112,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM"
+      ],
+      "page_name": "JIM"
+    },
+    {
+      "body": "Dream OOTD? Bilhin mo na! 🛒\nPwede nang installment ang online payments when you pay with GGives. ZERO downpayment pa ‘yan!\n\nKaya today with GGives! 💙\n\nSubject to eligibility. Terms and conditions apply.\n\nGGives is powered by Fuse Financing, Inc.\n\nFuse Financing, Inc is regulated by the SEC (flcd_queries@sec.gov.ph) with Registration Number: CS201617622 and Certificate of Authority Number: 1317. Kindly review the terms and conditions in the Disclosure Statement before proceeding with the loan transaction.\n\nG-Xchange Inc. (GXI) is regulated by the Bangko Sentral ng Pilipinas (www.bsp.gov.ph). Visit the GCash Help Center or call 2882 (Globe/TM) / (02) 7213-9999 (other networks; fees may apply) to know more.\n\nASC Reference No. G0015D090624G",
+      "title": "Kaya today with GGives!",
+      "cta": "Learn more",
+      "format": "image",
+      "days_running": 39,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "GCash"
+    },
+    {
+      "body": "When international supplier payments fail, everything in your business slows down.\nYour goods remain stuck at the border.\nYour customers keep waiting.\nYour cash flow takes the hit.\n\nThe truth is simple:\nMost Nigerian businesses face these issues because traditional banks rely on slow approvals, outdated processes, and risky payment routes that often bounce back.\n\nGlo Currency gives you a smarter way to pay your suppliers.\n\nWe process your international payments through verified, compliant, and secure channels, ensuring your funds reach the right supplier quickly and without complications.\n\nImporters and exporters across Nigeria trust Glo Currency for:\n\nFast and reliable international payments\n\nTransparent, real-time rates\n\nVerified global settlement routes\n\nA support team available right here in Lagos\n\nKeep your supply chain moving. Stop losing money to delays.\n\nBook a Currency Strategy Call: https://glocurrency.com/loc\n\nVisit us at: 86 Allen Avenue, Ikeja, Lagos\nCall or WhatsApp: +2347040417421",
+      "title": "Keep Your Supply Chain Moving with Fast Global Payments",
+      "cta": "Learn more",
+      "format": "video",
+      "days_running": 76,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "THREADS"
+      ],
+      "page_name": "Glo Currency Money Transfer"
+    },
+    {
+      "body": "Get Paid to Play! Download games and receive instant cash directly to your phone.",
+      "title": "Get Rewarded NOW!",
+      "cta": "Install now",
+      "format": "video",
+      "days_running": 72,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Alexa Rashaun Katie"
+    },
+    {
+      "body": "Kailangan na talaga magpalit ng appliance pero mabigat bayaran? 😩\n\nGawing magaan with GGives dahil pwedeng hulugan with ZERO downpayment when you Scan to Pay!\n\nKaya today with GGives! 💙\n\nSubject to eligibility. Terms and conditions apply.\nGGIves is powered by Fuse Lending, Inc.\nGCash is supervised by the Bangko Sentral ng Pilipinas. \nFuse Lending, Inc. is supervised by the Bangko Sentral ng Pilipinas and regulated by the Securities and Exchange Commission. SEC Reg. No. CS201617622. Certificate of Authority (CA) No. 1897. \nKindly review the terms and conditions in the disclosure statement before proceeding with the loan transaction.\nChat with Gigi inside the GCash app or visit the Help Center to learn more.\n\nASC Reference No. G0013D090624G",
+      "title": "",
+      "cta": "Learn more",
+      "format": "image",
+      "days_running": 85,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM"
+      ],
+      "page_name": "GCash"
+    },
+    {
+      "body": "The lives of more than 3 million people have changed",
+      "title": "Free DownLoad",
+      "cta": "Install now",
+      "format": "image",
+      "days_running": 138,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Grace Bosse Dan"
+    },
+    {
+      "body": "The way money should work",
+      "title": "",
+      "cta": "Install now",
+      "format": "video",
+      "days_running": 42,
+      "is_active": true,
+      "platforms": [
+        "INSTAGRAM"
+      ],
+      "page_name": "Cash App"
+    },
+    {
+      "body": "Track Your Steps, Achieve Your Goals! \nStart your fitness journey with our easy-to-use Pedometer App. Count your steps, set daily goals, and stay motivated!",
+      "title": "Download Now and Start Stepping👉",
+      "cta": "Install now",
+      "format": "video",
+      "days_running": 122,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Tour Soft"
+    },
+    {
+      "body": "Mahaba na ang wishlist? Kaya na i-checkout agad! 💙\nPwede nang installment ang online payments when you pay with GGives. ZERO Downpayment pa ‘yan! \n\nKaya Today with GGives!\n\nSubject to eligibility. Terms and conditions apply.\n\nGGives is powered by Fuse Financing, Inc.\n\nFuse Financing, Inc is regulated by the SEC (flcd_queries@sec.gov.ph) with Registration Number: CS201617622 and Certificate of Authority Number: 1317. Kindly review the terms and conditions in the Disclosure Statement before proceeding with the loan transaction.\n\nG-Xchange Inc. (GXI) is regulated by the Bangko Sentral ng Pilipinas (www.bsp.gov.ph). Visit the GCash Help Center or call 2882 (Globe/TM) / (02) 7213-9999 (other networks; fees may apply) to know more.\n\nASC Reference No. G0003D090524G",
+      "title": "Kaya today with GGives!",
+      "cta": "Learn more",
+      "format": "image",
+      "days_running": 39,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "GCash"
+    },
+    {
+      "body": "{{product.brand}} Say goodbye to transfer fees - ZERO fees on all transactions to Gambia! Send any amount hassle-free! Don't let this offer slip away! Say goodbye to transfer fees - ZERO fees on all transactions to Gambia! Send any amount hassle-free! Don't let this offer slip away!",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 182,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "THREADS"
+      ],
+      "page_name": "Supersonicz Money Transfer"
+    },
+    {
+      "body": "Whether it's money for essentials, bills, or airtime. Use Supersonicz to send joy to Gambia in an instant! Trust our secure platform for swift support to your loved ones. Use promo code \"GMCE\" at sign-up for extra perks Use promo code \"GMCE\" at sign-up for extra perks Use promo code \"GMCE\" at sign-up for extra perks Use promo code \"GMCE\" at sign-up for extra perks Use promo code \"GMCE\" at sign-up for extra perks Use promo code \"GMCE\" at sign-up for extra perks Use promo code \"GMCE\" at sign-up for extra perks Use promo code \"GMCE\" at sign-up for extra perks Use promo code \"GMCE\" at sign-up for extra perks",
+      "title": "Supersonicz Money Transfer",
+      "cta": "Download",
+      "format": "carousel",
+      "days_running": 182,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "THREADS"
+      ],
+      "page_name": "Supersonicz Money Transfer"
+    }
+  ],
+  "messaging_analysis": {
+    "messaging_angles": [
+      "Cash back and rewards programs",
+      "Quick cash access / instant loans (no credit check)",
+      "Installment payments / buy now pay later",
+      "Money transfer with zero fees",
+      "Track spending / budgeting tools",
+      "Simple one-click app solutions",
+      "Promotional giveaways and sign-up bonuses"
+    ],
+    "top_ctas": [
+      "Install now",
+      "Learn more",
+      "Download",
+      "Shop now",
+      "Sign up",
+      "Get offer"
+    ],
+    "buy_crypto_framing": "none — these ads do not promote buying crypto at all; they focus on cash back, loans, money transfers, and financial management tools",
+    "fees_messaging": "Fees are prominently featured as a benefit through 'ZERO fees' messaging (money transfers), 'no hidden fees' claims, and transparent low percentage rates (1.99%). The absence of fees is used as a primary selling point.",
+    "simplicity_messaging": "Heavily emphasized through phrases like 'one simple app', 'with a single click', 'in 5 min or less', '100% app-based — zero paperwork', and 'simple. secure.' Speed and ease of use are core value propositions.",
+    "security_messaging": "Mentioned but not dominant. Appears in phrases like 'secure platform', 'safe', and regulatory supervision disclaimers (Bangko Sentral, SEC). Trust is implied through app store ratings and user count rather than explicit security features.",
+    "dominant_format": "carousel",
+    "longest_running_themes": [
+      "Cash back rewards (Rakuten ads: 498d, 829d running)",
+      "Zero fees on money transfers (182d, 618d running)",
+      "App store ratings and social proof (618d tire ad, ongoing financial apps)",
+      "Quick cash access without credit checks (104d+ running Dave ads)"
+    ],
+    "summary": "This competitor set focuses heavily on financial utility apps emphasizing instant access to money (loans, cash advances, transfers) with transparent or zero fees. The strategy prioritizes simplicity and speed ('one click', 'in minutes') over security messaging, using carousel format to showcase multiple benefits or user scenarios. Crypto is completely absent from these competitors' messaging."
+  },
+  "speed_comparison": {
+    "gaps": [
+      "Cash back/rewards program messaging is underdeveloped (Speed has 'Speed Stacks' but doesn't lead with reward percentages or cash-back framing)",
+      "No sign-up bonus or promotional giveaway hooks in current ads",
+      "Missing social proof elements (app store ratings, user count, testimonials)",
+      "No budgeting/spending tracking angle despite wallet utility potential",
+      "Lack of 'quick access' or 'instant' framing beyond payments (competitor emphasizes speed in multiple contexts)",
+      "No carousel format showing multiple use cases or step-by-step benefits",
+      "Missing 'one-click' or 'in X minutes' simplicity specificity"
+    ],
+    "speed_advantages": [
+      "Bitcoin/crypto native positioning (competitor avoids crypto entirely — Speed can own this for crypto-curious segment)",
+      "Lightning Network technology as a genuine infrastructure advantage for instant + zero-fee claims",
+      "Remittance use case with zero fees is differentiated by crypto rails vs traditional fintech",
+      "iGaming instant deposits angle is untapped by these competitors and highly specific",
+      "Can frame 'no credit check' or 'no bank account needed' more authentically through Bitcoin positioning"
+    ],
+    "angles_to_test": [
+      "Lead with specific cashback/reward percentage for Speed Stacks (e.g., '2% back in Bitcoin on every purchase')",
+      "Sign-up bonus hook: 'Get [X sats/dollars] free when you send your first payment'",
+      "Social proof carousel: app ratings + user count + speed of transactions with testimonials",
+      "Remittance angle with time + fee comparison: 'Send $500 home: Banks = $25 fee + 3 days. Speed = $0 + instant'",
+      "iGaming deposit speed comparison: 'Deposit to [platform] in 10 seconds, not 10 minutes'",
+      "Simple step count: 'Send Bitcoin in 3 taps' or 'Start earning rewards in under 2 minutes'",
+      "Budgeting/tracking hook for mainstream: 'Track your Bitcoin spending in one simple app'"
+    ],
+    "ctas_to_test": [
+      "Install now",
+      "Get offer (especially with sign-up bonus messaging)",
+      "Start earning (for Speed Stacks rewards angle)",
+      "Send now (for remittance urgency)",
+      "Download and get [bonus]"
+    ],
+    "avoid": [
+      "Loan/cash advance framing — misaligned with Speed's model and Bitcoin ethos",
+      "Buy now pay later messaging — creates debt association incompatible with wallet positioning",
+      "Overpromising on 'track spending' without robust feature parity to budgeting apps",
+      "Generic 'Shop now' CTA without clear shopping integration or merchant network"
+    ],
+    "recommendations": "Test carousel formats showing Speed's three core use cases (remittance/iGaming/everyday spending) with specific time and fee comparisons per slide. Introduce sign-up bonus messaging and lead Speed Stacks ads with concrete reward percentages, mirroring competitor cash-back emphasis but in Bitcoin terms. Add social proof elements (ratings, transaction volume, user testimonials) to build trust without over-indexing on security jargon. For remittance and iGaming segments, create comparison ads with exact numbers (fees saved, time saved) to make zero-fee and instant-deposit claims tangible and credible."
+  }
+}
