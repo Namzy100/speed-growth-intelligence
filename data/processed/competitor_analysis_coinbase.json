@@ -1,213 +1,10 @@
 {
   "competitor": "Coinbase",
   "platform": "all",
-  "fetched_at": "2026-06-11T20:49:00.938185+00:00",
-  "total_ads": 50,
+  "country": "GB",
+  "fetched_at": "2026-06-16T06:14:32.169333+00:00",
+  "total_ads": 7,
   "ads": [
-    {
-      "body": "Ready to buy?",
-      "title": "Bitcoin is above $100,000 again.",
-      "cta": "Use app",
-      "format": "image",
-      "days_running": 225,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "AUDIENCE_NETWORK",
-        "MESSENGER",
-        "THREADS"
-      ],
-      "page_name": "Coinbase"
-    },
-    {
-      "body": "Ashtin Martin. \n\n@ashtin",
-      "title": "Aston Martin Aramco Formula One Team",
-      "cta": "Visit Instagram profile",
-      "format": "carousel",
-      "days_running": 6,
-      "is_active": false,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM"
-      ],
-      "page_name": "Aston Martin Aramco Formula One Team"
-    },
-    {
-      "body": "{{product.brand}} With Base44, you can build your own app from one simple prompt. And I mean a real, working app - not just a pretty design. It automatically generates the backend and database that make your product actually functional. This is how you stop hitting a wall with other tools and finally build something real. With Base44, you can build your own app from one simple prompt. And I mean a real, working app - not just a pretty design. It automatically generates the backend and database that make your product actually functional. This is how you stop hitting a wall with other tools and finally build something real. With Base44, you can build your own app from one simple prompt. And I mean a real, working app - not just a pretty design. It automatically generates the backend and database that make your product actually functional. This is how you stop hitting a wall with other tools and finally build something real. With Base44, you can build your own app from one simple prompt. And I mean a real, working app - not just a pretty design. It automatically generates the backend and database that make your product actually functional. This is how you stop hitting a wall with other tools and finally build something real. With Base44, you can build your own app from one simple prompt. And I mean a real, working app - not just a pretty design. It automatically generates the backend and database that make your product actually functional. This is how you stop hitting a wall with other tools and finally build something real.",
-      "title": "{{product.name}}",
-      "cta": "Sign up",
-      "format": "carousel",
-      "days_running": 120,
-      "is_active": false,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM"
-      ],
-      "page_name": "Base44"
-    },
-    {
-      "body": "Coinbase Makes Bitcoin Easy",
-      "title": "Simplify Bitcoin with Coinbase",
-      "cta": "Download",
-      "format": "video",
-      "days_running": 170,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "MESSENGER"
-      ],
-      "page_name": "Coinbase"
-    },
-    {
-      "body": "Coinbase Makes Bitcoin Easy",
-      "title": "Simplify Bitcoin with Coinbase",
-      "cta": "Download",
-      "format": "video",
-      "days_running": 65,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "THREADS"
-      ],
-      "page_name": "Coinbase"
-    },
-    {
-      "body": "Ready to buy?",
-      "title": "Coinbase makes Bitcoin easy.",
-      "cta": "Use app",
-      "format": "image",
-      "days_running": 57,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "AUDIENCE_NETWORK",
-        "MESSENGER",
-        "THREADS"
-      ],
-      "page_name": "Coinbase"
-    },
-    {
-      "body": "Ready to buy?",
-      "title": "Get Started with Bitcoin Today",
-      "cta": "Learn more",
-      "format": "video",
-      "days_running": 175,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "AUDIENCE_NETWORK",
-        "MESSENGER",
-        "THREADS"
-      ],
-      "page_name": "Coinbase"
-    },
-    {
-      "body": "Ready to take the first step out of the broken financial system? Download Coinbase today.",
-      "title": "Coinbase is your way out",
-      "cta": "Download",
-      "format": "video",
-      "days_running": 59,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "THREADS"
-      ],
-      "page_name": "Coinbase"
-    },
-    {
-      "body": "Coinbase Makes XRP Easy",
-      "title": "Simplify XRP with Coinbase",
-      "cta": "Download",
-      "format": "video",
-      "days_running": 170,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "MESSENGER"
-      ],
-      "page_name": "Coinbase"
-    },
-    {
-      "body": "Coinbase Makes Solana Easy",
-      "title": "Simplify Solana with Coinbase",
-      "cta": "Download",
-      "format": "video",
-      "days_running": 170,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "MESSENGER"
-      ],
-      "page_name": "Coinbase"
-    },
-    {
-      "body": "Ready to buy?",
-      "title": "Get Started with Bitcoin Today",
-      "cta": "Learn more",
-      "format": "video",
-      "days_running": 176,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "AUDIENCE_NETWORK",
-        "MESSENGER",
-        "THREADS"
-      ],
-      "page_name": "Coinbase"
-    },
-    {
-      "body": "Ready to buy?",
-      "title": "Get Started with Bitcoin Today",
-      "cta": "Learn more",
-      "format": "video",
-      "days_running": 176,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "AUDIENCE_NETWORK",
-        "MESSENGER",
-        "THREADS"
-      ],
-      "page_name": "Coinbase"
-    },
-    {
-      "body": "Coinbase Makes Ethereum Easy",
-      "title": "Simplify Ethereum with Coinbase",
-      "cta": "Download",
-      "format": "video",
-      "days_running": 170,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "MESSENGER"
-      ],
-      "page_name": "Coinbase"
-    },
-    {
-      "body": "Coinbase Makes Bitcoin Easy",
-      "title": "Simplify Bitcoin with Coinbase",
-      "cta": "Download",
-      "format": "video",
-      "days_running": 66,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "THREADS"
-      ],
-      "page_name": "Coinbase"
-    },
     {
       "body": "We can all make a difference for Keal, We have that power!!!\n👇🏻\n@skealzzz needs a miracle right now really bad…\n🖤👇🏻🖤\nlet’s show him the overwhelming love of the #smartmoneymovement 🙏😝✌️community!!! \n🖤👇🏻🖤👇🏼\n\nI love all of you so **** much!!! 🖤🖤🖤\n\n#hititup #promo4promo #miracles #love \n\nlet’s put everyone on one person at a time, no gatekeeping!!!!!!\n😝🖤🙏🏼\n\nI’m calling on you all to support the mission please + shoutouts!\n#payitforward🙏🏾 \n@smartmoneylabel \n@prod.chrisdk \n@ayokubaluka \n@lr_indi_218 \n@internetmoneyrecords \n@cryptosrus \n@larkdavis.crypto \n@juicewrld999\n@liluzivert \n@xxxtentacion \n@yunggravy \n@lilbaby @young.thug.world \n@young.thug.world \n@michael_saylor\n@onetreeplanted \n@champagnepapi \n@bbnomula\n@lilbieber\n@liltunechi\n@juicewrld999\n@ianndior \n@popsmoke_daily \n@prodlucent \n@meet.this.simon \n@coldbrumusic_ \n@iamglassofficial \n@yeomilann \n@ayokubaluka @lr_indi_218 @official_jay2210 @drphil @myfinancialfriendofficialfx\n@captainsparklez_miante \n@ssundeeyt @donaldjtrumpjr @kamalaharris @demolitionrancenumber1fan @liluzivurt @liltecca @lildurk @lilpeep @lilpump @prod_chrisdk @music_mishaps @simonservidamusic @venustheory @vsauce_michael_ @vsauce_ @kevlieber @jakerawr @calebhammercomposer @marktilbury @coinbase @robinhoodapp @solana @official.cardano @nearprotocolofficials @juice_wrld4456 @juiciewrld999 @hammertimejuice @hammertimejuice @lilyachty @lilmabu @mrbeast @mostvaluablepromotions @records @2pac @biggy.cookthebook @rihannaofficiall @slipknot @coreytaylor @stonesour @livecoinwatch @macmiller @curly.j @nablogrealestate @burkeandherbertbank @officialalorica @intuit @hrblock @turbotax @creditkarma @koinly @altcoinbuzz @joeysturgistones @steventerreberry @deathcorespecialistsofficial @rockreels @metallica @activision @gearbox @fromsoftware_jp @sony @xbox @xboxgamepass @outsidexboxofficial @linustech @some.ordinarygamers @music._history @undergroundsound @choccitymusic @ourgenerationmusic @rapmusic@alphaville.music @sonymusic @wellesmusic @austin.powell #promo #promoter #branding #independentartists #bitcoin #videogameedit #finance #art #business #music #screech #bigbusiness #guns #metalhead #popular #marketing #networking",
       "title": "",
@@ -221,330 +18,57 @@
       "page_name": "xiscreechix"
     },
     {
-      "body": "{{product.brand}}",
+      "body": "Start your crypto journey on Coinbase. Trade Bitcoin, Ethereum, and More. Sign Up Today",
+      "title": "Buy Bitcoin in Minutes",
+      "cta": "Download",
+      "format": "video",
+      "days_running": 86,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Coinbase"
+    },
+    {
+      "body": "{{product.brand}} Start your crypto journey on Coinbase. Trade Bitcoin, Ethereum, and More. Sign Up Today Start your crypto journey on Coinbase. Trade Bitcoin, Ethereum, and More. Sign Up Today Start your crypto journey on Coinbase. Trade Bitcoin, Ethereum, and More. Sign Up Today",
+      "title": "{{product.name}}",
+      "cta": "Download",
+      "format": "carousel",
+      "days_running": 84,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Coinbase"
+    },
+    {
+      "body": "Start your crypto journey on Coinbase. Trade Bitcoin, Ethereum, and More. Sign Up Today",
+      "title": "Buy Bitcoin in Minutes",
+      "cta": "Download",
+      "format": "video",
+      "days_running": 21,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Coinbase"
+    },
+    {
+      "body": "{{product.brand}} Your USDC earns automatically. No lockups. No setup. 3.75% APR on Kraken+. Your USDC earns automatically. No lockups. No setup. 3.75% APR on Kraken+.",
       "title": "{{product.name}}",
       "cta": "Learn more",
-      "format": "carousel",
-      "days_running": 8,
-      "is_active": false,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "AUDIENCE_NETWORK",
-        "MESSENGER",
-        "THREADS"
-      ],
-      "page_name": "Lava Finance"
-    },
-    {
-      "body": "Coinbase Makes Bitcoin Easy",
-      "title": "Simplify Bitcoin with Coinbase",
-      "cta": "Download",
-      "format": "video",
-      "days_running": 170,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "MESSENGER"
-      ],
-      "page_name": "Coinbase"
-    },
-    {
-      "body": "Ready to buy?",
-      "title": "Get Started with Bitcoin Today",
-      "cta": "Learn more",
-      "format": "video",
-      "days_running": 176,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "AUDIENCE_NETWORK",
-        "MESSENGER",
-        "THREADS"
-      ],
-      "page_name": "Coinbase"
-    },
-    {
-      "body": "Ready to take the first step out of the broken financial system? Download Coinbase today.",
-      "title": "Coinbase is your way out",
-      "cta": "Download",
-      "format": "video",
-      "days_running": 59,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "MESSENGER"
-      ],
-      "page_name": "Coinbase"
-    },
-    {
-      "body": "Ready to take the first step out of the broken financial system? Download Coinbase today.",
-      "title": "Coinbase is your way out",
-      "cta": "Install now",
-      "format": "video",
-      "days_running": 30,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "AUDIENCE_NETWORK",
-        "MESSENGER",
-        "THREADS"
-      ],
-      "page_name": "Coinbase"
-    },
-    {
-      "body": "From every angle, a different dimension.\n\nOur @maadenksa Monaco livery, up close.\n\n#MonacoGP",
-      "title": "",
-      "cta": "Sign up",
-      "format": "carousel",
-      "days_running": 5,
-      "is_active": false,
-      "platforms": [
-        "INSTAGRAM"
-      ],
-      "page_name": "Aston Martin Aramco Formula One Team"
-    },
-    {
-      "body": "Trade sports, culture, and more",
-      "title": "You can now trade on whatever you're into with prediction markets on Coinbase.",
-      "cta": "Install now",
-      "format": "video",
-      "days_running": 65,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "THREADS"
-      ],
-      "page_name": "Coinbase"
-    },
-    {
-      "body": "Trade sports, culture, and more",
-      "title": "You can now trade on whatever you're into with prediction markets on Coinbase.",
-      "cta": "Install now",
-      "format": "video",
-      "days_running": 65,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "MESSENGER",
-        "THREADS"
-      ],
-      "page_name": "Coinbase"
-    },
-    {
-      "body": "Colour changing around Monaco. \n\nSymbolising the transformation of raw materials into advanced technology. \n\nClick the link in bio to find out more on our livery with @maadenksa. #MonacoGP",
-      "title": "",
-      "cta": "Sign up",
-      "format": "carousel",
-      "days_running": 4,
-      "is_active": false,
-      "platforms": [
-        "INSTAGRAM"
-      ],
-      "page_name": "Aston Martin Aramco Formula One Team"
-    },
-    {
-      "body": "{{product.brand}}",
-      "title": "",
-      "cta": "",
-      "format": "image",
-      "days_running": 7,
-      "is_active": false,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "AUDIENCE_NETWORK",
-        "MESSENGER",
-        "THREADS"
-      ],
-      "page_name": "Sharea de"
-    },
-    {
-      "body": "Ready to buy?",
-      "title": "Coinbase makes crypto easy.",
-      "cta": "Download",
-      "format": "video",
-      "days_running": 58,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "AUDIENCE_NETWORK",
-        "MESSENGER",
-        "THREADS"
-      ],
-      "page_name": "Coinbase"
-    },
-    {
-      "body": "Coinbase Makes Ethereum Easy",
-      "title": "Simplify Ethereum with Coinbase",
-      "cta": "Download",
-      "format": "video",
-      "days_running": 60,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "THREADS"
-      ],
-      "page_name": "Coinbase"
-    },
-    {
-      "body": "Coinbase Makes Ethereum Easy",
-      "title": "Simplify Ethereum with Coinbase",
-      "cta": "Download",
-      "format": "video",
-      "days_running": 14,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "THREADS"
-      ],
-      "page_name": "Coinbase"
-    },
-    {
-      "body": "Coinbase Makes Bitcoin Easy",
-      "title": "Simplify Bitcoin with Coinbase",
-      "cta": "Download",
-      "format": "video",
-      "days_running": 170,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "MESSENGER"
-      ],
-      "page_name": "Coinbase"
-    },
-    {
-      "body": "{{product.brand}} Base44 lets you turn ideas into real apps. No code needed. Base44 lets you turn ideas into real apps. No code needed. Base44 lets you turn ideas into real apps. No code needed.",
-      "title": "{{product.name}}",
-      "cta": "Sign up",
-      "format": "carousel",
-      "days_running": 87,
-      "is_active": false,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM"
-      ],
-      "page_name": "Base44"
-    },
-    {
-      "body": "Coinbase Makes Ethereum Easy",
-      "title": "Simplify Ethereum with Coinbase",
-      "cta": "Download",
-      "format": "video",
-      "days_running": 170,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "MESSENGER"
-      ],
-      "page_name": "Coinbase"
-    },
-    {
-      "body": "Coinbase Makes Ethereum Easy",
-      "title": "Simplify Ethereum with Coinbase",
-      "cta": "Install now",
-      "format": "video",
-      "days_running": 30,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "AUDIENCE_NETWORK",
-        "MESSENGER",
-        "THREADS"
-      ],
-      "page_name": "Coinbase"
-    },
-    {
-      "body": "Coinbase Makes Ethereum Easy",
-      "title": "Simplify Ethereum with Coinbase",
-      "cta": "Download",
-      "format": "video",
-      "days_running": 59,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "MESSENGER"
-      ],
-      "page_name": "Coinbase"
-    },
-    {
-      "body": "Ready to buy?",
-      "title": "Coinbase makes crypto easy.",
-      "cta": "Use app",
-      "format": "video",
-      "days_running": 58,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "AUDIENCE_NETWORK",
-        "MESSENGER",
-        "THREADS"
-      ],
-      "page_name": "Coinbase"
-    },
-    {
-      "body": "Coinbase Makes Dogecoin Easy",
-      "title": "Simplify Dogecoin with Coinbase",
-      "cta": "Download",
-      "format": "video",
-      "days_running": 170,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "MESSENGER"
-      ],
-      "page_name": "Coinbase"
-    },
-    {
-      "body": "Coinbase Makes Bitcoin Easy",
-      "title": "Coinbase: Buy Crypto & Stocks",
-      "cta": "Download",
-      "format": "carousel",
-      "days_running": 20,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "AUDIENCE_NETWORK",
-        "MESSENGER",
-        "THREADS"
-      ],
-      "page_name": "Coinbase"
-    },
-    {
-      "body": "{{product.brand}} Base44 lets you turn ideas into real apps. No code needed. Base44 lets you turn ideas into real apps. No code needed. Base44 lets you turn ideas into real apps. No code needed.",
-      "title": "{{product.name}}",
-      "cta": "Sign up",
       "format": "carousel",
       "days_running": 95,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM"
-      ],
-      "page_name": "Base44"
-    },
-    {
-      "body": "{{product.brand}} Support the team in style with the official Aston Martin Aramco F1® 2026 Driver replica tees and fresh arrivals. Available now on the official team store.\n\nSave 10% off your first order as an I / AM member. Support the team in style with the official Aston Martin Aramco F1® 2026 Driver replica tees and fresh arrivals. Available now on the official team store.\n\nSave 10% off your first order as an I / AM member.",
-      "title": "{{product.name}}",
-      "cta": "Shop now",
-      "format": "carousel",
-      "days_running": 23,
       "is_active": false,
       "platforms": [
         "FACEBOOK",
@@ -553,246 +77,56 @@
         "MESSENGER",
         "THREADS"
       ],
-      "page_name": "Aston Martin Aramco Formula One Team"
+      "page_name": "Kraken UK"
     },
     {
-      "body": "{{product.brand}} Ready to take the first step out of the broken financial system? Download Coinbase today. Ready to take the first step out of the broken financial system? Download Coinbase today.",
-      "title": "{{product.name}}",
-      "cta": "Download",
-      "format": "carousel",
-      "days_running": 58,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "AUDIENCE_NETWORK",
-        "MESSENGER",
-        "THREADS"
-      ],
-      "page_name": "Coinbase"
-    },
-    {
-      "body": "Coinbase Makes Solana Easy",
-      "title": "Simplify Solana with Coinbase",
+      "body": "Simplify Bitcoin with Coinbase",
+      "title": "Official Coinbase app",
       "cta": "Download",
       "format": "video",
-      "days_running": 170,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "MESSENGER"
-      ],
-      "page_name": "Coinbase"
-    },
-    {
-      "body": "{{product.brand}} Base44 lets you turn ideas into real apps. No code needed. Base44 lets you turn ideas into real apps. No code needed. Base44 lets you turn ideas into real apps. No code needed.",
-      "title": "{{product.name}}",
-      "cta": "Sign up",
-      "format": "carousel",
-      "days_running": 106,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM"
-      ],
-      "page_name": "Base44"
-    },
-    {
-      "body": "The Coinbase app makes getting started easy. Sign up for a free Coinbase account today.",
-      "title": "Ready to escape the system?",
-      "cta": "Download",
-      "format": "video",
-      "days_running": 22,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "THREADS"
-      ],
-      "page_name": "Coinbase"
-    },
-    {
-      "body": "Coinbase Makes Solana Easy",
-      "title": "Simplify Solana with Coinbase",
-      "cta": "Install now",
-      "format": "video",
-      "days_running": 30,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "AUDIENCE_NETWORK",
-        "MESSENGER",
-        "THREADS"
-      ],
-      "page_name": "Coinbase"
-    },
-    {
-      "body": "Stablecoins, Ethereum, Bitcoin, Robinhood… the crypto space is wild right now. \"There's gonna be the pimps. There's gonna be the hoes.\" Some profit, some lose. Which side of the bet are you on? Invest wisely, stay safe. #CryptoTruth #Stablecoins #Ethereum #Bitcoin #Robinhood #CryptoInvesting #FinancialLiteracy",
-      "title": "Coinbase, Bitcoin & Robinhood: Crypto Market Insights!",
-      "cta": "Learn more",
-      "format": "video",
-      "days_running": 24,
-      "is_active": false,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "AUDIENCE_NETWORK",
-        "MESSENGER",
-        "THREADS"
-      ],
-      "page_name": "The Black Business School"
-    },
-    {
-      "body": "✨🎉💚💛 Happy New Year to the ZKTC Community 💛💚🎉✨\n\nAs we step into the new year, we’re proud to share several major milestones with our community.\n\nThe private presale has officially concluded, and we’re grateful to announce that $22,157 in charitable donations were raised during this phase — scheduled for deployment beginning March 2026 alongside our public launch.\n\n🚀💚💛 Public Presale Is Now Open\n• Minimum to acquire ZKTC: $2,500\n• Request your unlock code today\n\n🤝💚💛 First Official ZakatRated Charity Partner\nWe are proud to announce Human Development Fund (HDF) as the first officially ZakatRated charity in the Zakat Coin ecosystem — a globally trusted organization delivering humanitarian aid and Zakat worldwide.\n\n📲💚💛 ZakPay Is Live\nZakPay is now available on iOS & Android, enabling real utility today.\n• KYC supported in 18+ countries\n\n🏦💚💛 Coinbase On-Ramping Coming Soon\nACH, Apple Pay, and debit card support will be going live in the coming days.\n\n📅💚💛 Public Launch Countdown\n🗓 March 26, 2026\n\nThis is only the beginning. Thank you for believing in ethical, utility-first blockchain built for real-world impact.\n\n🌍 https://zktcoin.com #ZakatCoin #ZKTC #ZakPay #ZakatRated\n#HumanDevelopmentFund CryptoGiving\nEthicalBlockchain IslamicFinance\nWeb3ForGood Zakat Sadaqah",
-      "title": "",
-      "cta": "Visit Instagram profile",
-      "format": "image",
-      "days_running": 3,
-      "is_active": false,
-      "platforms": [
-        "INSTAGRAM"
-      ],
-      "page_name": "ZakatCoin"
-    },
-    {
-      "body": "Ready to take the first step out of the broken financial system? Download Coinbase today.",
-      "title": "Coinbase is your way out",
-      "cta": "Use app",
-      "format": "video",
-      "days_running": 14,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "AUDIENCE_NETWORK",
-        "MESSENGER",
-        "THREADS"
-      ],
-      "page_name": "Coinbase"
-    },
-    {
-      "body": "💰 Bitcoin is one of the most valuable assets in the world and its inception in 2008 paved way for creating a market capitalisation of $1.57 trillion. Despite its limited supply of only around 21 million coins, some the planet’s largest organisations, people, and governments own vast amounts.\n\n📈 Satoshi Nakamoto, the pseudonym of the creator, is by far the largest holder with 1.1 million coins. Several crypto exchange companies, such as Coinbase, follow behind him with each holding hundreds of thousands of coins. \n\n🤑 Private individuals such as the Winklevoss twins purchased their coins in the early days of Bitcoin, when the price was much lower than today. Governments, such as the U.S. and UK, largely obtained their coins from various crime seizures. \n\nFollow @move for interesting stories, amazing places, and incredible people 💫\n\n#Move #Bitcoin #Crypto #Finance #Business",
-      "title": "Move - Interesting stories / Amazing places / Incredible people",
-      "cta": "Visit Instagram profile",
-      "format": "carousel",
-      "days_running": 2,
+      "days_running": 6,
       "is_active": false,
       "platforms": [
         "FACEBOOK",
         "INSTAGRAM"
       ],
-      "page_name": "Move - Interesting stories / Amazing places / Incredible people"
-    },
-    {
-      "body": "Coinbase Makes Bitcoin Easy",
-      "title": "Simplify Bitcoin with Coinbase",
-      "cta": "Download",
-      "format": "video",
-      "days_running": 66,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "THREADS"
-      ],
       "page_name": "Coinbase"
     },
     {
-      "body": "Trade sports, culture, and more",
-      "title": "You can now trade on whatever you're into with prediction markets on Coinbase.",
-      "cta": "Install now",
-      "format": "image",
-      "days_running": 65,
-      "is_active": true,
-      "platforms": [
-        "FACEBOOK",
-        "INSTAGRAM",
-        "THREADS"
-      ],
-      "page_name": "Coinbase"
-    },
-    {
-      "body": "Coinbase Makes Bitcoin Easy",
-      "title": "Simplify Bitcoin with Coinbase",
+      "body": "Simplify Bitcoin with Coinbase",
+      "title": "Official Coinbase app",
       "cta": "Download",
       "format": "video",
-      "days_running": 114,
-      "is_active": true,
+      "days_running": 6,
+      "is_active": false,
       "platforms": [
         "FACEBOOK",
-        "INSTAGRAM",
-        "MESSENGER"
+        "INSTAGRAM"
       ],
       "page_name": "Coinbase"
     }
   ],
   "messaging_analysis": {
     "messaging_angles": [
-      "Simplicity/ease of use ('Makes [Crypto] Easy')",
-      "Purchase readiness ('Ready to buy?')",
-      "Anti-establishment/alternative finance ('broken financial system')",
-      "Multi-coin accessibility (Bitcoin, Ethereum, Solana, XRP, Dogecoin)",
-      "Onboarding focus ('getting started easy', 'first step')"
+      "Start your crypto journey",
+      "Simplify Bitcoin/crypto",
+      "Trade multiple cryptocurrencies",
+      "Passive earning (USDC rewards)",
+      "Community/social movement (outlier)"
     ],
     "top_ctas": [
       "Download",
-      "Learn more",
-      "Install now",
-      "Use app",
-      "Sign up"
+      "Learn more"
     ],
-    "buy_crypto_framing": "direct — messaging is action-oriented with 'Ready to buy?' and direct CTAs to download/install, pushing immediate conversion rather than education",
-    "fees_messaging": "completely absent — no mention of fees, costs, or pricing in any ads",
-    "simplicity_messaging": "heavily emphasized through repetitive '[Coinbase] Makes [Crypto] Easy' format and 'getting started easy' messaging, positioning ease-of-use as the core value proposition",
-    "security_messaging": "not emphasized — no explicit trust, security, or safety messaging present in these ads",
-    "dominant_format": "video — vast majority of active, long-running ads are video format",
+    "buy_crypto_framing": "direct — explicit calls to 'start your crypto journey' and 'trade Bitcoin' position crypto buying as the primary action",
+    "fees_messaging": "Fees are completely absent from all ad copy. Focus is on entry points and simplicity, not cost structure.",
+    "simplicity_messaging": "Emphasized through 'Simplify Bitcoin' messaging and 'no lockups, no setup' language for earning products. Positioned as removing friction from crypto.",
+    "security_messaging": "Entirely absent. No trust, safety, or security language appears in any of these ads.",
+    "dominant_format": "video — 5 of 7 ads are video format, with 2 carousels",
     "longest_running_themes": [
-      "Simplicity messaging ('Makes Bitcoin/Ethereum/Solana Easy') — 170+ days",
-      "Purchase readiness ('Ready to buy?') — 175+ days",
-      "Multi-coin positioning (Bitcoin, Ethereum, Solana, etc.) — 170+ days"
+      "Start your crypto journey / Trade Bitcoin and Ethereum (84-95 days)",
+      "USDC passive earning with no setup (95 days)"
     ],
-    "summary": "This competitor (Coinbase) relies heavily on simplicity messaging with a formulaic '[Coin Name] Made Easy' approach across multiple cryptocurrencies, running primarily video ads for 170+ days. The strategy is direct-conversion focused with 'Ready to buy?' calls and download CTAs, positioning crypto access as simple while completely avoiding fee discussions and framing the product as an escape from traditional finance."
-  },
-  "speed_comparison": {
-    "gaps": [
-      "No multi-use case messaging (competitor segments by coin type, Speed could segment by use case: remittance, gaming, everyday spending)",
-      "No 'getting started' or onboarding-focused messaging to reduce friction for crypto-curious users",
-      "No aspirational or alternative finance framing (no 'future of money' or anti-establishment angle)",
-      "Missing 'ready to act' purchase-readiness framing that creates urgency",
-      "No video ad format mentioned in current copy examples",
-      "Lack of repetitive, formulaic messaging that builds brand recognition across segments"
-    ],
-    "speed_advantages": [
-      "Zero fees (competitor completely avoids fee messaging, this is Speed's killer differentiator)",
-      "Instant deposits for specific use case (iGaming) - competitor has no vertical-specific positioning",
-      "Lightning Network technology as a tangible infrastructure advantage vs generic 'easy' claims",
-      "Rewards program (Speed Stacks) - competitor shows no rewards messaging",
-      "Clear remittance value proposition with concrete savings angle"
-    ],
-    "angles_to_test": [
-      "Formulaic simplicity series: 'Speed Makes [Remittances] Easy', 'Speed Makes [Gaming Deposits] Easy', 'Speed Makes [Bitcoin] Easy'",
-      "Purchase-readiness framing: 'Ready to send money home?', 'Ready to deposit instantly?', 'Ready to use Bitcoin?'",
-      "Onboarding reducer: 'Your first Bitcoin payment in 60 seconds', 'Getting started is easy: Download, fund, send'",
-      "Multi-use case creative: Separate ad sets showcasing Bitcoin for remittance vs gaming vs everyday use",
-      "Alternative finance angle with Speed's advantage: 'Banks charge fees. Speed doesn't.' or 'Skip Western Union. Use Bitcoin Lightning.'",
-      "Feature-forward simplicity: 'Instant Bitcoin payments. Zero fees. That's it.'"
-    ],
-    "ctas_to_test": [
-      "Download Speed",
-      "Install now",
-      "Start sending",
-      "Use Speed",
-      "Get Speed",
-      "Send now"
-    ],
-    "avoid": [
-      "Vague 'makes crypto easy' claims without specific proof points (Speed should lead with tangible benefits: zero fees, instant speed)",
-      "Ignoring fee messaging (competitor avoids it, Speed should weaponize it)",
-      "Generic multi-coin hedging without conviction (Speed is Bitcoin Lightning-focused, own it)",
-      "Pure download CTAs without context (Speed's CTAs should reinforce the core benefit: 'Download Speed. Send free.' not just 'Download')"
-    ],
-    "recommendations": "Test formulaic simplicity messaging across all three segments with use-case specific variants ('Speed Makes Remittances Easy/Free'). Always anchor simplicity claims to your zero-fee differentiator since competitors avoid fee discussions entirely. Develop video creative showing the 60-second onboarding flow for crypto-curious users, directly countering complexity concerns. Create purchase-readiness campaigns for each segment ('Ready to send money home? Ready to deposit instantly?') with segment-specific CTAs that reinforce the core benefit."
+    "summary": "Competitors lead with beginner-focused onboarding messaging ('start your journey', 'simplify Bitcoin') and direct calls to trade crypto, using video as the primary format. Longest-running ads emphasize frictionless entry and passive earning opportunities, while completely avoiding fee discussion and security positioning."
   }
 }
