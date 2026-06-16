@@ -2,7 +2,7 @@
 
 import os
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import gspread
@@ -35,6 +35,22 @@ no markdown formatting:
 
 Keep it under 400 words. Write for a marketing lead, not a data scientist. \
 Be direct and reference actual numbers from the data.
+
+When interpreting the data, follow these rules:
+- Treat every channel as distinct. "Google Ads" (paid user acquisition), \
+"Google Organic Search" (unpaid app-store/search discovery), and "Organic" are \
+SEPARATE channels. Never describe Google Ads installs as organic or as \
+"misattributed as organic" — they are correctly attributed to the Google Ads channel.
+- If a paid ad network (e.g. Google Ads, Apple Search Ads, Facebook) shows real \
+installs but $0 cost and $0 eCPI, do NOT treat it as organic. Flag it as a \
+cost/spend integration that is disconnected for that network, and recommend \
+reconnecting it in the Adjust dashboard so spend and eCPI report correctly. \
+Channels such as Organic, Website, Partnership, and Google Organic Search are \
+genuinely unpaid and correctly show no cost.
+- The retention data below already excludes immature cohorts (recent days whose \
+DN window has not fully elapsed). Do not interpret a missing recent day or a \
+low final data point as a retention drop or "collapse" — base the D1 trend only \
+on the matured cohorts shown and the stated trend figure.
 
 --- DATA ---
 {data_summary}
@@ -104,7 +120,7 @@ def _fmt_channel_overview(df: pd.DataFrame) -> str:
         if installs == 0:
             continue
         ecpi = float(row.get("ecpi", 0))
-        cost_str = f"eCPI ${ecpi:.2f}" if ecpi > 0 else "organic / no paid cost"
+        cost_str = f"eCPI ${ecpi:.2f}" if ecpi > 0 else "$0 cost / $0 eCPI reported"
         impr = int(row.get("impressions", 0))
         clicks = int(row.get("clicks", 0))
         reach = f", {impr:,} impressions, {clicks:,} clicks" if impr > 0 else ""
@@ -141,25 +157,51 @@ def _fmt_retention(df: pd.DataFrame) -> str:
     if "day" in df.columns:
         df = df.sort_values("day", ascending=False)
 
-    lines = ["D1 RETENTION BY DATE (most recent first)"]
+    # A DN retention figure is only valid once N full days have elapsed since the
+    # cohort's install day. Cohorts where cohort_day + N >= today are still maturing
+    # and read artificially low — including them produces false "collapse" alarms.
+    today = datetime.now(timezone.utc).date()
+
+    lines = ["D1 RETENTION BY DATE (most recent first; immature cohorts excluded)"]
     d1_values = []
+    immature = 0
     for _, row in df.iterrows():
+        day = row.get("day", "")
+        try:
+            cohort_date = datetime.strptime(str(day), "%Y-%m-%d").date()
+        except (ValueError, TypeError):
+            cohort_date = None
+
+        # D1 matures only after the day following the cohort has fully elapsed.
+        if cohort_date is not None and cohort_date + timedelta(days=1) >= today:
+            immature += 1
+            continue
+
         d1 = float(row.get("retention_rate_d1", 0))
         if d1 == 0:
             continue
-        day = row.get("day", "")
         d7 = float(row.get("retention_rate_d7", 0))
         d7_str = f", D7={d7:.1%}" if d7 > 0 else ""
         lines.append(f"  {day}: D1={d1:.1%}{d7_str}")
         d1_values.append(d1)
 
-    if len(d1_values) >= 3:
+    if immature:
+        lines.append(
+            f"  ({immature} most recent cohort day(s) excluded — D1 not yet matured)"
+        )
+
+    if len(d1_values) >= 4:
         recent = d1_values[:7]
-        older = d1_values[7:]
+        older = d1_values[7:14]
         if older:
-            delta = recent[-1] - older[0]
+            recent_avg = sum(recent) / len(recent)
+            older_avg = sum(older) / len(older)
+            delta = recent_avg - older_avg
             trend = "improving" if delta > 0.01 else "declining" if delta < -0.01 else "flat"
-            lines.append(f"  Trend (last 7 days vs prior): {trend} (Δ {delta:+.1%})")
+            lines.append(
+                f"  Trend (recent {len(recent)}d avg {recent_avg:.1%} vs prior "
+                f"{len(older)}d avg {older_avg:.1%}): {trend} (Δ {delta:+.1%})"
+            )
 
     return "\n".join(lines)
 
