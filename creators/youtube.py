@@ -47,6 +47,13 @@ _SCORER_TAGS = {
 }
 
 
+# Reject channels below this subscriber count. Tiny channels produce
+# artificially capped engagement ratios (avg_views/subscribers >> 1, clamped
+# to 1.0) that inflate engagement scores — e.g. 5- and 20-subscriber junk
+# channels scoring 15–19/20 on engagement in early test runs.
+MIN_SUBSCRIBERS = 5_000
+
+
 class QuotaExceededError(Exception):
     """Raised when the YouTube API daily quota is exhausted."""
 
@@ -239,6 +246,10 @@ class YouTubeCreatorFetcher:
             return None
 
         subscribers = int(stats.get("subscriberCount", 0))
+
+        # Subscriber floor: reject channels too small to score reliably.
+        if subscribers < MIN_SUBSCRIBERS:
+            return None
 
         uploads_id = content_details.get("relatedPlaylists", {}).get("uploads", "")
         avg_views = avg_likes = avg_comments = 0.0

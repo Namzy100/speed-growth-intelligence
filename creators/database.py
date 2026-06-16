@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS creators (
     sponsorship_count       INTEGER DEFAULT 0,
     niche_tags              TEXT[] DEFAULT '{}',
     composite_score         FLOAT DEFAULT 0,
+    deposit_relevance_score FLOAT DEFAULT 0,
     segment_tag             TEXT DEFAULT 'general',
     reasoning               TEXT,
     audience_fit            FLOAT DEFAULT 0,
@@ -57,6 +58,13 @@ GRANT ALL ON public.creators TO anon, authenticated, service_role;
 # If the table already exists but is unreachable (PGRST125), the grants are
 # likely missing. Run just this block in the SQL editor to fix it.
 GRANT_SQL = "GRANT ALL ON public.creators TO anon, authenticated, service_role;"
+
+# Migration for tables created before deposit_relevance_score was persisted.
+# Idempotent — safe to run repeatedly.
+ADD_DEPOSIT_COLUMN_SQL = (
+    "ALTER TABLE public.creators "
+    "ADD COLUMN IF NOT EXISTS deposit_relevance_score FLOAT DEFAULT 0;"
+)
 
 
 # ------------------------------------------------------------------
@@ -268,6 +276,7 @@ def _merge_record(creator_dict: dict, score_dict: dict) -> dict:
         "niche_tags":           creator_dict.get("niche_tags", []),
         # Scoring fields
         "composite_score":          score_dict.get("composite_score", 0.0),
+        "deposit_relevance_score":  score_dict.get("deposit_relevance_score", 0.0),
         "segment_tag":              score_dict.get("segment_tag", "general"),
         "reasoning":                score_dict.get("reasoning", ""),
         "audience_fit":             scores.get("audience_fit", 0.0),
