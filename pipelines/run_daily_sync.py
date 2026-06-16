@@ -1,4 +1,17 @@
-"""Daily orchestration: pulls all data sources and syncs to Google Sheets."""
+"""Daily orchestration: syncs Adjust install/retention data to Google Sheets.
+
+Scope: this orchestrator currently syncs ONLY the Adjust pipeline (channel
+overview, campaign installs, retention) plus a "Last Updated" timestamp. The
+other Speed data sources are standalone and are NOT yet wired into this
+orchestrator:
+
+  - creators/      — TikTok/YouTube creator discovery + scoring (persisted to
+                     Supabase, run on their own)
+  - eu/            — European market analysis (currently unimplemented)
+  - intelligence/  — weekly_brief.py and competitor_analysis.py (run manually)
+
+Add them here as separate steps in run() when they are ready for automation.
+"""
 
 import os
 import sys
@@ -16,13 +29,11 @@ if str(_ROOT) not in sys.path:
 load_dotenv()
 
 from pipelines.adjust import AdjustPipeline
-from pipelines.sheets import create_sheet_if_missing, write_dataframe
-
-_ADJUST_SHEET_MAP = {
-    "channel_overview": "Channel Overview",
-    "installs_by_campaign": "Campaign Installs",
-    "retention": "Retention",
-}
+from pipelines.sheets import (
+    create_sheet_if_missing,
+    write_all_adjust_data,
+    write_dataframe,
+)
 
 
 # ------------------------------------------------------------------
@@ -51,21 +62,8 @@ def _sync_adjust(spreadsheet_id: str) -> bool:
         _log(f"Adjust: pull FAILED — {e}")
         return False
 
-    success = True
-    for key, sheet_name in _ADJUST_SHEET_MAP.items():
-        df = data.get(key)
-        if df is None or df.empty:
-            _log(f"Adjust → '{sheet_name}': skipped (no data)")
-            continue
-        try:
-            create_sheet_if_missing(spreadsheet_id, sheet_name)
-            write_dataframe(df, spreadsheet_id, sheet_name)
-            _log(f"Adjust → '{sheet_name}': {len(df)} rows written")
-        except Exception as e:
-            _log(f"Adjust → '{sheet_name}': FAILED — {e}")
-            success = False
-
-    return success
+    # Single source of truth for the write loop lives in sheets.py.
+    return write_all_adjust_data(data, spreadsheet_id, log=_log)
 
 
 def _write_last_updated(spreadsheet_id: str) -> None:
