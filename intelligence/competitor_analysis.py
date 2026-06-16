@@ -30,21 +30,68 @@ _AD_LIBRARY_BASE = "https://www.facebook.com/ads/library/"
 _MAX_ADS = 50
 _RUN_TIMEOUT = timedelta(seconds=120)
 
+# Default Ad Library country. No specific target market is documented in
+# CLAUDE.md or docs/ (only a generic "EU focus"), so we default to GB (UK) as a
+# plausible first market for a fintech wallet. THIS IS AN UNCONFIRMED ASSUMPTION
+# — override with --country and confirm the real target market.
+_DEFAULT_COUNTRY = "GB"
+
+# Optional registry of known advertiser Page IDs. Searching by Page ID is the
+# most precise way to pull a competitor's ads — it returns only that page's ads
+# and eliminates keyword noise entirely. Populate from the Meta Ad Library URL
+# (the `view_all_page_id=` value on a competitor's page). Left empty by design:
+# a wrong ID silently returns the wrong page, so we don't guess.
+_KNOWN_PAGE_IDS: dict[str, str] = {
+    # "Coinbase": "...",
+    # "Cash App": "...",
+    # "Strike": "...",
+    # "Speed Wallet": "...",
+}
+
+# Fintech / payments vocabulary used to keep keyword-search results on-topic.
+# An ad survives the relevance filter only if it comes from the exact advertiser
+# page OR its copy contains one of these terms. The exact-page match already
+# anchors the real advertiser's brand ads, so this list is tuned for PRECISION:
+# crypto-specific tokens and money-movement phrases that don't appear in games,
+# fashion, or auto ads. Deliberately EXCLUDES ambiguous singletons — bare
+# "lightning" (matched a Dubai fashion ad: "every look is a lightning strike"),
+# "bank", "exchange", "invest", "wallet", "deposit", "cash"/"money" — which leak
+# noise from unrelated verticals.
+_FINTECH_TERMS = (
+    "bitcoin", "btc", "crypto", "cryptocurrency", "blockchain", "stablecoin",
+    "stable coin", "usdt", "usdc", "satoshi", " sats ", "remittance",
+    "send money", "money transfer", "transfer money", "buy bitcoin",
+    "spend bitcoin", "crypto wallet", "bitcoin wallet", "digital wallet",
+    "mobile wallet", "lightning network", "lightning wallet", "lightning payment",
+    "peer-to-peer payment", "debit card", "no fees", "zero fees", "low fees",
+    "instant transfer",
+)
+
 
 # ------------------------------------------------------------------
 # Fetch from Meta Ad Library via Apify
 # ------------------------------------------------------------------
 
-def fetch_competitor_ads(competitor_name: str, platform: str = "all") -> list[dict]:
+def fetch_competitor_ads(
+    competitor_name: str,
+    platform: str = "all",
+    country: str = _DEFAULT_COUNTRY,
+    page_id: str | None = None,
+) -> list[dict]:
     """Fetch active ads for a competitor from Meta Ad Library.
 
     Args:
         competitor_name: Brand name to search (e.g. "Coinbase", "Cash App").
         platform:        "all", "facebook", or "instagram".
+        country:         ISO country code for the Ad Library (e.g. "GB", "US").
+        page_id:         Optional exact advertiser Page ID. If given, only that
+                         page's ads are pulled (most precise, no keyword noise).
+                         Falls back to _KNOWN_PAGE_IDS[competitor_name] if present.
 
     Returns:
-        List of normalised ad dicts with keys:
-        body, title, cta, format, days_running, is_active, platforms, page_name.
+        List of normalised ad dicts, with off-topic results removed by
+        _is_relevant(). Keys: body, title, cta, format, days_running, is_active,
+        platforms, page_name.
 
     Raises:
         EnvironmentError: If APIFY_API_KEY is missing.
@@ -54,7 +101,8 @@ def fetch_competitor_ads(competitor_name: str, platform: str = "all") -> list[di
     if not api_key:
         raise EnvironmentError("APIFY_API_KEY must be set in .env")
 
-    url = _build_ad_library_url(competitor_name, platform)
+    page_id = page_id or _KNOWN_PAGE_IDS.get(competitor_name)
+    url = _build_ad_library_url(competitor_name, platform, country, page_id)
     client = ApifyClient(api_key)
 
     run = client.actor(_AD_LIBRARY_ACTOR).call(
@@ -74,25 +122,86 @@ def fetch_competitor_ads(competitor_name: str, platform: str = "all") -> list[di
     raw_items = list(client.dataset(run.default_dataset_id).iterate_items())
 
     ads = []
+    discarded = 0
     for item in raw_items:
         parsed = _parse_ad_item(item)
-        if parsed:
-            ads.append(parsed)
+        if not parsed:
+            continue
+        if not _is_relevant(parsed, competitor_name):
+            discarded += 1
+            continue
+        ads.append(parsed)
+
+    if discarded:
+        print(
+            f"  Relevance filter: discarded {discarded} off-topic ad(s) "
+            f"(kept {len(ads)})"
+        )
 
     return ads
 
 
-def _build_ad_library_url(competitor_name: str, platform: str) -> str:
+def fetch_speed_ads(
+    country: str = _DEFAULT_COUNTRY,
+    query: str = "Speed Wallet",
+    page_id: str | None = None,
+    limit: int = 15,
+) -> list[str]:
+    """Pull Speed Wallet's own live ad copy from Meta Ad Library.
+
+    Uses the same fetch + relevance mechanism as competitors instead of a
+    hardcoded placeholder list. Returns up to `limit` ad-copy strings.
+    """
+    ads = fetch_competitor_ads(
+        query, platform="all", country=country, page_id=page_id
+    )
+    return [a["body"] for a in ads if a.get("body")][:limit]
+
+
+def _build_ad_library_url(
+    competitor_name: str,
+    platform: str,
+    country: str,
+    page_id: str | None = None,
+) -> str:
     params: dict[str, str] = {
         "active_status": "all",
         "ad_type": "all",
-        "country": "US",
-        "q": competitor_name,
-        "search_type": "keyword_unordered",
+        "country": country,
     }
+    if page_id:
+        # Most precise: pull only this advertiser page's ads — no keyword noise.
+        params["view_all_page_id"] = str(page_id)
+    else:
+        # Exact-phrase match is tighter than keyword_unordered, but the common-word
+        # problem (e.g. "Strike") is still cleaned up downstream by _is_relevant().
+        params["q"] = competitor_name
+        params["search_type"] = "keyword_exact_phrase"
     if platform in ("facebook", "instagram", "messenger"):
         params["publisher_platforms[]"] = platform
     return _AD_LIBRARY_BASE + "?" + urllib.parse.urlencode(params)
+
+
+def _normalize(text: str) -> str:
+    """Lowercase and strip punctuation for tolerant name comparison."""
+    return re.sub(r"[^a-z0-9 ]", "", (text or "").lower()).strip()
+
+
+def _is_relevant(ad: dict, competitor_name: str) -> bool:
+    """Keep an ad only if it is plausibly from the target advertiser.
+
+    True when the ad's page name EXACTLY matches the competitor (so e.g.
+    "Critical Strike"/"Football Strike" do NOT match "Strike"), or when the ad
+    copy contains a fintech/payments term. Everything else is treated as noise.
+    """
+    page = _normalize(ad.get("page_name", ""))
+    comp = _normalize(competitor_name)
+    page_match = bool(page) and bool(comp) and page == comp
+
+    text = f"{ad.get('body', '')} {ad.get('title', '')}".lower()
+    fintech_match = any(term in text for term in _FINTECH_TERMS)
+
+    return page_match or fintech_match
 
 
 def _parse_ad_item(item: dict) -> dict | None:
@@ -320,6 +429,8 @@ def save_analysis(analysis: dict, competitor_name: str) -> Path:
 def run_analysis(
     competitor_name: str,
     platform: str = "all",
+    country: str = _DEFAULT_COUNTRY,
+    page_id: str | None = None,
     speed_ad_examples: list[str] | None = None,
 ) -> dict:
     """Full pipeline: fetch ads → analyse themes → compare to Speed → save.
@@ -327,18 +438,29 @@ def run_analysis(
     Args:
         competitor_name:   Brand to search in Meta Ad Library.
         platform:          "all", "facebook", or "instagram".
+        country:           ISO country code for the Ad Library (e.g. "GB").
+        page_id:           Optional exact advertiser Page ID (most precise).
         speed_ad_examples: Speed's current ad copy strings for gap analysis.
                            Pass None or [] to skip the comparison step.
 
     Returns:
         Full analysis dict saved to data/processed/.
     """
-    print(f"Fetching Meta Ad Library ads for '{competitor_name}'...")
-    ads = fetch_competitor_ads(competitor_name, platform)
-    print(f"  {len(ads)} ads with copy fetched")
+    print(f"Fetching Meta Ad Library ads for '{competitor_name}' (country={country})...")
+    ads = fetch_competitor_ads(competitor_name, platform, country, page_id)
+    print(f"  {len(ads)} relevant ads with copy retained")
 
     if not ads:
-        return {"error": "No ads with copy found", "competitor": competitor_name}
+        return {
+            "error": "No relevant ads with copy found",
+            "competitor": competitor_name,
+            "country": country,
+            "hint": (
+                "Keyword search returned no on-topic ads. Supply the exact "
+                "advertiser Page ID via --page-id (or _KNOWN_PAGE_IDS) for a "
+                "precise pull."
+            ),
+        }
 
     print("Analysing messaging themes with Claude...")
     themes = analyze_messaging_themes(ads)
@@ -351,6 +473,7 @@ def run_analysis(
     analysis = {
         "competitor": competitor_name,
         "platform": platform,
+        "country": country,
         "fetched_at": datetime.now(timezone.utc).isoformat(),
         "total_ads": len(ads),
         "ads": ads,
@@ -449,19 +572,77 @@ Keep it under 600 words total. Write for a marketing strategist, not a data scie
 # ------------------------------------------------------------------
 
 if __name__ == "__main__":
-    # Sample Speed ad copy — replace or extend with real examples.
-    SPEED_ADS = [
-        "Send Bitcoin instantly. Zero fees. Download Speed.",
-        "Stack sats on every purchase with Speed Stacks rewards.",
-        "The Lightning wallet built for real life. Speed — instant payments, zero fees.",
-        "Send money home without the fees. Speed uses Bitcoin Lightning to cut out the middlemen.",
-    ]
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Analyse a competitor's Meta Ad Library ads vs Speed's own ads."
+    )
+    parser.add_argument(
+        "--competitor", default="Coinbase",
+        help='Competitor brand name to analyse (e.g. "Cash App").',
+    )
+    parser.add_argument(
+        "--country", default=None,
+        help=f"ISO country code for the Ad Library (default: {_DEFAULT_COUNTRY}).",
+    )
+    parser.add_argument(
+        "--platform", default="all", choices=["all", "facebook", "instagram", "messenger"],
+    )
+    parser.add_argument(
+        "--page-id", default=None,
+        help="Exact advertiser Page ID for the competitor (most precise).",
+    )
+    parser.add_argument(
+        "--speed-query", default="Speed Wallet",
+        help="Search term for Speed's own ads (default: 'Speed Wallet').",
+    )
+    parser.add_argument(
+        "--speed-page-id", default=None,
+        help="Exact Page ID for Speed's own advertiser page (most precise).",
+    )
+    parser.add_argument(
+        "--no-speed-compare", action="store_true",
+        help="Skip the Speed gap-analysis comparison step.",
+    )
+    args = parser.parse_args()
+
+    country = args.country or _DEFAULT_COUNTRY
+    if not args.country:
+        print("⚠️  ASSUMPTION: no target market is documented in CLAUDE.md/docs and")
+        print(f"⚠️  no --country was given, so defaulting to '{_DEFAULT_COUNTRY}' (UK) as a")
+        print("⚠️  likely first market for a fintech wallet. CONFIRM the real target")
+        print("⚠️  market before relying on these results — do not treat GB as settled.\n")
+
+    # Pull Speed's own ads dynamically via the same Ad Library mechanism.
+    speed_ads: list[str] = []
+    if not args.no_speed_compare:
+        print(f"Fetching Speed's own ads (query='{args.speed_query}', country={country})...")
+        try:
+            speed_ads = fetch_speed_ads(
+                country=country, query=args.speed_query, page_id=args.speed_page_id
+            )
+            print(f"  {len(speed_ads)} Speed ad(s) retained")
+        except (EnvironmentError, RuntimeError, ApifyApiError) as e:
+            print(f"  Could not fetch Speed ads: {e}")
+        if not speed_ads:
+            print(
+                "  No Speed ads found — gap analysis will be skipped. "
+                "Supply --speed-page-id for a precise pull.\n"
+            )
 
     result = run_analysis(
-        competitor_name="Coinbase",
-        platform="all",
-        speed_ad_examples=SPEED_ADS,
+        competitor_name=args.competitor,
+        platform=args.platform,
+        country=country,
+        page_id=args.page_id,
+        speed_ad_examples=speed_ads,
     )
+
+    if "error" in result:
+        print(f"\n{result['error']}")
+        if result.get("hint"):
+            print(result["hint"])
+        sys.exit(0)
 
     print("\n" + "=" * 60)
     print("MESSAGING ANALYSIS")
