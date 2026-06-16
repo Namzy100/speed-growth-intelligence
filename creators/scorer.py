@@ -162,11 +162,25 @@ class CreatorScorer:
         score = max(0.0, min(log_score, 20.0))
         return score, f"~{raw:,.0f} weighted engaged reach"
 
+    # Above this count, the "sponsorships" are almost certainly a brand's own
+    # ad-flagged product videos (self-promotion), not third-party brand deals.
+    # A real creator's brand-deal history rarely exceeds this. We refuse to let
+    # self-promotion max out the signal — it gets a fixed, modest score instead.
+    _SELF_PROMO_THRESHOLD = 50
+    _SELF_PROMO_SCORE = 6.0
+
     def _score_sponsorship_history(self, creator: dict) -> tuple[float, str]:
-        """Experience with brand deals, on a log2 curve (0–20)."""
+        """Experience with *third-party* brand deals, on a log2 curve (0–20)."""
         count = creator.get("sponsorship_count", 0)
         if count == 0:
             return 0.0, "no prior brand deals"
+
+        if count > self._SELF_PROMO_THRESHOLD:
+            # Implausibly high → self-promotion artifact, not partnership track record.
+            return self._SELF_PROMO_SCORE, (
+                f"{count} ad-flagged videos — likely self-promotion, "
+                f"down-weighted (not third-party deals)"
+            )
 
         # log2(count+1) / log2(21): 1 deal→4.5, 5→11.5, 10→15.5, 20→20
         score = min(math.log2(count + 1) / math.log2(21) * 20, 20.0)

@@ -26,6 +26,10 @@ _FINTECH_KEYWORDS = [
     "money app", "wallet app", "paytech",
 ]
 
+# Reject creators below this follower count — too small to score reliably and
+# prone to artificially capped engagement ratios. Mirrors youtube.MIN_SUBSCRIBERS.
+MIN_FOLLOWERS = 5_000
+
 _CRYPTO_SAT = 6   # hits required to reach the cap
 _FINTECH_SAT = 5
 _CRYPTO_CAP = 0.80
@@ -125,6 +129,8 @@ class TikTokCreatorFetcher:
             return None
 
         followers = int(author.get("fans", 0) or 0)
+        if followers < MIN_FOLLOWERS:
+            return None
         bio = author.get("signature", "") or ""
         total_video_count = int(author.get("video", 0) or 0)
 
