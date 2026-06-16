@@ -1,20 +1,58 @@
 """Google Sheets writer for Looker Studio dashboards."""
 
 import os
+import time
 from pathlib import Path
+from typing import Callable, TypeVar
 
 import gspread
 import pandas as pd
 from dotenv import load_dotenv
-from gspread.exceptions import SpreadsheetNotFound
+from gspread.exceptions import APIError, SpreadsheetNotFound
+from requests.exceptions import ConnectionError as RequestsConnectionError
+from requests.exceptions import Timeout as RequestsTimeout
 
 load_dotenv()
 
+# Single source of truth for the Adjust report → sheet-tab mapping.
 _ADJUST_SHEET_MAP = {
     "channel_overview": "Channel Overview",
     "installs_by_campaign": "Campaign Installs",
     "retention": "Retention",
 }
+
+# Retry policy for transient Sheets API failures (5xx / 429 / network / timeout).
+_MAX_ATTEMPTS = 4
+_BACKOFF_BASE_SECONDS = 1.0          # exponential: 1s, 2s, 4s between retries
+
+_T = TypeVar("_T")
+
+
+def _is_transient_api_error(e: APIError) -> bool:
+    """True for Sheets APIErrors worth retrying: 5xx server errors and 429 quota."""
+    response = getattr(e, "response", None)
+    code = getattr(response, "status_code", None)
+    return code is not None and (code >= 500 or code == 429)
+
+
+def _retry(func: Callable[[], _T]) -> _T:
+    """Run a gspread call, retrying transient failures with exponential backoff.
+
+    Retries on 5xx/429 APIErrors and on connection/timeout errors. Non-transient
+    errors (e.g. 403/404) are raised immediately without retry.
+    """
+    for attempt in range(_MAX_ATTEMPTS):
+        is_last = attempt == _MAX_ATTEMPTS - 1
+        try:
+            return func()
+        except APIError as e:
+            if not _is_transient_api_error(e) or is_last:
+                raise
+        except (RequestsConnectionError, RequestsTimeout):
+            if is_last:
+                raise
+        time.sleep(_BACKOFF_BASE_SECONDS * (2 ** attempt))
+    raise RuntimeError("unreachable: retry loop exhausted")  # pragma: no cover
 
 
 # ------------------------------------------------------------------
@@ -39,7 +77,7 @@ def _client() -> gspread.Client:
 
 def _open(spreadsheet_id: str) -> gspread.Spreadsheet:
     try:
-        return _client().open_by_key(spreadsheet_id)
+        return _retry(lambda: _client().open_by_key(spreadsheet_id))
     except SpreadsheetNotFound:
         raise SpreadsheetNotFound(
             f"Spreadsheet '{spreadsheet_id}' not found. "
@@ -67,10 +105,10 @@ def create_sheet_if_missing(spreadsheet_id: str, sheet_name: str) -> gspread.Wor
         sheet_name:     The tab name to create.
     """
     spreadsheet = _open(spreadsheet_id)
-    existing = {ws.title for ws in spreadsheet.worksheets()}
+    existing = {ws.title for ws in _retry(spreadsheet.worksheets)}
     if sheet_name not in existing:
-        return spreadsheet.add_worksheet(title=sheet_name, rows=1000, cols=26)
-    return spreadsheet.worksheet(sheet_name)
+        return _retry(lambda: spreadsheet.add_worksheet(title=sheet_name, rows=1000, cols=26))
+    return _retry(lambda: spreadsheet.worksheet(sheet_name))
 
 
 def write_dataframe(
@@ -89,33 +127,49 @@ def write_dataframe(
         spreadsheet_id:  The Google Sheets file ID.
         sheet_name:      The tab name to write to (must already exist).
     """
-    worksheet = _open(spreadsheet_id).worksheet(sheet_name)
+    worksheet = _retry(lambda: _open(spreadsheet_id).worksheet(sheet_name))
     values = _df_to_values(df)
-    worksheet.clear()
-    worksheet.update(values, value_input_option="USER_ENTERED")
+    _retry(worksheet.clear)
+    _retry(lambda: worksheet.update(values, value_input_option="USER_ENTERED"))
 
 
 def write_all_adjust_data(
     adjust_data_dict: dict[str, pd.DataFrame],
     spreadsheet_id: str,
-) -> None:
+    log: Callable[[str], None] = print,
+) -> bool:
     """Write each DataFrame from AdjustPipeline.get_all() to its own sheet tab.
 
-    Tab names: Channel Overview, Campaign Installs, Retention.
-    Tabs are created if they don't already exist.
+    Tab names: Channel Overview, Campaign Installs, Retention. Tabs are created
+    if they don't already exist. This is the single place the Adjust → sheets
+    write loop lives; callers (e.g. run_daily_sync) should use it rather than
+    reimplementing the loop.
+
+    Individual tab failures are logged and do not abort the remaining tabs.
 
     Args:
         adjust_data_dict:  Dict returned by AdjustPipeline.get_all().
         spreadsheet_id:    The Google Sheets file ID.
+        log:               Callable used for progress/error lines (defaults to print;
+                           pass a timestamped logger from the orchestrator).
+
+    Returns:
+        True if every non-empty report was written, False if any tab failed.
     """
+    success = True
     for key, sheet_name in _ADJUST_SHEET_MAP.items():
         df = adjust_data_dict.get(key)
         if df is None or df.empty:
-            print(f"  Skipped: '{sheet_name}' (no data)")
+            log(f"Adjust → '{sheet_name}': skipped (no data)")
             continue
-        create_sheet_if_missing(spreadsheet_id, sheet_name)
-        write_dataframe(df, spreadsheet_id, sheet_name)
-        print(f"  Written: '{sheet_name}' ({len(df)} rows, {len(df.columns)} columns)")
+        try:
+            create_sheet_if_missing(spreadsheet_id, sheet_name)
+            write_dataframe(df, spreadsheet_id, sheet_name)
+            log(f"Adjust → '{sheet_name}': {len(df)} rows written")
+        except Exception as e:
+            log(f"Adjust → '{sheet_name}': FAILED — {e}")
+            success = False
+    return success
 
 
 # ------------------------------------------------------------------

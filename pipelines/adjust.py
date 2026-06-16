@@ -21,6 +21,11 @@ _NUMERIC: dict[str, list[str]] = {
     "retention": [f"retention_rate_d{d}" for d in [1, 2, 3, 4, 5, 6, 7, 14]],
 }
 
+# Retry policy for transient failures (network errors, timeouts, 5xx, 429).
+_MAX_ATTEMPTS = 4
+_BACKOFF_BASE_SECONDS = 1.0          # exponential: 1s, 2s, 4s between retries
+_RATE_LIMIT_WAIT_SECONDS = 5.0       # fallback wait for 429 when no Retry-After
+
 
 class AdjustPipeline:
     """Pulls install and attribution data from the Adjust KPI Service API v1."""
@@ -85,15 +90,43 @@ class AdjustPipeline:
             "sandbox": "false",
             "format": "json",
         }
-        for attempt in range(3):
-            resp = requests.get(
-                _BASE_URL, headers=self._headers, params=params, timeout=30
-            )
+        for attempt in range(_MAX_ATTEMPTS):
+            is_last = attempt == _MAX_ATTEMPTS - 1
+            backoff = _BACKOFF_BASE_SECONDS * (2 ** attempt)
+
+            # Network-level transient failures: timeouts and connection errors.
+            try:
+                resp = requests.get(
+                    _BASE_URL, headers=self._headers, params=params, timeout=30
+                )
+            except (requests.Timeout, requests.ConnectionError) as e:
+                if is_last:
+                    raise RuntimeError(
+                        f"Adjust request failed after {_MAX_ATTEMPTS} attempts: {e}"
+                    ) from e
+                time.sleep(backoff)
+                continue
+
+            # 429 rate limiting — handled distinctly from other transient errors.
+            # Honour the Retry-After header when present, else use a fixed wait.
             if resp.status_code == 429:
-                if attempt < 2:
-                    time.sleep(5)
-                    continue
-                raise RuntimeError("Adjust API rate limit exceeded after 3 attempts.")
+                if is_last:
+                    raise RuntimeError(
+                        f"Adjust API rate limit exceeded after {_MAX_ATTEMPTS} attempts."
+                    )
+                retry_after = resp.headers.get("Retry-After", "")
+                wait = float(retry_after) if retry_after.isdigit() else _RATE_LIMIT_WAIT_SECONDS
+                time.sleep(wait)
+                continue
+
+            # 5xx server errors are transient — retry with exponential backoff.
+            if resp.status_code >= 500:
+                if is_last:
+                    resp.raise_for_status()
+                time.sleep(backoff)
+                continue
+
+            # Success or a non-retryable 4xx — raise on the latter, return on success.
             resp.raise_for_status()
             return resp.json().get("rows", [])
         return []
