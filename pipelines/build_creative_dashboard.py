@@ -1,9 +1,9 @@
 """Build a self-contained creative-performance dashboard HTML from live Sheets data.
 
 Pulls the Channel Overview / Campaign Installs / Retention / Last Updated tabs
-from the Google Sheet at build time, computes the highlights, asks Claude
-(claude-sonnet-4-6) for plain-English insights, and bakes everything into a
-single self-contained file at docs/creative_dashboard.html.
+from the Google Sheet at build time, computes the headline KPIs + highlights,
+asks Claude (claude-sonnet-4-6) for structured insight cards, and bakes
+everything into a single self-contained file at docs/creative_dashboard.html.
 
 Why a build script rather than client-side fetching: gspread is server-side and
 credentials.json is a service-account private key — embedding it in a browser
@@ -36,6 +36,7 @@ _OUT = _ROOT / "docs" / "creative_dashboard.html"
 _INSIGHTS_MODEL = "claude-sonnet-4-6"
 _MIN_MEANINGFUL_INSTALLS = 100   # floor for "meaningful volume" in efficiency pick
 _RETENTION_EXCLUDE_RECENT_DAYS = 2
+_D1_TARGET = 0.25                # D1 retention KPI threshold (green above, red below)
 
 
 # ------------------------------------------------------------------
@@ -74,6 +75,8 @@ def build_channels(rows: list[dict]) -> dict:
     channels = [c for c in channels if c["channel"]]
     channels.sort(key=lambda c: c["installs"], reverse=True)
 
+    total_installs = sum(c["installs"] for c in channels)
+
     # Most efficient = lowest eCPI among PAID channels (eCPI > 0) with meaningful
     # volume. eCPI 0 means organic/no spend, which isn't "efficient", so excluded.
     paid = [c for c in channels if c["ecpi"] > 0 and c["installs"] >= _MIN_MEANINGFUL_INSTALLS]
@@ -89,12 +92,29 @@ def build_channels(rows: list[dict]) -> dict:
             "flagged": fb["ecpi"] > apple["ecpi"],
         }
 
+    # Re-engagement channel (high clicks, ~no installs) drives the CVR KPI.
+    re_pat = re.compile(r"re-?engag", re.I)
+    re_ch = next((c for c in channels if re_pat.search(c["channel"])), None)
+    reengagement = None
+    if re_ch and re_ch["clicks"] > 0:
+        reengagement = {
+            "channel": re_ch["channel"],
+            "clicks": re_ch["clicks"],
+            "installs": re_ch["installs"],
+            "cvr": round(re_ch["installs"] / re_ch["clicks"] * 100, 3),
+        }
+
+    # The table shows only channels that actually drove installs — drop zero rows.
+    display = [c for c in channels if c["installs"] > 0]
+
     return {
-        "channels": channels,
+        "channels": display,
+        "total_installs": total_installs,
         "most_efficient": most_efficient["channel"] if most_efficient else None,
         "most_efficient_detail": most_efficient,
         "facebook_flag": facebook_flag,
         "min_meaningful_installs": _MIN_MEANINGFUL_INSTALLS,
+        "reengagement": reengagement,
     }
 
 
@@ -118,7 +138,6 @@ def build_campaigns(rows: list[dict]) -> dict:
 
 
 def build_retention(rows: list[dict]) -> dict:
-    # Sort cohorts by date and drop the most recent N (immature).
     rows = [r for r in rows if str(r.get("day", "")).strip()]
     rows.sort(key=lambda r: str(r["day"]))
     matured = rows[:-_RETENTION_EXCLUDE_RECENT_DAYS] if len(rows) > _RETENTION_EXCLUDE_RECENT_DAYS else []
@@ -142,7 +161,7 @@ def build_retention(rows: list[dict]) -> dict:
 
 
 # ------------------------------------------------------------------
-# Claude insights
+# Claude insights (structured cards)
 # ------------------------------------------------------------------
 
 def generate_insights(channels: dict, campaigns: dict, retention: dict) -> dict:
@@ -151,11 +170,11 @@ def generate_insights(channels: dict, campaigns: dict, retention: dict) -> dict:
         return {"insights": [], "critical_index": None,
                 "source": "unavailable (ANTHROPIC_API_KEY not set)"}
 
-    # Compact, factual summary of the real data for the model to reason over.
     summary = {
         "channels_top": channels["channels"][:8],
         "most_efficient_channel": channels["most_efficient_detail"],
         "facebook_vs_apple_ecpi": channels["facebook_flag"],
+        "reengagement_channel": channels["reengagement"],
         "top_campaigns": campaigns["campaigns"],
         "retention_curve_d1_d7": dict(zip(retention["labels"], retention["values"])),
         "retention_cohorts_used": retention["cohort_count"],
@@ -166,16 +185,17 @@ def generate_insights(channels: dict, campaigns: dict, retention: dict) -> dict:
         "Lightning payments app. Below is REAL data pulled live from the user "
         "acquisition dashboard (installs, eCPI, top campaigns, and the D1-D7 "
         "retention curve from matured cohorts).\n\n"
-        "Write 4-5 plain-English insight bullets: what's working, what isn't, "
-        "and what to do next. Be specific and cite the actual numbers (channel "
-        "names, eCPI values, install counts, retention %). Each bullet must be "
-        "ONE punchy sentence — no semicolons stringing two thoughts together, "
-        "no fluff, no generic advice.\n\n"
-        "Ordering: the FIRST bullet must cover organic install dominance; the "
-        "SECOND bullet must be the re-engagement funnel inefficiency (clicks "
-        "converting to almost no installs), which is the single most urgent "
-        "issue. Then the rest.\n\n"
-        "Return ONLY a JSON array of strings, e.g. [\"...\", \"...\"]. No prose.\n\n"
+        "Write 4-5 insight cards. Each card is a JSON object with exactly these keys:\n"
+        '  "type": one of "positive", "warning", or "neutral"\n'
+        '  "headline": a punchy 4-8 word headline, no trailing period\n'
+        '  "detail": ONE sentence citing the specific numbers (channel names, '
+        "eCPI values, install counts, retention %)\n\n"
+        "Be specific, no fluff, no generic advice. Ordering: the FIRST card "
+        "covers organic install dominance (type positive); the SECOND card is "
+        "the re-engagement funnel inefficiency — clicks converting to almost no "
+        'installs — and MUST be type "warning" (the single most urgent issue). '
+        "Then the rest.\n\n"
+        "Return ONLY a JSON array of these objects. No prose.\n\n"
         f"DATA:\n{json.dumps(summary, indent=2)}"
     )
 
@@ -184,14 +204,13 @@ def generate_insights(channels: dict, campaigns: dict, retention: dict) -> dict:
         client = Anthropic(api_key=api_key)
         resp = client.messages.create(
             model=_INSIGHTS_MODEL,
-            max_tokens=900,
+            max_tokens=1000,
             messages=[{"role": "user", "content": prompt}],
         )
-        text = resp.content[0].text.strip()
-        insights = _parse_json_array(text)
-        if insights:
-            insights, critical_index = _reorder_insights(insights)
-            return {"insights": insights, "critical_index": critical_index,
+        cards = _parse_insights(resp.content[0].text.strip())
+        if cards:
+            cards, critical_index = _reorder_insights(cards)
+            return {"insights": cards, "critical_index": critical_index,
                     "source": _INSIGHTS_MODEL}
         return {"insights": [], "critical_index": None,
                 "source": f"{_INSIGHTS_MODEL} (unparseable response)"}
@@ -200,7 +219,8 @@ def generate_insights(channels: dict, campaigns: dict, retention: dict) -> dict:
                 "source": f"error: {type(e).__name__}: {e}"}
 
 
-def _parse_json_array(text: str) -> list[str]:
+def _parse_insights(text: str) -> list[dict]:
+    """Parse Claude's JSON array of insight cards into normalised dicts."""
     try:
         val = json.loads(text)
     except json.JSONDecodeError:
@@ -211,27 +231,39 @@ def _parse_json_array(text: str) -> list[str]:
             val = json.loads(m.group())
         except json.JSONDecodeError:
             return []
-    if isinstance(val, list):
-        return [str(x) for x in val if str(x).strip()]
-    return []
+    if not isinstance(val, list):
+        return []
+    cards = []
+    for item in val:
+        if isinstance(item, dict):
+            headline = str(item.get("headline", "")).strip()
+            detail = str(item.get("detail", "")).strip()
+            typ = str(item.get("type", "neutral")).strip().lower()
+            if typ not in ("positive", "warning", "neutral"):
+                typ = "neutral"
+            if headline or detail:
+                cards.append({"type": typ, "headline": headline, "detail": detail})
+        elif str(item).strip():
+            # Fallback if the model returned plain strings instead of objects.
+            cards.append({"type": "neutral", "headline": "", "detail": str(item).strip()})
+    return cards
 
 
-def _reorder_insights(insights: list[str]) -> tuple[list[str], int | None]:
-    """Force the re-engagement-funnel bullet to position 2 and mark it critical.
-
-    The prompt already asks for this ordering; this guarantees it regardless of
-    model compliance. Returns (insights, critical_index) where critical_index is
-    the position of the re-engagement bullet (used to style it), or None.
-    """
+def _reorder_insights(cards: list[dict]) -> tuple[list[dict], int | None]:
+    """Force the re-engagement card to position 2; return its index (critical)."""
     pat = re.compile(r"re-?engag", re.I)
-    idx = next((i for i, t in enumerate(insights) if pat.search(t)), None)
+    idx = next(
+        (i for i, c in enumerate(cards)
+         if pat.search(f"{c.get('headline', '')} {c.get('detail', '')}")),
+        None,
+    )
     if idx is None:
-        return insights, None
-    if len(insights) >= 2 and idx != 1:
-        bullet = insights.pop(idx)
-        insights.insert(1, bullet)
-        return insights, 1
-    return insights, idx
+        return cards, None
+    if len(cards) >= 2 and idx != 1:
+        card = cards.pop(idx)
+        cards.insert(1, card)
+        return cards, 1
+    return cards, idx
 
 
 # ------------------------------------------------------------------
@@ -262,11 +294,24 @@ def main() -> None:
 
     print(f"Generating insights with {_INSIGHTS_MODEL}...")
     insights = generate_insights(channels, campaigns, retention)
-    print(f"  insights source: {insights['source']}  ({len(insights['insights'])} bullets)")
+    print(f"  insights source: {insights['source']}  ({len(insights['insights'])} cards)")
+
+    d1 = retention["values"][0] if retention["values"] else 0.0
+    kpis = {
+        "total_installs": channels["total_installs"],
+        "channel_count": len(channels["channels"]),
+        "best_paid": channels["most_efficient_detail"],
+        "d1_retention": d1,
+        "d1_above": d1 >= _D1_TARGET,
+        "d1_target": _D1_TARGET,
+        "matured_cohorts": retention["cohort_count"],
+        "reengagement": channels["reengagement"],
+    }
 
     data = {
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"),
         "last_updated": last_updated,
+        "kpis": kpis,
         **channels,
         **campaigns,
         "retention": retention,
@@ -279,7 +324,7 @@ def main() -> None:
     _OUT.write_text(render_html(data), encoding="utf-8")
     print(f"Wrote {_OUT.relative_to(_ROOT)} ({_OUT.stat().st_size:,} bytes)")
     print(f"  channels={len(data['channels'])} campaigns={len(data['campaigns'])} "
-          f"retention_cohorts={retention['cohort_count']}")
+          f"retention_cohorts={retention['cohort_count']} total_installs={kpis['total_installs']:,}")
 
 
 # ------------------------------------------------------------------
@@ -297,8 +342,9 @@ _TEMPLATE = r"""<!doctype html>
 <style>
   :root{
     --bg:#0d1117; --panel:#161b22; --panel-2:#1c2330; --border:#30363d;
-    --text:#e6edf3; --muted:#8b949e; --accent:#58a6ff; --good:#3fb950;
-    --warn:#d29922; --bad:#f85149; --teal:#2dd4bf;
+    --text:#e6edf3; --muted:#8b949e;
+    --accent:#6e40c9; --accent-2:#a371f7;
+    --good:#3fb950; --warn:#d29922; --bad:#f85149;
   }
   *{box-sizing:border-box}
   body{
@@ -306,60 +352,92 @@ _TEMPLATE = r"""<!doctype html>
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     line-height:1.5; -webkit-font-smoothing:antialiased;
   }
-  .wrap{max-width:1140px; margin:0 auto; padding:32px 20px 64px;}
-  header{display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:16px; margin-bottom:28px; border-bottom:1px solid var(--border); padding-bottom:20px;}
+  .wrap{max-width:1160px; margin:0 auto; padding:0 20px 72px;}
+
+  /* Brand bar */
+  .brandbar{display:flex; justify-content:space-between; align-items:center; padding:16px 0; border-bottom:1px solid var(--border);}
+  .brand{font-weight:700; font-size:15.5px; letter-spacing:-0.01em;}
+  .brand .bolt{color:var(--accent); margin-right:5px;}
+  .brandbar .sync{font-size:12px; color:var(--muted);}
+  .brandbar .sync b{color:var(--text); font-weight:600;}
+
+  /* Title */
+  .title-block{margin:26px 0 22px;}
   h1{font-size:24px; margin:0 0 4px; letter-spacing:-0.02em;}
-  .sub{color:var(--muted); font-size:13px;}
-  .stamp{text-align:right; font-size:12px; color:var(--muted);}
-  .stamp b{color:var(--text); font-weight:600;}
+  .title-block .sub{color:var(--muted); font-size:13px;}
+
+  /* KPI cards */
+  .kpi-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:16px;}
+  @media(max-width:860px){.kpi-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:470px){.kpi-grid{grid-template-columns:1fr;}}
+  .kpi{background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:18px;}
+  .kpi.flag{border-color:rgba(248,81,73,0.45);}
+  .kpi .val{font-size:30px; font-weight:700; letter-spacing:-0.02em; line-height:1.05;}
+  .kpi .val.good{color:var(--good);} .kpi .val.bad{color:var(--bad);}
+  .kpi .lab{font-size:11px; text-transform:uppercase; letter-spacing:0.07em; color:var(--muted); margin-top:8px; font-weight:700;}
+  .kpi .sub{font-size:12px; color:var(--muted); margin-top:7px;}
+
   section{margin:48px 0;}
   .sec-head{display:flex; align-items:baseline; gap:10px; margin-bottom:18px;}
-  h2{font-size:15px; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin:0; font-weight:600;}
+  h2{font-size:14px; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin:0; font-weight:700;}
   .note{font-size:12px; color:var(--muted);}
-  .panel{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:22px;}
+  .panel{background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:20px;}
   .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:28px;}
-  @media(max-width:820px){.grid-2{grid-template-columns:1fr;}}
+  @media(max-width:860px){.grid-2{grid-template-columns:1fr;}}
+
+  /* Channel table (compact) */
   table{width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums;}
-  th,td{text-align:right; padding:9px 12px; border-bottom:1px solid var(--border); font-size:13.5px;}
-  th{color:var(--muted); font-weight:600; font-size:11px; text-transform:uppercase; letter-spacing:0.05em;}
+  th,td{text-align:right; padding:6px 12px; border-bottom:1px solid var(--border); font-size:13px;}
+  th{color:var(--muted); font-weight:700; font-size:10.5px; text-transform:uppercase; letter-spacing:0.05em;}
   th:first-child,td:first-child{text-align:left;}
   tbody tr:last-child td{border-bottom:none;}
   tbody tr.eff{background:rgba(63,185,80,0.08);}
   td.ch{font-weight:600;}
-  .badge{display:inline-block; font-size:10.5px; font-weight:700; padding:2px 7px; border-radius:20px; margin-left:8px; vertical-align:middle; letter-spacing:0.03em;}
+  .badge{display:inline-block; font-size:10px; font-weight:700; padding:2px 7px; border-radius:20px; margin-left:8px; vertical-align:middle; letter-spacing:0.03em;}
   .badge.good{background:rgba(63,185,80,0.16); color:var(--good);}
   .badge.bad{background:rgba(248,81,73,0.16); color:var(--bad);}
   .num-good{color:var(--good); font-weight:600;}
   .num-bad{color:var(--bad); font-weight:600;}
   .muted{color:var(--muted);}
   .chart-box{position:relative; height:340px;}
-  ul.insights{list-style:none; margin:0; padding:0;}
-  ul.insights li{position:relative; padding:10px 0 10px 26px; border-bottom:1px solid var(--border); font-size:14px;}
-  ul.insights li:last-child{border-bottom:none;}
-  ul.insights li::before{content:"▸"; position:absolute; left:4px; color:var(--accent);}
-  ul.insights li.critical{border-left:3px solid var(--bad); background:linear-gradient(90deg,rgba(248,81,73,0.10),transparent 65%); padding-left:30px; border-radius:0 6px 6px 0;}
-  ul.insights li.critical::before{left:12px; color:var(--bad);}
-  .empty{display:flex; flex-direction:column; align-items:center; justify-content:center; padding:42px 20px; text-align:center; border:1px dashed var(--border); border-radius:10px; background:var(--panel-2);}
+
+  /* Insight cards */
+  .ins-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  @media(max-width:860px){.ins-grid{grid-template-columns:1fr;}}
+  .ins-card{display:flex; gap:13px; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:16px 18px;}
+  .ins-card.critical{border-color:var(--bad); border-left:3px solid var(--bad); background:linear-gradient(100deg,rgba(248,81,73,0.09),transparent 70%);}
+  .ins-ico{font-size:16px; line-height:1.5; flex:0 0 auto;}
+  .ins-positive{color:var(--good);} .ins-warning{color:var(--warn);} .ins-neutral{color:var(--accent-2);}
+  .ins-card.critical .ins-ico{color:var(--bad);}
+  .ins-head{font-size:14.5px; font-weight:650; letter-spacing:-0.01em; margin-bottom:3px;}
+  .ins-detail{font-size:12.5px; color:var(--muted); line-height:1.45;}
+  .src{font-size:11px; color:var(--muted); margin-top:14px; text-align:right;}
+
+  /* Meta empty state */
+  .empty{display:flex; flex-direction:column; align-items:center; justify-content:center; padding:44px 20px; text-align:center; border:1px dashed var(--border); border-radius:12px; background:var(--panel-2);}
   .empty .ico{color:var(--muted); margin-bottom:14px; opacity:0.8;}
   .empty .msg{color:var(--muted); font-size:14px; max-width:440px;}
-  .src{font-size:11px; color:var(--muted); margin-top:16px; text-align:right;}
+
   .fallback{color:var(--warn); font-size:13px; padding:20px; text-align:center;}
-  footer{margin-top:40px; padding-top:16px; border-top:1px solid var(--border); font-size:11.5px; color:var(--muted);}
+  footer{margin-top:44px; padding-top:16px; border-top:1px solid var(--border); font-size:11.5px; color:var(--muted);}
   code{background:var(--panel-2); padding:1px 5px; border-radius:4px; font-size:12px;}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header>
-    <div>
-      <h1>Creative Performance Dashboard</h1>
-      <div class="sub">Speed Wallet · User acquisition &amp; retention</div>
-    </div>
-    <div class="stamp">
-      Data last synced: <b id="lastUpdated">—</b><br>
-      Dashboard built: <b id="builtAt">—</b>
-    </div>
-  </header>
+
+  <div class="brandbar">
+    <div class="brand"><span class="bolt">⚡</span>Speed Wallet</div>
+    <div class="sync">Synced: <b id="syncTime">—</b></div>
+  </div>
+
+  <div class="title-block">
+    <h1>Creative Performance Dashboard</h1>
+    <div class="sub">User acquisition &amp; retention · last 30 days</div>
+  </div>
+
+  <!-- KPI summary row -->
+  <div class="kpi-grid" id="kpis"></div>
 
   <!-- 1. Channel Performance -->
   <section>
@@ -387,10 +465,8 @@ _TEMPLATE = r"""<!doctype html>
   <!-- 4. Key Insights -->
   <section>
     <div class="sec-head"><h2>Key Insights</h2></div>
-    <div class="panel">
-      <ul class="insights" id="insights"></ul>
-      <div class="src" id="insightsSrc"></div>
-    </div>
+    <div class="ins-grid" id="insights"></div>
+    <div class="src" id="insightsSrc"></div>
   </section>
 
   <!-- 5. Meta Creative Analysis placeholder -->
@@ -409,7 +485,8 @@ _TEMPLATE = r"""<!doctype html>
 
   <footer>
     Data pulled live from Google Sheets at build time and inlined into this file.
-    Charts via Chart.js (cdnjs). Insights generated by <code id="modelName">—</code>.
+    Charts via Chart.js (cdnjs). Insights by <code id="modelName">—</code>.
+    Built <span id="builtAt">—</span>.
   </footer>
 </div>
 
@@ -420,7 +497,42 @@ const intFmt = new Intl.NumberFormat("en-US");
 const fmtInt = n => intFmt.format(Math.round(n||0));
 const fmtEcpi = v => (v && v > 0) ? "$" + Number(v).toFixed(2) : "—";
 const fmtCost = v => (v && v > 0) ? "$" + intFmt.format(Math.round(v)) : "—";
-const fmtPct = v => (v*100).toFixed(1) + "%";
+const esc = s => { const d=document.createElement("div"); d.textContent = (s==null?"":s); return d.innerHTML; };
+
+function kpiCard(val, valCls, lab, sub, cardCls){
+  return `<div class="kpi ${cardCls||""}">
+    <div class="val ${valCls||""}">${val}</div>
+    <div class="lab">${lab}</div>
+    <div class="sub">${sub}</div>
+  </div>`;
+}
+
+function renderKPIs(){
+  const k = DATA.kpis, g = document.getElementById("kpis");
+  const cards = [];
+  cards.push(kpiCard(fmtInt(k.total_installs), "", "Total Installs",
+    `Last 30 days · ${k.channel_count} active channels`, ""));
+
+  if (k.best_paid)
+    cards.push(kpiCard("$" + k.best_paid.ecpi.toFixed(2), "good", "Best Paid eCPI",
+      `${esc(k.best_paid.channel)} · ${fmtInt(k.best_paid.installs)} installs`, ""));
+  else
+    cards.push(kpiCard("—", "", "Best Paid eCPI", "no paid channels", ""));
+
+  const above = k.d1_above;
+  cards.push(kpiCard((k.d1_retention*100).toFixed(1) + "%", above ? "good" : "bad",
+    "D1 Retention",
+    `${above ? "▲" : "▼"} ${above ? "above" : "below"} ${Math.round(k.d1_target*100)}% target · ${k.matured_cohorts} cohorts`,
+    ""));
+
+  if (k.reengagement)
+    cards.push(kpiCard(k.reengagement.cvr.toFixed(2) + "%", "bad", "Re-engagement CVR",
+      `⚠ ${fmtInt(k.reengagement.clicks)} clicks → ${fmtInt(k.reengagement.installs)} installs`, "flag"));
+  else
+    cards.push(kpiCard("—", "", "Re-engagement CVR", "no re-engagement channel", ""));
+
+  g.innerHTML = cards.join("");
+}
 
 function renderChannels(){
   const tb = document.querySelector("#chTable tbody");
@@ -433,9 +545,10 @@ function renderChannels(){
     if (c.channel === eff) badge = '<span class="badge good">★ Most efficient</span>';
     if (fb && fb.flagged && c.channel.toLowerCase() === "facebook")
       badge += '<span class="badge bad">⚠ eCPI above Apple</span>';
-    const ecpiCls = (c.channel === eff) ? "num-good" : ((fb && fb.flagged && c.channel.toLowerCase()==="facebook") ? "num-bad" : "");
+    const ecpiCls = (c.channel === eff) ? "num-good"
+      : ((fb && fb.flagged && c.channel.toLowerCase()==="facebook") ? "num-bad" : "");
     tr.innerHTML =
-      `<td class="ch">${c.channel}${badge}</td>` +
+      `<td class="ch">${esc(c.channel)}${badge}</td>` +
       `<td>${fmtInt(c.installs)}</td>` +
       `<td class="${ecpiCls}">${fmtEcpi(c.ecpi)}</td>` +
       `<td class="muted">${fmtInt(c.impressions)}</td>` +
@@ -444,24 +557,28 @@ function renderChannels(){
   });
   const parts = [];
   if (DATA.most_efficient_detail)
-    parts.push(`Most efficient: ${eff} ($${DATA.most_efficient_detail.ecpi.toFixed(2)} eCPI, ${fmtInt(DATA.most_efficient_detail.installs)} installs, ≥${DATA.min_meaningful_installs} vol)`);
+    parts.push(`Most efficient: ${eff} ($${DATA.most_efficient_detail.ecpi.toFixed(2)} eCPI)`);
   if (fb && fb.flagged)
-    parts.push(`Facebook eCPI $${fb.facebook_ecpi.toFixed(2)} > Apple $${fb.apple_ecpi.toFixed(2)}`);
+    parts.push(`Facebook $${fb.facebook_ecpi.toFixed(2)} > Apple $${fb.apple_ecpi.toFixed(2)}`);
+  parts.push(`${DATA.channels.length} channels with installs`);
   document.getElementById("chNote").textContent = parts.join("  ·  ");
 }
 
 function renderCampaigns(){
-  const note = document.getElementById("cmpNote");
-  note.textContent = `Top ${DATA.campaigns.length} by installs (excl. ${DATA.excluded_organic_rows} unattributed Organic)`;
+  document.getElementById("cmpNote").textContent =
+    `Top ${DATA.campaigns.length} by installs (excl. ${DATA.excluded_organic_rows} unattributed Organic)`;
   if (typeof Chart === "undefined"){ chartFallback("cmpChart"); return; }
   const trunc = s => s.length > 25 ? s.slice(0, 25) + "..." : s;
   const labels = DATA.campaigns.map(c => trunc(c.campaign));
   const installs = DATA.campaigns.map(c => c.installs);
-  new Chart(document.getElementById("cmpChart"), {
+  const ctx = document.getElementById("cmpChart").getContext("2d");
+  const grad = ctx.createLinearGradient(0, 0, 560, 0);
+  grad.addColorStop(0, "#6e40c9"); grad.addColorStop(1, "#a371f7");
+  new Chart(ctx, {
     type:"bar",
     data:{labels, datasets:[{
       label:"Installs", data:installs,
-      backgroundColor:"#58a6ff", borderRadius:4, maxBarThickness:24,
+      backgroundColor:grad, borderRadius:4, maxBarThickness:24,
     }]},
     options:{
       indexAxis:"y", responsive:true, maintainAspectRatio:false,
@@ -470,9 +587,9 @@ function renderCampaigns(){
         legend:{display:false},
         tooltip:{callbacks:{
           title:(items)=> DATA.campaigns[items[0].dataIndex].campaign,
-          afterLabel:(ctx)=>{
-            const c = DATA.campaigns[ctx.dataIndex];
-            return `Channel: ${c.channel}\nCost: ${fmtCost(c.cost)}`;
+          afterLabel:(c)=>{
+            const x = DATA.campaigns[c.dataIndex];
+            return `Channel: ${x.channel}\nCost: ${fmtCost(x.cost)}`;
           },
         }},
       },
@@ -493,14 +610,14 @@ function renderRetention(){
     type:"line",
     data:{labels:r.labels, datasets:[{
       label:"Retention", data:r.values.map(v=>+(v*100).toFixed(2)),
-      borderColor:"#2dd4bf", backgroundColor:"rgba(45,212,191,0.12)",
-      fill:true, tension:0.3, pointRadius:4, pointBackgroundColor:"#2dd4bf",
+      borderColor:"#a371f7", backgroundColor:"rgba(110,64,201,0.16)",
+      fill:true, tension:0.3, pointRadius:4, pointBackgroundColor:"#a371f7",
     }]},
     options:{
       responsive:true, maintainAspectRatio:false,
       plugins:{
         legend:{display:false},
-        tooltip:{callbacks:{label:(ctx)=>` ${ctx.parsed.y.toFixed(1)}% retained`}},
+        tooltip:{callbacks:{label:(c)=>` ${c.parsed.y.toFixed(1)}% retained`}},
       },
       scales:{
         x:{ticks:{color:"#e6edf3"}, grid:{color:"#21262d"}},
@@ -511,16 +628,23 @@ function renderRetention(){
 }
 
 function renderInsights(){
-  const ul = document.getElementById("insights");
+  const g = document.getElementById("insights");
+  const ICON = {positive:"▲", warning:"⚠", neutral:"●"};
   if (!DATA.insights || !DATA.insights.length){
-    ul.innerHTML = '<li class="muted">Insights unavailable for this build.</li>';
+    g.innerHTML = '<div class="ins-card"><div class="ins-detail">Insights unavailable for this build.</div></div>';
   } else {
-    DATA.insights.forEach((t, i) => {
-      const li = document.createElement("li");
-      if (i === DATA.insights_critical_index) li.className = "critical";
-      li.textContent = t;
-      ul.appendChild(li);
-    });
+    g.innerHTML = DATA.insights.map((c, i) => {
+      const crit = (i === DATA.insights_critical_index) ? "critical" : "";
+      const head = c.headline || c.detail;
+      const detail = c.headline ? c.detail : "";
+      return `<div class="ins-card ${crit}">
+        <div class="ins-ico ins-${c.type}">${ICON[c.type] || "●"}</div>
+        <div>
+          <div class="ins-head">${esc(head)}</div>
+          ${detail ? `<div class="ins-detail">${esc(detail)}</div>` : ""}
+        </div>
+      </div>`;
+    }).join("");
   }
   document.getElementById("insightsSrc").textContent = "Generated by " + DATA.insights_source;
   document.getElementById("modelName").textContent = DATA.insights_source;
@@ -536,8 +660,9 @@ function chartFallback(id){
 
 function init(){
   try{
-    document.getElementById("lastUpdated").textContent = DATA.last_updated || "—";
+    document.getElementById("syncTime").textContent = DATA.last_updated || "—";
     document.getElementById("builtAt").textContent = DATA.generated_at || "—";
+    renderKPIs();
     renderChannels();
     renderCampaigns();
     renderRetention();
@@ -545,7 +670,8 @@ function init(){
     console.log("Dashboard rendered OK:",
       DATA.channels.length, "channels,",
       DATA.campaigns.length, "campaigns,",
-      DATA.retention.cohort_count, "retention cohorts");
+      DATA.retention.cohort_count, "retention cohorts,",
+      (DATA.insights||[]).length, "insights");
   }catch(e){
     console.error("Dashboard render error:", e);
   }
