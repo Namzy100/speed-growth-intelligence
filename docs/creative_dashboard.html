@@ -23,12 +23,12 @@
   .sub{color:var(--muted); font-size:13px;}
   .stamp{text-align:right; font-size:12px; color:var(--muted);}
   .stamp b{color:var(--text); font-weight:600;}
-  section{margin:30px 0;}
-  .sec-head{display:flex; align-items:baseline; gap:10px; margin-bottom:14px;}
+  section{margin:48px 0;}
+  .sec-head{display:flex; align-items:baseline; gap:10px; margin-bottom:18px;}
   h2{font-size:15px; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin:0; font-weight:600;}
   .note{font-size:12px; color:var(--muted);}
-  .panel{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:18px;}
-  .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:20px;}
+  .panel{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:22px;}
+  .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:28px;}
   @media(max-width:820px){.grid-2{grid-template-columns:1fr;}}
   table{width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums;}
   th,td{text-align:right; padding:9px 12px; border-bottom:1px solid var(--border); font-size:13.5px;}
@@ -43,15 +43,17 @@
   .num-good{color:var(--good); font-weight:600;}
   .num-bad{color:var(--bad); font-weight:600;}
   .muted{color:var(--muted);}
-  .chart-box{position:relative; height:300px;}
+  .chart-box{position:relative; height:340px;}
   ul.insights{list-style:none; margin:0; padding:0;}
   ul.insights li{position:relative; padding:10px 0 10px 26px; border-bottom:1px solid var(--border); font-size:14px;}
   ul.insights li:last-child{border-bottom:none;}
   ul.insights li::before{content:"▸"; position:absolute; left:4px; color:var(--accent);}
+  ul.insights li.critical{border-left:3px solid var(--bad); background:linear-gradient(90deg,rgba(248,81,73,0.10),transparent 65%); padding-left:30px; border-radius:0 6px 6px 0;}
+  ul.insights li.critical::before{left:12px; color:var(--bad);}
   .empty{display:flex; flex-direction:column; align-items:center; justify-content:center; padding:42px 20px; text-align:center; border:1px dashed var(--border); border-radius:10px; background:var(--panel-2);}
-  .empty .ico{font-size:30px; margin-bottom:10px; opacity:0.7;}
+  .empty .ico{color:var(--muted); margin-bottom:14px; opacity:0.8;}
   .empty .msg{color:var(--muted); font-size:14px; max-width:440px;}
-  .src{font-size:11px; color:var(--muted); margin-top:10px;}
+  .src{font-size:11px; color:var(--muted); margin-top:16px; text-align:right;}
   .fallback{color:var(--warn); font-size:13px; padding:20px; text-align:center;}
   footer{margin-top:40px; padding-top:16px; border-top:1px solid var(--border); font-size:11.5px; color:var(--muted);}
   code{background:var(--panel-2); padding:1px 5px; border-radius:4px; font-size:12px;}
@@ -106,7 +108,12 @@
   <section>
     <div class="sec-head"><h2>Meta Creative Analysis</h2></div>
     <div class="empty">
-      <div class="ico">📊</div>
+      <svg class="ico" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="3" y1="20.5" x2="21" y2="20.5"/>
+        <rect x="4.5" y="11" width="3.6" height="9.5"/>
+        <rect x="10.2" y="6" width="3.6" height="14.5"/>
+        <rect x="15.9" y="14" width="3.6" height="6.5"/>
+      </svg>
       <div class="msg">Pending Meta ad account access — will populate automatically once connected.</div>
     </div>
   </section>
@@ -118,7 +125,7 @@
 </div>
 
 <script>
-const DATA = {"generated_at": "2026-06-19 19:48:02 UTC", "last_updated": "2026-06-19 19:47:45 UTC", "channels": [{"channel": "Organic", "installs": 26862, "impressions": 0, "clicks": 0, "ecpi": 0.0}, {"channel": "Google Ads", "installs": 5289, "impressions": 794871, "clicks": 10893, "ecpi": 4.0955}, {"channel": "Apple", "installs": 2189, "impressions": 54676, "clicks": 4397, "ecpi": 3.8803}, {"channel": "Facebook", "installs": 1741, "impressions": 236798, "clicks": 13587, "ecpi": 4.5845}, {"channel": "Website", "installs": 1548, "impressions": 0, "clicks": 12947, "ecpi": 0.0}, {"channel": "Partnership", "installs": 1116, "impressions": 0, "clicks": 8246, "ecpi": 0.0}, {"channel": "Google Organic Search", "installs": 961, "impressions": 0, "clicks": 0, "ecpi": 0.0}, {"channel": "Re-engagement campaigns", "installs": 122, "impressions": 0, "clicks": 100917, "ecpi": 0.0}, {"channel": "Social Media", "installs": 93, "impressions": 0, "clicks": 16232, "ecpi": 0.0}, {"channel": "Telegram Ads", "installs": 46, "impressions": 0, "clicks": 630, "ecpi": 0.0}, {"channel": "Untrusted Devices", "installs": 25, "impressions": 0, "clicks": 0, "ecpi": 0.0}, {"channel": "Las Vegas Billboard", "installs": 23, "impressions": 0, "clicks": 243, "ecpi": 0.0}, {"channel": "MiniBet", "installs": 14, "impressions": 0, "clicks": 852, "ecpi": 0.0}, {"channel": "Flipit New", "installs": 1, "impressions": 0, "clicks": 27, "ecpi": 0.0}, {"channel": "Adcash DSP", "installs": 0, "impressions": 0, "clicks": 3, "ecpi": 0.0}, {"channel": "Chrome Wallet", "installs": 0, "impressions": 0, "clicks": 3, "ecpi": 0.0}, {"channel": "Email", "installs": 0, "impressions": 0, "clicks": 35, "ecpi": 0.0}, {"channel": "Google Ads (Website)", "installs": 0, "impressions": 0, "clicks": 1362, "ecpi": 0.0}, {"channel": "Liftoff", "installs": 0, "impressions": 0, "clicks": 286, "ecpi": 0.0}, {"channel": "Meta Retargeting Campaign", "installs": 0, "impressions": 0, "clicks": 408, "ecpi": 0.0}, {"channel": "Meta Video Ads", "installs": 0, "impressions": 0, "clicks": 3446, "ecpi": 0.0}, {"channel": "PR/Guest Post", "installs": 0, "impressions": 0, "clicks": 8, "ecpi": 0.0}, {"channel": "Rumble", "installs": 0, "impressions": 0, "clicks": 9, "ecpi": 0.0}, {"channel": "Sponsorships", "installs": 0, "impressions": 0, "clicks": 85, "ecpi": 0.0}, {"channel": "Sweepstakes", "installs": 0, "impressions": 0, "clicks": 2, "ecpi": 0.0}, {"channel": "Taboola", "installs": 0, "impressions": 0, "clicks": 4, "ecpi": 0.0}], "most_efficient": "Apple", "most_efficient_detail": {"channel": "Apple", "installs": 2189, "impressions": 54676, "clicks": 4397, "ecpi": 3.8803}, "facebook_flag": {"facebook_ecpi": 4.5845, "apple_ecpi": 3.8803, "flagged": true}, "min_meaningful_installs": 100, "campaigns": [{"campaign": "New - Android Brand US", "channel": "Google Ads", "installs": 2770, "cost": 10864.55}, {"campaign": "XAUT offers", "channel": "Google Ads", "installs": 1747, "cost": 6690.09}, {"campaign": "Payday - Android - Broad+", "channel": "Facebook", "installs": 1528, "cost": 5904.48}, {"campaign": "US - Brand - Exact", "channel": "Apple", "installs": 1212, "cost": 4158.3}, {"campaign": "Home>banner>android", "channel": "Website", "installs": 872, "cost": 0.0}, {"campaign": "Android - Brand US", "channel": "Google Ads", "installs": 770, "cost": 4106.31}, {"campaign": "US - Max Conversion Campaign", "channel": "Apple", "installs": 686, "cost": 3078.62}, {"campaign": "Thndr", "channel": "Partnership", "installs": 590, "cost": 0.0}, {"campaign": "Fumb", "channel": "Partnership", "installs": 367, "cost": 0.0}, {"campaign": "Home>banner>iOS", "channel": "Website", "installs": 329, "cost": 0.0}], "excluded_organic_rows": 3, "retention": {"labels": ["D1", "D2", "D3", "D4", "D5", "D6", "D7"], "values": [0.2558, 0.208, 0.1799, 0.1641, 0.1593, 0.1453, 0.1347], "cohort_count": 28, "excluded_days": ["2026-06-17", "2026-06-18"]}, "insights": ["Organic dominates acquisition at 26,862 installs (67% of total) with zero paid cost \u2014 invest in understanding what's driving this (SEO, word-of-mouth, press) and double down, since no budget is being allocated to amplify it.", "Apple Search Ads is the most efficient paid channel at $3.88 eCPI vs. Facebook's $4.58 eCPI \u2014 Facebook costs 18% more per install, so shift budget from Facebook toward Apple, especially since Apple's 'US - Brand - Exact' campaign is already converting efficiently at $3.43 per install ($4,158 for 1,212 installs).", "Google Ads' top campaign 'New - Android Brand US' drove 2,770 installs at $3.92 eCPI ($10,865 spend), making it the highest-volume paid campaign \u2014 however 'Android - Brand US' drove only 770 installs at $5.33 eCPI ($4,106), suggesting duplicate brand campaigns with one significantly underperforming; consolidate or pause the weaker one.", "D1 retention is 25.6% and drops to 13.5% by D7 \u2014 nearly half of Day-1 retained users are gone within a week, which is a serious activation problem; prioritize in-app onboarding improvements and a D2\u2013D3 push notification or incentive to recover this drop before scaling paid spend further.", "Re-engagement campaigns generated 100,917 clicks but only 122 installs, implying near-zero conversion on lapsed users \u2014 either the targeting is off or the landing experience is broken; audit the re-engagement funnel immediately or reallocate that effort to Partnership channels (Thndr: 590 installs, Fumb: 367 installs) which are delivering free installs at scale."], "insights_source": "claude-sonnet-4-6"};
+const DATA = {"generated_at": "2026-06-19 20:26:58 UTC", "last_updated": "2026-06-19 20:26:45 UTC", "channels": [{"channel": "Organic", "installs": 26862, "impressions": 0, "clicks": 0, "ecpi": 0.0}, {"channel": "Google Ads", "installs": 5289, "impressions": 794871, "clicks": 10893, "ecpi": 4.0955}, {"channel": "Apple", "installs": 2189, "impressions": 54676, "clicks": 4397, "ecpi": 3.8803}, {"channel": "Facebook", "installs": 1741, "impressions": 236798, "clicks": 13587, "ecpi": 4.5845}, {"channel": "Website", "installs": 1548, "impressions": 0, "clicks": 12947, "ecpi": 0.0}, {"channel": "Partnership", "installs": 1116, "impressions": 0, "clicks": 8246, "ecpi": 0.0}, {"channel": "Google Organic Search", "installs": 961, "impressions": 0, "clicks": 0, "ecpi": 0.0}, {"channel": "Re-engagement campaigns", "installs": 122, "impressions": 0, "clicks": 100917, "ecpi": 0.0}, {"channel": "Social Media", "installs": 93, "impressions": 0, "clicks": 16232, "ecpi": 0.0}, {"channel": "Telegram Ads", "installs": 46, "impressions": 0, "clicks": 630, "ecpi": 0.0}, {"channel": "Untrusted Devices", "installs": 25, "impressions": 0, "clicks": 0, "ecpi": 0.0}, {"channel": "Las Vegas Billboard", "installs": 23, "impressions": 0, "clicks": 243, "ecpi": 0.0}, {"channel": "MiniBet", "installs": 14, "impressions": 0, "clicks": 852, "ecpi": 0.0}, {"channel": "Flipit New", "installs": 1, "impressions": 0, "clicks": 27, "ecpi": 0.0}, {"channel": "Adcash DSP", "installs": 0, "impressions": 0, "clicks": 3, "ecpi": 0.0}, {"channel": "Chrome Wallet", "installs": 0, "impressions": 0, "clicks": 3, "ecpi": 0.0}, {"channel": "Email", "installs": 0, "impressions": 0, "clicks": 35, "ecpi": 0.0}, {"channel": "Google Ads (Website)", "installs": 0, "impressions": 0, "clicks": 1362, "ecpi": 0.0}, {"channel": "Liftoff", "installs": 0, "impressions": 0, "clicks": 286, "ecpi": 0.0}, {"channel": "Meta Retargeting Campaign", "installs": 0, "impressions": 0, "clicks": 408, "ecpi": 0.0}, {"channel": "Meta Video Ads", "installs": 0, "impressions": 0, "clicks": 3446, "ecpi": 0.0}, {"channel": "PR/Guest Post", "installs": 0, "impressions": 0, "clicks": 8, "ecpi": 0.0}, {"channel": "Rumble", "installs": 0, "impressions": 0, "clicks": 9, "ecpi": 0.0}, {"channel": "Sponsorships", "installs": 0, "impressions": 0, "clicks": 85, "ecpi": 0.0}, {"channel": "Sweepstakes", "installs": 0, "impressions": 0, "clicks": 2, "ecpi": 0.0}, {"channel": "Taboola", "installs": 0, "impressions": 0, "clicks": 4, "ecpi": 0.0}], "most_efficient": "Apple", "most_efficient_detail": {"channel": "Apple", "installs": 2189, "impressions": 54676, "clicks": 4397, "ecpi": 3.8803}, "facebook_flag": {"facebook_ecpi": 4.5845, "apple_ecpi": 3.8803, "flagged": true}, "min_meaningful_installs": 100, "campaigns": [{"campaign": "New - Android Brand US", "channel": "Google Ads", "installs": 2770, "cost": 10864.55}, {"campaign": "XAUT offers", "channel": "Google Ads", "installs": 1747, "cost": 6690.09}, {"campaign": "Payday - Android - Broad+", "channel": "Facebook", "installs": 1528, "cost": 5904.48}, {"campaign": "US - Brand - Exact", "channel": "Apple", "installs": 1212, "cost": 4158.3}, {"campaign": "Home>banner>android", "channel": "Website", "installs": 872, "cost": 0.0}, {"campaign": "Android - Brand US", "channel": "Google Ads", "installs": 770, "cost": 4106.31}, {"campaign": "US - Max Conversion Campaign", "channel": "Apple", "installs": 686, "cost": 3078.62}, {"campaign": "Thndr", "channel": "Partnership", "installs": 590, "cost": 0.0}, {"campaign": "Fumb", "channel": "Partnership", "installs": 367, "cost": 0.0}, {"campaign": "Home>banner>iOS", "channel": "Website", "installs": 329, "cost": 0.0}], "excluded_organic_rows": 3, "retention": {"labels": ["D1", "D2", "D3", "D4", "D5", "D6", "D7"], "values": [0.2558, 0.208, 0.1798, 0.1641, 0.1594, 0.1453, 0.1347], "cohort_count": 28, "excluded_days": ["2026-06-17", "2026-06-18"]}, "insights": ["Organic dominates acquisition with 26,862 installs \u2014 nearly 5x the next largest paid channel (Google Ads at 5,289) \u2014 signaling strong word-of-mouth or brand pull that paid budgets should be tested against, not assumed to replicate.", "Re-engagement campaigns are burning through 100,917 clicks to produce just 122 installs (a 0.12% conversion rate), making this the single most urgent fix: pause or overhaul the creative and audience targeting before another dollar is wasted.", "Apple Search Ads is the most capital-efficient paid channel at $3.88 eCPI vs. Facebook's $4.58 \u2014 reallocating a portion of Facebook's budget to Apple could yield roughly 18% more installs per dollar spent.", "D7 retention is only 13.47%, meaning roughly 87 out of every 100 users acquired are gone within a week \u2014 no paid scale-up is justified until onboarding or early activation is fixed to close even half of that drop-off.", "The 'XAUT offers' Google Ads campaign drove 1,747 installs at ~$3.83 eCPI, undercutting even Apple's blended average, and should be isolated for creative analysis and budget expansion before the signal gets diluted."], "insights_critical_index": 1, "insights_source": "claude-sonnet-4-6"};
 
 const intFmt = new Intl.NumberFormat("en-US");
 const fmtInt = n => intFmt.format(Math.round(n||0));
@@ -158,26 +165,31 @@ function renderCampaigns(){
   const note = document.getElementById("cmpNote");
   note.textContent = `Top ${DATA.campaigns.length} by installs (excl. ${DATA.excluded_organic_rows} unattributed Organic)`;
   if (typeof Chart === "undefined"){ chartFallback("cmpChart"); return; }
-  const labels = DATA.campaigns.map(c => c.campaign);
+  const trunc = s => s.length > 25 ? s.slice(0, 25) + "..." : s;
+  const labels = DATA.campaigns.map(c => trunc(c.campaign));
   const installs = DATA.campaigns.map(c => c.installs);
   new Chart(document.getElementById("cmpChart"), {
     type:"bar",
     data:{labels, datasets:[{
       label:"Installs", data:installs,
-      backgroundColor:"#58a6ff", borderRadius:4, maxBarThickness:26,
+      backgroundColor:"#58a6ff", borderRadius:4, maxBarThickness:24,
     }]},
     options:{
       indexAxis:"y", responsive:true, maintainAspectRatio:false,
+      layout:{padding:{left:10, right:16, top:4, bottom:4}},
       plugins:{
         legend:{display:false},
-        tooltip:{callbacks:{afterLabel:(ctx)=>{
-          const c = DATA.campaigns[ctx.dataIndex];
-          return `Channel: ${c.channel}\nCost: ${fmtCost(c.cost)}`;
-        }}},
+        tooltip:{callbacks:{
+          title:(items)=> DATA.campaigns[items[0].dataIndex].campaign,
+          afterLabel:(ctx)=>{
+            const c = DATA.campaigns[ctx.dataIndex];
+            return `Channel: ${c.channel}\nCost: ${fmtCost(c.cost)}`;
+          },
+        }},
       },
       scales:{
         x:{ticks:{color:"#8b949e"}, grid:{color:"#21262d"}},
-        y:{ticks:{color:"#e6edf3", font:{size:11}}, grid:{display:false}},
+        y:{ticks:{color:"#e6edf3", font:{size:11}, autoSkip:false}, grid:{display:false}},
       },
     },
   });
@@ -214,8 +226,11 @@ function renderInsights(){
   if (!DATA.insights || !DATA.insights.length){
     ul.innerHTML = '<li class="muted">Insights unavailable for this build.</li>';
   } else {
-    DATA.insights.forEach(t => {
-      const li = document.createElement("li"); li.textContent = t; ul.appendChild(li);
+    DATA.insights.forEach((t, i) => {
+      const li = document.createElement("li");
+      if (i === DATA.insights_critical_index) li.className = "critical";
+      li.textContent = t;
+      ul.appendChild(li);
     });
   }
   document.getElementById("insightsSrc").textContent = "Generated by " + DATA.insights_source;
