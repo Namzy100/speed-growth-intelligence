@@ -190,36 +190,64 @@ def _normalize(text: str) -> str:
 def _is_relevant(ad: dict, competitor_name: str) -> bool:
     """Keep an ad only if it is plausibly from the target advertiser.
 
-    True when the ad's page name EXACTLY matches the competitor (so e.g.
-    "Critical Strike"/"Football Strike" do NOT match "Strike"), or when the ad
-    copy contains a fintech/payments term. Everything else is treated as noise.
+    Relevant when EITHER:
+      - the ad's page name EXACTLY matches the competitor (so e.g.
+        "Critical Strike"/"Football Strike" do NOT match "Strike"), OR
+      - the copy contains a genuine fintech/payments term that is NOT merely
+        the competitor's own brand name.
+
+    The brand name is stripped from the copy before the keyword check so that
+    incidental mentions in third-party sponsorship/event ads don't count — e.g.
+    a Moët & Chandon ad naming the "Crypto.com Miami Grand Prix" no longer
+    passes just because "Crypto.com" contains the token "crypto".
     """
     page = _normalize(ad.get("page_name", ""))
     comp = _normalize(competitor_name)
-    page_match = bool(page) and bool(comp) and page == comp
+    if bool(page) and bool(comp) and page == comp:
+        return True
 
+    # Not from the exact advertiser page: require a real fintech signal.
     text = f"{ad.get('body', '')} {ad.get('title', '')}".lower()
-    fintech_match = any(term in text for term in _FINTECH_TERMS)
 
-    return page_match or fintech_match
+    # Remove the competitor's brand name (punctuation-tolerant) so an incidental
+    # mention can't, by itself, satisfy the keyword filter.
+    brand_core = re.sub(r"[^a-z0-9]+", " ", competitor_name.lower()).strip()
+    if brand_core:
+        brand_pattern = r"[^a-z0-9]*".join(re.escape(tok) for tok in brand_core.split())
+        text = re.sub(brand_pattern, " ", text)
+
+    return any(term in text for term in _FINTECH_TERMS)
 
 
 def _parse_ad_item(item: dict) -> dict | None:
     """Normalise a raw Apify item into a clean ad dict. Returns None if no body copy."""
     snap = item.get("snapshot", {}) or {}
 
-    # Ad copy — body can be a dict or a plain string depending on the ad type
+    # Ad copy — body can be a dict or a plain string depending on the ad type.
     body = snap.get("body", "")
-    body_text = body.get("text", "") if isinstance(body, dict) else str(body or "")
+    main_text = body.get("text", "") if isinstance(body, dict) else str(body or "")
 
-    # Some ads put copy in cards or extra text blocks
+    # Carousels repeat the same copy across every card, which previously
+    # triplicated the body (e.g. "Invest with Robinhood" x3). Collect the main
+    # body plus each card body, then keep only unique phrases (order-preserving).
+    fragments = [main_text]
     for card in snap.get("cards", []):
         card_body = card.get("body", "")
         card_text = card_body.get("text", "") if isinstance(card_body, dict) else str(card_body or "")
-        if card_text:
-            body_text = (body_text + " " + card_text).strip()
+        fragments.append(card_text)
 
-    body_text = body_text.strip()
+    seen: set[str] = set()
+    unique_fragments: list[str] = []
+    for frag in fragments:
+        frag = (frag or "").strip()
+        if frag and frag not in seen:
+            seen.add(frag)
+            unique_fragments.append(frag)
+
+    body_text = " ".join(unique_fragments)
+    # Strip unrendered template tokens like "{{product.brand}}", then tidy whitespace.
+    body_text = re.sub(r"\{\{.*?\}\}", " ", body_text)
+    body_text = re.sub(r"\s+", " ", body_text).strip()
     if not body_text:
         return None
 
