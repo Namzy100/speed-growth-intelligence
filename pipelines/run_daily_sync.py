@@ -1,9 +1,11 @@
-"""Daily orchestration: syncs Adjust install/retention data to Google Sheets.
+"""Daily orchestration: syncs Adjust install/retention data to Google Sheets,
+then rebuilds the creative performance dashboard.
 
-Scope: this orchestrator currently syncs ONLY the Adjust pipeline (channel
-overview, campaign installs, retention) plus a "Last Updated" timestamp. The
-other Speed data sources are standalone and are NOT yet wired into this
-orchestrator:
+Scope: this orchestrator syncs the Adjust pipeline (channel overview, campaign
+installs, retention), writes a "Last Updated" timestamp, and — as a final step —
+rebuilds the self-contained creative dashboard HTML (docs/creative_dashboard.html)
+from the freshly-synced sheet data, so it stays current on every run. The other
+Speed data sources are standalone and are NOT yet wired into this orchestrator:
 
   - creators/      — TikTok/YouTube creator discovery + scoring (persisted to
                      Supabase, run on their own)
@@ -28,6 +30,7 @@ if str(_ROOT) not in sys.path:
 
 load_dotenv()
 
+from pipelines import build_creative_dashboard
 from pipelines.adjust import AdjustPipeline
 from pipelines.sheets import (
     create_sheet_if_missing,
@@ -74,6 +77,22 @@ def _write_last_updated(spreadsheet_id: str) -> None:
     _log(f"Last Updated: '{now_str}'")
 
 
+def _rebuild_dashboard() -> bool:
+    """Rebuild the creative dashboard HTML from the freshly-synced sheet data.
+
+    Runs last so it reflects the Adjust writes and the new Last Updated stamp.
+    Pulls the sheet again and regenerates docs/creative_dashboard.html.
+    """
+    _log("Dashboard: rebuilding docs/creative_dashboard.html from latest data...")
+    try:
+        build_creative_dashboard.main()
+        _log("Dashboard: rebuilt successfully")
+        return True
+    except Exception as e:
+        _log(f"Dashboard: rebuild FAILED — {e}")
+        return False
+
+
 # ------------------------------------------------------------------
 # Entrypoint
 # ------------------------------------------------------------------
@@ -98,6 +117,9 @@ def run() -> None:
     except Exception as e:
         _log(f"Last Updated: FAILED — {e}")
         results["Last Updated"] = False
+
+    # Creative dashboard — final step, rebuilt from the freshly-synced data.
+    results["Dashboard"] = _rebuild_dashboard()
 
     # Summary
     succeeded = sum(results.values())
