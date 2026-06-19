@@ -13,8 +13,17 @@ REMITTANCE_TAGS = {
 
 IGAMING_TAGS = {
     "igaming", "gambling", "casino", "betting", "poker", "slots",
-    "esports", "sports betting", "fantasy sports", "online gambling",
-    "sportsbook", "online casino",
+    "esports", "sports betting", "sports bet", "esports betting",
+    "fantasy sports", "online gambling", "sportsbook", "online casino",
+    "wager", "play to earn", "p2e",
+}
+
+# Unambiguous iGaming signals. If a creator carries ANY of these in their
+# niche_tags, the segment is forced to iGaming regardless of how high their
+# crypto_content_pct would otherwise push the crypto-curious score — a clear
+# casino/betting/gambling channel is iGaming first, crypto-adjacent second.
+IGAMING_PRECEDENCE_TAGS = {
+    "casino", "betting", "gambling", "poker", "wager", "play to earn", "p2e",
 }
 
 CRYPTO_TAGS = {
@@ -103,6 +112,13 @@ class CreatorScorer:
             "iGaming": len(tags & IGAMING_TAGS) * 5,
             "crypto-curious": len(tags & CRYPTO_TAGS) * 3.5 + crypto_pct * 6 + fintech_pct * 2,
         }
+
+        # Segment precedence: a clear iGaming signal wins outright. Without this,
+        # a crypto-heavy casino/betting channel gets pulled into crypto-curious
+        # by crypto_content_pct even though it plainly belongs in iGaming.
+        if tags & IGAMING_PRECEDENCE_TAGS:
+            raw = raw_scores["iGaming"]
+            return min(raw, 20.0), "iGaming", f"iGaming (forced by clear tag, {raw:.1f} raw)"
 
         best = max(raw_scores, key=raw_scores.get)
         raw = raw_scores[best]
