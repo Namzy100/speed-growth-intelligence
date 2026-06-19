@@ -1,6 +1,7 @@
 """YouTube Data API v3 creator discovery for Speed Wallet partner scouting."""
 
 import os
+import re
 from typing import Optional
 
 import requests
@@ -217,9 +218,16 @@ class YouTubeCreatorFetcher:
         return crypto_pct, fintech_pct
 
     @staticmethod
-    def _derive_niche_tags(description: str, topics: list[str]) -> list[str]:
-        """Build niche tags from description keyword matches and YouTube topic titles."""
-        text = description.lower()
+    def _derive_niche_tags(name: str, description: str, topics: list[str]) -> list[str]:
+        """Build niche tags from the channel name, description, and topic titles.
+
+        The name is scanned too: channels like "Leading Crypto Casinos" or
+        "PlayToEarn" carry their strongest segment signal in the title, not the
+        description. CamelCase names are also split (PlayToEarn -> "play to
+        earn") so multi-word tags still match.
+        """
+        name_split = re.sub(r"(?<=[a-z0-9])(?=[A-Z])", " ", name or "")
+        text = f"{name} {name_split} {description}".lower()
         tags = {tag for tag in _SCORER_TAGS if tag in text}
 
         for url in topics:
@@ -281,7 +289,7 @@ class YouTubeCreatorFetcher:
             "crypto_content_pct": crypto_pct,
             "fintech_content_pct": fintech_pct,
             "sponsorship_count": 0,
-            "niche_tags": self._derive_niche_tags(description, topic_categories),
+            "niche_tags": self._derive_niche_tags(name, description, topic_categories),
         }
 
 
