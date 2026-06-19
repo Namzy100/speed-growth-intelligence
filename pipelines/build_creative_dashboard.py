@@ -148,7 +148,8 @@ def build_retention(rows: list[dict]) -> dict:
 def generate_insights(channels: dict, campaigns: dict, retention: dict) -> dict:
     api_key = os.getenv("ANTHROPIC_API_KEY")
     if not api_key:
-        return {"insights": [], "source": "unavailable (ANTHROPIC_API_KEY not set)"}
+        return {"insights": [], "critical_index": None,
+                "source": "unavailable (ANTHROPIC_API_KEY not set)"}
 
     # Compact, factual summary of the real data for the model to reason over.
     summary = {
@@ -165,10 +166,15 @@ def generate_insights(channels: dict, campaigns: dict, retention: dict) -> dict:
         "Lightning payments app. Below is REAL data pulled live from the user "
         "acquisition dashboard (installs, eCPI, top campaigns, and the D1-D7 "
         "retention curve from matured cohorts).\n\n"
-        "Write 3-5 concise, plain-English insight bullets: what's working, "
-        "what isn't, and what to do next. Be specific and cite the actual "
-        "numbers (channel names, eCPI values, install counts, retention %). "
-        "No fluff, no generic advice. Each bullet one or two sentences.\n\n"
+        "Write 4-5 plain-English insight bullets: what's working, what isn't, "
+        "and what to do next. Be specific and cite the actual numbers (channel "
+        "names, eCPI values, install counts, retention %). Each bullet must be "
+        "ONE punchy sentence — no semicolons stringing two thoughts together, "
+        "no fluff, no generic advice.\n\n"
+        "Ordering: the FIRST bullet must cover organic install dominance; the "
+        "SECOND bullet must be the re-engagement funnel inefficiency (clicks "
+        "converting to almost no installs), which is the single most urgent "
+        "issue. Then the rest.\n\n"
         "Return ONLY a JSON array of strings, e.g. [\"...\", \"...\"]. No prose.\n\n"
         f"DATA:\n{json.dumps(summary, indent=2)}"
     )
@@ -184,10 +190,14 @@ def generate_insights(channels: dict, campaigns: dict, retention: dict) -> dict:
         text = resp.content[0].text.strip()
         insights = _parse_json_array(text)
         if insights:
-            return {"insights": insights, "source": _INSIGHTS_MODEL}
-        return {"insights": [], "source": f"{_INSIGHTS_MODEL} (unparseable response)"}
+            insights, critical_index = _reorder_insights(insights)
+            return {"insights": insights, "critical_index": critical_index,
+                    "source": _INSIGHTS_MODEL}
+        return {"insights": [], "critical_index": None,
+                "source": f"{_INSIGHTS_MODEL} (unparseable response)"}
     except Exception as e:
-        return {"insights": [], "source": f"error: {type(e).__name__}: {e}"}
+        return {"insights": [], "critical_index": None,
+                "source": f"error: {type(e).__name__}: {e}"}
 
 
 def _parse_json_array(text: str) -> list[str]:
@@ -204,6 +214,24 @@ def _parse_json_array(text: str) -> list[str]:
     if isinstance(val, list):
         return [str(x) for x in val if str(x).strip()]
     return []
+
+
+def _reorder_insights(insights: list[str]) -> tuple[list[str], int | None]:
+    """Force the re-engagement-funnel bullet to position 2 and mark it critical.
+
+    The prompt already asks for this ordering; this guarantees it regardless of
+    model compliance. Returns (insights, critical_index) where critical_index is
+    the position of the re-engagement bullet (used to style it), or None.
+    """
+    pat = re.compile(r"re-?engag", re.I)
+    idx = next((i for i, t in enumerate(insights) if pat.search(t)), None)
+    if idx is None:
+        return insights, None
+    if len(insights) >= 2 and idx != 1:
+        bullet = insights.pop(idx)
+        insights.insert(1, bullet)
+        return insights, 1
+    return insights, idx
 
 
 # ------------------------------------------------------------------
@@ -243,6 +271,7 @@ def main() -> None:
         **campaigns,
         "retention": retention,
         "insights": insights["insights"],
+        "insights_critical_index": insights.get("critical_index"),
         "insights_source": insights["source"],
     }
 
@@ -283,12 +312,12 @@ _TEMPLATE = r"""<!doctype html>
   .sub{color:var(--muted); font-size:13px;}
   .stamp{text-align:right; font-size:12px; color:var(--muted);}
   .stamp b{color:var(--text); font-weight:600;}
-  section{margin:30px 0;}
-  .sec-head{display:flex; align-items:baseline; gap:10px; margin-bottom:14px;}
+  section{margin:48px 0;}
+  .sec-head{display:flex; align-items:baseline; gap:10px; margin-bottom:18px;}
   h2{font-size:15px; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin:0; font-weight:600;}
   .note{font-size:12px; color:var(--muted);}
-  .panel{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:18px;}
-  .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:20px;}
+  .panel{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:22px;}
+  .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:28px;}
   @media(max-width:820px){.grid-2{grid-template-columns:1fr;}}
   table{width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums;}
   th,td{text-align:right; padding:9px 12px; border-bottom:1px solid var(--border); font-size:13.5px;}
@@ -303,15 +332,17 @@ _TEMPLATE = r"""<!doctype html>
   .num-good{color:var(--good); font-weight:600;}
   .num-bad{color:var(--bad); font-weight:600;}
   .muted{color:var(--muted);}
-  .chart-box{position:relative; height:300px;}
+  .chart-box{position:relative; height:340px;}
   ul.insights{list-style:none; margin:0; padding:0;}
   ul.insights li{position:relative; padding:10px 0 10px 26px; border-bottom:1px solid var(--border); font-size:14px;}
   ul.insights li:last-child{border-bottom:none;}
   ul.insights li::before{content:"▸"; position:absolute; left:4px; color:var(--accent);}
+  ul.insights li.critical{border-left:3px solid var(--bad); background:linear-gradient(90deg,rgba(248,81,73,0.10),transparent 65%); padding-left:30px; border-radius:0 6px 6px 0;}
+  ul.insights li.critical::before{left:12px; color:var(--bad);}
   .empty{display:flex; flex-direction:column; align-items:center; justify-content:center; padding:42px 20px; text-align:center; border:1px dashed var(--border); border-radius:10px; background:var(--panel-2);}
-  .empty .ico{font-size:30px; margin-bottom:10px; opacity:0.7;}
+  .empty .ico{color:var(--muted); margin-bottom:14px; opacity:0.8;}
   .empty .msg{color:var(--muted); font-size:14px; max-width:440px;}
-  .src{font-size:11px; color:var(--muted); margin-top:10px;}
+  .src{font-size:11px; color:var(--muted); margin-top:16px; text-align:right;}
   .fallback{color:var(--warn); font-size:13px; padding:20px; text-align:center;}
   footer{margin-top:40px; padding-top:16px; border-top:1px solid var(--border); font-size:11.5px; color:var(--muted);}
   code{background:var(--panel-2); padding:1px 5px; border-radius:4px; font-size:12px;}
@@ -366,7 +397,12 @@ _TEMPLATE = r"""<!doctype html>
   <section>
     <div class="sec-head"><h2>Meta Creative Analysis</h2></div>
     <div class="empty">
-      <div class="ico">📊</div>
+      <svg class="ico" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="3" y1="20.5" x2="21" y2="20.5"/>
+        <rect x="4.5" y="11" width="3.6" height="9.5"/>
+        <rect x="10.2" y="6" width="3.6" height="14.5"/>
+        <rect x="15.9" y="14" width="3.6" height="6.5"/>
+      </svg>
       <div class="msg">Pending Meta ad account access — will populate automatically once connected.</div>
     </div>
   </section>
@@ -418,26 +454,31 @@ function renderCampaigns(){
   const note = document.getElementById("cmpNote");
   note.textContent = `Top ${DATA.campaigns.length} by installs (excl. ${DATA.excluded_organic_rows} unattributed Organic)`;
   if (typeof Chart === "undefined"){ chartFallback("cmpChart"); return; }
-  const labels = DATA.campaigns.map(c => c.campaign);
+  const trunc = s => s.length > 25 ? s.slice(0, 25) + "..." : s;
+  const labels = DATA.campaigns.map(c => trunc(c.campaign));
   const installs = DATA.campaigns.map(c => c.installs);
   new Chart(document.getElementById("cmpChart"), {
     type:"bar",
     data:{labels, datasets:[{
       label:"Installs", data:installs,
-      backgroundColor:"#58a6ff", borderRadius:4, maxBarThickness:26,
+      backgroundColor:"#58a6ff", borderRadius:4, maxBarThickness:24,
     }]},
     options:{
       indexAxis:"y", responsive:true, maintainAspectRatio:false,
+      layout:{padding:{left:10, right:16, top:4, bottom:4}},
       plugins:{
         legend:{display:false},
-        tooltip:{callbacks:{afterLabel:(ctx)=>{
-          const c = DATA.campaigns[ctx.dataIndex];
-          return `Channel: ${c.channel}\nCost: ${fmtCost(c.cost)}`;
-        }}},
+        tooltip:{callbacks:{
+          title:(items)=> DATA.campaigns[items[0].dataIndex].campaign,
+          afterLabel:(ctx)=>{
+            const c = DATA.campaigns[ctx.dataIndex];
+            return `Channel: ${c.channel}\nCost: ${fmtCost(c.cost)}`;
+          },
+        }},
       },
       scales:{
         x:{ticks:{color:"#8b949e"}, grid:{color:"#21262d"}},
-        y:{ticks:{color:"#e6edf3", font:{size:11}}, grid:{display:false}},
+        y:{ticks:{color:"#e6edf3", font:{size:11}, autoSkip:false}, grid:{display:false}},
       },
     },
   });
@@ -474,8 +515,11 @@ function renderInsights(){
   if (!DATA.insights || !DATA.insights.length){
     ul.innerHTML = '<li class="muted">Insights unavailable for this build.</li>';
   } else {
-    DATA.insights.forEach(t => {
-      const li = document.createElement("li"); li.textContent = t; ul.appendChild(li);
+    DATA.insights.forEach((t, i) => {
+      const li = document.createElement("li");
+      if (i === DATA.insights_critical_index) li.className = "critical";
+      li.textContent = t;
+      ul.appendChild(li);
     });
   }
   document.getElementById("insightsSrc").textContent = "Generated by " + DATA.insights_source;
