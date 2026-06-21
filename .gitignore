@@ -4,3 +4,6 @@ data/raw/
 credentials.json
 __pycache__/
 *.pyc
+
+# Generated insight cache (regenerated on data change; not source)
+data/processed/creative_dashboard_insights.cache.json
