@@ -567,23 +567,45 @@ const fmtEcpi = v => (v && v > 0) ? "$" + Number(v).toFixed(2) : "—";
 const fmtCost = v => (v && v > 0) ? "$" + intFmt.format(Math.round(v)) : "—";
 const esc = s => { const d=document.createElement("div"); d.textContent = (s==null?"":s); return d.innerHTML; };
 
-function kpiCard(val, valCls, lab, sub, cardCls){
+function kpiCard(val, valCls, lab, sub, cardCls, count){
+  const data = count
+    ? ` data-count="${count.target}" data-prefix="${count.prefix||""}" data-suffix="${count.suffix||""}" data-decimals="${count.decimals||0}"`
+    : "";
   return `<div class="kpi ${cardCls||""}">
-    <div class="val ${valCls||""}">${val}</div>
+    <div class="val ${valCls||""}"${data}>${val}</div>
     <div class="lab">${lab}</div>
     <div class="sub">${sub}</div>
   </div>`;
+}
+
+// Animated count-up for KPI numbers (eased), respecting reduced-motion.
+function animateVal(el){
+  const target = parseFloat(el.dataset.count);
+  if (isNaN(target)) return;
+  const dec = parseInt(el.dataset.decimals||"0", 10);
+  const pre = el.dataset.prefix||"", suf = el.dataset.suffix||"";
+  const fmt = v => pre + (dec>0 ? v.toFixed(dec) : intFmt.format(Math.round(v))) + suf;
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches){ el.textContent = fmt(target); return; }
+  const dur = 950, t0 = performance.now();
+  el.textContent = fmt(0);
+  requestAnimationFrame(function step(now){
+    const p = Math.min(1, (now-t0)/dur), e = 1 - Math.pow(1-p, 3);
+    el.textContent = fmt(target * e);
+    if (p < 1) requestAnimationFrame(step); else el.textContent = fmt(target);
+  });
 }
 
 function renderKPIs(){
   const k = DATA.kpis, g = document.getElementById("kpis");
   const cards = [];
   cards.push(kpiCard(fmtInt(k.total_installs), "", "Total Installs",
-    `Last 30 days · ${k.channel_count} active channels`, ""));
+    `Last 30 days · ${k.channel_count} active channels`, "",
+    {target:k.total_installs, decimals:0}));
 
   if (k.best_paid)
     cards.push(kpiCard("$" + k.best_paid.ecpi.toFixed(2), "good", "Best Paid eCPI",
-      `${esc(k.best_paid.channel)} · ${fmtInt(k.best_paid.installs)} installs`, ""));
+      `${esc(k.best_paid.channel)} · ${fmtInt(k.best_paid.installs)} installs`, "",
+      {target:k.best_paid.ecpi, prefix:"$", decimals:2}));
   else
     cards.push(kpiCard("—", "", "Best Paid eCPI", "no paid channels", ""));
 
@@ -591,15 +613,17 @@ function renderKPIs(){
   cards.push(kpiCard((k.d1_retention*100).toFixed(1) + "%", above ? "good" : "bad",
     "D1 Retention",
     `${above ? "▲" : "▼"} ${above ? "above" : "below"} ${Math.round(k.d1_target*100)}% target · ${k.matured_cohorts} cohorts`,
-    ""));
+    "", {target:k.d1_retention*100, suffix:"%", decimals:1}));
 
   if (k.reengagement)
     cards.push(kpiCard(k.reengagement.cvr.toFixed(2) + "%", "bad", "Re-engagement CVR",
-      `⚠ ${fmtInt(k.reengagement.clicks)} clicks → ${fmtInt(k.reengagement.installs)} installs`, "flag"));
+      `⚠ ${fmtInt(k.reengagement.clicks)} clicks → ${fmtInt(k.reengagement.installs)} installs`, "flag",
+      {target:k.reengagement.cvr, suffix:"%", decimals:2}));
   else
     cards.push(kpiCard("—", "", "Re-engagement CVR", "no re-engagement channel", ""));
 
   g.innerHTML = cards.join("");
+  g.querySelectorAll(".val[data-count]").forEach(animateVal);
 }
 
 function renderChannels(){
@@ -653,13 +677,16 @@ function renderCampaigns(){
       layout:{padding:{left:10, right:16, top:4, bottom:4}},
       plugins:{
         legend:{display:false},
-        tooltip:{callbacks:{
-          title:(items)=> DATA.campaigns[items[0].dataIndex].campaign,
-          afterLabel:(c)=>{
-            const x = DATA.campaigns[c.dataIndex];
-            return `Channel: ${x.channel}\nCost: ${fmtCost(x.cost)}`;
-          },
-        }},
+        tooltip:{
+          backgroundColor:"rgba(14,16,24,0.96)", borderColor:"rgba(255,255,255,0.10)", borderWidth:1,
+          cornerRadius:9, padding:11, titleColor:"#edf1f7", bodyColor:"#9aa4b2", displayColors:false,
+          callbacks:{
+            title:(items)=> DATA.campaigns[items[0].dataIndex].campaign,
+            afterLabel:(c)=>{
+              const x = DATA.campaigns[c.dataIndex];
+              return `Channel: ${x.channel}\nCost: ${fmtCost(x.cost)}`;
+            },
+          }},
       },
       scales:{
         x:{ticks:{color:"#8b949e"}, grid:{color:"rgba(255,255,255,0.06)"}},
@@ -674,18 +701,27 @@ function renderRetention(){
   document.getElementById("retNote").textContent =
     `Avg of ${r.cohort_count} matured cohorts (excl. ${r.excluded_days.length} most-recent days)`;
   if (typeof Chart === "undefined"){ chartFallback("retChart"); return; }
-  new Chart(document.getElementById("retChart"), {
+  const rctx = document.getElementById("retChart").getContext("2d");
+  const fill = rctx.createLinearGradient(0, 0, 0, 340);
+  fill.addColorStop(0, "rgba(163,113,245,0.42)");
+  fill.addColorStop(1, "rgba(110,64,201,0.02)");
+  new Chart(rctx, {
     type:"line",
     data:{labels:r.labels, datasets:[{
       label:"Retention", data:r.values.map(v=>+(v*100).toFixed(2)),
-      borderColor:"#a371f7", backgroundColor:"rgba(110,64,201,0.16)",
-      fill:true, tension:0.3, pointRadius:4, pointBackgroundColor:"#a371f7",
+      borderColor:"#a371f7", backgroundColor:fill, borderWidth:2.5,
+      fill:true, tension:0.35,
+      pointRadius:4, pointHoverRadius:6, pointBackgroundColor:"#a371f7",
+      pointBorderColor:"#0a0c11", pointBorderWidth:2,
     }]},
     options:{
       responsive:true, maintainAspectRatio:false,
       plugins:{
         legend:{display:false},
-        tooltip:{callbacks:{label:(c)=>` ${c.parsed.y.toFixed(1)}% retained`}},
+        tooltip:{
+          backgroundColor:"rgba(14,16,24,0.96)", borderColor:"rgba(255,255,255,0.10)", borderWidth:1,
+          cornerRadius:9, padding:11, titleColor:"#edf1f7", bodyColor:"#9aa4b2", displayColors:false,
+          callbacks:{label:(c)=>` ${c.parsed.y.toFixed(1)}% retained`}},
       },
       scales:{
         x:{ticks:{color:"#e6edf3"}, grid:{color:"rgba(255,255,255,0.06)"}},
