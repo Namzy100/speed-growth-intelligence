@@ -38,6 +38,17 @@ _MIN_MEANINGFUL_INSTALLS = 100   # floor for "meaningful volume" in efficiency p
 _RETENTION_EXCLUDE_RECENT_DAYS = 2
 _D1_TARGET = 0.25                # D1 retention KPI threshold (green above, red below)
 
+# Insight cache: the Claude call is the only paid step in a daily run, so we
+# skip it unless the headline numbers have moved meaningfully. Thresholds below
+# define "meaningful" per metric ("rel" = relative change, "abs" = absolute).
+_INSIGHTS_CACHE = _ROOT / "data" / "processed" / "creative_dashboard_insights.cache.json"
+_FP_THRESHOLDS: dict[str, tuple[str, float]] = {
+    "total_installs":   ("rel", 0.03),   # 3% relative
+    "best_paid_ecpi":   ("rel", 0.05),   # 5% relative
+    "d1_retention":     ("abs", 0.01),   # 1 percentage point
+    "reengagement_cvr": ("rel", 0.15),   # 15% relative
+}
+
 
 # ------------------------------------------------------------------
 # Parsing helpers
@@ -267,6 +278,92 @@ def _reorder_insights(cards: list[dict]) -> tuple[list[dict], int | None]:
 
 
 # ------------------------------------------------------------------
+# Insight cache (cost control) — skip the Claude call on unchanged data
+# ------------------------------------------------------------------
+
+def _load_cache() -> dict | None:
+    try:
+        return json.loads(_INSIGHTS_CACHE.read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError):
+        return None
+
+
+def _save_cache(fingerprint: dict, result: dict) -> None:
+    _INSIGHTS_CACHE.parent.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "fingerprint": fingerprint,
+        "insights": result["insights"],
+        "critical_index": result.get("critical_index"),
+        "source": result.get("source", _INSIGHTS_MODEL),
+        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"),
+    }
+    _INSIGHTS_CACHE.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+
+
+def _significant_change(old_fp: dict, new_fp: dict) -> tuple[bool, list[str]]:
+    """Return (changed, reasons) — True if any metric moved past its threshold."""
+    reasons = []
+    for key, (mode, thr) in _FP_THRESHOLDS.items():
+        old, new = old_fp.get(key), new_fp.get(key)
+        if old is None or new is None:
+            if old != new:  # a metric appeared or disappeared
+                reasons.append(f"{key} {old}→{new}")
+            continue
+        if mode == "abs":
+            if abs(new - old) >= thr:
+                reasons.append(f"{key} {old}→{new} (Δ{abs(new-old):.4g})")
+        else:  # relative
+            base = abs(old)
+            if base == 0:
+                if new != old:
+                    reasons.append(f"{key} {old}→{new}")
+            elif abs(new - old) / base >= thr:
+                reasons.append(f"{key} {old}→{new} ({abs(new-old)/base:.0%})")
+    return (len(reasons) > 0, reasons)
+
+
+def get_insights(fingerprint: dict, channels: dict, campaigns: dict, retention: dict) -> dict:
+    """Cache-aware insights: only call Claude when the headline numbers shifted.
+
+    Returns the same shape as generate_insights() plus 'cache_hit'. On a run
+    where the data hasn't moved past the thresholds, the cached insights are
+    reused and no Claude request is made.
+    """
+    cache = _load_cache()
+    if cache and cache.get("insights"):
+        changed, reasons = _significant_change(cache.get("fingerprint", {}), fingerprint)
+        if not changed:
+            print(f"  cache HIT — data unchanged since {cache.get('generated_at', '?')}; "
+                  f"skipping Claude call")
+            return {
+                "insights": cache["insights"],
+                "critical_index": cache.get("critical_index"),
+                "source": f"{cache.get('source', _INSIGHTS_MODEL)} (cached)",
+                "cache_hit": True,
+            }
+        print(f"  cache MISS — regenerating; shifted: {'; '.join(reasons)}")
+    else:
+        print("  cache MISS — no usable cache; generating")
+
+    result = generate_insights(channels, campaigns, retention)
+
+    # If Claude failed but a cache exists, reuse it rather than show nothing.
+    if not result["insights"] and cache and cache.get("insights"):
+        print(f"  regeneration failed ({result['source']}) — falling back to cache")
+        return {
+            "insights": cache["insights"],
+            "critical_index": cache.get("critical_index"),
+            "source": f"{cache.get('source', _INSIGHTS_MODEL)} (cached; regen failed)",
+            "cache_hit": True,
+        }
+
+    if result["insights"]:
+        _save_cache(fingerprint, result)
+    result["cache_hit"] = False
+    return result
+
+
+# ------------------------------------------------------------------
 # Render
 # ------------------------------------------------------------------
 
@@ -292,11 +389,18 @@ def main() -> None:
     if lu:
         last_updated = str(list(lu[0].values())[0])
 
-    print(f"Generating insights with {_INSIGHTS_MODEL}...")
-    insights = generate_insights(channels, campaigns, retention)
-    print(f"  insights source: {insights['source']}  ({len(insights['insights'])} cards)")
-
     d1 = retention["values"][0] if retention["values"] else 0.0
+    fingerprint = {
+        "total_installs": channels["total_installs"],
+        "best_paid_ecpi": channels["most_efficient_detail"]["ecpi"] if channels["most_efficient_detail"] else None,
+        "d1_retention": round(d1, 4),
+        "reengagement_cvr": channels["reengagement"]["cvr"] if channels["reengagement"] else None,
+    }
+
+    print("Resolving insights (cache-aware)...")
+    insights = get_insights(fingerprint, channels, campaigns, retention)
+    print(f"  insights: {insights['source']}  ({len(insights['insights'])} cards)")
+
     kpis = {
         "total_installs": channels["total_installs"],
         "channel_count": len(channels["channels"]),
