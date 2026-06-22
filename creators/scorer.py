@@ -9,6 +9,11 @@ REMITTANCE_TAGS = {
     "remittance", "diaspora", "expat", "expats", "migrant", "migrants",
     "money transfer", "send money", "forex", "wire transfer",
     "international transfer", "immigrant", "immigrants", "overseas",
+    # Spanish/Portuguese terms for the Mexico & Brazil diaspora corridors
+    "remesas", "enviar dinero", "mandar dinero", "mandar dinheiro",
+    "remessa", "transferencia internacional", "transferência internacional",
+    "dinero al extranjero", "dinheiro para o exterior",
+    "envio de dinero", "envio de dinheiro",
 }
 
 IGAMING_TAGS = {
