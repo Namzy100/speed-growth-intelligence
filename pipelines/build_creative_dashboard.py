@@ -47,6 +47,8 @@ _FP_THRESHOLDS: dict[str, tuple[str, float]] = {
     "best_paid_ecpi":   ("rel", 0.05),   # 5% relative
     "d1_retention":     ("abs", 0.01),   # 1 percentage point
     "reengagement_cvr": ("rel", 0.15),   # 15% relative
+    "meta_spend":       ("rel", 0.05),   # 5% relative — Meta total spend
+    "meta_installs":    ("rel", 0.05),   # 5% relative — Meta total installs
 }
 
 
@@ -67,6 +69,18 @@ def _num(x) -> float:
 def _records(ss, tab: str) -> list[dict]:
     ws = sheets._retry(lambda: ss.worksheet(tab))
     return sheets._retry(ws.get_all_records)
+
+
+def _records_optional(ss, tab: str) -> list[dict]:
+    """Like _records, but returns [] if the tab doesn't exist yet.
+
+    Used for newer tabs (e.g. Meta Campaigns) so an older sheet still builds.
+    """
+    from gspread.exceptions import WorksheetNotFound
+    try:
+        return _records(ss, tab)
+    except WorksheetNotFound:
+        return []
 
 
 # ------------------------------------------------------------------
@@ -171,11 +185,35 @@ def build_retention(rows: list[dict]) -> dict:
     }
 
 
+def build_meta(rows: list[dict]) -> dict:
+    """Meta campaign performance from the Meta Campaigns tab, ranked by spend."""
+    camps = []
+    for r in rows:
+        name = str(r.get("campaign_name", "")).strip()
+        if not name:
+            continue
+        camps.append({
+            "campaign": name,
+            "spend": round(_num(r.get("spend")), 2),
+            "impressions": int(_num(r.get("impressions"))),
+            "clicks": int(_num(r.get("clicks"))),
+            "installs": int(_num(r.get("mobile_app_install"))),
+        })
+    camps.sort(key=lambda c: c["spend"], reverse=True)
+    totals = {
+        "spend": round(sum(c["spend"] for c in camps), 2),
+        "impressions": sum(c["impressions"] for c in camps),
+        "clicks": sum(c["clicks"] for c in camps),
+        "installs": sum(c["installs"] for c in camps),
+    }
+    return {"campaigns": camps, "totals": totals}
+
+
 # ------------------------------------------------------------------
 # Claude insights (structured cards)
 # ------------------------------------------------------------------
 
-def generate_insights(channels: dict, campaigns: dict, retention: dict) -> dict:
+def generate_insights(channels: dict, campaigns: dict, retention: dict, meta: dict) -> dict:
     api_key = os.getenv("ANTHROPIC_API_KEY")
     if not api_key:
         return {"insights": [], "critical_index": None,
@@ -189,23 +227,28 @@ def generate_insights(channels: dict, campaigns: dict, retention: dict) -> dict:
         "top_campaigns": campaigns["campaigns"],
         "retention_curve_d1_d7": dict(zip(retention["labels"], retention["values"])),
         "retention_cohorts_used": retention["cohort_count"],
+        "meta_paid_campaigns": meta["campaigns"],
+        "meta_paid_totals": meta["totals"],
     }
 
     prompt = (
         "You are a performance-marketing analyst for Speed Wallet, a Bitcoin "
         "Lightning payments app. Below is REAL data pulled live from the user "
-        "acquisition dashboard (installs, eCPI, top campaigns, and the D1-D7 "
-        "retention curve from matured cohorts).\n\n"
+        "acquisition dashboard (installs, eCPI, top campaigns, the D1-D7 "
+        "retention curve from matured cohorts, and Meta/Facebook paid campaign "
+        "spend, clicks and mobile-app-install counts).\n\n"
         "Write 4-5 insight cards. Each card is a JSON object with exactly these keys:\n"
         '  "type": one of "positive", "warning", or "neutral"\n'
         '  "headline": a punchy 4-8 word headline, no trailing period\n'
         '  "detail": ONE sentence citing the specific numbers (channel names, '
-        "eCPI values, install counts, retention %)\n\n"
+        "eCPI values, install counts, retention %, or Meta campaign spend/installs)\n\n"
         "Be specific, no fluff, no generic advice. Ordering: the FIRST card "
         "covers organic install dominance (type positive); the SECOND card is "
         "the re-engagement funnel inefficiency — clicks converting to almost no "
         'installs — and MUST be type "warning" (the single most urgent issue). '
-        "Then the rest.\n\n"
+        "Then the rest, AT LEAST ONE of which MUST reference the Meta paid "
+        "campaigns by name, citing real spend (USD) and mobile_app_install "
+        "counts (e.g. cost-per-install efficiency across the Meta campaigns).\n\n"
         "Return ONLY a JSON array of these objects. No prose.\n\n"
         f"DATA:\n{json.dumps(summary, indent=2)}"
     )
@@ -322,7 +365,7 @@ def _significant_change(old_fp: dict, new_fp: dict) -> tuple[bool, list[str]]:
     return (len(reasons) > 0, reasons)
 
 
-def get_insights(fingerprint: dict, channels: dict, campaigns: dict, retention: dict) -> dict:
+def get_insights(fingerprint: dict, channels: dict, campaigns: dict, retention: dict, meta: dict) -> dict:
     """Cache-aware insights: only call Claude when the headline numbers shifted.
 
     Returns the same shape as generate_insights() plus 'cache_hit'. On a run
@@ -345,7 +388,7 @@ def get_insights(fingerprint: dict, channels: dict, campaigns: dict, retention: 
     else:
         print("  cache MISS — no usable cache; generating")
 
-    result = generate_insights(channels, campaigns, retention)
+    result = generate_insights(channels, campaigns, retention, meta)
 
     # If Claude failed but a cache exists, reuse it rather than show nothing.
     if not result["insights"] and cache and cache.get("insights"):
@@ -379,10 +422,11 @@ def main() -> None:
     print("Opening Google Sheet (live)...")
     ss = sheets._open(sid)
 
-    print("Reading tabs: Channel Overview, Campaign Installs, Retention, Last Updated...")
+    print("Reading tabs: Channel Overview, Campaign Installs, Retention, Meta Campaigns, Last Updated...")
     channels = build_channels(_records(ss, "Channel Overview"))
     campaigns = build_campaigns(_records(ss, "Campaign Installs"))
     retention = build_retention(_records(ss, "Retention"))
+    meta = build_meta(_records_optional(ss, "Meta Campaigns"))
 
     last_updated = ""
     lu = _records(ss, "Last Updated")
@@ -395,10 +439,12 @@ def main() -> None:
         "best_paid_ecpi": channels["most_efficient_detail"]["ecpi"] if channels["most_efficient_detail"] else None,
         "d1_retention": round(d1, 4),
         "reengagement_cvr": channels["reengagement"]["cvr"] if channels["reengagement"] else None,
+        "meta_spend": meta["totals"]["spend"] or None,
+        "meta_installs": meta["totals"]["installs"] or None,
     }
 
     print("Resolving insights (cache-aware)...")
-    insights = get_insights(fingerprint, channels, campaigns, retention)
+    insights = get_insights(fingerprint, channels, campaigns, retention, meta)
     print(f"  insights: {insights['source']}  ({len(insights['insights'])} cards)")
 
     kpis = {
@@ -419,6 +465,7 @@ def main() -> None:
         **channels,
         **campaigns,
         "retention": retention,
+        "meta": meta,
         "insights": insights["insights"],
         "insights_critical_index": insights.get("critical_index"),
         "insights_source": insights["source"],
@@ -428,7 +475,8 @@ def main() -> None:
     _OUT.write_text(render_html(data), encoding="utf-8")
     print(f"Wrote {_OUT.relative_to(_ROOT)} ({_OUT.stat().st_size:,} bytes)")
     print(f"  channels={len(data['channels'])} campaigns={len(data['campaigns'])} "
-          f"retention_cohorts={retention['cohort_count']} total_installs={kpis['total_installs']:,}")
+          f"retention_cohorts={retention['cohort_count']} meta_campaigns={len(meta['campaigns'])} "
+          f"total_installs={kpis['total_installs']:,}")
 
 
 # ------------------------------------------------------------------
@@ -634,14 +682,23 @@ _TEMPLATE = r"""<!doctype html>
     </section>
   </div>
 
-  <!-- 4. Key Insights -->
+  <!-- 4. Meta Campaign Performance -->
+  <section>
+    <div class="sec-head"><h2>Meta Campaign Performance</h2><span class="note" id="metaNote"></span></div>
+    <div class="panel"><div class="table-wrap"><table id="metaTable">
+      <thead><tr><th>Campaign</th><th>Spend</th><th>Impressions</th><th>Clicks</th><th>App Installs</th></tr></thead>
+      <tbody></tbody>
+    </table></div></div>
+  </section>
+
+  <!-- 5. Key Insights -->
   <section>
     <div class="sec-head"><h2>Key Insights</h2></div>
     <div class="ins-grid" id="insights"></div>
     <div class="src" id="insightsSrc"></div>
   </section>
 
-  <!-- 5. Meta Creative Analysis placeholder -->
+  <!-- 6. Meta Creative Analysis placeholder -->
   <section>
     <div class="sec-head"><h2>Meta Creative Analysis</h2></div>
     <div class="empty">
@@ -651,7 +708,7 @@ _TEMPLATE = r"""<!doctype html>
         <rect x="10.2" y="6" width="3.6" height="14.5"/>
         <rect x="15.9" y="14" width="3.6" height="6.5"/>
       </svg>
-      <div class="msg">Pending Meta ad account access — will populate automatically once connected.</div>
+      <div class="msg">Campaign-level Meta data is now live above. Creative-level (ad &amp; asset) breakdown is pending and will populate once wired in.</div>
     </div>
   </section>
 
@@ -669,6 +726,8 @@ const intFmt = new Intl.NumberFormat("en-US");
 const fmtInt = n => intFmt.format(Math.round(n||0));
 const fmtEcpi = v => (v && v > 0) ? "$" + Number(v).toFixed(2) : "—";
 const fmtCost = v => (v && v > 0) ? "$" + intFmt.format(Math.round(v)) : "—";
+const usdFmt = new Intl.NumberFormat("en-US", {minimumFractionDigits:2, maximumFractionDigits:2});
+const fmtMoney = v => (v || v === 0) ? "$" + usdFmt.format(Number(v)) : "—";
 const esc = s => { const d=document.createElement("div"); d.textContent = (s==null?"":s); return d.innerHTML; };
 
 function kpiCard(val, valCls, lab, sub, cardCls, count){
@@ -835,6 +894,29 @@ function renderRetention(){
   });
 }
 
+function renderMeta(){
+  const m = DATA.meta;
+  const tb = document.querySelector("#metaTable tbody");
+  if (!m || !m.campaigns || !m.campaigns.length){
+    document.getElementById("metaNote").textContent = "No active Meta campaigns this period";
+    tb.innerHTML = `<tr><td colspan="5" class="muted">No Meta campaign data for this period.</td></tr>`;
+    return;
+  }
+  m.campaigns.forEach(c => {
+    const tr = document.createElement("tr");
+    tr.innerHTML =
+      `<td class="ch">${esc(c.campaign)}</td>` +
+      `<td>${fmtMoney(c.spend)}</td>` +
+      `<td class="muted">${fmtInt(c.impressions)}</td>` +
+      `<td class="muted">${fmtInt(c.clicks)}</td>` +
+      `<td class="num-good">${fmtInt(c.installs)}</td>`;
+    tb.appendChild(tr);
+  });
+  const t = m.totals;
+  document.getElementById("metaNote").textContent =
+    `${m.campaigns.length} active campaigns  ·  ${fmtMoney(t.spend)} spend  ·  ${fmtInt(t.installs)} installs`;
+}
+
 function renderInsights(){
   const g = document.getElementById("insights");
   const ICON = {positive:"▲", warning:"⚠", neutral:"●"};
@@ -874,6 +956,7 @@ function init(){
     renderChannels();
     renderCampaigns();
     renderRetention();
+    renderMeta();
     renderInsights();
     console.log("Dashboard rendered OK:",
       DATA.channels.length, "channels,",
