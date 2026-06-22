@@ -35,10 +35,19 @@ _CRYPTO_CAP = 0.80
 _FINTECH_CAP = 0.60
 
 # Tags from scorer.py that we try to match in descriptions and topic titles.
+# Vocabulary used to derive niche_tags from channel text. Must stay in sync
+# with the tag sets in scorer.py — a term only becomes a niche_tag if it is
+# listed here, and only contributes to a segment if scorer.py recognises it too.
 _SCORER_TAGS = {
     "remittance", "diaspora", "expat", "expats", "migrant", "migrants",
     "money transfer", "send money", "forex", "wire transfer", "immigrant",
     "immigrants", "overseas",
+    # Spanish/Portuguese remittance terms (Mexico & Brazil corridors) — must
+    # mirror the additions in scorer.py REMITTANCE_TAGS.
+    "remesas", "enviar dinero", "mandar dinero", "mandar dinheiro",
+    "remessa", "transferencia internacional", "transferência internacional",
+    "dinero al extranjero", "dinheiro para o exterior",
+    "envio de dinero", "envio de dinheiro",
     "igaming", "gambling", "casino", "betting", "poker", "slots", "esports",
     "sports betting", "sports bet", "esports betting", "fantasy sports",
     "online gambling", "sportsbook", "wager", "play to earn", "p2e",

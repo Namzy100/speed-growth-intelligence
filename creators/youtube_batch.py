@@ -41,7 +41,9 @@ SEGMENT_SEARCHES: dict[str, list[str]] = {
         # Mexico/Brazil diaspora corridors (Spanish/Portuguese)
         "enviar dinero a Mexico",
         "remesas a Mexico",
-        "mandar dinero a Brasil",
+        "mandar dinheiro para o Brasil",
+        "enviar dinheiro para o Brasil",
+        "remessa de dinheiro Brasil",
         "remessa internacional Brasil",
         "send money to Mexico from US",
     ],
