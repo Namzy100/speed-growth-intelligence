@@ -46,6 +46,10 @@ SEGMENT_SEARCHES: dict[str, list[str]] = {
         "remessa de dinheiro Brasil",
         "remessa internacional Brasil",
         "send money to Mexico from US",
+        # Broader money-movement terms
+        "international wire transfer tips",
+        "cheapest way to send money abroad",
+        "Western Union alternative",
     ],
     "iGaming": [
         "crypto casino",
@@ -72,10 +76,16 @@ SEGMENT_SEARCHES: dict[str, list[str]] = {
         "bitcoin investing US 2025",
         "crypto beginner United States",
         "lightning network bitcoin payments",
+        # Broader crypto-curious terms
+        "best crypto apps 2025",
+        "bitcoin cash app",
+        "crypto passive income",
+        "ethereum for beginners",
+        "how to use bitcoin",
     ],
 }
 
-MAX_RESULTS_PER_SEARCH = 8   # channels requested per search term
+MAX_RESULTS_PER_SEARCH = 10   # channels requested per search term
 
 
 def verify_column() -> None:
