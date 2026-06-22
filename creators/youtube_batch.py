@@ -23,7 +23,10 @@ from creators.youtube import QuotaExceededError, YouTubeCreatorFetcher
 load_dotenv()
 
 # Per-segment search terms. iGaming gets extra variations — "crypto casino"
-# alone returned almost nothing useful in the prior test.
+# alone returned almost nothing useful in the prior test. Remittance and
+# crypto-curious are grounded in Speed's confirmed influencer markets (US,
+# Mexico, Brazil): remittance includes Spanish/Portuguese diaspora-corridor
+# terms, crypto-curious includes US-market framing.
 SEGMENT_SEARCHES: dict[str, list[str]] = {
     "remittance": [
         "send money abroad",
@@ -35,6 +38,12 @@ SEGMENT_SEARCHES: dict[str, list[str]] = {
         "diaspora finance",
         "immigrant money tips",
         "remittance app comparison",
+        # Mexico/Brazil diaspora corridors (Spanish/Portuguese)
+        "enviar dinero a Mexico",
+        "remesas a Mexico",
+        "mandar dinero a Brasil",
+        "remessa internacional Brasil",
+        "send money to Mexico from US",
     ],
     "iGaming": [
         "crypto casino",
@@ -57,6 +66,10 @@ SEGMENT_SEARCHES: dict[str, list[str]] = {
         "crypto payments beginner",
         "buy bitcoin 2025",
         "bitcoin for beginners",
+        # US market framing
+        "bitcoin investing US 2025",
+        "crypto beginner United States",
+        "lightning network bitcoin payments",
     ],
 }
 
