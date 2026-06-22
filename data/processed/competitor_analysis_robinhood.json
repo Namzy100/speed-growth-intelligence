@@ -1,0 +1,439 @@
+{
+  "competitor": "Robinhood",
+  "platform": "all",
+  "country": "US",
+  "fetched_at": "2026-06-22T16:18:02.488589+00:00",
+  "total_ads": 27,
+  "ads": [
+    {
+      "body": "Sign up for Robinhood Gold ($5/month) to get a high APY on your idle cash. Terms apply.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 31,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Customer funds are protected, prices are transparent and prediction markets move based on supply and demand.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 47,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Experience the power of Legend with advanced charting and layouts.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 47,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Introducing margin rates between 3.95% and 5%.",
+      "title": "We lowered our margin rates—our standard rate was 12%.",
+      "cta": "Learn more",
+      "format": "video",
+      "days_running": 47,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Sign up and deposit 1k or more to earn a cash bonus up to $1250. Terms Apply.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 31,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Get a new perk with your Robinhood Gold membership ($5/mo.) Earn 3.35% APY on uninvested cash with Robinhood Gold. $5/month subscription & terms apply.",
+      "title": "Robinhood",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 47,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Robinhood gives you access to participate in IPOs at the offering price before stocks start trading publicly. No account minimum required. Sign up for Robinhood and kick off your portfolio.",
+      "title": "{{product.name}}",
+      "cta": "Download",
+      "format": "carousel",
+      "days_running": 10,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Trade BTC, ETH, DOGE and more 24/7 with Robinhood.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 47,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Customer funds are protected, prices are transparent and prediction markets move based on supply and demand.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 46,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Investment decisions handled by a team with 45+ years of collective experience navigating market cycles.",
+      "title": "Robinhood: Trading & Investing",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 17,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "What you see is what you get. No hidden lender fees or unexpected markups. IPOs have generally been reserved for institutional investors & Wall Street.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 14,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Experience the power of Legend with advanced charting and layouts.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 47,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Buy \"Yes\" or \"No\" on match results, group winners, and tournament storylines.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 6,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Experience the power of Legend with advanced charting and layouts.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 47,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Get flexible access funds for qualified expenses that support a child’s growth. What you see is what you get. No hidden lender fees or unexpected markups.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 13,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Who does the man in tights actually represent? Vlad Tenev chats with Dr. Robert Pogue Harrison to discuss the concept of outlaws, the deeper roots of the Robinhood name, and more.",
+      "title": "The Roots of Our Name & the Legend",
+      "cta": "Listen now",
+      "format": "video",
+      "days_running": 12,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Introducing margin rates between 3.95% and 5%.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 47,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Get a new perk with your Robinhood Gold membership ($5/mo.)",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 47,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Sign up for Robinhood and kick off your portfolio.",
+      "title": "{{product.name}}",
+      "cta": "Download",
+      "format": "carousel",
+      "days_running": 10,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Buy \"Yes\" or \"No\" on match results, group winners, and tournament storylines.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 5,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Buy \"Yes\" or \"No\" on match results, group winners, and tournament storylines.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 6,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Ambition goes global in London. Taking the jersey swap worldwide with @ogcnice and @memgrizz @m.bombito_ #jamorant",
+      "title": "",
+      "cta": "Visit Instagram profile",
+      "format": "video",
+      "days_running": 11,
+      "is_active": false,
+      "platforms": [
+        "INSTAGRAM"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Plus automatic rebalancing tailored to your financial goals.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 17,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Buy \"Yes\" or \"No\" on match results, group winners, and tournament storylines.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 4,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Customer funds are protected, prices are transparent and prediction markets move based on supply and demand.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 46,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Buy \"Yes\" or \"No\" on match results, group winners, and tournament storylines.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 5,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Ambition goes global in London. Taking the jersey swap worldwide with @ogcnice and @memgrizz @m.bombito_ #jamorant",
+      "title": "",
+      "cta": "Visit Instagram profile",
+      "format": "video",
+      "days_running": 7,
+      "is_active": false,
+      "platforms": [
+        "INSTAGRAM"
+      ],
+      "page_name": "Robinhood"
+    }
+  ],
+  "messaging_analysis": {
+    "messaging_angles": [
+      "Robinhood Gold membership perks (APY on cash)",
+      "Prediction markets with transparent pricing",
+      "Advanced trading tools (Legend platform, charting)",
+      "Low margin rates (3.95-5%)",
+      "Sign-up bonuses and cash incentives",
+      "IPO access for retail investors",
+      "Crypto trading availability (BTC, ETH, DOGE)",
+      "Transparent pricing with no hidden fees",
+      "Managed investment services with experienced team",
+      "Sports betting/prediction markets"
+    ],
+    "top_ctas": [
+      "Learn more",
+      "Install now",
+      "Download",
+      "Visit Instagram profile",
+      "Listen now"
+    ],
+    "buy_crypto_framing": "soft — crypto is presented as one of many tradable assets (Ad 8: 'Trade BTC, ETH, DOGE and more 24/7') rather than a primary focus; casual mention alongside broader investment product suite",
+    "fees_messaging": "Heavily emphasized as a differentiator — repeated focus on 'transparent prices,' 'no hidden lender fees,' 'no unexpected markups,' and competitive margin rates (3.95-5%). Fees are positioned as an advantage over competitors.",
+    "simplicity_messaging": "Minimal direct simplicity messaging; emphasis is more on accessibility ('no account minimum,' 'IPOs for retail investors') and democratization rather than ease-of-use or beginner-friendliness",
+    "security_messaging": "Mentioned moderately through 'customer funds are protected' in prediction market ads (Ads 2, 9, 25), but not a dominant theme across the ad set; trust is implied through transparency messaging rather than explicit security features",
+    "dominant_format": "carousel — 24 of 27 ads use carousel format; only 3 video ads present",
+    "longest_running_themes": [
+      "Robinhood Gold membership with APY benefits (47 days)",
+      "Prediction markets with customer protection and transparent pricing (47 days)",
+      "Legend platform with advanced charting (47 days)",
+      "Low margin rates 3.95-5% (47 days)"
+    ],
+    "summary": "This competitor (Robinhood) employs a product-diversification strategy emphasizing premium membership perks, advanced trading tools, and transparent pricing across multiple asset classes. Their longest-running ads focus on Gold membership benefits, prediction markets, and professional-grade features rather than beginner simplicity, suggesting they're targeting active traders and investors seeking sophisticated tools. Crypto is mentioned but positioned as just another tradable asset rather than a hero product."
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "competitor": "Kraken",
+  "platform": "all",
+  "country": "US",
+  "fetched_at": "2026-06-22T16:18:19.875638+00:00",
+  "total_ads": 1,
+  "ads": [
+    {
+      "body": "Trade at the speed of crypto on Kraken. Watch this:",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 48,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    }
+  ],
+  "messaging_analysis": {
+    "messaging_angles": [
+      "Speed and performance",
+      "Trading focus",
+      "Visual demonstration"
+    ],
+    "top_ctas": [
+      "Install now"
+    ],
+    "buy_crypto_framing": "direct — explicitly emphasizes trading crypto with clear action-oriented language",
+    "fees_messaging": "Not mentioned or emphasized in the analyzed ad",
+    "simplicity_messaging": "Implied through 'Watch this' suggesting visual simplicity, but not explicitly stated",
+    "security_messaging": "Not present in the analyzed ad",
+    "dominant_format": "carousel",
+    "longest_running_themes": [
+      "Speed as core value proposition",
+      "Trading-focused messaging",
+      "Visual demonstration approach"
+    ],
+    "summary": "This competitor (Kraken) uses a direct, trading-focused approach emphasizing speed as their key differentiator. The 48-day run suggests the speed/performance angle resonates with their target audience, using visual carousel format to demonstrate product capabilities rather than explaining features through text."
+  }
+}

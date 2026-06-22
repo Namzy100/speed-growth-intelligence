@@ -1,0 +1,244 @@
+{
+  "competitor": "Crypto.com",
+  "platform": "all",
+  "country": "US",
+  "fetched_at": "2026-06-22T16:18:13.632445+00:00",
+  "total_ads": 14,
+  "ads": [
+    {
+      "body": "Win up to USD 1,100 of CRO with the Missions feature 🙌 🧑‍🚀 Complete Missions by using the Crypto.com App 💎 Earn up to 66 Diamonds every day 🎁 Redeem a Mystery Box with just 25 Diamonds",
+      "title": "Open Crypto.com App and Buy crypto Now",
+      "cta": "Use app",
+      "format": "video",
+      "days_running": 612,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "The Profit and Loss dashboard lets you track your real-time portfolio performance.",
+      "title": "{{product.name}}",
+      "cta": "Use app",
+      "format": "carousel",
+      "days_running": 612,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "All the trending coins in one app. New listings every week.",
+      "title": "All the trending coins in one app.",
+      "cta": "Use app",
+      "format": "image",
+      "days_running": 258,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Be part of 100+ million users around the world when you sign up to the Crypto.com App! Registration only takes a few minutes.",
+      "title": "{{product.name}}",
+      "cta": "Use app",
+      "format": "carousel",
+      "days_running": 238,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "💸 In a record-breaking domain name purchase, the owner of Crypto.com — co-founder and CEO Kris Marszalek — paid about $70 million in cryptocurrency to acquire the premium domain AI.com. That price eclipses the previous publicly disclosed record of $30 million for Voice.com, making AI.com the most expensive domain sale ever reported. 💲 Marszalek originally bought the Crypto.com domain when his company (then called Monaco) rebranded in 2018, reportedly paying around $12 million for it — a move that helped turn the exchange into one of the world’s biggest crypto platforms. 🤖 Marszalek is building a brand-new consumer AI platform on it. The vision is a personal AI agent service that can do things like send messages, organise tasks, interact with apps and execute actions on behalf of users — essentially an autonomous assistant for everyday digital life. 🏈 The company is planning a high-profile launch tied to a Super Bowl commercial on February 8, 2026, when the platform will start rolling out publicly. Follow @move for interesting stories, amazing places, and incredible people 💫 #Move #AI #Crypto #Domain #Superbowl",
+      "title": "Move - Interesting stories / Amazing places / Incredible people",
+      "cta": "Visit Instagram profile",
+      "format": "carousel",
+      "days_running": 2,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM"
+      ],
+      "page_name": "Move - Interesting stories / Amazing places / Incredible people"
+    },
+    {
+      "body": "Earn uncapped crypto rewards when purchasing with your card. Plus, enjoy boosted reward rates for the first 12 months from account opening or tier upgrade.² Learn more.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 61,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Earn uncapped crypto rewards when purchasing with your card. Plus, enjoy boosted reward rates for the first 12 months from account opening or tier upgrade.² Learn more.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 61,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Earn uncapped crypto rewards when purchasing with your card. Plus, enjoy boosted reward rates for the first 12 months from account opening or tier upgrade.² Learn more.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 60,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "IF. You have lost your bitcoin or any type of crypto to fake investment reach out to us no",
+      "title": "Best crypto recovery",
+      "cta": "Send WhatsApp message",
+      "format": "image",
+      "days_running": 32,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK"
+      ],
+      "page_name": "Best crypto recovery"
+    },
+    {
+      "body": "💫 Pay 0% credit/debit card fees when you purchase BTC, ETH and 250+ top coins. Valid in your first 7 days. The Crypto.com App boasts 24/7 trading, enabling you to grow your portfolio with ETH and 350+ top tokens anytime, anywhere.",
+      "title": "{{product.name}}",
+      "cta": "Use app",
+      "format": "carousel",
+      "days_running": 106,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Earn uncapped crypto rewards when purchasing with your card. Plus, enjoy boosted reward rates for the first 12 months from account opening or tier upgrade.² Learn more.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 18,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Earn uncapped crypto rewards when purchasing with your card. Plus, enjoy boosted reward rates for the first 12 months from account opening or tier upgrade.² Learn more.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 61,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "[48h Drop] George C. Romero is a filmmaker, the founder of Romero Pictures, and the son of George A. Romero—director of the culture-defining ‘Night of the Living Dead’. Heavy Metal and Romero Pictures have dropped a motion comic film about the birth of the zombie genre. Original buyers can redeem memorabilia and have the opportunity to meet George C. over Zoom. Sign up now to collect a piece of film history!",
+      "title": "Meet George C. Romeo by collecting NFTs from “The Rise”",
+      "cta": "Sign up",
+      "format": "image",
+      "days_running": 35,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "[48h Drop] George C. Romero is a filmmaker, the founder of Romero Pictures, and the son of George A. Romero—director of the culture-defining ‘Night of the Living Dead’. Heavy Metal and Romero Pictures have dropped a motion comic film about the birth of the zombie genre. Original buyers can redeem memorabilia and have the opportunity to meet George C. over Zoom. Sign up now to collect a piece of film history!",
+      "title": "Meet George C. Romeo by collecting NFTs from “The Rise”",
+      "cta": "Sign up",
+      "format": "image",
+      "days_running": 26,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    }
+  ],
+  "messaging_analysis": {
+    "messaging_angles": [
+      "Rewards and incentives (missions, diamonds, mystery boxes, crypto rewards)",
+      "Card rewards and cashback",
+      "Zero fees promotional offers",
+      "Portfolio tracking and management tools",
+      "Wide coin selection and new listings",
+      "Large user base social proof (100M+ users)",
+      "24/7 trading availability"
+    ],
+    "top_ctas": [
+      "Use app",
+      "Install now",
+      "Sign up",
+      "Visit Instagram profile",
+      "Send WhatsApp message"
+    ],
+    "buy_crypto_framing": "soft — focuses on rewards, portfolio tools, and convenience rather than direct 'buy now' messaging; buying is positioned as a means to earn rewards or access features",
+    "fees_messaging": "Promotional angle — fees are positioned as a benefit through time-limited offers like '0% credit/debit card fees in first 7 days' rather than avoided entirely",
+    "simplicity_messaging": "Minimal emphasis — only one ad mentions 'registration takes a few minutes'; ease-of-use is implied rather than explicitly highlighted",
+    "security_messaging": "Virtually absent — no direct messaging about security, trust, or safety features in these ads",
+    "dominant_format": "carousel — majority of ads use carousel format, with some images and one video",
+    "longest_running_themes": [
+      "Gamified rewards system (Missions, Diamonds, Mystery Boxes) - 612 days",
+      "Portfolio tracking tools - 612 days",
+      "Wide coin selection - 258+ days",
+      "Large user base social proof - 238 days"
+    ],
+    "summary": "This competitor relies heavily on incentive-driven marketing with gamification (missions, rewards), card cashback programs, and promotional zero-fee offers to drive engagement. The strategy emphasizes portfolio tools and social proof over direct crypto purchasing, with carousel formats dominating and long-running campaigns focused on rewards and coin variety suggesting these perform best."
+  }
+}
