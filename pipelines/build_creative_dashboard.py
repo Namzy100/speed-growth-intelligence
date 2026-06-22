@@ -233,7 +233,10 @@ def generate_insights(channels: dict, campaigns: dict, retention: dict, meta: di
 
     prompt = (
         "You are a performance-marketing analyst for Speed Wallet, a Bitcoin "
-        "Lightning payments app. Below is REAL data pulled live from the user "
+        "Lightning payments app. Speed's primary markets are the US and EU for "
+        "paid advertising, and the US, Mexico, and Brazil for influencer "
+        "marketing — ground any geographic interpretation in these markets. "
+        "Below is REAL data pulled live from the user "
         "acquisition dashboard (installs, eCPI, top campaigns, the D1-D7 "
         "retention curve from matured cohorts, and Meta/Facebook paid campaign "
         "spend, clicks and mobile-app-install counts).\n\n"

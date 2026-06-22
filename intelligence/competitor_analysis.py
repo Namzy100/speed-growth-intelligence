@@ -30,11 +30,10 @@ _AD_LIBRARY_BASE = "https://www.facebook.com/ads/library/"
 _MAX_ADS = 50
 _RUN_TIMEOUT = timedelta(seconds=120)
 
-# Default Ad Library country. No specific target market is documented in
-# CLAUDE.md or docs/ (only a generic "EU focus"), so we default to GB (UK) as a
-# plausible first market for a fintech wallet. THIS IS AN UNCONFIRMED ASSUMPTION
-# — override with --country and confirm the real target market.
-_DEFAULT_COUNTRY = "GB"
+# Default Ad Library country. Speed's confirmed paid-ad markets are US + EU;
+# US is the primary market, so it's the default here. Override with --country
+# (e.g. an EU market code) for non-US pulls.
+_DEFAULT_COUNTRY = "US"
 
 # Optional registry of known advertiser Page IDs. Searching by Page ID is the
 # most precise way to pull a competitor's ads — it returns only that page's ads
@@ -635,11 +634,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     country = args.country or _DEFAULT_COUNTRY
-    if not args.country:
-        print("⚠️  ASSUMPTION: no target market is documented in CLAUDE.md/docs and")
-        print(f"⚠️  no --country was given, so defaulting to '{_DEFAULT_COUNTRY}' (UK) as a")
-        print("⚠️  likely first market for a fintech wallet. CONFIRM the real target")
-        print("⚠️  market before relying on these results — do not treat GB as settled.\n")
 
     # Pull Speed's own ads dynamically via the same Ad Library mechanism.
     speed_ads: list[str] = []

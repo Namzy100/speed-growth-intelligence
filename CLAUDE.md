@@ -4,7 +4,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Speed is a Python intelligence pipeline for creator discovery and market analysis. It scrapes TikTok (via Apify) and YouTube, scores creators, runs market analysis (EU focus), and generates AI-powered weekly briefs, with data persisted in Supabase and synced to Google Sheets.
+Speed is a Python intelligence pipeline for creator discovery and market analysis. It scrapes TikTok (via Apify) and YouTube, scores creators, runs market analysis, and generates AI-powered weekly briefs, with data persisted in Supabase and synced to Google Sheets.
+
+### Target markets
+
+- **Paid advertising:** US + EU
+- **Influencer marketing:** US, Mexico, Brazil
+
+Ground geographic interpretation of any analysis or AI-generated insight in these markets.
+
+### Current focus areas (Niyati)
+
+- **Creative performance AI tooling** — the creative dashboard (`pipelines/build_creative_dashboard.py`) and its Claude-generated insight cards.
+- **Campaign-level analysis** — Meta campaign spend/installs (`pipelines/meta.py`) and Adjust install/retention data, synced to Google Sheets.
+- **US influencer research** — creator discovery and scoring (`creators/`), focused on the US influencer market.
 
 ## Environment Setup
 
