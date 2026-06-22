@@ -1,5 +1,6 @@
 """Weekly intelligence brief generator for Speed Wallet marketing team."""
 
+import json
 import os
 import sys
 from datetime import datetime, timedelta, timezone
@@ -26,7 +27,7 @@ Speed's primary markets are the US and EU for paid advertising, and the US, Mexi
 Brazil for influencer marketing — ground geographic interpretations in these markets.
 
 Write a weekly performance brief for the marketing lead based on the data below. \
-Cover exactly these five points in clean flowing prose — no headers, no bullet points, \
+Cover exactly these points in clean flowing prose — no headers, no bullet points, \
 no markdown formatting:
 
 1. The top 3 findings from this week's data.
@@ -34,8 +35,12 @@ no markdown formatting:
 3. Which channel needs attention or a budget review and why.
 4. One specific recommended action with a clear rationale.
 5. D1 retention trend — improving, declining, or flat — and what it signals.
+6. A short Competitor Context paragraph (2-3 sentences) summarizing what \
+Robinhood and Crypto.com are currently emphasizing in their ads, drawn ONLY from \
+the COMPETITOR ANALYSIS section below. If that section is empty or absent, omit \
+this paragraph entirely.
 
-Keep it under 400 words. Write for a marketing lead, not a data scientist. \
+Keep it under 450 words. Write for a marketing lead, not a data scientist. \
 Be direct and reference actual numbers from the data.
 
 When interpreting the data, follow these rules:
@@ -54,9 +59,20 @@ DN window has not fully elapsed). Do not interpret a missing recent day or a \
 low final data point as a retention drop or "collapse" — base the D1 trend only \
 on the matured cohorts shown and the stated trend figure.
 
+--- COMPETITOR ANALYSIS ---
+{competitor_context}
+--- END COMPETITOR ANALYSIS ---
+
 --- DATA ---
 {data_summary}
 --- END DATA ---"""
+
+# Competitor analyses to fold into the brief's Competitor Context paragraph.
+# Reads the saved (US) analyses; absent files are skipped gracefully.
+_COMPETITOR_FILES = [
+    ("Robinhood", "competitor_analysis_robinhood.json"),
+    ("Crypto.com", "competitor_analysis_crypto.com.json"),
+]
 
 
 # ------------------------------------------------------------------
@@ -70,6 +86,39 @@ def _sheets_client() -> gspread.Client:
     if not Path(creds_path).is_file():
         raise FileNotFoundError(f"Credentials file not found: {creds_path}")
     return gspread.service_account(filename=creds_path)
+
+
+def read_competitor_context() -> str:
+    """Read saved competitor analyses into a compact block for the brief.
+
+    Pulls each competitor's messaging angles, top CTAs, and summary from
+    data/processed/. Returns an empty string if no usable files exist, in which
+    case the prompt instructs the model to omit the Competitor Context paragraph.
+    """
+    data_dir = _ROOT / "data" / "processed"
+    blocks = []
+    for name, fname in _COMPETITOR_FILES:
+        path = data_dir / fname
+        if not path.exists():
+            continue
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            continue
+        ma = data.get("messaging_analysis", {})
+        if not ma or "parse_error" in ma:
+            continue
+        angles = ma.get("messaging_angles", [])[:4]
+        ctas = ma.get("top_ctas", [])[:3]
+        summary = ma.get("summary", "")
+        blocks.append(
+            f"{name} (country={data.get('country', '?')}, "
+            f"{data.get('total_ads', '?')} ads):\n"
+            f"  messaging_angles: {angles}\n"
+            f"  top_ctas: {ctas}\n"
+            f"  summary: {summary}"
+        )
+    return "\n\n".join(blocks)
 
 
 def read_sheets_data(spreadsheet_id: str) -> dict[str, pd.DataFrame]:
@@ -212,16 +261,20 @@ def _fmt_retention(df: pd.DataFrame) -> str:
 # Generate brief via Claude
 # ------------------------------------------------------------------
 
-def generate_brief(data_summary: str) -> str:
+def generate_brief(data_summary: str, competitor_context: str = "") -> str:
     api_key = os.getenv("ANTHROPIC_API_KEY")
     if not api_key:
         raise EnvironmentError("ANTHROPIC_API_KEY must be set in .env")
 
+    prompt = _PROMPT.format(
+        data_summary=data_summary,
+        competitor_context=competitor_context or "(no competitor data available)",
+    )
     client = Anthropic(api_key=api_key)
     response = client.messages.create(
         model="claude-sonnet-4-5",
         max_tokens=1024,
-        messages=[{"role": "user", "content": _PROMPT.format(data_summary=data_summary)}],
+        messages=[{"role": "user", "content": prompt}],
     )
     return response.content[0].text
 
@@ -255,8 +308,14 @@ def run() -> str:
     print("\nBuilding data summary...")
     summary = build_data_summary(data)
 
+    competitor_context = read_competitor_context()
+    if competitor_context:
+        print(f"Competitor context loaded ({competitor_context.count('country=')} competitor(s)).")
+    else:
+        print("No competitor analyses found — Competitor Context will be omitted.")
+
     print("Calling Claude API (claude-sonnet-4-5)...")
-    brief = generate_brief(summary)
+    brief = generate_brief(summary, competitor_context)
 
     path = save_brief(brief)
     print(f"\nSaved: {path.relative_to(_ROOT)}")
