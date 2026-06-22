@@ -2,10 +2,18 @@
 
 import os
 import re
+import sys
+from pathlib import Path
 from typing import Optional
 
 import requests
 from dotenv import load_dotenv
+
+# Repo root on path so the scorer import works whether this module is imported
+# as creators.youtube or run directly (python creators/youtube.py).
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from creators.scorer import CRYPTO_TAGS, IGAMING_TAGS, REMITTANCE_TAGS
 
 load_dotenv()
 
@@ -35,27 +43,12 @@ _CRYPTO_CAP = 0.80
 _FINTECH_CAP = 0.60
 
 # Tags from scorer.py that we try to match in descriptions and topic titles.
-# Vocabulary used to derive niche_tags from channel text. Must stay in sync
-# with the tag sets in scorer.py — a term only becomes a niche_tag if it is
-# listed here, and only contributes to a segment if scorer.py recognises it too.
-_SCORER_TAGS = {
-    "remittance", "diaspora", "expat", "expats", "migrant", "migrants",
-    "money transfer", "send money", "forex", "wire transfer", "immigrant",
-    "immigrants", "overseas",
-    # Spanish/Portuguese remittance terms (Mexico & Brazil corridors) — must
-    # mirror the additions in scorer.py REMITTANCE_TAGS.
-    "remesas", "enviar dinero", "mandar dinero", "mandar dinheiro",
-    "remessa", "transferencia internacional", "transferência internacional",
-    "dinero al extranjero", "dinheiro para o exterior",
-    "envio de dinero", "envio de dinheiro",
-    "igaming", "gambling", "casino", "betting", "poker", "slots", "esports",
-    "sports betting", "sports bet", "esports betting", "fantasy sports",
-    "online gambling", "sportsbook", "wager", "play to earn", "p2e",
-    "crypto", "bitcoin", "ethereum", "blockchain", "defi", "web3", "nft",
-    "cryptocurrency", "altcoin", "trading", "investing", "finance",
-    "personal finance", "fintech", "payments", "lightning", "btc", "eth",
-    "satoshi", "hodl",
-}
+# Vocabulary used to derive niche_tags from channel text. Built directly from
+# the scorer's segment tag sets so there is ONE source of truth: a term added to
+# REMITTANCE_TAGS / IGAMING_TAGS / CRYPTO_TAGS in scorer.py automatically becomes
+# extractable here, and only contributes to a segment the scorer recognises.
+# (There is no separate FINTECH_TAGS — fintech/payments terms live in CRYPTO_TAGS.)
+_SCORER_TAGS = REMITTANCE_TAGS | IGAMING_TAGS | CRYPTO_TAGS
 
 
 # Reject channels below this subscriber count. Tiny channels produce
@@ -299,6 +292,8 @@ class YouTubeCreatorFetcher:
             "fintech_content_pct": fintech_pct,
             "sponsorship_count": 0,
             "niche_tags": self._derive_niche_tags(name, description, topic_categories),
+            # Retained for the scorer's LLM fallback classifier (name/desc/tags).
+            "description": description,
         }
 
 

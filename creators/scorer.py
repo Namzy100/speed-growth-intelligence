@@ -1,7 +1,14 @@
 """Creator scoring system for Speed Wallet partner discovery."""
 
 import math
+import os
 from typing import Any
+
+# LLM fallback classifier: when rule-based scoring finds no segment match (the
+# tag would be "general"), a single cheap Claude call classifies the creator
+# from its name/description/tags. Kept to Haiku and one call per general creator
+# so cost stays negligible.
+_FALLBACK_MODEL = "claude-haiku-4-5"
 
 
 # Keyword sets for Speed's three target audience segments
@@ -47,6 +54,16 @@ class CreatorScorer:
     the full breakdown.
     """
 
+    def __init__(self, use_llm_fallback: bool = True) -> None:
+        """Args:
+            use_llm_fallback: when True, a creator the rule-based scorer would
+                tag "general" gets one cheap Claude (Haiku) classification
+                attempt from its name/description/tags. Set False to keep
+                scoring fully offline and deterministic (e.g. in tests).
+        """
+        self._use_llm_fallback = use_llm_fallback
+        self._llm_client = None  # lazy-initialised on first fallback call
+
     def score(self, creator: dict[str, Any]) -> dict[str, Any]:
         """Score a creator and return a detailed breakdown.
 
@@ -68,6 +85,16 @@ class CreatorScorer:
                 reasoning            — plain-English summary of the score
         """
         audience_fit, segment_tag, audience_notes = self._score_audience_fit(creator)
+
+        # LLM fallback: only when the rule-based scorer found no segment signal.
+        # The numeric audience_fit score is left untouched (it correctly reflects
+        # weak *measurable* signal); only the segment_tag label is reclassified.
+        if segment_tag == "general" and self._use_llm_fallback:
+            llm_tag = self._classify_general_llm(creator)
+            if llm_tag and llm_tag != "general":
+                segment_tag = llm_tag
+                audience_notes += f"; LLM-reclassified to '{llm_tag}'"
+
         engagement, engagement_notes = self._score_engagement_quality(creator)
         content, content_notes = self._score_content_alignment(creator)
         acquisition, acq_notes = self._score_acquisition_potential(creator, audience_fit)
@@ -133,6 +160,61 @@ class CreatorScorer:
 
         score = min(raw, 20.0)
         return score, best, f"{best} ({raw:.1f} raw)"
+
+    def _classify_general_llm(self, creator: dict) -> str | None:
+        """Classify a would-be-"general" creator via one cheap Claude call.
+
+        Fires only as a fallback when keyword/percentage scoring found no segment
+        signal. Returns one of the three segments, "general", or None if the call
+        can't run (no API key / SDK missing / API error) — callers keep "general"
+        in those cases.
+        """
+        api_key = os.getenv("ANTHROPIC_API_KEY")
+        if not api_key:
+            return None
+
+        name = creator.get("name", "")
+        description = (creator.get("description") or "")[:600]
+        tags = ", ".join(creator.get("niche_tags", [])) or "(none)"
+
+        prompt = (
+            "Classify this social-media creator into ONE audience segment for "
+            "Speed Wallet, a Bitcoin Lightning payments app.\n\n"
+            "Segments:\n"
+            "- remittance: audience sends money across borders — diaspora, "
+            "migrants, money transfer, remesas/remessas, international transfers\n"
+            "- iGaming: online gambling, casino, betting, poker, sports betting\n"
+            "- crypto-curious: mainstream people interested in buying, using, or "
+            "learning about crypto/Bitcoin; crypto investing or education\n"
+            "- general: none of the above, or unrelated to money/crypto/gambling\n\n"
+            f"Creator name: {name}\n"
+            f"Description: {description}\n"
+            f"Tags: {tags}\n\n"
+            "Reply with EXACTLY one of: remittance, iGaming, crypto-curious, "
+            "general. No other text."
+        )
+
+        try:
+            if self._llm_client is None:
+                from anthropic import Anthropic
+                self._llm_client = Anthropic(api_key=api_key)
+            resp = self._llm_client.messages.create(
+                model=_FALLBACK_MODEL,
+                max_tokens=16,
+                messages=[{"role": "user", "content": prompt}],
+            )
+            text = resp.content[0].text.strip().lower().strip("\"'.")
+        except Exception:
+            return None
+
+        # Normalise the reply to a canonical segment label.
+        if "remittance" in text:
+            return "remittance"
+        if "igaming" in text or "gaming" in text or "gambl" in text:
+            return "iGaming"
+        if "crypto" in text:
+            return "crypto-curious"
+        return "general"
 
     def _score_engagement_quality(self, creator: dict) -> tuple[float, str]:
         """Real vs. inflated engagement, combining quality score and rate (0–20)."""
