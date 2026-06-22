@@ -21,7 +21,9 @@ _DOCS_DIR = _ROOT / "docs" / "weekly_briefs"
 _PROMPT = """\
 You are a marketing analyst for Speed Wallet, a Bitcoin Lightning payment app. \
 Speed targets three segments: remittance senders (hook: zero fees), iGaming users \
-(hook: instant deposits/withdrawals), and crypto-curious mainstream users (hook: simplicity).
+(hook: instant deposits/withdrawals), and crypto-curious mainstream users (hook: simplicity). \
+Speed's primary markets are the US and EU for paid advertising, and the US, Mexico, and \
+Brazil for influencer marketing — ground geographic interpretations in these markets.
 
 Write a weekly performance brief for the marketing lead based on the data below. \
 Cover exactly these five points in clean flowing prose — no headers, no bullet points, \
