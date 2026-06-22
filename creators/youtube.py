@@ -114,18 +114,47 @@ class YouTubeCreatorFetcher:
     # API helpers
     # ------------------------------------------------------------------
 
+    # Reasons (case-insensitive) YouTube returns when the daily quota is spent
+    # or requests are coming too fast. quotaExceeded/dailyLimitExceeded arrive as
+    # 403; *RateLimitExceeded can be 403 or 429.
+    _QUOTA_REASONS = {
+        "quotaexceeded", "dailylimitexceeded",
+        "ratelimitexceeded", "userratelimitexceeded",
+    }
+
     def _get(self, endpoint: str, params: dict) -> dict:
         resp = self._session.get(
             f"{_BASE}/{endpoint}",
             params={**params, "key": self._key},
             timeout=10,
         )
-        if resp.status_code == 403:
-            errors = resp.json().get("error", {}).get("errors", [])
-            if errors and errors[0].get("reason") == "quotaExceeded":
-                raise QuotaExceededError("YouTube API daily quota exhausted.")
+
+        # Surface quota/rate-limit responses as QuotaExceededError so callers
+        # (e.g. run_batch) can stop gracefully and save partial progress instead
+        # of crashing on a raw HTTPError. A bare 429 is always rate/quota; a 403
+        # only counts when its error reason is a quota/rate-limit reason (other
+        # 403s — e.g. an invalid key — still raise normally below).
+        if resp.status_code in (403, 429):
+            reasons = {r.lower() for r in self._error_reasons(resp)}
+            if resp.status_code == 429 or (reasons & self._QUOTA_REASONS):
+                detail = ", ".join(sorted(reasons)) or f"HTTP {resp.status_code}"
+                print(f"  !! YouTube quota/rate limit hit ({detail}) — "
+                      f"stopping fetch and saving progress so far.")
+                raise QuotaExceededError(
+                    f"YouTube API quota/rate limit reached ({detail})."
+                )
+
         resp.raise_for_status()
         return resp.json()
+
+    @staticmethod
+    def _error_reasons(resp) -> list[str]:
+        """Extract the API error 'reason' codes, tolerating a non-JSON body."""
+        try:
+            errors = resp.json().get("error", {}).get("errors", []) or []
+        except ValueError:
+            return []
+        return [e.get("reason", "") for e in errors if e.get("reason")]
 
     def _search_channels(self, query: str, max_results: int) -> list[str]:
         data = self._get("search", {
