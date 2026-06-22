@@ -1,0 +1,385 @@
+{
+  "competitor": "Robinhood",
+  "platform": "all",
+  "country": "GB",
+  "fetched_at": "2026-06-22T18:06:03.252401+00:00",
+  "total_ads": 22,
+  "scraped_before_filter": 50,
+  "ads": [
+    {
+      "body": "Invest with Robinhood",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 112,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Invest in US Stocks, No Commission",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 90,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Invest with Robinhood",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 90,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Invest with Robinhood",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 228,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Invest with Robinhood",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 228,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Invest with Robinhood",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 90,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "2% deposit match",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 38,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "2% deposit match",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 39,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Stablecoins, Ethereum, Bitcoin, Robinhood… the crypto space is wild right now. \"There's gonna be the pimps. There's gonna be the hoes.\" Some profit, some lose. Which side of the bet are you on? Invest wisely, stay safe. #CryptoTruth #Stablecoins #Ethereum #Bitcoin #Robinhood #CryptoInvesting #FinancialLiteracy",
+      "title": "Coinbase, Bitcoin & Robinhood: Crypto Market Insights!",
+      "cta": "Learn more",
+      "format": "video",
+      "days_running": 24,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "The Black Business School"
+    },
+    {
+      "body": "Invest in US Stocks, No Commission",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 90,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "2% deposit match",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 39,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Invest in US Stocks, No Commission",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 228,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "2% deposit match",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 39,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Invest in US Stocks, No Commission",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 228,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "2% deposit match",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 39,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Invest in US Stocks, No Commission",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 227,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Robinhood Legend",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 89,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Invest with Robinhood",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 228,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Robinhood Legend",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 89,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Robinhood Legend",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 89,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Robinhood Legend",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 89,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Invest with Robinhood",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 90,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    }
+  ],
+  "messaging_analysis": {
+    "messaging_angles": [
+      "Brand-focused generic investing ('Invest with Robinhood')",
+      "Zero-commission stock trading",
+      "Deposit incentives (2% match)",
+      "Brand prestige/status ('Robinhood Legend')",
+      "Crypto volatility awareness (cautionary tone)"
+    ],
+    "top_ctas": [
+      "Install now",
+      "Learn more"
+    ],
+    "buy_crypto_framing": "soft — crypto is mentioned sparingly and with caution; focus is primarily on stocks and general investing rather than pushing crypto purchases",
+    "fees_messaging": "Prominently featured as a competitive advantage with 'No Commission' messaging on stock trades; positioned as a key differentiator",
+    "simplicity_messaging": "Minimal to non-existent — ads focus on brand name recognition and financial incentives rather than ease-of-use or user experience",
+    "security_messaging": "Absent from ad copy — no explicit trust, safety, or security messaging (except one cautionary crypto video about investing wisely)",
+    "dominant_format": "carousel — overwhelmingly the primary format (21 of 22 ads)",
+    "longest_running_themes": [
+      "Generic 'Invest with Robinhood' brand messaging (228+ days)",
+      "No commission US stock trading (227-228 days)"
+    ],
+    "summary": "This competitor relies heavily on brand recognition and evergreen carousel ads emphasizing commission-free stock trading. Crypto is barely mentioned and when it is, the tone is cautionary rather than promotional. The strategy prioritizes simple, repetitive brand messaging over feature education or trust-building."
+  }
+}

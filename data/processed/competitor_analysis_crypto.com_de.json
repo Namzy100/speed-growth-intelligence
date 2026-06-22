@@ -1,0 +1,703 @@
+{
+  "competitor": "Crypto.com",
+  "platform": "all",
+  "country": "DE",
+  "fetched_at": "2026-06-22T18:07:03.482269+00:00",
+  "total_ads": 44,
+  "scraped_before_filter": 50,
+  "ads": [
+    {
+      "body": "Win up to USD 1,100 of CRO with the Missions feature 🙌 🧑‍🚀 Complete Missions by using the Crypto.com App 💎 Earn up to 66 Diamonds every day 🎁 Redeem a Mystery Box with just 25 Diamonds",
+      "title": "Open Crypto.com App and Buy crypto Now",
+      "cta": "Use app",
+      "format": "video",
+      "days_running": 612,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "The Profit and Loss dashboard lets you track your real-time portfolio performance.",
+      "title": "{{product.name}}",
+      "cta": "Use app",
+      "format": "carousel",
+      "days_running": 612,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Buy any NFT for the chance to win USD 100! There will be 10 lucky draw winners every day.",
+      "title": "Crypto.com NFT | Buy, Sell, Discover Exclusive Digital Collectibles",
+      "cta": "Sign up",
+      "format": "image",
+      "days_running": 3,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Set off on your cryptocurrency journey with just US$10 and a wide selection of 350+ top tokens in the Crypto.com App! Mit einem Crypto.com-Konto können Sie Ihr Kryptowährungsportfolio jederzeit nahtlos über das Desktop-Web oder unsere mobile App aufbauen.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 217,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Start trading in the Crypto.com App or Web to unlock crypto rewards worth up to 1 Bitcoin instantly! Sign up in five steps.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 70,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Secure, Regulated, Trusted. You Can Buy & Sell CRO. Terms and conditions apply.",
+      "title": "{{product.name}}",
+      "cta": "Sign up",
+      "format": "carousel",
+      "days_running": 133,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Earn rewards worth up to 1 Bitcoin when you start buying cryptocurrency in the Crypto.com App or Web! Register in minutes.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 145,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "🔥 Buy BTC, ETH and 250+ coins without credit/debit card fees in your first 7 days. Start with just US$10.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 158,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Crypto Earn boasts a simple reward structure, high allocation limit, and support for 20+ top coins, including BTC, ETH & SOL. Pay 0% credit/debit card fees in your first 7 days!",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 80,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Earn rewards worth up to 1 Bitcoin when you start buying cryptocurrency in the Crypto.com App or Web! Register in minutes.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 146,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Start trading in the Crypto.com App or Web to unlock crypto rewards worth up to 1 Bitcoin instantly! Sign up in five steps.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 71,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Secure, Regulated, Trusted. You Can Buy & Sell CRO. Terms and conditions apply.",
+      "title": "{{product.name}}",
+      "cta": "Sign up",
+      "format": "carousel",
+      "days_running": 133,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "With the Crypto.com App, you can buy the asset that has outperformed the S&P 500 for years, along with 400+ more tokens!",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 31,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "With the Crypto.com App, you can buy the asset that has outperformed the S&P 500 for years, along with 400+ more tokens!",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 36,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Set off on your cryptocurrency journey with just US$10 and a wide selection of 350+ top tokens in the Crypto.com App! Mit einem Crypto.com-Konto können Sie Ihr Kryptowährungsportfolio jederzeit nahtlos über das Desktop-Web oder unsere mobile App aufbauen.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 146,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Set off on your cryptocurrency journey with just US$10 and a wide selection of 350+ top tokens in the Crypto.com App! Mit einem Crypto.com-Konto können Sie Ihr Kryptowährungsportfolio jederzeit nahtlos über das Desktop-Web oder unsere mobile App aufbauen.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 44,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Mit einem Crypto.com-Konto können Sie Ihr Kryptowährungsportfolio jederzeit nahtlos über das Desktop-Web oder unsere mobile App aufbauen.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 82,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Heard of DOGE, PEPE & SHIB? What about BONK or ELON? Explore meme coins in the Crypto.com App, where you can trade with just US$10. Heard of SHIB, DOGE & PEPE? What about BONK or ELON? Explore meme coins in the Crypto.com App, where you can trade with just US$10.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 308,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "With the Crypto.com App, you can buy the asset that has outperformed the S&P 500 for years, along with 400+ more tokens!",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 31,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Mit einem Crypto.com-Konto können Sie Ihr Kryptowährungsportfolio jederzeit nahtlos über das Desktop-Web oder unsere mobile App aufbauen.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 217,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "With the Crypto.com App, you can buy the asset that has outperformed the S&P 500 for years, along with 400+ more tokens!",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 31,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Set off on your cryptocurrency journey with just US$10 and a wide selection of 350+ top tokens in the Crypto.com App! Mit einem Crypto.com-Konto können Sie Ihr Kryptowährungsportfolio jederzeit nahtlos über das Desktop-Web oder unsere mobile App aufbauen.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 40,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Nur die Crypto.com Karte bietet bis zu 8% Ausgaben-Erstattung, volle Streaming-Abo-Rabatte, keine Jahresgebühren und mehr.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 173,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Make your first deposit of at least €50 and start purchasing crypto to join the running for up to €1,020 in CRO rewards!",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 44,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Make your first deposit of at least €50 and start purchasing crypto to join the running for up to €1,020 in CRO rewards!",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 39,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Eliminiere Handelsgebühren* und schalte Prämien für Ausgaben und Trades frei – alles in einem Abonnement. Jetzt abonnieren. *Transaktionsgebühren und Spread können anfallen",
+      "title": "{{product.name}}",
+      "cta": "Subscribe",
+      "format": "carousel",
+      "days_running": 117,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Earn rewards worth up to 1 Bitcoin when you start buying cryptocurrency in the Crypto.com App or Web! Register in minutes.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 116,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Mit einem Crypto.com-Konto können Sie Ihr Kryptowährungsportfolio jederzeit nahtlos über das Desktop-Web oder unsere mobile App aufbauen.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 133,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Mit einem Crypto.com-Konto können Sie Ihr Kryptowährungsportfolio jederzeit nahtlos über das Desktop-Web oder unsere mobile App aufbauen.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 158,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Mit einem Crypto.com-Konto können Sie Ihr Kryptowährungsportfolio jederzeit nahtlos über das Desktop-Web oder unsere mobile App aufbauen.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 44,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Mit einem Crypto.com-Konto können Sie Ihr Kryptowährungsportfolio jederzeit nahtlos über das Desktop-Web oder unsere mobile App aufbauen.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 155,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Access PEPE, DOGE, SHIB, and more with just US$10 – all in the Crypto.com App.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 155,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Nur die Crypto.com Karte bietet bis zu 8% Ausgaben-Erstattung, volle Streaming-Abo-Rabatte, keine Jahresgebühren und mehr.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 173,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Mit einem Crypto.com-Konto können Sie Ihr Kryptowährungsportfolio jederzeit nahtlos über das Desktop-Web oder unsere mobile App aufbauen.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 44,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Eliminiere Handelsgebühren* und schalte Prämien für Ausgaben und Trades frei – alles in einem Abonnement. Jetzt abonnieren. *Transaktionsgebühren und Spread können anfallen",
+      "title": "{{product.name}}",
+      "cta": "Subscribe",
+      "format": "carousel",
+      "days_running": 117,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Nur die Crypto.com Karte bietet bis zu 8% Ausgaben-Erstattung, volle Streaming-Abo-Rabatte, keine Jahresgebühren und mehr.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 174,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "You can now buy crypto with Apple Pay! Grow your holdings with just a few taps.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 76,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Buy BTC, ETH and 250+ coins without credit/debit card fees in your first 7 days. Start with just US$10.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 76,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Mit einem Crypto.com-Konto können Sie Ihr Kryptowährungsportfolio jederzeit nahtlos über das Desktop-Web oder unsere mobile App aufbauen.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 39,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Mit einem Crypto.com-Konto können Sie Ihr Kryptowährungsportfolio jederzeit nahtlos über das Desktop-Web oder unsere mobile App aufbauen.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 133,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Mit einem Crypto.com-Konto können Sie Ihr Kryptowährungsportfolio jederzeit nahtlos über das Desktop-Web oder unsere mobile App aufbauen.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 81,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "🔥 Buy SOL, BTC, ETH and 400+ coins without credit/debit card fees in your first 7 days. Start with just US$10.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 158,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Mit einem Crypto.com-Konto können Sie Ihr Kryptowährungsportfolio jederzeit nahtlos über das Desktop-Web oder unsere mobile App aufbauen.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 217,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Get a full Netflix subscription rebate with the Crypto.com Visa Card. T&C apply.",
+      "title": "{{product.name}}",
+      "cta": "Download",
+      "format": "carousel",
+      "days_running": 178,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    }
+  ],
+  "messaging_analysis": {
+    "messaging_angles": [
+      "Sign-up rewards and incentives (up to 1 BTC in rewards)",
+      "Low barrier to entry (start with just $10)",
+      "Wide token selection (250-400+ coins available)",
+      "Zero fees promotions (no card fees for first 7 days)",
+      "Crypto.com Visa Card benefits (cashback, streaming rebates)",
+      "Gamification (Missions, Diamonds, Mystery Boxes)",
+      "Meme coin access (DOGE, PEPE, SHIB, BONK)",
+      "Performance comparisons (outperforming S&P 500)",
+      "Crypto Earn passive income features"
+    ],
+    "top_ctas": [
+      "Install now",
+      "Sign up",
+      "Use app",
+      "Subscribe",
+      "Download"
+    ],
+    "buy_crypto_framing": "direct — ads explicitly encourage buying crypto with specific CTAs like 'buy BTC, ETH,' 'start buying cryptocurrency,' and 'purchase crypto,' often combined with low entry points ($10 minimums) and immediate reward incentives",
+    "fees_messaging": "Positioned as a competitive advantage through limited-time promotions (0% credit/debit card fees in first 7 days) and subscription models that eliminate trading fees; fees are acknowledged but minimized through asterisks and fine print (e.g., 'transaction fees and spread may apply')",
+    "simplicity_messaging": "Heavily emphasized through low entry barriers ('just US$10'), quick setup ('register in minutes,' 'sign up in five steps'), and seamless cross-platform access (desktop web or mobile app); simplicity is a core pillar of the messaging",
+    "security_messaging": "Addressed minimally and only when necessary; appears in conservative copy like 'Secure, Regulated, Trusted' but is not a primary messaging focus across most ads; trust-building is implicit rather than explicit",
+    "dominant_format": "carousel — overwhelmingly the preferred format (40+ of 44 ads), with only 2 video ads, 1 image, and 1 other carousel",
+    "longest_running_themes": [
+      "Seamless portfolio building across desktop and mobile (217+ days, multiple variations)",
+      "Low $10 entry point with wide token selection (146-217+ days)",
+      "Crypto.com Visa Card benefits including cashback and streaming rebates (173-174+ days)",
+      "Meme coin trading access (308+ days)",
+      "Up to 1 Bitcoin in sign-up rewards (145-146+ days)",
+      "Zero credit/debit card fees promotion in first 7 days (158+ days)"
+    ],
+    "summary": "Crypto.com's ad strategy centers on aggressive acquisition through sign-up incentives (up to 1 BTC in rewards) and removing friction with ultra-low entry points ($10 minimum) and temporary zero-fee promotions. The approach is highly transactional and direct, pushing users to buy crypto immediately with carousel ads emphasizing token variety (250-400+ coins), meme coin access, and Visa Card perks as retention hooks. Security and complexity concerns are minimized in favor of rewards, simplicity, and FOMO-driven messaging around market performance."
+  }
+}
