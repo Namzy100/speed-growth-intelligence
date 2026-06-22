@@ -1,0 +1,682 @@
+{
+  "competitor": "Robinhood",
+  "platform": "all",
+  "country": "DE",
+  "fetched_at": "2026-06-22T18:06:44.558828+00:00",
+  "total_ads": 46,
+  "scraped_before_filter": 50,
+  "ads": [
+    {
+      "body": "Get €10 in crypto when you sign up for Robinhood today.",
+      "title": "Robinhood",
+      "cta": "Learn more",
+      "format": "image",
+      "days_running": 18,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Get €10 in crypto when you sign up for Robinhood today.",
+      "title": "Robinhood",
+      "cta": "Learn more",
+      "format": "image",
+      "days_running": 22,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Download Robinhood if you want to: a) Trade crypto at one of the lowest average costs b) Transfer 30+ assets on-chain c) Earn crypto rewards for learning d) Have peace of mind while trading 📲 Download the app to get started.",
+      "title": "Robinhood",
+      "cta": "Learn more",
+      "format": "image",
+      "days_running": 18,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Download Robinhood if you want to: a) Trade crypto at one of the lowest average costs b) Transfer 30+ assets on-chain c) Earn crypto rewards for learning d) Have peace of mind while trading 📲 Download the app to get started.",
+      "title": "Robinhood",
+      "cta": "Learn more",
+      "format": "image",
+      "days_running": 14,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Get €10 in crypto when you sign up for Robinhood today.",
+      "title": "Robinhood",
+      "cta": "Learn more",
+      "format": "video",
+      "days_running": 7,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Get €10 in crypto when you sign up for Robinhood today.",
+      "title": "Robinhood",
+      "cta": "Learn more",
+      "format": "video",
+      "days_running": 5,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Download Robinhood if you want to: a) Trade crypto at one of the lowest average costs b) Transfer 30+ assets on-chain c) Earn crypto rewards for learning d) Have peace of mind while trading 📲 Download the app to get started.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 36,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 8,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Download Robinhood Crypto if you want to: a) Trade crypto at one of the lowest average costs b) Transfer 30+ assets on-chain c) Earn crypto rewards for learning d) Have peace of mind while trading 📲 Download the app to get started.",
+      "title": "Robinhood Crypto",
+      "cta": "Install now",
+      "format": "image",
+      "days_running": 11,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood Crypto EU"
+    },
+    {
+      "body": "Download Robinhood if you want to: a) Trade crypto at one of the lowest average costs b) Transfer 30+ assets on-chain c) Earn crypto rewards for learning d) Have peace of mind while trading 📲 Download the app to get started.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 8,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Download Robinhood if you want to: a) Trade crypto at one of the lowest average costs b) Transfer 30+ assets on-chain c) Earn crypto rewards for learning d) Have peace of mind while trading 📲 Download the app to get started.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 18,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Tune in for a night of celebration as we make our biggest crypto announcements of the year. You don’t want to miss this. June 30, 2025 - 5 PM CEST • 11 AM ET",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 6,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Tune in for a night of celebration as we make our biggest crypto announcements of the year. You don’t want to miss this. June 30, 2025 - 5 PM CEST • 11 AM ET",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 6,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Download Robinhood Crypto if you want to: a) Trade crypto at one of the lowest average costs b) Transfer 30+ assets on-chain c) Earn crypto rewards for learning d) Have peace of mind while trading 📲 Download the app to get started.",
+      "title": "Robinhood Crypto",
+      "cta": "Learn more",
+      "format": "video",
+      "days_running": 10,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood Crypto EU"
+    },
+    {
+      "body": "Get €10 in crypto when you sign up for Robinhood today.",
+      "title": "Robinhood",
+      "cta": "Learn more",
+      "format": "image",
+      "days_running": 15,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Download Robinhood if you want to: a) Trade crypto at one of the lowest average costs b) Transfer 30+ assets on-chain c) Earn crypto rewards for learning d) Have peace of mind while trading 📲 Download the app to get started.",
+      "title": "Robinhood",
+      "cta": "Learn more",
+      "format": "image",
+      "days_running": 11,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Trade popular crypto at low cost.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 4,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Tune in for a night of celebration as we make our biggest crypto announcements of the year. You don’t want to miss this. June 30, 2025 - 5 PM CEST • 11 AM ET",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 6,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Tune in for a night of celebration as we make our biggest crypto announcements of the year. You don’t want to miss this. June 30, 2025 - 5 PM CEST • 11 AM ET",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 4,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Put your crypto to work. Earn rewards by staking your ETH and SOL on Robinhood Crypto.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 35,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Tune in for a night of celebration as we make our biggest crypto announcements of the year. You don’t want to miss this. June 30, 2025 - 5 PM CEST • 11 AM ET",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 4,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Download Robinhood Crypto if you want to: a) Trade crypto at one of the lowest average costs b) Transfer 30+ assets on-chain c) Earn crypto rewards for learning d) Have peace of mind while trading 📲 Download the app to get started.",
+      "title": "Robinhood Crypto",
+      "cta": "Install now",
+      "format": "image",
+      "days_running": 4,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 3,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Download Robinhood if you want to: a) Trade crypto at one of the lowest average costs b) Transfer 30+ assets on-chain c) Earn crypto rewards for learning d) Have peace of mind while trading 📲 Download the app to get started.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 8,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Tune in for a night of celebration as we make our biggest crypto announcements of the year. You don’t want to miss this. June 30, 2025 - 5 PM CEST • 11 AM ET",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 4,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Trade popular crypto at low cost.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 4,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 11,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 5,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Download Robinhood Crypto if you want to: a) Trade crypto at one of the lowest average costs b) Transfer 30+ assets on-chain c) Earn crypto rewards for learning d) Have peace of mind while trading 📲 Download the app to get started.",
+      "title": "Robinhood Crypto",
+      "cta": "Learn more",
+      "format": "video",
+      "days_running": 5,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Get €10 in crypto when you sign up for Robinhood today.",
+      "title": "Robinhood",
+      "cta": "Learn more",
+      "format": "video",
+      "days_running": 2,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Download Robinhood Crypto if you want to: a) Trade crypto at one of the lowest average costs b) Transfer 30+ assets on-chain c) Earn crypto rewards for learning d) Have peace of mind while trading 📲 Download the app to get started.",
+      "title": "Robinhood Crypto",
+      "cta": "Learn more",
+      "format": "video",
+      "days_running": 10,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood Crypto EU"
+    },
+    {
+      "body": "Get €10 in crypto when you sign up for Robinhood Crypto today.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 10,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood Crypto EU"
+    },
+    {
+      "body": "Tune in for a night of celebration as we make our biggest crypto announcements of the year. You don’t want to miss this. June 30, 2025 - 5 PM CEST • 11 AM ET",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 6,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Download Robinhood if you want to: a) Trade crypto at one of the lowest average costs b) Transfer 30+ assets on-chain c) Earn crypto rewards for learning d) Have peace of mind while trading 📲 Download the app to get started.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 14,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Get €10 in crypto when you sign up for Robinhood Crypto today.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 7,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Get €10 in crypto when you sign up for Robinhood today.",
+      "title": "Robinhood",
+      "cta": "Learn more",
+      "format": "image",
+      "days_running": 28,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Get €10 in crypto when you sign up for Robinhood today.",
+      "title": "Robinhood",
+      "cta": "Learn more",
+      "format": "image",
+      "days_running": 14,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Trade 50+ crypto assets 24 hours a day, 7 days a week.",
+      "title": "Robinhood",
+      "cta": "Learn more",
+      "format": "image",
+      "days_running": 13,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Tune in for a night of celebration as we make our biggest crypto announcements of the year. You don’t want to miss this. June 30, 2025 - 5 PM CEST • 11 AM ET",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 4,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "THREADS"
+      ],
+      "page_name": "Robinhood"
+    },
+    {
+      "body": "Download Robinhood if you want to: a) Trade crypto at one of the lowest average costs b) Transfer 30+ assets on-chain c) Earn crypto rewards for learning d) Have peace of mind while trading 📲 Download the app to get started.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 5,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Download Robinhood Crypto if you want to: a) Trade crypto at one of the lowest average costs b) Transfer 30+ assets on-chain c) Earn crypto rewards for learning d) Have peace of mind while trading 📲 Download the app to get started.",
+      "title": "Robinhood Crypto",
+      "cta": "Learn more",
+      "format": "video",
+      "days_running": 5,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Download Robinhood Crypto if you want to: a) Trade crypto at one of the lowest average costs b) Transfer 30+ assets on-chain c) Earn crypto rewards for learning d) Have peace of mind while trading 📲 Download the app to get started.",
+      "title": "Robinhood Crypto",
+      "cta": "Install now",
+      "format": "image",
+      "days_running": 11,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood Crypto EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 11,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Get €10 in crypto when you sign up for Robinhood today.",
+      "title": "Robinhood",
+      "cta": "Learn more",
+      "format": "image",
+      "days_running": 23,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Get €10 in crypto when you sign up for Robinhood today.",
+      "title": "Robinhood",
+      "cta": "Learn more",
+      "format": "image",
+      "days_running": 7,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 8,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    }
+  ],
+  "messaging_analysis": {
+    "messaging_angles": [
+      "Sign-up bonus incentive (€10 free crypto)",
+      "Low-cost trading emphasis",
+      "Multi-feature value proposition (trade, transfer, earn, security)",
+      "All-in-one platform (crypto + stock tokens)",
+      "Event/announcement driven (crypto announcements)",
+      "Earn rewards (staking, learning)"
+    ],
+    "top_ctas": [
+      "Learn more",
+      "Install now"
+    ],
+    "buy_crypto_framing": "direct — Most ads directly mention 'Trade crypto' or 'Get crypto,' with clear calls to download and start trading. The €10 bonus is an explicit incentive to buy/sign up.",
+    "fees_messaging": "Fees are positioned as a competitive advantage with repeated emphasis on 'lowest average costs' and 'low cost trading,' framing Robinhood as the affordable option.",
+    "simplicity_messaging": "Simplicity is implied through the 'all in one place' messaging and structured list format (a, b, c, d), but not explicitly called out as 'easy' or 'simple.' The focus is more on feature breadth than ease of use.",
+    "security_messaging": "Security is subtly addressed through 'peace of mind while trading' in the feature list ads, but it's a secondary point rather than a primary trust-building angle.",
+    "dominant_format": "carousel",
+    "longest_running_themes": [
+      "€10 sign-up bonus (seen in 36-day ad)",
+      "Multi-feature value prop: low-cost trading + on-chain transfers + earn rewards + peace of mind (seen in 36-day ad)",
+      "Staking rewards messaging (35-day ad)"
+    ],
+    "summary": "Robinhood's ad strategy heavily emphasizes acquisition through a €10 sign-up bonus and competitive low-cost trading, supported by a feature-rich value proposition. The dominant carousel format allows them to showcase multiple benefits (trading, transfers, earning, security) in a structured, list-based approach. Longer-running ads suggest that the bonus incentive and comprehensive feature messaging are their most effective angles."
+  }
+}

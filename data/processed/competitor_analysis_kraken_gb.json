@@ -1,0 +1,431 @@
+{
+  "competitor": "Kraken",
+  "platform": "all",
+  "country": "GB",
+  "fetched_at": "2026-06-22T18:06:31.365240+00:00",
+  "total_ads": 25,
+  "scraped_before_filter": 50,
+  "ads": [
+    {
+      "body": "UK crypto traders are joining 15M+ global clients on Kraken. ✅ Quickly fund your account with Plaid, Paypal or manually from your bank ✅ Easily connect to major UK banks ✅ 430+ cryptocurrencies available 24/7 Time to start trading at the speed of crypto. Download Kraken today.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 241,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Kraken UK"
+    },
+    {
+      "body": "UK crypto traders are joining 15M+ global clients on Kraken. ✅ Quickly fund your account with Plaid, Paypal or manually from your bank ✅ Easily connect to major UK banks ✅ 430+ cryptocurrencies available 24/7 Time to start trading at the speed of crypto. Download Kraken today.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 249,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Kraken UK"
+    },
+    {
+      "body": "You don’t need to go big to get started in crypto.With Kraken, you can begin with just £10. ✅ No pressure ✅ No massive buy-ins ✅ Just an easy way to test the waters Start small. Learn fast. Build as you go.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 217,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Kraken UK"
+    },
+    {
+      "body": "UK traders: deposit & withdraw with e-wallet or IBAN. Start crypto trading today.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 126,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Kraken UK"
+    },
+    {
+      "body": "UK crypto traders are joining 15M+ global clients on Kraken. ✅ Quickly fund your account with Plaid, Paypal or manually from your bank ✅ Easily connect to major UK banks ✅ 430+ cryptocurrencies available 24/7 Time to start trading at the speed of crypto. Download Kraken today. UK traders: deposit & withdraw with e-wallet or IBAN. Start crypto trading today.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 248,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Kraken UK"
+    },
+    {
+      "body": "UK traders: deposit & withdraw with e-wallet or IBAN. Start crypto trading today.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 239,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Kraken UK"
+    },
+    {
+      "body": "UK traders: deposit & withdraw with e-wallet or IBAN. Start crypto trading today.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 240,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Kraken UK"
+    },
+    {
+      "body": "1,000+ crypto markets, 13M+ users, 275+ cryptocurrencies. Discover more: ➡️",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 248,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Kraken UK"
+    },
+    {
+      "body": "UK crypto traders are joining 15M+ global clients on Kraken. ✅ Quickly fund your account with Plaid, Paypal or manually from your bank ✅ Easily connect to major UK banks ✅ 430+ cryptocurrencies available 24/7 Time to start trading at the speed of crypto. Download Kraken today. UK traders: deposit & withdraw with e-wallet or IBAN. Start crypto trading today.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 141,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Kraken UK"
+    },
+    {
+      "body": "UK crypto traders are joining 15M+ global clients on Kraken. ✅ Quickly fund your account with Plaid, Paypal or manually from your bank ✅ Easily connect to major UK banks ✅ 430+ cryptocurrencies available 24/7 Time to start trading at the speed of crypto. Download Kraken today.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 233,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Kraken UK"
+    },
+    {
+      "body": "UK traders: deposit & withdraw with e-wallet or IBAN. Start crypto trading today.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 218,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Kraken UK"
+    },
+    {
+      "body": "UK traders: deposit & withdraw with e-wallet or IBAN. Start crypto trading today.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 238,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Kraken UK"
+    },
+    {
+      "body": "UK crypto traders are joining 15M+ global clients on Kraken. ✅ Quickly fund your account with Plaid, Paypal or manually from your bank ✅ Easily connect to major UK banks ✅ 430+ cryptocurrencies available 24/7 Time to start trading at the speed of crypto. Download Kraken today.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 239,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Kraken UK"
+    },
+    {
+      "body": "Kraken is ranked #1 by Kaiko and trusted by 15M+ users. ✅Deposit GBP via Plaid, PayPal, or manual transfer from your bank ✅Industry-leading security ✅500+ cryptos available anytime, anywhere Join thousands of UK clients enjoying Kraken for fast deposits, fast withdrawals, and effective support. Download Kraken today. UK traders: deposit & withdraw with e-wallet or IBAN. Start crypto trading today.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 247,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Kraken UK"
+    },
+    {
+      "body": "UK traders: deposit & withdraw with e-wallet or IBAN. Start crypto trading today.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 86,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Kraken UK"
+    },
+    {
+      "body": "UK traders: deposit & withdraw with e-wallet or IBAN. Start crypto trading today.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 240,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Kraken UK"
+    },
+    {
+      "body": "UK crypto traders are joining 15M+ global clients on Kraken. ✅ Quickly fund your account with Plaid, Paypal or manually from your bank ✅ Easily connect to major UK banks ✅ 430+ cryptocurrencies available 24/7 Time to start trading at the speed of crypto. Download Kraken today.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 239,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Kraken UK"
+    },
+    {
+      "body": "UK crypto traders are joining 15M+ global clients on Kraken. ✅ Quickly fund your account with Plaid, Paypal or manually from your bank ✅ Easily connect to major UK banks ✅ 430+ cryptocurrencies available 24/7 Time to start trading at the speed of crypto. Download Kraken today.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 248,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Kraken UK"
+    },
+    {
+      "body": "1,000+ crypto markets, 13M+ users, 275+ cryptocurrencies. Discover more: ➡️",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 173,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Kraken UK"
+    },
+    {
+      "body": "UK traders: deposit & withdraw with e-wallet or IBAN. Start crypto trading today.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 24,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Kraken UK"
+    },
+    {
+      "body": "UK crypto traders are joining 15M+ global clients on Kraken. ✅ Quickly fund your account with Plaid, Paypal or manually from your bank ✅ Easily connect to major UK banks ✅ 430+ cryptocurrencies available 24/7 Time to start trading at the speed of crypto. Download Kraken today.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 162,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Kraken UK"
+    },
+    {
+      "body": "UK crypto traders are joining 15M+ global clients on Kraken. ✅ Quickly fund your account with Plaid, Paypal or manually from your bank ✅ Easily connect to major UK banks ✅ 430+ cryptocurrencies available 24/7 Time to start trading at the speed of crypto. Download Kraken today.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 155,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Kraken UK"
+    },
+    {
+      "body": "UK crypto traders are joining 15M+ global clients on Kraken. ✅ Quickly fund your account with Plaid, Paypal or manually from your bank ✅ Easily connect to major UK banks ✅ 430+ cryptocurrencies available 24/7 Time to start trading at the speed of crypto. Download Kraken today.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 136,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Kraken UK"
+    },
+    {
+      "body": "UK crypto traders are joining 15M+ global clients on Kraken. ✅ Quickly fund your account with Plaid, Paypal or manually from your bank ✅ Easily connect to major UK banks ✅ 430+ cryptocurrencies available 24/7 Time to start trading at the speed of crypto. Download Kraken today.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 238,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Kraken UK"
+    },
+    {
+      "body": "UK traders: deposit & withdraw with e-wallet or IBAN. Start crypto trading today.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 128,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Kraken UK"
+    }
+  ],
+  "messaging_analysis": {
+    "messaging_angles": [
+      "Social proof (15M+ global clients, thousands of UK users)",
+      "Easy funding/deposits (Plaid, PayPal, bank transfers)",
+      "UK bank connectivity and localization",
+      "Wide crypto selection (275-500+ cryptocurrencies)",
+      "Low barrier to entry (start with £10)",
+      "Speed and accessibility (24/7 trading, fast deposits/withdrawals)"
+    ],
+    "top_ctas": [
+      "Learn more",
+      "Install now",
+      "Download Kraken"
+    ],
+    "buy_crypto_framing": "direct — Strong emphasis on 'start trading today,' 'begin with just £10,' and immediate funding options. The messaging is action-oriented with clear trading and buying focus throughout.",
+    "fees_messaging": "Completely avoided — no mention of fees, commissions, or cost structure in any ad copy. Focus is entirely on ease of access and variety.",
+    "simplicity_messaging": "Strongly emphasized through multiple vectors: 'Quickly fund,' 'Easily connect,' 'Start small,' 'No pressure,' 'Just an easy way to test the waters,' and streamlined deposit/withdrawal messaging. Simplicity is a core pillar.",
+    "security_messaging": "Minimal but present — Only one ad (Ad 14) mentions 'Industry-leading security' and being '#1 ranked by Kaiko.' Security is generally implied through social proof (15M+ users) rather than explicitly stated.",
+    "dominant_format": "carousel — 100% of ads use carousel format",
+    "longest_running_themes": [
+      "Social proof + UK bank integration (217-249 days: Ads emphasizing 15M+ clients, Plaid/PayPal funding, UK bank connectivity)",
+      "Simple deposit/withdraw messaging (218-240 days: Short-form 'UK traders: deposit & withdraw' messaging)",
+      "Wide crypto selection with user numbers (248 days: '1,000+ crypto markets, 13M+ users, 275+ cryptocurrencies')"
+    ],
+    "summary": "Kraken's ad strategy is heavily UK-localized, focusing on removing friction through easy funding options (Plaid, PayPal, IBAN) and emphasizing massive scale (15M+ users, 430+ cryptos) as social proof. The approach is direct about trading with minimal barrier ('start with £10'), while deliberately avoiding fee discussions and relying on ease-of-use and trust-through-popularity rather than explicit security messaging."
+  }
+}

@@ -1,0 +1,456 @@
+{
+  "competitor": "Crypto.com",
+  "platform": "all",
+  "country": "GB",
+  "fetched_at": "2026-06-22T18:06:16.391464+00:00",
+  "total_ads": 28,
+  "scraped_before_filter": 50,
+  "ads": [
+    {
+      "body": "With Crypto.com Prime, you benefit from personalised wealth services tailored to your specific needs no matter when or where.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 313,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Win up to USD 1,100 of CRO with the Missions feature 🙌 🧑‍🚀 Complete Missions by using the Crypto.com App 💎 Earn up to 66 Diamonds every day 🎁 Redeem a Mystery Box with just 25 Diamonds",
+      "title": "Open Crypto.com App and Buy crypto Now",
+      "cta": "Use app",
+      "format": "video",
+      "days_running": 612,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "The Profit and Loss dashboard lets you track your real-time portfolio performance.",
+      "title": "{{product.name}}",
+      "cta": "Use app",
+      "format": "carousel",
+      "days_running": 612,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Buy any NFT for the chance to win USD 100! There will be 10 lucky draw winners every day.",
+      "title": "Crypto.com NFT | Buy, Sell, Discover Exclusive Digital Collectibles",
+      "cta": "Sign up",
+      "format": "image",
+      "days_running": 3,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "This is a high-risk investment, take 2 mins to learn more: https://crypto.com/document/risk_summary_uk The Crypto.com App boasts 24/7 trading, enabling you to grow your portfolio with BTC and 400+ top tokens anytime, anywhere.",
+      "title": "Trade BTC and 400+ Cryptocurrencies 24/7",
+      "cta": "Install now",
+      "format": "image",
+      "days_running": 78,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Access up to 8% in spending rebates for your Crypto.com Card through the Level Up program!",
+      "title": "{{product.name}}",
+      "cta": "Use app",
+      "format": "carousel",
+      "days_running": 224,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Level Up today and enjoy zero trading fees*, exclusive rewards, and premium perks built for every trader. Subscribe now.",
+      "title": "{{product.name}}",
+      "cta": "Subscribe",
+      "format": "carousel",
+      "days_running": 53,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Level Up today and enjoy zero trading fees*, exclusive rewards, and premium perks built for every trader. Subscribe now.",
+      "title": "{{product.name}}",
+      "cta": "Subscribe",
+      "format": "carousel",
+      "days_running": 23,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Build your portfolio in the Crypto.com App with XRP and 400+ coins at any time. Build your portfolio in the Crypto.com App with ETH and 400+ coins at any time. Build your portfolio in the Crypto.com App with SHIB and 400+ coins at any time. Build your portfolio in the Crypto.com App with ADA and 400+ coins at any time. Build your portfolio in the Crypto.com App with DOGE and 400+ coins at any time. Build your portfolio in the Crypto.com App with CRO and 400+ coins at any time.",
+      "title": "{{product.custom_label_2}}",
+      "cta": "Explore more",
+      "format": "carousel",
+      "days_running": 43,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "This is a high-risk investment, take 2 mins to learn more: https://crypto.com/document/risk_summary_uk The Crypto.com App boasts 24/7 trading, enabling you to grow your portfolio with BTC and 400+ top tokens anytime, anywhere.",
+      "title": "Trade BTC and 400+ Cryptocurrencies 24/7",
+      "cta": "Install now",
+      "format": "image",
+      "days_running": 43,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Level Up today and enjoy zero trading fees*, exclusive rewards, and premium perks built for every trader. Subscribe now.",
+      "title": "{{product.name}}",
+      "cta": "Subscribe",
+      "format": "carousel",
+      "days_running": 53,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Sign up to the Crypto.com App and claim a 30-day free trial for our Level Up rewards programme! Select the Plus and Pro tier.",
+      "title": "{{product.name}}",
+      "cta": "Subscribe",
+      "format": "carousel",
+      "days_running": 53,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Don’t invest unless you’re prepared to lose all the money you invest. This is a high-risk investment and you should not expect to be protected if something goes wrong. Take 2 mins to learn more: https://crypto.com/document/risk_summary_uk GBP conversion is effortless in the Crypto.com App. Easily transfer GBP to and from your bank account using FPS.",
+      "title": "GBP Support for Your Crypto Journey",
+      "cta": "Use app",
+      "format": "image",
+      "days_running": 73,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Don’t invest unless you’re prepared to lose all the money you invest. This is a high-risk investment and you should not expect to be protected if something goes wrong. Take 2 mins to learn more: https://crypto.com/document/risk_summary_uk GBP conversion is effortless in the Crypto.com App. Easily transfer GBP to and from your bank account using FPS.",
+      "title": "GBP Support for Your Crypto Journey",
+      "cta": "Use app",
+      "format": "image",
+      "days_running": 83,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Build your portfolio in the Crypto.com App with CRO and 400+ coins at any time. Build your portfolio in the Crypto.com App with ETH and 400+ coins at any time. Build your portfolio in the Crypto.com App with ADA and 400+ coins at any time. Build your portfolio in the Crypto.com App with SHIB and 400+ coins at any time. Build your portfolio in the Crypto.com App with XRP and 400+ coins at any time. Build your portfolio in the Crypto.com App with DOGE and 400+ coins at any time.",
+      "title": "{{product.custom_label_2}}",
+      "cta": "Explore more",
+      "format": "carousel",
+      "days_running": 16,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "loving the ease of @cryptocomofficial in my daily life 😮‍💨🤍🫶🏼 📈💸💸 #crypto #cryptocurrency #cryptoease #dayinmylife",
+      "title": "",
+      "cta": "Install now",
+      "format": "video",
+      "days_running": 181,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM"
+      ],
+      "page_name": "mjsocialsugc"
+    },
+    {
+      "body": "Sign up to the Crypto.com App and claim a 30-day free trial for our Level Up rewards programme! Select the Plus and Pro tier.",
+      "title": "{{product.name}}",
+      "cta": "Subscribe",
+      "format": "carousel",
+      "days_running": 53,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "This is a high-risk investment, take 2 mins to learn more: https://crypto.com/document/risk_summary_uk The Crypto.com App boasts 24/7 trading, enabling you to grow your portfolio with BTC and 400+ top tokens anytime, anywhere.",
+      "title": "Trade BTC and 400+ Cryptocurrencies 24/7",
+      "cta": "Install now",
+      "format": "image",
+      "days_running": 31,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Level Up today and enjoy zero trading fees*, exclusive rewards, and premium perks built for every trader. Subscribe now.",
+      "title": "{{product.name}}",
+      "cta": "Subscribe",
+      "format": "carousel",
+      "days_running": 23,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Build your portfolio in the Crypto.com App with XRP and 400+ coins at any time. Build your portfolio in the Crypto.com App with ETH and 400+ coins at any time. Build your portfolio in the Crypto.com App with SHIB and 400+ coins at any time. Build your portfolio in the Crypto.com App with CRO and 400+ coins at any time. Build your portfolio in the Crypto.com App with DOGE and 400+ coins at any time. Build your portfolio in the Crypto.com App with ADA and 400+ coins at any time.",
+      "title": "{{product.custom_label_2}}",
+      "cta": "Explore more",
+      "format": "carousel",
+      "days_running": 22,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "This is a high-risk investment, take 2 mins to learn more: https://crypto.com/document/risk_summary_uk The Crypto.com App boasts 24/7 trading, enabling you to grow your portfolio with BTC and 400+ top tokens anytime, anywhere.",
+      "title": "Trade BTC and 400+ Cryptocurrencies 24/7",
+      "cta": "Install now",
+      "format": "image",
+      "days_running": 74,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Level Up today and enjoy zero trading fees*, exclusive rewards, and premium perks built for every trader. Subscribe now.",
+      "title": "{{product.name}}",
+      "cta": "Subscribe",
+      "format": "carousel",
+      "days_running": 24,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "💸 In a record-breaking domain name purchase, the owner of Crypto.com — co-founder and CEO Kris Marszalek — paid about $70 million in cryptocurrency to acquire the premium domain AI.com. That price eclipses the previous publicly disclosed record of $30 million for Voice.com, making AI.com the most expensive domain sale ever reported. 💲 Marszalek originally bought the Crypto.com domain when his company (then called Monaco) rebranded in 2018, reportedly paying around $12 million for it — a move that helped turn the exchange into one of the world’s biggest crypto platforms. 🤖 Marszalek is building a brand-new consumer AI platform on it. The vision is a personal AI agent service that can do things like send messages, organise tasks, interact with apps and execute actions on behalf of users — essentially an autonomous assistant for everyday digital life. 🏈 The company is planning a high-profile launch tied to a Super Bowl commercial on February 8, 2026, when the platform will start rolling out publicly. Follow @move for interesting stories, amazing places, and incredible people 💫 #Move #AI #Crypto #Domain #Superbowl",
+      "title": "Move - Interesting stories / Amazing places / Incredible people",
+      "cta": "Visit Instagram profile",
+      "format": "carousel",
+      "days_running": 2,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM"
+      ],
+      "page_name": "Move - Interesting stories / Amazing places / Incredible people"
+    },
+    {
+      "body": "Earn uncapped crypto rewards when purchasing with your card. Plus, enjoy boosted reward rates for the first 12 months from account opening or tier upgrade.² Learn more.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 61,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "This is a high-risk investment, take 2 mins to learn more: https://crypto.com/document/risk_summary_uk The Crypto.com App boasts 24/7 trading, enabling you to grow your portfolio with BTC and 400+ top tokens anytime, anywhere.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 77,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Sign up to the Crypto.com App and claim a 30-day free trial for our Level Up rewards programme! Select the Plus and Pro tier.",
+      "title": "{{product.name}}",
+      "cta": "Subscribe",
+      "format": "carousel",
+      "days_running": 24,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Sign up to the Crypto.com App and claim a 30-day free trial for our Level Up rewards programme! Select the Plus and Pro tier.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 67,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Don’t invest unless you’re prepared to lose all the money you invest. This is a high-risk investment and you should not expect to be protected if something goes wrong. Take 2 mins to learn more: https://crypto.com/document/risk_summary_uk The Crypto.com App boasts 24/7 trading, enabling you to grow your portfolio with ETH and 350+ top tokens anytime, anywhere.",
+      "title": "{{product.name}}",
+      "cta": "Use app",
+      "format": "carousel",
+      "days_running": 82,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    }
+  ],
+  "messaging_analysis": {
+    "messaging_angles": [
+      "Portfolio building with 400+ coins",
+      "Rewards programs and perks (Level Up, card rebates)",
+      "24/7 trading availability",
+      "Zero trading fees for subscribers",
+      "Gamification (Missions, Diamonds, Mystery Boxes)",
+      "Portfolio tracking tools",
+      "Wealth services for high-net-worth individuals"
+    ],
+    "top_ctas": [
+      "Subscribe",
+      "Install now",
+      "Use app",
+      "Explore more",
+      "Learn more",
+      "Sign up",
+      "Visit Instagram profile"
+    ],
+    "buy_crypto_framing": "direct — ads explicitly encourage building portfolios and trading with specific tokens (BTC, ETH, XRP, SHIB, ADA, CRO), framed as accessible 24/7 trading",
+    "fees_messaging": "Zero trading fees are prominently featured as a key benefit of the Level Up subscription program, positioned as an exclusive perk rather than default feature",
+    "simplicity_messaging": "Ease-of-use is highlighted through 'effortless' conversion, 'any time, anywhere' trading, and user-generated content emphasizing daily life integration, though not a dominant theme",
+    "security_messaging": "Security and trust are not emphasized; instead, legally-required risk warnings dominate with prominent disclaimers about high-risk investment and potential total loss",
+    "dominant_format": "carousel — the majority of ads use carousel format, followed by image and occasional video",
+    "longest_running_themes": [
+      "Gamification rewards (Missions, Diamonds, Mystery Boxes) - 612 days",
+      "Portfolio tracking dashboard - 612 days",
+      "Personalized wealth services - 313 days",
+      "Card spending rebates - 224 days",
+      "24/7 trading with 400+ tokens - multiple ads 70-80+ days"
+    ],
+    "summary": "Crypto.com employs a subscription-first strategy centered on their Level Up rewards program, emphasizing zero fees, exclusive perks, and portfolio diversification across 400+ tokens. Long-running ads focus on gamification, rewards programs, and wealth management tools, with legally-mandated risk warnings prominently featured rather than trust/security messaging. The approach is transactional and feature-rich, targeting active traders with subscription incentives rather than crypto newcomers."
+  }
+}
