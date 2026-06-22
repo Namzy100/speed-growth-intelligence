@@ -21,6 +21,11 @@ _ADJUST_SHEET_MAP = {
     "retention": "Retention",
 }
 
+# Single source of truth for the Meta report → sheet-tab mapping.
+_META_SHEET_MAP = {
+    "campaign_performance": "Meta Campaigns",
+}
+
 # Retry policy for transient Sheets API failures (5xx / 429 / network / timeout).
 _MAX_ATTEMPTS = 4
 _BACKOFF_BASE_SECONDS = 1.0          # exponential: 1s, 2s, 4s between retries
@@ -156,18 +161,62 @@ def write_all_adjust_data(
     Returns:
         True if every non-empty report was written, False if any tab failed.
     """
+    return _write_reports(
+        adjust_data_dict, _ADJUST_SHEET_MAP, "Adjust", spreadsheet_id, log
+    )
+
+
+def write_all_meta_data(
+    meta_data_dict: dict[str, pd.DataFrame],
+    spreadsheet_id: str,
+    log: Callable[[str], None] = print,
+) -> bool:
+    """Write each DataFrame from MetaPipeline.get_all() to its own sheet tab.
+
+    Tab name: Meta Campaigns. Tabs are created if they don't already exist.
+    Mirrors write_all_adjust_data; callers should use it rather than
+    reimplementing the loop.
+
+    Args:
+        meta_data_dict:    Dict returned by MetaPipeline.get_all().
+        spreadsheet_id:    The Google Sheets file ID.
+        log:               Callable used for progress/error lines (defaults to print;
+                           pass a timestamped logger from the orchestrator).
+
+    Returns:
+        True if every non-empty report was written, False if any tab failed.
+    """
+    return _write_reports(
+        meta_data_dict, _META_SHEET_MAP, "Meta", spreadsheet_id, log
+    )
+
+
+def _write_reports(
+    data_dict: dict[str, pd.DataFrame],
+    sheet_map: dict[str, str],
+    source_label: str,
+    spreadsheet_id: str,
+    log: Callable[[str], None],
+) -> bool:
+    """Write a {report_key: DataFrame} dict to its mapped sheet tabs.
+
+    Shared write loop for the Adjust and Meta sources. Individual tab failures
+    are logged and do not abort the remaining tabs.
+
+    Returns True if every non-empty report was written, False if any tab failed.
+    """
     success = True
-    for key, sheet_name in _ADJUST_SHEET_MAP.items():
-        df = adjust_data_dict.get(key)
+    for key, sheet_name in sheet_map.items():
+        df = data_dict.get(key)
         if df is None or df.empty:
-            log(f"Adjust → '{sheet_name}': skipped (no data)")
+            log(f"{source_label} → '{sheet_name}': skipped (no data)")
             continue
         try:
             create_sheet_if_missing(spreadsheet_id, sheet_name)
             write_dataframe(df, spreadsheet_id, sheet_name)
-            log(f"Adjust → '{sheet_name}': {len(df)} rows written")
+            log(f"{source_label} → '{sheet_name}': {len(df)} rows written")
         except Exception as e:
-            log(f"Adjust → '{sheet_name}': FAILED — {e}")
+            log(f"{source_label} → '{sheet_name}': FAILED — {e}")
             success = False
     return success
 

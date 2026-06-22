@@ -1,11 +1,13 @@
-"""Daily orchestration: syncs Adjust install/retention data to Google Sheets,
-then rebuilds the creative performance dashboard.
+"""Daily orchestration: syncs Adjust install/retention and Meta campaign data to
+Google Sheets, then rebuilds the creative performance dashboard.
 
 Scope: this orchestrator syncs the Adjust pipeline (channel overview, campaign
-installs, retention), writes a "Last Updated" timestamp, and — as a final step —
-rebuilds the self-contained creative dashboard HTML (docs/creative_dashboard.html)
-from the freshly-synced sheet data, so it stays current on every run. The other
-Speed data sources are standalone and are NOT yet wired into this orchestrator:
+installs, retention) and the Meta pipeline (campaign-level spend, impressions,
+clicks, mobile app installs), writes a "Last Updated" timestamp, and — as a
+final step — rebuilds the self-contained creative dashboard HTML
+(docs/creative_dashboard.html) from the freshly-synced sheet data, so it stays
+current on every run. The other Speed data sources are standalone and are NOT
+yet wired into this orchestrator:
 
   - creators/      — TikTok/YouTube creator discovery + scoring (persisted to
                      Supabase, run on their own)
@@ -32,9 +34,11 @@ load_dotenv()
 
 from pipelines import build_creative_dashboard
 from pipelines.adjust import AdjustPipeline
+from pipelines.meta import MetaPipeline
 from pipelines.sheets import (
     create_sheet_if_missing,
     write_all_adjust_data,
+    write_all_meta_data,
     write_dataframe,
 )
 
@@ -67,6 +71,23 @@ def _sync_adjust(spreadsheet_id: str) -> bool:
 
     # Single source of truth for the write loop lives in sheets.py.
     return write_all_adjust_data(data, spreadsheet_id, log=_log)
+
+
+def _sync_meta(spreadsheet_id: str) -> bool:
+    """Pull Meta campaign data and write it to the Meta Campaigns tab.
+
+    Returns True if all writes succeeded, False if any step failed.
+    Individual sheet failures are logged but do not abort the others.
+    """
+    _log("Meta: pulling last 30 days...")
+    try:
+        data = MetaPipeline().get_all(days=30)
+    except Exception as e:
+        _log(f"Meta: pull FAILED — {e}")
+        return False
+
+    # Single source of truth for the write loop lives in sheets.py.
+    return write_all_meta_data(data, spreadsheet_id, log=_log)
 
 
 def _write_last_updated(spreadsheet_id: str) -> None:
@@ -109,6 +130,9 @@ def run() -> None:
 
     # Adjust
     results["Adjust"] = _sync_adjust(spreadsheet_id)
+
+    # Meta — refreshes alongside Adjust each day.
+    results["Meta"] = _sync_meta(spreadsheet_id)
 
     # Last Updated timestamp
     try:
