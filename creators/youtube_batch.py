@@ -8,6 +8,7 @@ Run from repo root:  python creators/youtube_batch.py
 """
 
 import os
+import re
 import sys
 from pathlib import Path
 from statistics import mean
@@ -93,6 +94,60 @@ SEGMENT_SEARCHES: dict[str, list[str]] = {
 
 MAX_RESULTS_PER_SEARCH = 10   # channels requested per search term
 
+# Competitors and brand accounts — these are companies, not individual creators,
+# so they are never partnership targets. Any channel whose name contains one of
+# these (case-insensitive) is skipped before saving.
+EXCLUDED_BRANDS = [
+    "Western Union", "Remitly", "Wise", "PayPal", "MoneyGram",
+    "Coinbase", "Cash App", "Crypto.com", "Kraken", "Robinhood",
+]
+
+
+def is_excluded_brand(name: str) -> bool:
+    """True if `name` contains an excluded competitor/brand token (case-insensitive)."""
+    low = (name or "").lower()
+    return any(b.lower() in low for b in EXCLUDED_BRANDS)
+
+
+def _normalize_name(name: str) -> str:
+    """Lowercase, strip punctuation, collapse whitespace for name comparison."""
+    return re.sub(r"[^a-z0-9]+", " ", (name or "").lower()).strip()
+
+
+def find_name_subset_duplicates(items, name_fn, score_fn) -> list:
+    """Return the items to REMOVE as near-duplicates.
+
+    Two items are near-duplicates when one's normalized name is a substring of
+    the other's (e.g. "Remitly" vs "Remitly, Inc."). The lower-scored item is
+    marked for removal; the higher-scored one is kept.
+
+    Args:
+        items:    list of items (creator dicts, (creator, score) tuples, DB rows…)
+        name_fn:  callable(item) -> name string
+        score_fn: callable(item) -> numeric score
+    """
+    norm = [(_normalize_name(name_fn(it)), float(score_fn(it) or 0), it) for it in items]
+    removed = [False] * len(norm)
+    to_remove = []
+    for i in range(len(norm)):
+        if removed[i] or not norm[i][0]:
+            continue
+        for j in range(i + 1, len(norm)):
+            if removed[j] or not norm[j][0]:
+                continue
+            a, b = norm[i][0], norm[j][0]
+            if a != b and not (a in b or b in a):
+                continue
+            # Same name or one contains the other → drop the lower-scored.
+            if norm[i][1] >= norm[j][1]:
+                to_remove.append(norm[j][2])
+                removed[j] = True
+            else:
+                to_remove.append(norm[i][2])
+                removed[i] = True
+                break
+    return to_remove
+
 
 def verify_column() -> None:
     sb = database._client()
@@ -146,13 +201,33 @@ def run_batch() -> None:
 
     creators = list(by_key.values())
     print(f"Total unique creators (>= floor): {len(creators)}")
-    if not creators:
-        sys.exit("No creators passed the floor — nothing to save.")
 
-    # Score + save
+    # Drop competitor/brand channels — companies, not individual creators.
+    excluded = [c for c in creators if is_excluded_brand(c.get("name", ""))]
+    if excluded:
+        print(f"Excluded {len(excluded)} competitor/brand channel(s): "
+              f"{[c['name'] for c in excluded]}")
+        creators = [c for c in creators if not is_excluded_brand(c.get("name", ""))]
+
+    if not creators:
+        sys.exit("No creators left to save after exclusions.")
+
+    # Score, then drop near-duplicate names (keep the higher-scored).
+    scored = [(c, scorer.score(c)) for c in creators]
+    dupes = find_name_subset_duplicates(
+        scored,
+        name_fn=lambda cs: cs[0].get("name", ""),
+        score_fn=lambda cs: cs[1]["composite_score"],
+    )
+    if dupes:
+        dupe_ids = {id(cs) for cs in dupes}
+        print(f"Skipping {len(dupes)} near-duplicate name(s): "
+              f"{[cs[0]['name'] for cs in dupes]}")
+        scored = [cs for cs in scored if id(cs) not in dupe_ids]
+
+    # Save
     saved = []
-    for c in creators:
-        score = scorer.score(c)
+    for c, score in scored:
         rec = database.save_creator(c, score)
         saved.append((rec.get("name"), rec.get("platform")))
     print(f"Saved {len(saved)} creators to Supabase.\n")
