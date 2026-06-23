@@ -1,9 +1,16 @@
 """Claude-powered outreach brief generator for Speed Wallet creator partnerships."""
 
 import os
+import re
+import sys
+from pathlib import Path
 
 import anthropic
 from dotenv import load_dotenv
+
+_ROOT = Path(__file__).resolve().parent.parent
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))
 
 load_dotenv()
 
@@ -93,41 +100,67 @@ def generate_brief(creator_dict: dict, score_dict: dict) -> str:
 
 
 # ------------------------------------------------------------------
-# Quick test
+# Database-driven generation: top creators -> briefs on disk
 # ------------------------------------------------------------------
 
+_BRIEFS_DIR = _ROOT / "docs" / "creator_briefs"
+
+
+def _slug(name: str) -> str:
+    """Filesystem-safe handle from a creator name ('Matt's Crypto' -> 'matts_crypto')."""
+    s = re.sub(r"[^a-z0-9]+", "_", (name or "").lower()).strip("_")
+    return s or "creator"
+
+
+def generate_brief_for_row(row: dict) -> str:
+    """Generate a brief from a flat Supabase creator row.
+
+    DB rows already carry both the raw creator fields (name, followers,
+    niche_tags, *_content_pct) and the scoring fields (segment_tag,
+    composite_score, reasoning), so the same row satisfies both arguments of
+    generate_brief().
+    """
+    return generate_brief(row, row)
+
+
+def run(top_n: int = 5) -> None:
+    """Generate outreach briefs for the top-N creators by composite score,
+    print each, and save to docs/creator_briefs/<handle>.txt."""
+    from creators import database
+
+    rows = database.get_all_creators()  # ordered by composite_score desc
+    if not rows:
+        print("No creators in the database — nothing to generate.")
+        return
+
+    top = rows[:top_n]
+    _BRIEFS_DIR.mkdir(parents=True, exist_ok=True)
+
+    print(f"Generating outreach briefs for the top {len(top)} creators "
+          f"by composite score...\n")
+    for i, r in enumerate(top, 1):
+        name = r.get("name", "Unknown")
+        brief = generate_brief_for_row(r)
+        header = (
+            f"Outreach Brief — {name} ({r.get('platform', '')})\n"
+            f"Segment: {r.get('segment_tag', '')} | "
+            f"Score: {r.get('composite_score', '')}/100 | "
+            f"{int(r.get('followers', 0)):,} followers\n"
+            + "-" * 60 + "\n"
+        )
+        path = _BRIEFS_DIR / f"{_slug(name)}.txt"
+        path.write_text(header + brief + "\n", encoding="utf-8")
+
+        print("=" * 70)
+        print(f"[{i}] {header}{brief}")
+        print(f"\nSaved: {path.relative_to(_ROOT)}")
+    print("=" * 70)
+    print(f"\nDone — {len(top)} briefs written to {_BRIEFS_DIR.relative_to(_ROOT)}/")
+
+
 if __name__ == "__main__":
-    import sys
-    from pathlib import Path
-
-    sys.path.insert(0, str(Path(__file__).parent.parent))
-    from creators.scorer import CreatorScorer
-
-    SAMPLE_CREATOR = {
-        "name": "CryptoRico",
-        "platform": "YouTube",
-        "followers": 220_000,
-        "engagement_rate": 0.045,
-        "engagement_quality": 7,
-        "crypto_content_pct": 0.60,
-        "fintech_content_pct": 0.15,
-        "sponsorship_count": 8,
-        "niche_tags": ["bitcoin", "crypto", "lightning", "personal finance", "investing"],
-    }
-
-    scorer = CreatorScorer()
-    score = scorer.score(SAMPLE_CREATOR)
-
-    print(f"Generating brief for {SAMPLE_CREATOR['name']} ({SAMPLE_CREATOR['platform']})...")
-    print(f"Segment: {score['segment_tag']}  Score: {score['composite_score']}/100\n")
-
     try:
-        brief = generate_brief(SAMPLE_CREATOR, score)
+        run()
     except EnvironmentError as e:
         print(f"Config error: {e}")
         sys.exit(1)
-
-    print("=" * 60)
-    print(brief)
-    print("=" * 60)
-    print(f"\nWord count: ~{len(brief.split())}")

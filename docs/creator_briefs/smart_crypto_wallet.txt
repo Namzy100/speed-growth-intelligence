@@ -1,0 +1,12 @@
+Outreach Brief — SMART CRYPTO WALLET (YouTube)
+Segment: crypto-curious | Score: 68.6/100 | 28,600 followers
+------------------------------------------------------------
+SMART CRYPTO WALLET sits right in the sweet spot for Speed. Their channel is built around helping crypto-curious viewers figure out where to start — the audience that watches them is exactly the kind of person who's intrigued by Bitcoin but hasn't found a practical reason to actually use it day to day. That's the gap Speed fills, and at 10.4% engagement on a 28k channel, this is a small but genuinely attentive audience that listens when the creator recommends something.
+
+Because their viewers lean curious rather than hardcore, the angle here is simplicity and real utility, not yield farming or trading mechanics. The features that matter most are how easy Speed makes actually spending Bitcoin — instant Lightning payments settled in seconds, zero fees, and Speed Stacks letting people earn sats on normal purchases. The stablecoin support (USDT, USDC) is worth mentioning too, since a curious audience often worries about volatility, and stable value gives them a softer on-ramp.
+
+Three talking points for the pitch: first, Speed turns Bitcoin from a thing you hold into a thing you use, which fits their "where do I start" content perfectly. Second, it works on iOS and Android and is built for everyday people, not just enthusiasts. Third, Speed Stacks gives their viewers a tangible reason to try it — earning sats while buying coffee is an easy, demonstrable hook.
+
+Recommended CTA: a hands-on walkthrough or first-payment demo video where they download Speed and send a real Lightning payment on camera.
+
+One thing to avoid: don't frame Speed as an investment or trading play — that misreads their audience and overpromises.
