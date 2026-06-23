@@ -1,0 +1,20 @@
+To: Niyati
+From: Naman
+Date: 2026-06-23
+Re: Budget Reallocation Recommendation
+
+**Efficiency Overview**
+
+Across our three paid channels tracked in Adjust, there is a meaningful eCPI gap we are not yet exploiting. Apple Search Ads leads on efficiency at $3.91 eCPI, Facebook sits close behind at $4.09, and Google Ads trails at $5.11 — 31% more expensive per install than Apple. Within our Meta campaigns specifically, the picture is even more uneven: the Payday Android Broad+ campaign is delivering installs at $3.46 per install, while iOS App Promotion runs at $6.93, Cash Deposit at $53.75, and Re-engagement Android at $24.07. Our blended paid eCPI across Adjust channels is roughly $4.68 on $43,917 in estimated spend.
+
+**Recommended Reallocations**
+
+The clearest move is to reduce Google Ads and redirect budget toward Apple and Facebook, which are both outperforming it on cost efficiency. I recommend shifting $5,000 (approximately 18% of Google Ads' estimated $27,964 spend) out of Google Ads — $3,000 into Apple Search Ads and $2,000 into Facebook — bringing Google Ads down to roughly $22,964, Apple up to $11,720, and Facebook up to $9,233. At Apple's current eCPI of $3.91, the $3,000 incremental spend projects to approximately 767 additional installs. The $2,000 added to Facebook at $4.09 eCPI projects to roughly 489 additional installs. Combined, that is approximately 1,256 incremental installs from the same $5,000 that would have generated only 978 installs if left in Google Ads at $5.11 — a gain of roughly 278 installs at no added budget.
+
+Within Meta specifically, I recommend pausing Cash Deposit ($645 spend, $53.75 CPI) and Re-engagement Android ($144, $24.07 CPI), freeing up approximately $789. Reallocate all of it into Payday Android Broad+, which is our single best-performing Meta campaign at $3.46 CPI. This reallocation keeps Meta total spend flat and projects an additional 228 installs from that $789 versus the roughly 19 installs those two underperforming campaigns generated.
+
+The Re-targeting campaign ($217, $13.61 CPI) and iOS App Promotion ($1,380, $6.93 CPI) should remain active but be monitored closely. If iOS App Promotion does not improve toward the $4–5 range within the next two weeks, I would recommend a further 30% trim redirected to Apple Search Ads.
+
+**Expected Impact**
+
+In aggregate, these reallocations keep total paid spend flat at approximately $43,917 while projecting roughly 500 additional installs per month, improving our blended paid eCPI from approximately $4.68 to closer to $4.35. Happy to walk through the numbers live — let me know.
