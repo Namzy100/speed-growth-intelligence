@@ -1,12 +1,12 @@
 Outreach Brief — Matt's Crypto (YouTube)
 Segment: crypto-curious | Score: 66.6/100 | 137,000 followers
 ------------------------------------------------------------
-Matt's Crypto has built a 137K-strong audience that's genuinely curious about Bitcoin and crypto but sits squarely in the "knowledge-seeking" camp — his content leans heavily educational, with tags like bitcoin, eth, and knowledge pointing to viewers who want to understand this stuff before they dive in. That's exactly the crypto-curious profile Speed is built for, and his 11% engagement rate tells us people actually act on what he says. The fact that he's never done a brand deal is a plus here — his recommendations will land as authentic rather than transactional.
+Matt's Crypto sits right in the sweet spot for Speed. With 137K subscribers and an 11% engagement rate, his channel pulls in exactly the kind of crypto-curious viewer we want — people who are genuinely interested in Bitcoin and Ethereum but haven't necessarily figured out what to actually *do* with it day to day. His content leans heavily educational (those "knowledge" tags aren't an accident), which means his audience trusts him to explain things clearly rather than shill. That's a good foundation for a wallet that's all about practical utility.
 
-For his audience, the hook isn't trading or speculation, it's utility and simplicity. Speed turns Bitcoin from an abstract concept into something you actually use: zero-fee Lightning payments that settle in seconds, stablecoin support for anyone nervous about volatility, and Speed Stacks so viewers earn sats just by spending normally. It's the natural "okay, now what do I do with it" answer his educational content sets up.
+Because this is a crypto-curious crowd, the messaging should center on simplicity and real-world usefulness rather than fee-savings or speed-for-traders angles. The features that matter most here: how easy Speed makes spending Bitcoin via Lightning, the zero-fee transactions, and Speed Stacks letting everyday purchases earn sats back. The stablecoin support is also worth a mention for viewers who like crypto but get spooked by volatility.
 
-Three talking points to lead with: first, Speed bridges the gap between learning about Bitcoin and actually using it — a perfect next step for his viewers. Second, the zero-fee, instant Lightning experience makes a great hands-on demo or tutorial, which fits his format. Third, Speed Stacks gives viewers a low-risk reason to start today by earning real sats.
+Three talking points for the pitch: first, Speed bridges the gap between "I understand Bitcoin" and "I actually use Bitcoin" — a natural next step for his viewers. Second, Lightning is the topic his audience will increasingly ask about, so covering it positions him ahead of the curve. Third, Speed Stacks gives him a tangible, demonstrable hook for a video — earning sats on a real purchase on camera.
 
-The ask: a dedicated walkthrough or tutorial video where Matt sets up Speed and makes a real payment on camera.
+Recommended CTA: invite him to a short call to scope a sponsored walkthrough or "how I actually spend Bitcoin" segment.
 
-One thing to avoid: don't frame Speed as an investment or trading play — that undercuts the everyday-utility message and misreads his audience.
+One thing to avoid: don't pitch this as a trading or investment tool. His audience wants to learn and use, not speculate.

@@ -123,22 +123,36 @@ def generate_brief_for_row(row: dict) -> str:
     return generate_brief(row, row)
 
 
-def run(top_n: int = 5) -> None:
-    """Generate outreach briefs for the top-N creators by composite score,
-    print each, and save to docs/creator_briefs/<handle>.txt."""
+def run(top_n: int = 5, segments: list[str] | None = None, quiet: bool = False) -> int:
+    """Generate outreach briefs and save to docs/creator_briefs/<handle>.txt.
+
+    Selection: if `segments` is given, ALL creators whose segment_tag is in that
+    set are briefed (regardless of score); otherwise the top `top_n` creators by
+    composite score. Returns the number of briefs generated.
+    """
     from creators import database
 
     rows = database.get_all_creators()  # ordered by composite_score desc
     if not rows:
         print("No creators in the database — nothing to generate.")
-        return
+        return 0
 
-    top = rows[:top_n]
+    if segments:
+        segset = {s for s in segments}
+        selected = [r for r in rows if r.get("segment_tag") in segset]
+        label = f"all creators in segment(s) {sorted(segset)}"
+    else:
+        selected = rows[:top_n]
+        label = f"top {len(selected)} by composite score"
+
+    if not selected:
+        print(f"No creators matched ({label}).")
+        return 0
+
     _BRIEFS_DIR.mkdir(parents=True, exist_ok=True)
+    print(f"Generating outreach briefs for {label} ({len(selected)} creators)...\n")
 
-    print(f"Generating outreach briefs for the top {len(top)} creators "
-          f"by composite score...\n")
-    for i, r in enumerate(top, 1):
+    for i, r in enumerate(selected, 1):
         name = r.get("name", "Unknown")
         brief = generate_brief_for_row(r)
         header = (
@@ -151,16 +165,37 @@ def run(top_n: int = 5) -> None:
         path = _BRIEFS_DIR / f"{_slug(name)}.txt"
         path.write_text(header + brief + "\n", encoding="utf-8")
 
-        print("=" * 70)
-        print(f"[{i}] {header}{brief}")
-        print(f"\nSaved: {path.relative_to(_ROOT)}")
-    print("=" * 70)
-    print(f"\nDone — {len(top)} briefs written to {_BRIEFS_DIR.relative_to(_ROOT)}/")
+        if quiet:
+            print(f"[{i:>2}] {name}  ({r.get('segment_tag', '')}, "
+                  f"{r.get('composite_score', '')}/100) -> {path.name}")
+        else:
+            print("=" * 70)
+            print(f"[{i}] {header}{brief}")
+            print(f"\nSaved: {path.relative_to(_ROOT)}")
+
+    print(f"\nDone — {len(selected)} briefs written to {_BRIEFS_DIR.relative_to(_ROOT)}/")
+    return len(selected)
 
 
 if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Generate Speed Wallet outreach briefs from Supabase creators."
+    )
+    parser.add_argument("--top", type=int, default=5,
+                        help="Brief the top-N creators by composite score (default 5).")
+    parser.add_argument("--segments", default=None,
+                        help="Comma-separated segment tags; briefs ALL creators in "
+                             "those segments regardless of score (overrides --top).")
+    parser.add_argument("--quiet", action="store_true",
+                        help="Print one line per brief instead of the full text.")
+    args = parser.parse_args()
+
+    segs = [s.strip() for s in args.segments.split(",") if s.strip()] if args.segments else None
+
     try:
-        run()
+        run(top_n=args.top, segments=segs, quiet=args.quiet)
     except EnvironmentError as e:
         print(f"Config error: {e}")
         sys.exit(1)

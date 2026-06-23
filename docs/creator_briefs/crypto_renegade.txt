@@ -1,0 +1,12 @@
+Outreach Brief — Crypto Renegade (YouTube)
+Segment: crypto-curious | Score: 46.9/100 | 22,100 followers
+------------------------------------------------------------
+Crypto Renegade sits squarely in the crypto-curious space, which is exactly where Speed lives. Their audience leans into the "sociology of crypto" angle — people fascinated by Bitcoin's place in everyday life, not just price charts. That's a natural bridge to Speed, because the whole pitch is that Bitcoin can actually be used to pay for things, not just held and theorized about. With a 12% engagement rate, this is a smaller but genuinely curious audience that's still figuring out where to start, and that's the gap Speed fills.
+
+For this segment, lead with simplicity and utility. The features that matter most here are zero-fee Lightning payments, settlement in seconds, and Speed Stacks — earning sats on everyday purchases is a concrete, relatable hook for someone who's "crypto-curious but not sure where to start." Stablecoin support is a nice secondary point for the cautious viewer who wants stability before going full Bitcoin.
+
+Three talking points to pitch: first, Speed turns Bitcoin from an abstract idea into something you actually spend, which fits their lifestyle-and-tech framing perfectly. Second, it's built for normal people — iOS and Android, no jargon required — so it's an easy recommendation for a curious-but-hesitant audience. Third, Speed Stacks gives viewers a reason to try it today, not someday.
+
+For the CTA, propose a hands-on walkthrough video where they download Speed, make a real Lightning payment, and show the experience start to finish.
+
+One thing to avoid: don't frame this as an investment or trading play. Their audience is exploring, not speculating — keep it about utility.

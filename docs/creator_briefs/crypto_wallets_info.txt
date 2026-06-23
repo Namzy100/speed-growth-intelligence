@@ -1,0 +1,12 @@
+Outreach Brief — Crypto Wallets Info (YouTube)
+Segment: crypto-curious | Score: 54.6/100 | 22,300 followers
+------------------------------------------------------------
+Crypto Wallets Info has built an audience around exactly the kind of educational, explainer-style content that maps well to Speed's crypto-curious segment. Their viewers are clearly interested in blockchain and DeFi but are still in the learning phase — people who want to understand crypto before they actually use it. That's the gap Speed fills. We're not asking their audience to become traders or yield farmers; we're showing them a Bitcoin wallet that works like a normal payments app, which is a natural next step after the "what is a wallet" content they're already making.
+
+For this audience, lean into simplicity and everyday utility rather than technical depth. The strongest features to highlight are the zero-fee instant Lightning payments, the iOS/Android availability that makes onboarding painless, and Speed Stacks, since earning sats on regular purchases is an easy, tangible hook for someone curious but hesitant.
+
+Three talking points for the pitch: first, Speed turns abstract Lightning concepts they've explained into something their viewers can actually try in minutes. Second, the stablecoin support (USDT, USDC) gives nervous newcomers a stable-value option, which addresses the volatility fear that holds crypto-curious people back. Third, Speed Stacks gives them a genuinely fresh angle for a video — earning Bitcoin while spending, not just buying and holding.
+
+A good CTA would be a dedicated wallet walkthrough or first-payment demo video with a tracked signup link, since their content style already suits tutorials.
+
+One thing to avoid: don't frame this as an investment or trading play. Their audience responds to learning and utility, and price-speculation messaging would feel off-brand and erode trust.

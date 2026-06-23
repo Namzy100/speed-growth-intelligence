@@ -1,0 +1,12 @@
+Outreach Brief — CryptoLabs Research | Defi Income & Investing (YouTube)
+Segment: crypto-curious | Score: 51.7/100 | 42,200 followers
+------------------------------------------------------------
+CryptoLabs Research is worth pursuing as a moderate-fit partner. Their channel sits squarely in the DeFi and investing education space, which means their 42K subscribers already understand wallets, ETH, and yield mechanics. But the "Defi Income & Investing" framing tells us something useful: this audience treats crypto as a place to grow money, not spend it. That's the gap we'd be bridging — moving them from thinking of Bitcoin as an asset to thinking of it as a way to actually pay for things. Their crypto-curious lean and strong engagement quality (EQ 8/10) make them receptive to a well-explained utility pitch, even if reach is modest.
+
+Since this is a crypto-curious audience, we lead with simplicity and everyday utility rather than fee-savings or gambling angles. The hook is that Speed is a Lightning wallet anyone can use on iOS or Android, with instant settlement, zero Lightning fees, and stablecoin support for people who want to park value without volatility. Speed Stacks — earning sats on normal purchases — pairs naturally with an income-focused channel.
+
+Three talking points: first, frame Speed Stacks as "passive sats on spending you're already doing," which fits their income angle. Second, position stablecoin support as a bridge for viewers nervous about Bitcoin's swings. Third, emphasize that Lightning makes Bitcoin spendable today, not someday.
+
+Recommended CTA: a dedicated walkthrough video where they download Speed, send a real Lightning payment, and show Speed Stacks in action.
+
+Avoid pitching this as a yield or investment product — Speed is a payments wallet, and overpromising returns would mislead their audience.

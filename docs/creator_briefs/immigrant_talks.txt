@@ -1,0 +1,12 @@
+Outreach Brief — Immigrant Talks (YouTube)
+Segment: remittance | Score: 26.5/100 | 36,400 followers
+------------------------------------------------------------
+Immigrant Talks sits right at the heart of one of Speed's most important audiences: people who send money across borders. The channel speaks to migrants and immigrant communities about the realities of building a life in a new country, and remittances are a recurring, deeply personal part of that story. When someone sends $200 home and watches a chunk disappear to transfer fees and bad exchange rates, that's not an abstract problem to this audience — it's monthly frustration. That's exactly the pain Speed solves.
+
+For this audience, lead with fee savings. Speed's zero-fee Lightning transactions and near-instant settlement mean more money actually reaches family back home, faster. The stablecoin support (USDT, USDC) matters too, because people sending money want predictable value, not volatility — a useful reassurance for a less crypto-native crowd.
+
+Three talking points worth raising: first, a concrete comparison of what a typical remittance costs through traditional services versus Speed, in real dollars. Second, how funds settle in seconds rather than days, which matters for families relying on timely support. Third, that Speed works on regular iOS and Android phones and is built for everyday people, not just crypto enthusiasts.
+
+For the call to action, I'd propose a sponsored segment or honest walkthrough where the creator sends a small remittance live and shows the cost and speed difference firsthand — authenticity will land far better than a scripted plug.
+
+One thing to avoid: don't frame this as a crypto or investing opportunity. This audience cares about cheaper, reliable transfers, not Bitcoin speculation. Keep it practical and money-saving.

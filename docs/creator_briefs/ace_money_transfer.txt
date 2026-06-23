@@ -1,0 +1,12 @@
+Outreach Brief — ACE Money Transfer (YouTube)
+Segment: remittance | Score: 36.7/100 | 36,700 followers
+------------------------------------------------------------
+ACE Money Transfer sits right in the middle of the remittance conversation, which is exactly where Speed wants to be. Their YouTube audience is made up of people who actively send money across borders and care about how much of it actually arrives — that's the core hook for us. The fact that nearly half their content already covers fintech and payments means we wouldn't be educating a cold audience from scratch; they already understand transfer fees, exchange rates, and settlement times.
+
+The feature that matters most here is fee savings. Lightning transactions cost zero, and for someone sending money home every month, that's real money back in their pocket compared to traditional remittance corridors. Instant settlement is the second angle — money arriving in seconds instead of days. And for an audience that may be wary of crypto volatility, the stablecoin support (USDT, USDC) gives them stable value without the price swings.
+
+For the pitch, I'd lead with three points: first, a direct cost comparison showing what their viewers save versus conventional transfer services; second, the speed difference framed around real-world urgency, like family needing funds the same day; third, that Speed is built for everyday people, not crypto insiders, so it fits their existing audience rather than alienating it.
+
+The recommended CTA is a sponsored explainer or walkthrough video demonstrating a real cross-border send on Speed, with a trackable link.
+
+One thing to avoid: don't lean on speculative "get rich with Bitcoin" angles. This audience cares about practical money movement, not investment hype.

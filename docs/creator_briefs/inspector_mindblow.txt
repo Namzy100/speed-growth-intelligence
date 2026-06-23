@@ -1,12 +1,12 @@
 Outreach Brief — Inspector Mindblow (YouTube)
 Segment: crypto-curious | Score: 63.1/100 | 91,100 followers
 ------------------------------------------------------------
-Inspector Mindblow sits right in the sweet spot for Speed. With 91K subscribers who skew crypto-curious and a content mix that's roughly two-thirds crypto, this is an audience that's already intrigued by Bitcoin but probably still treats it as something you trade or HODL rather than something you actually spend. That gap is exactly what Speed closes, and an 8.5% engagement rate tells me his viewers actually listen when he talks. The fact that he's never done a brand deal is a plus — his recommendations will read as genuine rather than rehearsed.
+Inspector Mindblow sits right in the sweet spot we look for in a crypto-curious partner. With 91K subs and a content mix that leans heavily into crypto, ETH, NFTs, trading and broader web3 culture, their audience is already intrigued by Bitcoin but probably hasn't found a clean way to actually use it day to day. That gap is exactly what Speed fills, and the channel's 8.5% engagement rate tells us this is a viewer base that listens and acts when the creator recommends something.
 
-Because his audience is curious but not necessarily converted on real-world utility, lean into simplicity. The hook here isn't fees or speed for their own sake — it's that Speed makes Bitcoin do something practical. Zero-fee Lightning payments, settlement in seconds, stablecoin support for anyone nervous about volatility, and Speed Stacks to earn sats on everyday purchases all reinforce one idea: this is crypto you can actually use.
+Because their crowd is crypto-aware but not necessarily deep into payments, the messaging should lead with simplicity and real utility, not technical Lightning jargon. The hooks that matter here: zero-fee instant Lightning payments that settle in seconds, stablecoin support (USDT/USDC) for anyone who wants to dodge volatility, and Speed Stacks letting them earn sats on everyday spending.
 
-Three talking points to anchor the pitch: first, Speed bridges the gap between "I own Bitcoin" and "I spend Bitcoin," which matches where his audience already is. Second, the app is built for normal people, so there's no intimidating setup — a natural fit for a crypto-curious crowd. Third, Speed Stacks gives viewers a tangible reason to try it today.
+Three talking points worth building the pitch around: first, this is Bitcoin you can actually spend, bridging the gap between holding crypto and using it; second, the gaming and strategy angle in their niche tags pairs naturally with the "earn sats while you spend" reward mechanic; third, Speed works on iOS and Android for normal people, so it's an easy, low-friction recommendation that won't alienate the less technical part of their audience.
 
-For the CTA, ask him to do a hands-on walkthrough where he sends a real Lightning payment and earns sats live on camera.
+For the CTA, I'd propose a dedicated walkthrough video where they set up Speed live and make a real Lightning payment, tied to a tracked sign-up link.
 
-One thing to avoid: don't frame Speed as an investment or trading play — it's a payments tool, not the next moonshot.
+One thing to avoid: don't frame Speed as a trading or investment play. Their viewers already get plenty of that elsewhere, and it muddies the "spend and use" message.
