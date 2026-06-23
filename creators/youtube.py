@@ -102,8 +102,17 @@ class YouTubeCreatorFetcher:
                 creator = self._build_creator(ch)
                 if creator:
                     creators.append(creator)
-            except (QuotaExceededError, requests.HTTPError):
+            except QuotaExceededError:
+                # Quota / rate limit is run-fatal — propagate so the caller can
+                # stop gracefully and save progress. Never swallow it.
                 raise
+            except requests.HTTPError as e:
+                # A single channel can fail in isolation — most commonly a 404 on
+                # its uploads playlist. Skip just this channel and keep going so
+                # one bad channel can't abort the whole search term or run.
+                name = ch.get("snippet", {}).get("title", "?")
+                print(f"  ! skipping channel '{name}' — API error: {e}")
+                continue
             except Exception:
                 # Skip individual channels with incomplete data without aborting the batch.
                 continue
