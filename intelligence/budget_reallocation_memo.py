@@ -138,8 +138,11 @@ budget increase) unless you explicitly justify a net change.
 - Close with a short expected-impact line (e.g. projected extra installs at the \
 better blended eCPI).
 
-Write in clean plain-text memo prose (short paragraphs, no markdown tables, no \
-code blocks). Keep it under 450 words. Be concrete and decisive.
+Write in clean plain-text memo prose (short paragraphs). Keep it under 450 \
+words. Be concrete and decisive.
+
+FORMATTING: Do not use markdown formatting, asterisks, or bold markers — plain \
+text only with clear section headers using dashes or equals signs.
 
 --- DATA ---
 {data_summary}

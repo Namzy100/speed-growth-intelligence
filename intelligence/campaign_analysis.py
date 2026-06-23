@@ -142,6 +142,9 @@ rationale grounded in its numbers.
 
 Cite real numbers throughout. Be specific and direct. Keep it under 500 words.
 
+FORMATTING: Do not use markdown formatting, asterisks, or bold markers — plain \
+text only with clear section headers using dashes or equals signs.
+
 --- CAMPAIGN DATA ---
 {data_summary}
 --- END DATA ---"""
