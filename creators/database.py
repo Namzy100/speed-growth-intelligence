@@ -156,6 +156,21 @@ def save_creator(creator_dict: dict, score_dict: dict) -> dict:
     return result.data[0] if result.data else {}
 
 
+def delete_creator(creator_id: str) -> bool:
+    """Delete a single creator row by id. Returns True if a row was removed.
+
+    Used for database cleanup (e.g. removing competitor/brand channels or
+    near-duplicate rows). Deletion is permanent — callers should be sure.
+    """
+    result = (
+        _client().table(_TABLE)
+        .delete()
+        .eq("id", creator_id)
+        .execute()
+    )
+    return bool(result.data)
+
+
 def update_outreach_status(creator_id: str, new_status: OutreachStatus) -> dict:
     """Update the outreach_status for a single creator.
 
