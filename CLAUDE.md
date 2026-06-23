@@ -65,3 +65,7 @@ python test_connections.py
 - **Google Sheets** — `gspread` + `google-auth-oauthlib` for read/write to sheets.
 - **YouTube** — direct REST calls to `googleapis.com/youtube/v3`.
 - **schedule** — lightweight task scheduling for recurring pipeline runs.
+
+## Deliverables
+
+- **Looker Studio dashboard** — [Speed Wallet Marketing Intelligence Dashboard](https://datastudio.google.com/reporting/e15d81ef-6872-46e9-bca9-1624f0a61319). 4 pages: Channel Performance, Campaign Breakdown, Retention, Meta Campaigns. Backed by the Google Sheet tabs and updates automatically when `pipelines/run_daily_sync.py` runs. URL also saved in `docs/looker_studio_url.txt`.
