@@ -50,6 +50,8 @@ SEGMENT_SEARCHES: dict[str, list[str]] = {
         "international wire transfer tips",
         "cheapest way to send money abroad",
         "Western Union alternative",
+        "send money online cheap",
+        "money transfer comparison",
     ],
     "iGaming": [
         "crypto casino",
@@ -82,6 +84,10 @@ SEGMENT_SEARCHES: dict[str, list[str]] = {
         "crypto passive income",
         "ethereum for beginners",
         "how to use bitcoin",
+        "crypto YouTube channel",
+        "bitcoin news daily",
+        "DeFi explained",
+        "crypto wallet review",
     ],
 }
 
