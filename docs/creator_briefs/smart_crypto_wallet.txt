@@ -1,12 +1,12 @@
 Outreach Brief — SMART CRYPTO WALLET (YouTube)
 Segment: crypto-curious | Score: 68.6/100 | 28,600 followers
 ------------------------------------------------------------
-SMART CRYPTO WALLET sits right in the sweet spot for Speed. Their channel is built around helping crypto-curious viewers figure out where to start — the audience that watches them is exactly the kind of person who's intrigued by Bitcoin but hasn't found a practical reason to actually use it day to day. That's the gap Speed fills, and at 10.4% engagement on a 28k channel, this is a small but genuinely attentive audience that listens when the creator recommends something.
+SMART CRYPTO WALLET sits right in our crypto-curious sweet spot. Their audience is interested in Bitcoin and the broader crypto world but hasn't necessarily made the leap to using it for anything practical — and that's exactly the gap Speed fills. With a 10.4% engagement rate and a wallet-focused channel name, this is an audience already primed to think about how they actually hold and move their crypto, not just speculate on price. The fact that they cover lifestyle and food alongside crypto is a bonus: it means they can show Speed paying for everyday things, which is the whole point.
 
-Because their viewers lean curious rather than hardcore, the angle here is simplicity and real utility, not yield farming or trading mechanics. The features that matter most are how easy Speed makes actually spending Bitcoin — instant Lightning payments settled in seconds, zero fees, and Speed Stacks letting people earn sats on normal purchases. The stablecoin support (USDT, USDC) is worth mentioning too, since a curious audience often worries about volatility, and stable value gives them a softer on-ramp.
+For this segment, lead with simplicity and utility. The hook isn't fees or transaction speed in isolation — it's that Speed makes Bitcoin actually usable for normal people. Lightning payments settle in seconds with zero fees, stablecoin support (USDT, USDC) gives nervous newcomers a stable option, and Speed Stacks lets them earn sats on purchases they're already making.
 
-Three talking points for the pitch: first, Speed turns Bitcoin from a thing you hold into a thing you use, which fits their "where do I start" content perfectly. Second, it works on iOS and Android and is built for everyday people, not just enthusiasts. Third, Speed Stacks gives their viewers a tangible reason to try it — earning sats while buying coffee is an easy, demonstrable hook.
+Three talking points to pitch: first, Speed is the bridge between "I own some crypto" and "I actually spend it," which fits a wallet-named channel perfectly. Second, it's available on iOS and Android and built for everyday people, not just enthusiasts — easy to demo on camera. Third, Speed Stacks turns ordinary spending into sats, a natural fit for their lifestyle and food content.
 
-Recommended CTA: a hands-on walkthrough or first-payment demo video where they download Speed and send a real Lightning payment on camera.
+The CTA: invite them to do a hands-on walkthrough video showing a real purchase end to end.
 
-One thing to avoid: don't frame Speed as an investment or trading play — that misreads their audience and overpromises.
+One thing to avoid: don't frame Speed as a trading or investing tool — this is about spending, not portfolios.

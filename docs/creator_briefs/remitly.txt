@@ -1,0 +1,12 @@
+Outreach Brief — Remitly (TikTok)
+Segment: remittance | Score: 21.1/100 | 293,900 followers
+------------------------------------------------------------
+Quick flag before we go deeper: Remitly scored low on our fit model (21.1/100), and the data backs up caution. Engagement is thin (1.1% ER, ~57 weighted engaged reach), and the 394 ad-flagged videos read as self-promotion rather than genuine third-party partnership history. That said, the account name and remittance focus are exactly the audience we want to reach, so there's a strategic angle worth exploring even if the raw metrics are soft.
+
+Here's the play. Remitly's followers are people actively sending money across borders, which maps directly onto our core remittance segment. These are users who already feel the pain of transfer fees, so the hook writes itself: Speed's zero-fee Lightning transactions and instant, settles-in-seconds payments. For an audience that's used to losing a chunk of every transfer to fees and waiting days for money to land, that's a tangible, dollars-and-cents value prop. The stablecoin support (USDT, USDC) is also worth surfacing — people sending money home often want stable value, not crypto volatility.
+
+Three talking points for the pitch: first, lead with concrete fee savings versus traditional remittance corridors. Second, emphasize speed — money home in seconds, not days. Third, position Speed as built for everyday people, not crypto insiders, since their audience isn't a crypto crowd.
+
+CTA: propose a single sponsored demo where Remitly sends a real transfer on Speed and shows the fee and timing difference live.
+
+One thing to avoid: don't frame this as a Bitcoin or crypto play. This audience cares about getting more money home faster — lead with that, not the technology.

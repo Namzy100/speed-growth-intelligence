@@ -1,0 +1,12 @@
+Outreach Brief — Vivendo Mundo Afora (YouTube)
+Segment: remittance | Score: 21.0/100 | 1,090,000 followers
+------------------------------------------------------------
+Vivendo Mundo Afora's channel is built around the realities of living abroad — the lifestyle, the culture, the day-to-day of being a Brazilian away from home. That audience almost certainly includes people who send money back to family in Brazil, which is exactly where Speed fits. Anyone living between two countries knows the sting of remittance fees and the frustration of waiting days for transfers to clear, so this is a problem they feel personally, not an abstract crypto pitch.
+
+I'd lead entirely with fee savings and speed. Speed runs Lightning transactions with zero fees and settles in seconds, which is the direct answer to the wire fees and slow timelines their viewers deal with. The stablecoin support (USDT, USDC) is worth mentioning too, since it lets people hold stable value without worrying about Bitcoin's price swings — a real concern for someone sending grocery money home.
+
+For talking points: first, frame it as "what if sending money home cost nothing and arrived in seconds" — tie it to their lived-abroad story. Second, emphasize that Speed is built for everyday people, not crypto traders, so it suits their lifestyle-focused audience. Third, the app works on iOS and Android with a simple setup, so there's a low barrier for viewers to try it.
+
+For the CTA, invite them to a short call to walk through the app and a demo send to a Brazilian number.
+
+One thing to avoid: don't frame this as an investment or crypto-trading opportunity. Their audience cares about practical money movement, not speculation — leaning into Bitcoin hype will lose them.

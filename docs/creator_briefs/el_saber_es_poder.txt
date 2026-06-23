@@ -1,0 +1,12 @@
+Outreach Brief — EL SABER ES PODER (YouTube)
+Segment: remittance | Score: 22.0/100 | 18,100 followers
+------------------------------------------------------------
+EL SABER ES PODER sits at the intersection of knowledge, politics, and society, and that audience tends to care deeply about economic fairness and how ordinary people get squeezed by systems they don't control. That's actually a useful entry point for Speed, even though this channel isn't a crypto or fintech outlet at all. The remittance angle fits naturally with the kind of social and economic commentary this creator already does — money sent home, who profits from the fees, and what alternatives exist.
+
+For their audience, the hook isn't Bitcoin hype. It's the fee story. Speed's zero-fee Lightning transactions and instant settlement mean families sending money internationally keep more of what they earn, and the stablecoin support (USDT, USDC) gives people who fear volatility a way to hold stable value. Frame it as a practical tool, not a speculative bet.
+
+Three talking points worth raising: first, that traditional remittance services quietly take a meaningful cut on every transfer, which connects to this channel's interest in economic systems; second, that Speed settles in seconds, so the person back home isn't waiting days; third, that it works on a regular phone for regular people, no crypto expertise required.
+
+A realistic call to action: propose a single sponsored segment or explainer where they break down remittance fees and show Speed as one alternative, with a trackable link.
+
+One thing to avoid: don't lean on price-speculation or "get rich with Bitcoin" language. This audience is skeptical of hype, and that framing would undercut the channel's credibility and the pitch.

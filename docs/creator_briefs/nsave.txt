@@ -1,0 +1,12 @@
+Outreach Brief — nsave (YouTube)
+Segment: remittance | Score: 18.0/100 | 37,100 followers
+------------------------------------------------------------
+Quick note up front: nsave scores low for us (18/100), mostly because their content doesn't currently touch crypto or fintech at all, there's no prior brand-deal history, and the audience-fit signal is thin. So this is a speculative, lower-priority reach rather than a slam-dunk. That said, the remittance angle is genuinely interesting, and a 6.7% engagement rate on a 37K knowledge-leaning channel suggests an audience that actually listens, which matters more than raw size.
+
+The fit, if it exists, is the remittance thread. People who follow nsave for practical, money-related knowledge are exactly the folks getting quietly bled by transfer fees when they send money home. That's our clearest hook here. I'd lead entirely on fee savings: zero fees on Lightning transfers and money that settles in seconds rather than days, plus stablecoin support (USDT/USDC) so they can hold steady value without riding Bitcoin's volatility. Speed Stacks rewards are a nice secondary mention, not the headline.
+
+Three talking points worth pitching: first, a real cost comparison showing what a $200 transfer actually loses to traditional remittance fees versus Speed; second, that this works for everyday people on iOS and Android, no crypto background required; third, that stablecoins solve the "but isn't Bitcoin too volatile to send money?" worry their audience will immediately raise.
+
+The CTA: propose one explainer video walking through a real cross-border transfer, with a trackable link and a small flat fee plus performance bonus to de-risk it for both sides.
+
+Avoid framing this as a crypto-investing or get-rich pitch — their audience is knowledge-seeking and practical, and that tone would read as a scam.

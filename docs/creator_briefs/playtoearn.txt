@@ -1,0 +1,12 @@
+Outreach Brief — PlayToEarn (YouTube)
+Segment: iGaming | Score: 35.0/100 | 48,200 followers
+------------------------------------------------------------
+PlayToEarn sits right at the intersection of gaming, web3, and crypto, which makes their audience a reasonable match for Speed's iGaming angle. Their viewers already understand blockchain, play-to-earn mechanics, and the friction that comes with moving value in and out of games — that's exactly the pain point Speed solves. The honest read is this is a smaller, lower-engagement channel with no prior brand deals, so we should treat this as a test partnership rather than a flagship one.
+
+For this audience, lead with speed and the deposit/withdrawal experience. The hook is instant payments settled in seconds with zero Lightning fees — no more waiting on slow cashouts or watching fees eat into winnings. Stablecoin support (USDT, USDC) is worth mentioning too, since play-to-earn players care about locking in value when token prices swing.
+
+Three talking points to pitch: first, instant, near-free cashouts mean players keep more of what they earn — frame it against the slow, costly transfers they already complain about. Second, Speed Stacks lets their audience earn sats on everyday purchases, which fits the "play to earn" mindset they've built their channel around. Third, it works on iOS and Android for normal people, so even less technical viewers can actually use it.
+
+The call to action: propose a single sponsored integration or hands-on walkthrough video where they actually move funds and show the speed live, with a trackable link.
+
+One thing to avoid: don't position Speed as a play-to-earn token, NFT, or investment play. It's a payments wallet, and overpromising "earnings" will misfire with this crowd.

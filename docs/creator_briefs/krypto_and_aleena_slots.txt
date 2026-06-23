@@ -1,0 +1,10 @@
+Outreach Brief — Krypto and Aleena Slots (YouTube)
+Segment: iGaming | Score: 31.8/100 | 18,800 followers
+------------------------------------------------------------
+Krypto and Aleena Slots sit right in our iGaming wheelhouse, and that's the angle worth leading with. Their audience is already comfortable with slots, Lightning, and crypto-adjacent content, which means we don't have to do the heavy lifting of explaining what Bitcoin is — we just have to show how Speed makes the gambling experience smoother. The pain point their viewers feel most acutely is waiting on deposits and withdrawals, so that's where Speed shines: instant payments settled in seconds and zero fees on Lightning transactions. For an iGaming audience, the message is simple — get your money on the table faster and pull your winnings out without losing a cut to fees or sitting through pending screens.
+
+For the pitch, I'd lean on three points. First, instant deposits mean less time waiting and more time playing, which directly matches what their slots content is about. Second, zero-fee withdrawals mean their viewers actually keep what they win instead of bleeding it to payment processors. Third, stablecoin support (USDT, USDC) gives players a way to hold a balance without riding crypto volatility between sessions — useful for an audience that's crypto-aware but cautious.
+
+The call to action: a short demo segment showing a real deposit-to-withdrawal flow on a Speed wallet, with a trackable signup link in the description.
+
+One thing to avoid — don't frame Speed as a gambling product or imply we're a casino. We're the wallet that makes their payments fast and cheap, full stop. Keep the responsible-play tone intact.

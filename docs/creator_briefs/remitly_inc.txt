@@ -1,0 +1,12 @@
+Outreach Brief — Remitly, Inc. (YouTube)
+Segment: remittance | Score: 25.6/100 | 47,500 followers
+------------------------------------------------------------
+Remitly is an interesting case for us because their entire channel is built around remittance — diaspora communities, money transfer, and the real-world economics of sending money home. That's the exact audience Speed serves with its zero-fee Lightning transfers, so the alignment on subject matter is genuinely strong even if the partnership numbers (engagement around 0.9%, weighted reach near 224, no prior brand deals) suggest we'd be testing the waters here rather than betting big.
+
+The hook is straightforward and honest: fee savings. Their viewers already care about what it costs to send money internationally, so the pitch writes itself around Speed's zero fees and instant settlement. Stablecoin support (USDT, USDC) is worth mentioning too, since families receiving money often want stable value rather than exposure to price swings.
+
+Three talking points I'd lead with: first, traditional remittance corridors quietly eat 5–7% per transfer, and Speed removes that entirely. Second, payments settle in seconds, not the days a bank wire can take. Third, Speed is built for everyday people on iOS and Android — no crypto background needed, which fits an audience that's diaspora-focused rather than crypto-native.
+
+For the CTA, I'd propose a single sponsored explainer video walking through a real send-money-home scenario using Speed, with a trackable link so we can measure actual intent from their audience before discussing anything bigger.
+
+One thing to avoid: don't frame this as a crypto or Bitcoin-investing play. Their audience cares about getting money home cheaply and reliably — keep it about utility, not speculation.

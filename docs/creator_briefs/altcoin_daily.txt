@@ -1,0 +1,12 @@
+Outreach Brief — Altcoin Daily (YouTube)
+Segment: crypto-curious | Score: 61.6/100 | 1,650,000 followers
+------------------------------------------------------------
+Altcoin Daily has built a 1.65M-strong audience that lives and breathes crypto, but the channel's bread and butter is education — explaining altcoins, ETH, and Bitcoin to people who are curious but still figuring out how this stuff actually works in daily life. That's exactly the gap Speed fills. Their viewers already believe in Bitcoin; what they're missing is a clean answer to "okay, but what do I actually do with it?" Speed is the practical answer, which makes this a natural extension of the channel's explainer-driven content rather than a hard sell.
+
+Because this is a crypto-curious audience, the messaging should lean on simplicity and real-world utility, not technical depth. The hooks here are zero-fee Lightning payments, instant settlement in seconds, and Speed Stacks letting people earn sats on everyday purchases. Stablecoin support (USDT, USDC) is also worth mentioning since this audience already knows what those are and will appreciate the optionality.
+
+Three talking points to lead with: first, Speed turns Bitcoin from a "hold and hope" asset into something you spend and earn with daily. Second, the iOS/Android availability and clean UX make it genuinely usable for the mainstream viewers they're trying to onboard. Third, Speed Stacks gives their audience a reason to keep coming back — earning sats on normal purchases.
+
+Recommend a CTA built around a hands-on walkthrough: have them download Speed, send a payment live, and show the sats stacking up, paired with a trackable link.
+
+One thing to avoid: don't frame Speed as an investment or trading play — it's a payments tool, and overpromising returns will misfire with this audience.

@@ -1,0 +1,12 @@
+Outreach Brief — Western Union (YouTube)
+Segment: remittance | Score: 26.1/100 | 127,000 followers
+------------------------------------------------------------
+Western Union's YouTube channel reaches an audience that lives and breathes the remittance question—people sending money across borders to support family overseas, and viewers genuinely curious about how cross-border money movement actually works. That's the exact pain point Speed solves, which makes the audience alignment strong even if some of our other signals here are modest. These are people who already think about transfer fees and speed; we don't have to convince them the problem exists.
+
+The feature that matters most is zero-fee Lightning transactions. When you're sending money home regularly, the cut taken by traditional remittance services adds up fast, and Speed lets that money arrive in seconds rather than days. For viewers who get nervous about volatility, the stablecoin support (USDT, USDC) is worth flagging—they can hold steady value while still getting the speed and cost benefits.
+
+Three talking points to lead with: first, the real math on what families lose to fees over a year of regular transfers versus sending on Speed; second, that settlement happens in seconds, not the multi-day waits people are used to; third, that Speed is built for everyday people on iOS and Android, not just crypto insiders—you don't need to understand Bitcoin to use it.
+
+For the CTA, I'd suggest a walkthrough video showing a real cross-border send start to finish, with a tracked link so we can measure interest.
+
+One thing to avoid: don't frame this as a crypto investment play. This audience cares about getting money home affordably, not speculation—lead with utility, not Bitcoin hype.
