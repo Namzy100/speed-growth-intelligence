@@ -1,0 +1,65 @@
+SPEED WALLET CAMPAIGN ANALYSIS
+
+=============================================================
+SECTION 1: TOP 5 CAMPAIGNS BY INSTALLS
+=============================================================
+
+1. Google Ads / New - Android Brand US
+   Source: Adjust | Installs: 3,204 | eCPI: $5.25
+   The highest-volume paid campaign in the portfolio. Cost is moderate relative to scale.
+
+2. Google Ads / XAUT Offers
+   Source: Adjust | Installs: 1,825 | eCPI: $4.91
+   Strong volume with a competitive eCPI, likely benefiting from a specific product hook (XAUT token offers).
+
+3. Facebook / Payday - Android - Broad+
+   Source: Adjust | Installs: 1,577 | eCPI: $3.62 (Meta-reported: 1,649 installs at $3.46/install)
+   The most cost-efficient paid social campaign in the mix. Both Adjust and Meta agree closely on performance, adding confidence to the numbers.
+
+4. Apple Search Ads / US - Brand - Exact
+   Source: Adjust | Installs: 1,250 | eCPI: $3.38
+   The single lowest eCPI among all paid campaigns. High-intent brand searchers converting efficiently.
+
+5. Website / Home Banner Android
+   Source: Adjust | Installs: 907 | Cost: $0 reported | eCPI: n/a
+   Zero reported cost makes this the most efficient acquisition channel by default. Likely organic or owned-media traffic deserving further attribution investigation.
+
+=============================================================
+SECTION 2: UNDERPERFORMING CAMPAIGNS
+=============================================================
+
+1. Meta / Cash Deposit
+   Spend: $645.02 | Installs: 12 | CPI: $53.75
+   Generated 95,967 impressions and 2,279 clicks but converted only 12 installs. The click-to-install rate is roughly 0.5%, indicating a severe disconnect between the ad creative or audience and the app store conversion. CPI is 15x higher than the best-performing Meta campaign.
+
+2. Meta / Re-engagement - Android
+   Spend: $144.42 | Installs: 6 | CPI: $24.07
+   Only 6 installs from 25,928 impressions. The campaign name suggests a re-engagement objective, but Adjust attributes it to new installs, creating possible tracking or objective misalignment. CPI is nearly 7x worse than Payday - Android - Broad+.
+
+3. Meta / Re-targeting Campaign Android and iOS
+   Spend: $217.74 | Installs: 16 | CPI: $13.61
+   Delivered 22,257 impressions and 504 clicks but only 16 installs. Retargeting audiences may be too small or too cold, and blending Android and iOS into one campaign obscures optimization signals.
+
+4. Facebook / iOS - App Promotion Campaign
+   Adjust eCPI: $8.57 | Meta CPI: $6.93 | Spend: $1,379.75 | Installs (Adjust): 161
+   Both sources confirm weak performance. At $8.57 on Adjust versus $3.46 for the top Facebook campaign, iOS delivery costs are more than twice as expensive for roughly one-tenth the volume.
+
+=============================================================
+SECTION 3: RECOMMENDED ACTIONS PER UNDERPERFORMER
+=============================================================
+
+1. Meta / Cash Deposit
+   Action: Pause immediately and reallocate its $645 budget to Payday - Android - Broad+.
+   Rationale: A $53.75 CPI against a portfolio benchmark of $3.46 on the same platform is indefensible; the creative or audience is fundamentally broken and burning budget daily.
+
+2. Meta / Re-engagement - Android
+   Action: Audit the campaign objective and Adjust event mapping before spending further; pause until tracking is confirmed correct.
+   Rationale: A re-engagement campaign driving only 6 attributed installs at $24.07 suggests the campaign may be hitting already-active users or firing the wrong conversion event, making optimization impossible.
+
+3. Meta / Re-targeting Campaign Android and iOS
+   Action: Split into separate Android and iOS campaigns, each with a dedicated audience list, and cut combined budget by 50% during the test.
+   Rationale: Blending platforms at $13.61 CPI suppresses the algorithm's ability to optimize; separating them mirrors the strategy that made Payday - Android - Broad+ the top performer at $3.46.
+
+4. Facebook / iOS - App Promotion Campaign
+   Action: Reduce budget by 60% and redirect savings to Apple Search Ads / US - Brand - Exact, which delivers iOS installs at $3.38 versus Meta iOS at $8.57.
+   Rationale: Apple Search Ads is already proving a more cost-efficient iOS channel by 2.5x; shift the marginal iOS dollar to the channel with demonstrated performance.
