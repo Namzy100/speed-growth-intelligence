@@ -1,0 +1,87 @@
+======================================================================
+SPEED WALLET — EU CHANNEL STRATEGY PLAYBOOK
+Generated 2026-06-24 21:12 UTC
+======================================================================
+
+SPEED WALLET EU ACQUISITION PLAYBOOK
+======================================
+
+
+GERMANY
+-------
+
+1. PRIORITIZE CHANNELS
+
+Top channel: WhatsApp diaspora networks.
+Germany has 1,794 Speed installs already active in India and a meaningful Indian skilled-migrant corridor in Germany itself. That existing base is a ready-made amplification network. WhatsApp is the dominant messaging app for Indian diaspora communities globally, and peer-to-peer referral inside trusted family and friend groups converts at a fraction of the paid CPL. Activate the India-side install base with a referral push that flows into German-resident Indian communities.
+
+Second channel: Paid social.
+Crypto.com and Robinhood are both running sign-up bonus and reward-heavy paid social in Germany. Neither is touching the fee or remittance angle. That is an open lane. Run targeted Meta ads against Indian-origin demographic signals in Germany leading with a pure fee argument — no sign-up gimmicks, just the corridor math (what a typical monthly remittance to India costs on SWIFT versus zero on Speed).
+
+Third channel: Creator content.
+Supports the above two rather than leads. Use a small number of creators to seed credibility before scaling paid spend.
+
+Telegram is lower priority here. The Nigerian and Brazilian corridors in Germany are smaller, and Telegram skews toward crypto-native audiences who are already served by Kraken and Crypto.com.
+
+2. MESSAGING ANGLE
+
+Single best angle: Fee argument targeting the India-Germany remittance corridor.
+
+Competitors in Germany are entirely focused on trading incentives, token selection, and sign-up bonuses. None of them are speaking to the cost of sending money home. The India corridor is Germany's dominant diaspora flow, Speed has 1,794 installs in India to amplify from, and the Lightning zero-fee message is a factual, defensible claim that no trading-app competitor can match. Lead with the exact rupee-to-euro corridor math. Make the savings concrete and personal, not abstract.
+
+3. CREATOR SEGMENTS TO TARGET FIRST
+
+Remittance creators first. Specifically: Indian-origin creators in Germany or German-based creators covering expat finance, cost-of-living, and money management for migrants. These audiences are primed for fee-argument content because they send money home regularly and already feel the pain of transfer costs. iGaming creators are a secondary activation once remittance volume is established.
+
+
+UNITED KINGDOM
+--------------
+
+1. PRIORITIZE CHANNELS
+
+Top channel: WhatsApp diaspora networks.
+The UK has both an Indian and a Nigerian corridor, and Speed already has 1,794 India installs and 2,908 Nigeria installs in the source countries — the two largest diaspora bases in the playbook. The UK is English-language, Commonwealth-connected, and WhatsApp penetration in both communities is extremely high. This is the single highest-leverage activation in the entire EU rollout. A coordinated referral push from both source-country bases into UK diaspora WhatsApp groups can generate installs at near-zero marginal cost.
+
+Second channel: Telegram.
+The Nigerian community in particular has strong Telegram group culture around finance, remittance, and crypto. With 2,908 Nigeria installs, Speed has credible community presence to seed UK-facing Nigerian Telegram groups with corridor-specific messaging.
+
+Third channel: Paid social.
+Robinhood in the UK is running generic brand ads and barely mentions crypto. Kraken is focused on ease of deposits and social proof, not fees. Crypto.com is chasing active traders with rewards programs. The remittance fee angle is completely uncontested in UK paid social. Run targeted Meta ads against Indian and Nigerian demographic signals.
+
+Paid search is lower priority — the UK crypto search landscape is competitive and expensive for a brand at Speed's current install volume of 873.
+
+2. MESSAGING ANGLE
+
+Single best angle: Fee argument, dual-corridor version.
+
+Both corridors — UK-India and UK-Nigeria — are high-volume, high-fee remittance routes. Competitors are uniformly targeting traders, not senders. Run separate creative per corridor with localized math: what a typical monthly send to Lagos or Mumbai costs versus zero on Speed. The English-language market means creative production is straightforward and scalable.
+
+3. CREATOR SEGMENTS TO TARGET FIRST
+
+Remittance creators across both corridors simultaneously. The UK is unusual in that two strong diaspora communities are present and both have large source-country install bases to cross-amplify. Nigerian finance and expat creators should be activated alongside Indian expat finance creators from day one, not sequentially.
+
+
+PORTUGAL
+--------
+
+Note: No competitor ad scan is available for Portugal. Strategy is reasoned from corridor data and installs.
+
+1. PRIORITIZE CHANNELS
+
+Top channel: WhatsApp diaspora networks.
+Brazil is the dominant and defining corridor here. Speed has 1,268 installs in Brazil, and the Brazilian community is Portugal's largest foreign population. Brazilian migrants in Portugal are already culturally and linguistically connected to Brazilian WhatsApp networks. The Brazil install base can be activated directly to seed Portuguese-based Brazilian community groups. This is the most direct path to early installs given Portugal's current base of only 239.
+
+Second channel: Creator content.
+Portuguese-language Brazilian creators — particularly those covering expat life in Portugal, money transfers home, or personal finance — are the fastest way to reach this audience authentically. Brazil has a large and sophisticated creator ecosystem, and Portugal-based Brazilian influencers are an emerging category with highly engaged audiences of exactly the target demographic.
+
+Paid social is third and supporting. Without competitor data, budget should stay conservative until organic and creator channels validate the messaging, then paid social scales what works.
+
+2. MESSAGING ANGLE
+
+Single best angle: Fee argument for the Brazil-Portugal corridor.
+
+The language is shared, the corridor is high-volume, and Brazilian migrants sending money to family in Brazil face exactly the same fee pain as other diaspora segments. With no competitor scan available, there is no evidence anyone is contesting this angle in Portugal. The 1,268 Brazil installs give Speed a credible testimonial base to draw on. Lead with the corridor math in Portuguese.
+
+3. CREATOR SEGMENTS TO TARGET FIRST
+
+Remittance creators only, specifically Brazilian expat creators based in or focused on Portugal. The corridor is singular here — unlike Germany or the UK there is no secondary diaspora to balance against. Concentrate entirely on the Brazil-Portugal flow until installs justify broader expansion.
