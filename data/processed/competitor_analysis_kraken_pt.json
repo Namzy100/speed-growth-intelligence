@@ -1,0 +1,656 @@
+{
+  "competitor": "Kraken",
+  "platform": "all",
+  "country": "PT",
+  "fetched_at": "2026-06-24T21:16:37.925730+00:00",
+  "total_ads": 40,
+  "scraped_before_filter": 50,
+  "ads": [
+    {
+      "body": "Protecting your crypto with high security is easy with Kraken. This is why crypto investors trust us for smart trading: ✅ Zero settlement risk ✅ Fully encrypted data ✅ Approved by Kitboga Get started with Kraken today.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 125,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "Trade at the speed of crypto on Kraken. Watch this:",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 138,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "Protecting your crypto with high security is easy with Kraken. This is why crypto investors trust us for smart trading: ✅ Zero settlement risk ✅ Fully encrypted data ✅ Approved by Kitboga Get started with Kraken today.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 126,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "Trade xStocks 24/5 ⏱️ Tokenized Apple, Tesla, and more right next to your crypto 💻 Fractional trading ✅ No borders 🌍",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 160,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "You could win up to 3 Bitcoin in time for your relatives to ask you about your internet coins during holiday dinner. Just trade on Kraken to enter. Every $1 traded = 1 entry. 3 BTC grand prize + BTC rewards for 110 other winners. Opt in & start trading before Jan 5 ⤵️",
+      "title": "{{product.name}}",
+      "cta": "Sign up",
+      "format": "carousel",
+      "days_running": 22,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "Protecting your crypto with high security is easy with Kraken. This is why crypto investors trust us for smart trading: ✅ Zero settlement risk ✅ Fully encrypted data ✅ Approved by Kitboga Get started with Kraken today.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 127,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "Trade with Kraken from November 5th to December 3rd to win 1 BTC",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 30,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "1,000+ crypto markets, 13M+ users, 275+ cryptocurrencies. Discover more: ➡️",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 126,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "520+ cryptocurrencies, from Bitcoin to the latest meme coin. Download the app and start trading.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 35,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "Trade at the speed of crypto on Kraken. Watch this:",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 125,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "Trade at the speed of crypto on Kraken. Watch this:",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 41,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "Trade at the speed of crypto on Kraken. Watch this:",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 152,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "Every $1 traded = 1 entry to win 3 BTC this holiday season",
+      "title": "{{product.name}}",
+      "cta": "Sign up",
+      "format": "carousel",
+      "days_running": 22,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "European traders can access +520 cryptocurrencies on Kraken 🇪🇺 ✅ On-ramp in seconds with SEPA deposits ✅ Trade at the speed of crypto ✅ Perfect security score on Kaiko Still learning about crypto? No problem. Kraken has the tutorials you need to become pro. Download the app today and start trading in seconds.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 58,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "Trade at the speed of crypto on Kraken. Watch this:",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 171,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "520+ cryptocurrencies, from Bitcoin to the latest meme coin. Download the app and start trading.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 145,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "Choose simple crypto rewards or even more with bonded staking",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 105,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "✨ Why Krak Card? ✅ 1% cashback on every purchase 🌍 400+ currencies available 📲 Instantly spend from your Krak account 🔐 Use crypto or cash, you choose 💳 Accepted everywhere Mastercard is 👇 Get started with Krak Card today.",
+      "title": "{{product.name}}",
+      "cta": "Order now",
+      "format": "carousel",
+      "days_running": 70,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Krak"
+    },
+    {
+      "body": "Every $1 traded = 1 entry to win 3 BTC this holiday season",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 25,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "Trade with Kraken from November 5th to December 3rd to win 1 BTC",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 30,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "Attention, future-focused investors! 2026 starts now. ✅ Set recurring crypto buys in minutes on Kraken ✅ Invest consistently without trying to time the market ✅ Automate your strategy and reduce stress over volatility Stop guessing. Start building. 👉 Set up recurring buys on Kraken today",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 162,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "Protecting your crypto with high security is easy with Kraken. This is why crypto investors trust us for smart trading: ✅ Zero settlement risk ✅ Fully encrypted data ✅ Approved by Kitboga Get started with Kraken today.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 23,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "Protecting your crypto with high security is easy with Kraken. This is why crypto investors trust us for smart trading: ✅ Zero settlement risk ✅ Fully encrypted data ✅ Approved by Kitboga Get started with Kraken today.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 91,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "Protecting your crypto with high security is easy with Kraken. This is why crypto investors trust us for smart trading: ✅ Zero settlement risk ✅ Fully encrypted data ✅ Approved by Kitboga Get started with Kraken today.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 48,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "Protecting your crypto with high security is easy with Kraken. This is why crypto investors trust us for smart trading: ✅ Zero settlement risk ✅ Fully encrypted data ✅ Approved by Kitboga Get started with Kraken today.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 22,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "European crypto traders can on-ramp with ApplePay, GPay, PayPal, card, SEPA and more",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 28,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "Ative a sua margem com BTC, ETH ou USDC e receba $200 ao registar-se",
+      "title": "{{product.name}}",
+      "cta": "Sign up",
+      "format": "carousel",
+      "days_running": 29,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "WIN. 1. FULL. BITCOIN. 🧡 Just trade on Kraken to enter. Every $1 traded = 1 entry. More trades, more chances! 1 BTC grand prize + BTC rewards for 105 other winners. Opt in & start trading before Dec 3 Trade with Kraken from November 5th to December 3rd to win 1 BTC",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 28,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "WIN. 1. FULL. BITCOIN. 🧡 Just trade on Kraken to enter. Every $1 traded = 1 entry. More trades, more chances! 1 BTC grand prize + BTC rewards for 105 other winners. Opt in & start trading before Dec 3 Trade with Kraken from November 5th to December 3rd to win 1 BTC",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 24,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "Bitcoin reached a NEW all-time high 😯 Time to get in the game with Kraken ✅Hundreds of crypto guides & video tutorials ✅Highly competitive fees ✅Intuitive, fast interface ✅300+ cryptocurrencies ✅High-quality customer service Join the crypto world with Kraken to get ahead of the crowd!",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 24,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "1,000+ crypto markets, 13M+ users, 275+ cryptocurrencies. Discover more: ➡️",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 22,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "Trade on Kraken to win 3 BTC grand prize + BTC rewards for 110 other winners",
+      "title": "{{product.name}}",
+      "cta": "Sign up",
+      "format": "carousel",
+      "days_running": 21,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "Trade at the speed of crypto on Kraken. Watch this:",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 91,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "Protecting your crypto with high security is easy with Kraken. This is why crypto investors trust us for smart trading: ✅ Zero settlement risk ✅ Fully encrypted data ✅ Approved by Kitboga Get started with Kraken today.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 34,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "Bitcoin reached a NEW all-time high 😯 Time to get in the game with Kraken ✅Hundreds of crypto guides & video tutorials ✅Highly competitive fees ✅Intuitive, fast interface ✅300+ cryptocurrencies ✅High-quality customer service Join the crypto world with Kraken to get ahead of the crowd!",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 22,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "✨ Why Krak Card? ✅ 1% cashback on every purchase 🌍 400+ currencies available 📲 Instantly spend from your Krak account 🔐 Use crypto or cash, you choose 💳 Accepted everywhere Mastercard is 👇 Get started with Krak Card today.",
+      "title": "1% Cashback on Every Purchase",
+      "cta": "Order now",
+      "format": "image",
+      "days_running": 71,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Krak"
+    },
+    {
+      "body": "Protecting your crypto with high security is easy with Kraken. This is why crypto investors trust us for smart trading: ✅ Zero settlement risk ✅ Fully encrypted data ✅ Approved by Kitboga Get started with Kraken today.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 126,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "Trade at the speed of crypto on Kraken. Watch this:",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 124,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "European traders can access +520 cryptocurrencies on Kraken 🇪🇺 ✅ On-ramp in seconds with SEPA deposits ✅ Trade at the speed of crypto ✅ Perfect security score on Kaiko Still learning about crypto? No problem. Kraken has the tutorials you need to become pro. Download the app today and start trading in seconds.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 58,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    },
+    {
+      "body": "Trade at the speed of crypto on Kraken. Watch this:",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 172,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Kraken Digital Asset Exchange"
+    }
+  ],
+  "messaging_analysis": {
+    "messaging_angles": [
+      "Security and trust (zero settlement risk, encryption, Kitboga endorsement)",
+      "Speed of trading",
+      "Wide selection of cryptocurrencies (300-520+)",
+      "Contest/sweepstakes (win Bitcoin by trading)",
+      "Educational resources and tutorials for beginners",
+      "Automated investing (recurring buys, DCA strategy)",
+      "Debit card rewards (Krak Card cashback)",
+      "Tokenized stocks (xStocks)",
+      "Regional onboarding (Europe/SEPA focus)"
+    ],
+    "top_ctas": [
+      "Install now",
+      "Learn more",
+      "Sign up",
+      "Order now"
+    ],
+    "buy_crypto_framing": "direct — CTAs push immediate trading and downloads, with contest mechanics directly tied to trading volume ($1 traded = 1 entry). Focus is on 'start trading' rather than learning or exploring.",
+    "fees_messaging": "Briefly mentioned as 'highly competitive fees' in only 2 ads, otherwise completely avoided. Not a primary selling point in this creative set.",
+    "simplicity_messaging": "Positioned through 'intuitive, fast interface,' 'on-ramp in seconds,' instant card spending, and recurring buy automation. Ease-of-use is emphasized alongside beginner tutorials, but not the dominant theme.",
+    "security_messaging": "Heavily emphasized in longest-running ads (125-127+ days). Repeated checklist format: zero settlement risk, fully encrypted data, Kitboga approval. Security is a core trust pillar used consistently across high-performing creative.",
+    "dominant_format": "carousel — 39 of 40 ads use carousel format, with only 1 image ad",
+    "longest_running_themes": [
+      "Trade at the speed of crypto (138-172 days)",
+      "High security positioning with zero settlement risk and encryption (125-127 days)",
+      "Wide cryptocurrency selection messaging (126-152 days)",
+      "Recurring buys/automated investing (162 days active)"
+    ],
+    "summary": "Kraken's ad strategy centers on security-first messaging and speed, with the longest-running ads emphasizing trust signals like encryption and zero settlement risk. They supplement core brand messaging with tactical promotions (Bitcoin giveaways tied to trading volume) and product launches (debit card, recurring buys), while maintaining a direct call to install and start trading across nearly all creative."
+  }
+}
