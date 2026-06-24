@@ -98,8 +98,12 @@ MAX_RESULTS_PER_SEARCH = 10   # channels requested per search term
 # so they are never partnership targets. Any channel whose name contains one of
 # these (case-insensitive) is skipped before saving.
 EXCLUDED_BRANDS = [
+    # Fintech / crypto competitors
     "Western Union", "Remitly", "Wise", "PayPal", "MoneyGram",
     "Coinbase", "Cash App", "Crypto.com", "Kraken", "Robinhood",
+    # Media / news outlets — not individual creator partners
+    "CNBC", "BBC", "Forbes", "Bloomberg", "Reuters", "CNN",
+    "Fox Business", "Wall Street Journal", "Financial Times",
 ]
 
 
