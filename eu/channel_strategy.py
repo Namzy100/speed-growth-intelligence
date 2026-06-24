@@ -9,8 +9,8 @@ Kingdom, Portugal), Claude (claude-sonnet-4-6) recommends:
   - which creator segments to target first (remittance / iGaming / crypto-curious).
 
 Grounded in real per-country install data (Adjust "Country Installs" tab) and the
-GB/DE competitor ad analyses in data/processed/. Portugal has no competitor scan
-yet, which is flagged. Saves to docs/eu_channel_strategy_<date>.txt.
+GB/DE/PT competitor ad analyses in data/processed/. Saves to
+docs/eu_channel_strategy_<date>.txt.
 
 Run from repo root:  python eu/channel_strategy.py
 """
@@ -42,7 +42,7 @@ TOP_MARKETS = [
      "corridors": "Indian (skilled migrants); smaller Nigerian and Brazilian"},
     {"name": "United Kingdom", "country": "United Kingdom", "competitor_cc": "gb",
      "corridors": "Indian and Nigerian (Commonwealth, English-language)"},
-    {"name": "Portugal", "country": "Portugal", "competitor_cc": None,
+    {"name": "Portugal", "country": "Portugal", "competitor_cc": "pt",
      "corridors": "Brazilian (shared language, largest foreign community)"},
 ]
 SOURCE_COUNTRIES = ["Nigeria", "Brazil", "India", "Mexico"]
@@ -85,7 +85,7 @@ def read_competitor_context() -> dict[str, str]:
     """{cc: text block} of GB/DE competitor ad positioning from data/processed/."""
     data_dir = _ROOT / "data" / "processed"
     out: dict[str, str] = {}
-    for cc in ("gb", "de"):
+    for cc in ("gb", "de", "pt"):
         blocks = []
         for path in sorted(data_dir.glob(f"competitor_analysis_*_{cc}.json")):
             try:
@@ -149,8 +149,8 @@ def build_prompt(installs: dict[str, int], competitor: dict[str, str]) -> str:
         "the dominant corridor and competitor white space.\n"
         "3. CREATOR SEGMENTS TO TARGET FIRST — which creator segment(s) to recruit "
         "first and why.\n"
-        "Where a market has no competitor scan (Portugal), say so and reason from "
-        "the corridor and install data instead. Cite the real install numbers. "
+        "Where a market has no competitor scan, say so and reason from the "
+        "corridor and install data instead. Cite the real install numbers. "
         "Be decisive and specific. Keep it under 750 words."
     )
 
