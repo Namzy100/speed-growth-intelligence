@@ -2,7 +2,7 @@
 Google Sheets, then rebuilds the creative performance dashboard.
 
 Scope: this orchestrator syncs the Adjust pipeline (channel overview, campaign
-installs, retention) and the Meta pipeline (campaign-level spend, impressions,
+installs, installs by country, retention) and the Meta pipeline (campaign-level spend, impressions,
 clicks, mobile app installs), writes a "Last Updated" timestamp, and — as a
 final step — rebuilds the self-contained creative dashboard HTML
 (docs/creative_dashboard.html) from the freshly-synced sheet data, so it stays
@@ -39,6 +39,7 @@ from pipelines.sheets import (
     create_sheet_if_missing,
     write_all_adjust_data,
     write_all_meta_data,
+    write_country_installs,
     write_dataframe,
 )
 
@@ -71,6 +72,21 @@ def _sync_adjust(spreadsheet_id: str) -> bool:
 
     # Single source of truth for the write loop lives in sheets.py.
     return write_all_adjust_data(data, spreadsheet_id, log=_log)
+
+
+def _sync_country_installs(spreadsheet_id: str) -> bool:
+    """Pull Adjust installs broken down by country and write the Country Installs tab.
+
+    Returns True if the write succeeded (or was an empty no-op), False on failure.
+    """
+    _log("Adjust (country): pulling installs by country, last 30 days...")
+    try:
+        df = AdjustPipeline().get_installs_by_country(days=30)
+    except Exception as e:
+        _log(f"Adjust (country): pull FAILED — {e}")
+        return False
+
+    return write_country_installs(df, spreadsheet_id, log=_log)
 
 
 def _sync_meta(spreadsheet_id: str) -> bool:
@@ -130,6 +146,9 @@ def run() -> None:
 
     # Adjust
     results["Adjust"] = _sync_adjust(spreadsheet_id)
+
+    # Adjust installs-by-country — feeds the EU market analysis.
+    results["Country Installs"] = _sync_country_installs(spreadsheet_id)
 
     # Meta — refreshes alongside Adjust each day.
     results["Meta"] = _sync_meta(spreadsheet_id)
