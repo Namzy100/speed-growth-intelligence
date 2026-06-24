@@ -11,9 +11,13 @@ load_dotenv()
 
 _TABLE = "creators"
 
-OutreachStatus = Literal["not_contacted", "contacted", "responded", "in_negotiation"]
+OutreachStatus = Literal[
+    "not_contacted", "contacted", "responded",
+    "in_negotiation", "declined", "confirmed",
+]
 _VALID_STATUSES: frozenset[str] = frozenset(
-    {"not_contacted", "contacted", "responded", "in_negotiation"}
+    {"not_contacted", "contacted", "responded",
+     "in_negotiation", "declined", "confirmed"}
 )
 
 # Run this once in the Supabase SQL editor to create the table and grant API access.
@@ -41,8 +45,8 @@ CREATE TABLE IF NOT EXISTS creators (
     sponsorship_score       FLOAT DEFAULT 0,
     outreach_status         TEXT DEFAULT 'not_contacted'
                             CHECK (outreach_status IN (
-                                'not_contacted', 'contacted',
-                                'responded', 'in_negotiation'
+                                'not_contacted', 'contacted', 'responded',
+                                'in_negotiation', 'declined', 'confirmed'
                             )),
     brief                   TEXT,
     created_at              TIMESTAMPTZ DEFAULT now(),
@@ -65,6 +69,25 @@ ADD_DEPOSIT_COLUMN_SQL = (
     "ALTER TABLE public.creators "
     "ADD COLUMN IF NOT EXISTS deposit_relevance_score FLOAT DEFAULT 0;"
 )
+
+# Migration for tables created with the original 4-value outreach_status CHECK.
+# Ensures the column exists, then replaces the value constraint to also allow
+# the 'declined' and 'confirmed' stages. Idempotent — safe to run repeatedly.
+# Run this in the Supabase SQL editor before using the new statuses.
+ADD_OUTREACH_STATUSES_SQL = """
+ALTER TABLE public.creators
+    ADD COLUMN IF NOT EXISTS outreach_status TEXT DEFAULT 'not_contacted';
+
+ALTER TABLE public.creators
+    DROP CONSTRAINT IF EXISTS creators_outreach_status_check;
+
+ALTER TABLE public.creators
+    ADD CONSTRAINT creators_outreach_status_check
+    CHECK (outreach_status IN (
+        'not_contacted', 'contacted', 'responded',
+        'in_negotiation', 'declined', 'confirmed'
+    ));
+""".strip()
 
 
 # ------------------------------------------------------------------
