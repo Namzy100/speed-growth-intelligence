@@ -7,3 +7,8 @@ __pycache__/
 
 # Generated insight cache (regenerated on data change; not source)
 data/processed/creative_dashboard_insights.cache.json
+
+# macOS cruft
+.DS_Store
+creators/.DS_Store
+**/.DS_Store
