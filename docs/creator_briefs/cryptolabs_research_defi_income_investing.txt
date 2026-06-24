@@ -1,12 +1,14 @@
 Outreach Brief — CryptoLabs Research | Defi Income & Investing (YouTube)
 Segment: crypto-curious | Score: 51.7/100 | 42,200 followers
 ------------------------------------------------------------
-CryptoLabs Research is worth pursuing as a moderate-fit partner. Their channel sits squarely in the DeFi and investing education space, which means their 42K subscribers already understand wallets, ETH, and yield mechanics. But the "Defi Income & Investing" framing tells us something useful: this audience treats crypto as a place to grow money, not spend it. That's the gap we'd be bridging — moving them from thinking of Bitcoin as an asset to thinking of it as a way to actually pay for things. Their crypto-curious lean and strong engagement quality (EQ 8/10) make them receptive to a well-explained utility pitch, even if reach is modest.
+Hi team,
 
-Since this is a crypto-curious audience, we lead with simplicity and everyday utility rather than fee-savings or gambling angles. The hook is that Speed is a Lightning wallet anyone can use on iOS or Android, with instant settlement, zero Lightning fees, and stablecoin support for people who want to park value without volatility. Speed Stacks — earning sats on normal purchases — pairs naturally with an income-focused channel.
+CryptoLabs Research has built an audience that's exactly the kind of crypto-curious viewer Speed is designed for. Their content leans heavily into DeFi income, ETH, and investing education — which tells me their 42K subscribers are people who understand crypto conceptually but are often looking for practical, real-world ways to actually use it. That gap between "I get crypto as an investment" and "I can spend it day-to-day" is precisely where Speed fits.
 
-Three talking points: first, frame Speed Stacks as "passive sats on spending you're already doing," which fits their income angle. Second, position stablecoin support as a bridge for viewers nervous about Bitcoin's swings. Third, emphasize that Lightning makes Bitcoin spendable today, not someday.
+Because this audience skews educational and utility-focused rather than speculative, I'd lead with simplicity and everyday usefulness. The strongest features to highlight are zero-fee Lightning payments (which resonates with a finance-minded audience that hates hidden costs), stablecoin support for USDT and USDC (a natural bridge for viewers used to thinking in stable value), and Speed Stacks for earning sats on regular purchases — a tangible "income" angle that aligns with their DeFi-income framing.
 
-Recommended CTA: a dedicated walkthrough video where they download Speed, send a real Lightning payment, and show Speed Stacks in action.
+Three talking points for the pitch: first, Speed turns Bitcoin from a portfolio asset into something you can actually spend instantly; second, the zero-fee, seconds-to-settle experience is a clean demo that fits their explainer style; third, Speed Stacks gives their audience a low-effort way to accumulate sats, which complements their investing content.
 
-Avoid pitching this as a yield or investment product — Speed is a payments wallet, and overpromising returns would mislead their audience.
+For the CTA, propose a dedicated walkthrough or tutorial video where they set up Speed live and make a real payment on camera — their audience trusts hands-on demos.
+
+One thing to avoid: don't frame Speed as a yield or investment product. This audience knows DeFi, and overpromising returns will erode their credibility and ours.

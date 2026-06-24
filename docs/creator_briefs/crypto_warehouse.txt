@@ -1,12 +1,12 @@
 Outreach Brief — Crypto Warehouse (YouTube)
 Segment: crypto-curious | Score: 62.6/100 | 7,010 followers
 ------------------------------------------------------------
-Crypto Warehouse sits right in the sweet spot for Speed. Their channel is built around educating crypto-curious viewers — people who follow altcoins, ETH, and Bitcoin but are still figuring out how this stuff actually works in their lives. That's exactly the audience Speed is built for: folks who get the appeal of Bitcoin but want something practical, not another speculative chart to stare at. With an engagement quality of 10/10 and content that's 80% crypto, the creator has earned real trust with viewers who are open to learning what comes after they buy their first sats.
+Crypto Warehouse sits squarely in the crypto-curious lane, which is exactly where Speed wins. Their channel covers altcoins, ETH, Bitcoin, NFTs, and the broader "how do I actually get into this" investing conversation — and that audience is full of people who understand crypto conceptually but haven't found a reason to use it in daily life. Speed gives them that reason: a Bitcoin Lightning wallet that works for real purchases, not just speculation.
 
-For this audience, the hook is simplicity and everyday utility. Speed turns Bitcoin from "an asset I hold" into "money I can actually spend." Lead with zero-fee Lightning payments that settle in seconds, the option to hold stable value via USDT and USDC for people nervous about volatility, and Speed Stacks letting them earn sats on normal purchases. It's the bridge between watching crypto and using it.
+For this audience, the hook is simplicity and utility, not fee math or trading angles. Lead with how Speed makes Bitcoin feel usable — instant Lightning payments that settle in seconds, zero fees, and a clean iOS/Android experience that doesn't require you to be a power user. Speed Stacks is the standout here: earning sats on everyday purchases is a tangible "why bother" answer for someone curious but not yet committed. Stablecoin support (USDT, USDC) is a nice secondary point for viewers nervous about volatility.
 
-Three talking points worth raising: first, their viewers are already past the "what is Bitcoin" stage and ready for "now what do I do with it" — Speed answers that. Second, Speed Stacks gives the creator a genuinely fun demo: earning sats on coffee or groceries on camera. Third, no prior brand deals means a clean, authentic first sponsorship their audience won't tune out.
+Three talking points for the pitch: first, Speed turns the theory their channel teaches into something viewers can actually do today. Second, Speed Stacks gives them a fresh content angle — earning Bitcoin by spending, not buying. Third, the stablecoin option lets cautious viewers participate without diving into price swings.
 
-Recommended CTA: a sponsored walkthrough video showing a real payment plus their Speed Stacks rewards, with a download link for iOS and Android.
+Recommended CTA: invite them to do a hands-on "I tried using Bitcoin for everyday payments" walkthrough video, with a tracked download link and a Speed Stacks demo.
 
-Avoid leaning into trading or price-pump angles — Speed is about spending, not speculation.
+One thing to avoid: don't frame Speed as a trading or investing tool. This audience already gets that elsewhere — Speed's edge is spending, not speculating.

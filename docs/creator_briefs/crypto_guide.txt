@@ -1,12 +1,12 @@
 Outreach Brief — Crypto Guide (YouTube)
 Segment: crypto-curious | Score: 49.3/100 | 28,600 followers
 ------------------------------------------------------------
-Crypto Guide sits right in the middle of Speed's crypto-curious segment, and that's exactly where this partnership makes sense. Their 28.6K audience is interested in Bitcoin but their content leans educational and lifestyle-focused rather than hardcore trading — these are people who follow along because they want to understand crypto, not because they're already deep in it. That mindset is the whole reason Speed exists: giving newcomers a reason to actually use Bitcoin instead of just holding it.
+Crypto Guide sits right in the sweet spot of our crypto-curious segment, which is exactly who Speed is built for. Their 28,600 YouTube followers are people leaning into Bitcoin and the surrounding lifestyle but still figuring out what to actually do with it day to day — and that gap between curiosity and real-world use is where Speed comes in. The hodl-and-lifestyle angle they lean on is useful here: Speed is what turns Bitcoin from something you just hold into something you can actually spend.
 
-For this audience, lead with simplicity and real-world utility. The hook isn't price speculation, it's that Speed makes Bitcoin something you can spend in seconds, with zero Lightning fees and a clean iOS/Android app. Speed Stacks is a strong angle here too — earning sats on everyday purchases is a tangible, low-stakes way for a curious viewer to start stacking without trading. Stablecoin support (USDT, USDC) is worth a mention for anyone nervous about volatility.
+For this audience, the messaging should center on simplicity and utility rather than trading mechanics. The features that matter most are zero-fee Lightning payments that settle in seconds, the fact that it works on iOS and Android for normal people, stablecoin support for anyone nervous about volatility, and Speed Stacks letting them earn sats on everyday purchases — a natural reward hook for a crypto-curious crowd.
 
-Three talking points for the pitch: first, Speed bridges the gap between "I'm curious about Bitcoin" and "I'm actually using it," which matches their content tone; second, the zero-fee, instant-settlement angle is genuinely demoable on camera, which suits a guide-style channel; third, this would be their first brand deal, so we can build something tailored rather than slot them into a templated campaign.
+Three talking points worth pitching: first, Speed is the easy on-ramp from "I own some Bitcoin" to "I can pay with it," which fits their educational, explainer style. Second, Speed Stacks gives them a concrete, demoable reward to show their audience earning sats. Third, stablecoin support answers the volatility objection their crypto-curious viewers will raise.
 
-Recommended CTA: propose a single sponsored walkthrough video where they set up Speed and make a real Lightning payment live, with a tracked download link.
+I'd recommend a CTA built around a sponsored walkthrough video — download, set up, make a real payment on camera — since this is their first brand deal and a hands-on demo suits both their content and our utility story.
 
-One thing to avoid: don't frame Speed as an investment or trading tool — that misreads their audience and overpromises.
+One thing to avoid: don't pitch this as a trading or speculation tool. Keep it about spending and everyday use.
