@@ -186,7 +186,15 @@ def build_retention(rows: list[dict]) -> dict:
 
 
 def build_meta(rows: list[dict]) -> dict:
-    """Meta campaign performance from the Meta Campaigns tab, ranked by spend."""
+    """Meta campaign performance from the Meta Campaigns tab, ranked by spend.
+
+    Each campaign also carries a `creative_score` (0-100 composite from
+    intelligence.creative_scoring — pure, no Claude call) so the dashboard can
+    show a Creative Score column.
+    """
+    from intelligence.creative_scoring import creative_scores_by_name
+    scores = creative_scores_by_name(rows)
+
     camps = []
     for r in rows:
         name = str(r.get("campaign_name", "")).strip()
@@ -198,6 +206,7 @@ def build_meta(rows: list[dict]) -> dict:
             "impressions": int(_num(r.get("impressions"))),
             "clicks": int(_num(r.get("clicks"))),
             "installs": int(_num(r.get("mobile_app_install"))),
+            "creative_score": scores.get(name),
         })
     camps.sort(key=lambda c: c["spend"], reverse=True)
     totals = {
@@ -689,7 +698,7 @@ _TEMPLATE = r"""<!doctype html>
   <section>
     <div class="sec-head"><h2>Meta Campaign Performance</h2><span class="note" id="metaNote"></span></div>
     <div class="panel"><div class="table-wrap"><table id="metaTable">
-      <thead><tr><th>Campaign</th><th>Spend</th><th>Impressions</th><th>Clicks</th><th>App Installs</th></tr></thead>
+      <thead><tr><th>Campaign</th><th>Spend</th><th>Impressions</th><th>Clicks</th><th>App Installs</th><th>Creative Score</th></tr></thead>
       <tbody></tbody>
     </table></div></div>
   </section>
@@ -902,17 +911,19 @@ function renderMeta(){
   const tb = document.querySelector("#metaTable tbody");
   if (!m || !m.campaigns || !m.campaigns.length){
     document.getElementById("metaNote").textContent = "No active Meta campaigns this period";
-    tb.innerHTML = `<tr><td colspan="5" class="muted">No Meta campaign data for this period.</td></tr>`;
+    tb.innerHTML = `<tr><td colspan="6" class="muted">No Meta campaign data for this period.</td></tr>`;
     return;
   }
   m.campaigns.forEach(c => {
     const tr = document.createElement("tr");
+    const score = (c.creative_score == null) ? "—" : c.creative_score.toFixed(1);
     tr.innerHTML =
       `<td class="ch">${esc(c.campaign)}</td>` +
       `<td>${fmtMoney(c.spend)}</td>` +
       `<td class="muted">${fmtInt(c.impressions)}</td>` +
       `<td class="muted">${fmtInt(c.clicks)}</td>` +
-      `<td class="num-good">${fmtInt(c.installs)}</td>`;
+      `<td class="num-good">${fmtInt(c.installs)}</td>` +
+      `<td>${score}</td>`;
     tb.appendChild(tr);
   });
   const t = m.totals;

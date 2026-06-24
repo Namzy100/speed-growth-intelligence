@@ -1,0 +1,40 @@
+======================================================================
+SPEED WALLET — CREATIVE PERFORMANCE SCORING
+Generated 2026-06-24 20:48 UTC
+======================================================================
+
+CREATIVE SCORES — Speed Meta campaigns (composite 0-100; weights CPI 45% / install-rate 30% / CTR 25%)
+--------------------------------------------------------------------------------------------
+ SCORE     CTR        CPI  INST.RATE       SPEND  INSTALLS  CAMPAIGN
+ 100.0   8.08%      $3.46     15.69%  $    5,710     1,649  Payday - Android - Broad+
+  69.7   3.08%      $6.93     10.50%  $    1,380       199  iOS - App Promotion Campaign
+  46.5   2.26%     $13.61      3.17%  $      218        16  Re-targeting Campaign Andoid & iOS
+  32.1   0.69%     $24.07      3.33%  $      144         6  Re-engagement - Android
+   5.7   2.38%     $53.75      0.53%  $      645        12  Cash Deposit
+
+SPEED WALLET META CREATIVE PERFORMANCE ANALYSIS
+=================================================
+
+
+1. TOP PERFORMERS
+-----------------
+Payday - Android - Broad+ is the standout campaign with a perfect composite score of 100.0. It earns this position across all three weighted dimensions: a CTR of 8.08% (more than double any other campaign), a CPI of $3.46 (lowest in the set), and an install rate of 15.69% (nearly five times the bottom performers). With 1,649 installs on $5,710 in spend, it also delivers the highest volume. Adjust data corroborates this, showing 1,589 installs at an eCPI of $3.47 via Facebook, confirming measurement consistency. The iOS App Promotion Campaign is a credible second at 69.7, with a respectable 10.50% install rate, though its $6.93 CPI and 3.08% CTR show room to close the gap.
+
+
+2. UNDERPERFORMERS
+------------------
+Cash Deposit scores 5.7 and is the clearest problem campaign. Its CPI of $53.75 is roughly 15x that of Payday, and its install rate of just 0.53% means virtually no one who clicks follows through. CTR at 2.38% is not the primary issue — the audience is clicking but not converting, which points to a disconnect between the ad creative and the post-click or product experience. Re-engagement - Android scores 32.1 and is dragged down by a 0.69% CTR (lowest across all campaigns) and a $24.07 CPI on only $144 in spend and 6 installs, making it statistically unreliable but directionally weak.
+
+
+3. CREATIVE AND TARGETING PATTERNS
+-----------------------------------
+The data tells a clear story: broad Android audiences responding to a paycheck-framing creative outperform every other configuration. The Payday campaign's 8.08% CTR versus a 2.26-2.38% range for retargeting and Cash Deposit suggests that top-of-funnel, benefit-led messaging (getting paid faster, zero fees) resonates far more than transactional or re-engagement angles. The near-zero install rate on Cash Deposit despite moderate CTR indicates a landing or onboarding experience mismatch, not an awareness problem. iOS campaigns perform moderately but carry structurally higher CPIs ($6.93 vs $3.46), consistent with Apple Search Ads benchmarks in the Adjust data ($3.31 eCPI for Brand Exact). Retargeting and re-engagement show the weakest efficiency, suggesting the current creative for those segments is not differentiated enough to move already-exposed users.
+
+
+4. THREE RECOMMENDATIONS
+-------------------------
+1. Scale Payday - Android - Broad+ immediately. At a $3.46 CPI and 15.69% install rate, this campaign has headroom before saturation. Increase daily budget by at least 50% and test two to three creative variants (video vs static, different payday scenarios) to find the performance ceiling without disrupting the winning signal.
+
+2. Pause or overhaul Cash Deposit. A $53.75 CPI is not a targeting failure — the 2.38% CTR shows ad resonance. Audit the post-click flow specifically for this use case and rebuild the creative around a concrete value proposition tied to the deposit experience before reactivating spend.
+
+3. Expand the Payday creative framework to iOS. The iOS campaign at $6.93 CPI is decent but untested with the proven Payday angle. Adapt the top-performing Broad+ creative for iOS inventory and benchmark against the current 10.50% install rate to determine whether the creative or the platform is the ceiling.
