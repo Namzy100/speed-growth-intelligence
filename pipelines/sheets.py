@@ -191,6 +191,29 @@ def write_all_meta_data(
     )
 
 
+def write_country_installs(
+    df: pd.DataFrame,
+    spreadsheet_id: str,
+    log: Callable[[str], None] = print,
+) -> bool:
+    """Write the Adjust installs-by-country DataFrame to the 'Country Installs' tab.
+
+    Created if missing. Returns True on success (or a no-op skip when the frame
+    is empty), False if the write failed.
+    """
+    if df is None or df.empty:
+        log("Adjust → 'Country Installs': skipped (no data)")
+        return True
+    try:
+        create_sheet_if_missing(spreadsheet_id, "Country Installs")
+        write_dataframe(df, spreadsheet_id, "Country Installs")
+        log(f"Adjust → 'Country Installs': {len(df)} rows written")
+        return True
+    except Exception as e:
+        log(f"Adjust → 'Country Installs': FAILED — {e}")
+        return False
+
+
 def _write_reports(
     data_dict: dict[str, pd.DataFrame],
     sheet_map: dict[str, str],

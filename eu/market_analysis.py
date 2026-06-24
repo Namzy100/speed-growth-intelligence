@@ -9,11 +9,12 @@ Synthesizes which European markets Speed should enter first, by combining:
 Claude (claude-sonnet-4-6) turns these inputs into a structured prioritization
 memo recommending the top 3 EU markets to enter first.
 
-IMPORTANT DATA NOTE: the Adjust Channel Overview tab is broken down by
-acquisition CHANNEL (Organic, Google Ads, Apple, …), NOT by country. The
-pipeline has no per-country install data, so the diaspora->market mapping relies
-on the external research scaffold below (approximate, knowledge-based estimates),
-not on observed per-country installs. Verify figures before acting on them.
+DATA: real per-country install counts now come from the Adjust "Country
+Installs" tab (installs by country, last 30 days) — populated by run_daily_sync.
+Both the diaspora SOURCE countries and the candidate EU markets are grounded in
+this observed data. Only the diaspora-population and iGaming-regulation context
+per EU market still comes from the research scaffold below (approximate,
+knowledge-based estimates) — verify those before acting.
 
 Output: docs/eu_market_analysis_<date>.txt
 Run from repo root:  python eu/market_analysis.py
@@ -110,7 +111,7 @@ MARKET_RESEARCH = {
 
 
 # ------------------------------------------------------------------
-# Real-data context (Adjust Channel Overview — channel-level, not per-country)
+# Real-data context (Adjust "Country Installs" tab — installs by country)
 # ------------------------------------------------------------------
 
 def _num(x) -> float:
@@ -123,34 +124,40 @@ def _num(x) -> float:
         return 0.0
 
 
-def read_install_context() -> str:
-    """Summarize current US install scale from Channel Overview (channel-level)."""
+def read_country_installs() -> str:
+    """Summarize real installs by country from the Adjust 'Country Installs' tab,
+    highlighting Speed's diaspora source countries and the candidate EU markets."""
     sid = os.getenv("GOOGLE_SHEETS_ID")
     if not sid:
         raise EnvironmentError("GOOGLE_SHEETS_ID must be set in .env")
     ss = sheets._open(sid)
-    ws = sheets._retry(lambda: ss.worksheet("Channel Overview"))
+    ws = sheets._retry(lambda: ss.worksheet("Country Installs"))
     rows = sheets._retry(ws.get_all_records)
 
-    channels = []
+    by_country = {}
     for r in rows:
-        name = str(r.get("channel", "")).strip()
-        installs = int(_num(r.get("installs")))
-        if name and installs > 0:
-            channels.append((name, installs))
-    channels.sort(key=lambda c: c[1], reverse=True)
-    total = sum(c[1] for c in channels)
+        name = str(r.get("country", "")).strip()
+        if name:
+            by_country[name.lower()] = int(_num(r.get("installs")))
+    total = sum(by_country.values())
+
+    def lookup(name: str) -> int:
+        return by_country.get(name.lower(), 0)
 
     lines = [
-        f"Current US install scale (Adjust, last 30 days): {total:,} total installs "
-        f"across {len(channels)} active channels.",
-        "NOTE: this tab is broken down by acquisition CHANNEL, not by country — "
-        "the pipeline has no per-country install data, so per-country demand below "
-        "is inferred from diaspora research, not observed installs.",
-        "Top channels by installs:",
+        f"Real installs by country (Adjust, last 30 days): {total:,} total "
+        f"installs across {len(by_country)} countries.",
+        "",
+        "Diaspora SOURCE countries — Speed's current observed install base:",
     ]
-    for name, installs in channels[:6]:
-        lines.append(f"  - {name}: {installs:,}")
+    for c in SOURCE_COUNTRIES:
+        lines.append(f"  - {c}: {lookup(c):,} installs")
+    lines.append("")
+    lines.append("Candidate EU markets — current (largely organic) install base:")
+    for m in TARGET_MARKETS:
+        lines.append(f"  - {m}: {lookup(m):,} installs")
+    lines.append("")
+    lines.append(f"(Reference: United States leads with {lookup('United States'):,} installs.)")
     return "\n".join(lines)
 
 
@@ -173,10 +180,12 @@ def build_prompt(install_context: str) -> str:
         "market to enter first.\n\n"
         f"Top diaspora SOURCE countries Speed serves: {', '.join(SOURCE_COUNTRIES)}.\n"
         f"Candidate EU markets: {', '.join(TARGET_MARKETS)}.\n\n"
-        "CURRENT US TRACTION (real, from the dashboard):\n"
+        "REAL INSTALL DATA BY COUNTRY (observed, from the dashboard — weight this "
+        "heavily; the EU-market figures show existing unpaid demand):\n"
         f"{install_context}\n\n"
-        "RESEARCH SCAFFOLD (approximate, knowledge-based — treat diaspora figures "
-        "as estimates to be verified, not exact counts):\n"
+        "RESEARCH SCAFFOLD for diaspora ties + iGaming regulation per EU market "
+        "(approximate, knowledge-based — treat the diaspora POPULATION figures as "
+        "estimates to verify; the install counts above are real):\n"
         f"{research_block}\n\n"
         "Write a structured EU market prioritization memo in clean PLAIN TEXT. "
         "Do not use markdown formatting, asterisks, or bold markers — use clear "
@@ -221,9 +230,8 @@ def save_analysis(text: str) -> Path:
 
 
 def run() -> str:
-    print("Reading current US install context (Adjust Channel Overview)...")
-    install_context = read_install_context()
-    print("  (channel-level only — no per-country data in the pipeline)")
+    print("Reading real installs by country (Adjust 'Country Installs' tab)...")
+    install_context = read_country_installs()
 
     print(f"Generating EU market prioritization memo ({_MODEL})...")
     memo = generate_analysis(build_prompt(install_context))

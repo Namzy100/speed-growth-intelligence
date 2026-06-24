@@ -18,6 +18,7 @@ _RETENTION_METRICS = ",".join(
 _NUMERIC: dict[str, list[str]] = {
     "channel_overview": ["installs", "impressions", "clicks", "ecpi"],
     "installs_by_campaign": ["installs", "cost"],
+    "installs_by_country": ["installs"],
     "retention": [f"retention_rate_d{d}" for d in [1, 2, 3, 4, 5, 6, 7, 14]],
 }
 
@@ -57,6 +58,15 @@ class AdjustPipeline:
             metrics="installs,cost",
         )
         return self._to_df(rows, _NUMERIC["installs_by_campaign"])
+
+    def get_installs_by_country(self, days: int = 30) -> pd.DataFrame:
+        """Installs broken down by country (ISO code) for the last `days`."""
+        rows = self._fetch(
+            days=days,
+            dimensions="country",
+            metrics="installs",
+        )
+        return self._to_df(rows, _NUMERIC["installs_by_country"])
 
     def get_retention(self, days: int = 30) -> pd.DataFrame:
         """D1–D7 and D14 retention rates by day."""
