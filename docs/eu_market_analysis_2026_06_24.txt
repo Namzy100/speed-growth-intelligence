@@ -1,0 +1,60 @@
+SPEED WALLET — EU MARKET PRIORITIZATION MEMO
+==============================================
+
+EXECUTIVE SUMMARY
+-----------------
+Speed's European opportunity is strongest where its existing source-country corridors (Nigeria, Brazil, India, Mexico) overlap with legal iGaming markets and high digital adoption. Three markets — Portugal, United Kingdom, and Netherlands — rank above the others on this combined basis. Portugal leads because its Brazilian diaspora creates a uniquely concentrated, single-corridor advantage that Speed can own immediately.
+
+Note: all diaspora figures below are research-based estimates and should be verified before budget commitments.
+
+
+PER-MARKET ASSESSMENT
+---------------------
+
+PORTUGAL
+Diaspora/Remittance: Approximately 400,000+ Brazilian nationals make Brazil the largest foreign community in the country. Portugal-to-Brazil is the single most concentrated Speed-relevant corridor in Europe. Language parity (Portuguese) eliminates a localization barrier entirely.
+iGaming: Legal and regulated by the SRIJ. Market is growing and less saturated than UK or Spain, meaning lower CPAs and room to establish Lightning as a differentiated payment rail.
+Operational note: Smaller overall market size, but corridor concentration and localization ease compress go-to-market cost significantly.
+
+UNITED KINGDOM
+Diaspora/Remittance: Estimated 1.5M+ Indian-origin residents and 200,000+ Nigeria-born residents make UK-to-India and UK-to-Nigeria two of the highest-volume Speed-relevant corridors in Europe. This is the broadest multi-corridor opportunity on the list.
+iGaming: Fully legal under UKGC. The market is mature and competitive, which raises acquisition costs but also signals proven user willingness to transact. Lightning instant withdrawals are a genuine differentiator against legacy banking rails.
+Operational note: Regulatory overhead for a fintech operating in the UK (FCA considerations) is the highest of the five candidates. Plan for compliance lead time.
+
+NETHERLANDS
+Diaspora/Remittance: Smaller populations from Speed's specific source countries limit remittance-corridor depth. This is the weakest diaspora fit of the top three.
+iGaming: The KOA Act opened the market in October 2021, making this a relatively young, still-forming regulated market. Early positioning in a new iGaming market can lock in player and operator relationships before incumbents entrench.
+Operational note: High digital and fintech adoption means the crypto-curious mainstream segment is also viable here as a secondary wedge.
+
+SPAIN
+Diaspora/Remittance: Large Latin American diaspora overall, but Speed's Mexican corridor is underrepresented — Colombian, Venezuelan, and Ecuadorian communities dominate. Corridor fit is partial.
+iGaming: Legal under DGOJ with advertising restrictions that constrain paid acquisition. Competitive market without a standout Speed advantage.
+Assessment: Viable long-term but not a priority entry point.
+
+GERMANY
+Diaspora/Remittance: Growing Indian skilled-migrant community, but corridor concentration across Speed's source countries is lower than UK or Portugal.
+iGaming: Restrictive 2021 treaty framework with deposit limits and heavy regulation significantly constrains the iGaming segment's upside.
+Assessment: Largest EU economy but worst regulatory fit for Speed's iGaming hook. Enter later.
+
+
+TOP 3 EU MARKETS — RANKED
+--------------------------
+
+RANK 1 — PORTUGAL
+Rationale: One dominant corridor (Brazil), shared language, growing iGaming market with less incumbent pressure. Speed can achieve category leadership in a focused market faster here than anywhere else. Beats UK because corridor concentration and localization cost favor speed-to-traction over raw market size.
+
+RANK 2 — UNITED KINGDOM
+Rationale: Highest aggregate remittance volume across two strong corridors (India, Nigeria), mature iGaming market where Lightning withdrawals solve a real user pain point. Beats Netherlands because corridor depth and total addressable users are substantially larger.
+
+RANK 3 — NETHERLANDS
+Rationale: Early-mover advantage in a newly opened iGaming market combined with strong digital adoption. Remittance is a secondary angle; iGaming operator partnerships are the primary play.
+
+
+SUGGESTED FIRST MOVES
+---------------------
+
+Portugal — Lead with the remittance wedge. Target Brazilian expat communities directly (community groups, Portuguese-language social channels) with the zero-fee Brazil send message. iGaming as a secondary unlock once the user base is seeded.
+
+United Kingdom — Lead with iGaming. Partner with one or two UKGC-licensed operators to offer Lightning deposits and instant withdrawals. Use the player base to cross-sell remittance to Nigerian and Indian users organically.
+
+Netherlands — Lead with iGaming operator partnerships. Approach KSA-licensed platforms as a Lightning payment infrastructure partner before the market matures. Consumer acquisition follows operator distribution.
