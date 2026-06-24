@@ -11,6 +11,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 _ACTOR_ID = "clockworks/tiktok-profile-scraper"
+# General TikTok scraper — supports topic/keyword search via searchQueries.
+_SEARCH_ACTOR_ID = "clockworks/tiktok-scraper"
 
 # Same keyword lists as youtube.py for consistent cross-platform estimation.
 _CRYPTO_KEYWORDS = [
@@ -93,8 +95,55 @@ class TikTokCreatorFetcher:
             raise RuntimeError(f"Apify actor run ended with status: {run.status}")
 
         items = list(self._client.dataset(run.default_dataset_id).iterate_items())
+        return self._creators_from_items(items)
 
-        # Actor returns one row per video; group them by username to get per-creator lists.
+    def search(self, queries: list[str], results_per_query: int = 15) -> list[dict]:
+        """Discover creators by TOPIC via TikTok search (not by handle).
+
+        Uses the general tiktok-scraper actor's search mode. Each query returns
+        matching videos; creators are grouped from the videos' authors, then
+        built into CreatorScorer-ready dicts (deduped by username, >= follower
+        floor).
+
+        Args:
+            queries: Search terms (e.g. "bitcoin", "send money", "remessa").
+            results_per_query: Videos to pull per query — more = wider net + cost.
+
+        Returns:
+            List of creator dicts compatible with CreatorScorer.score().
+
+        Raises:
+            RuntimeError: If the Apify actor run fails or is aborted.
+            ApifyApiError: For authentication or platform-level API errors.
+        """
+        if not queries:
+            return []
+
+        run = self._client.actor(_SEARCH_ACTOR_ID).call(
+            run_input={
+                "searchQueries": queries,
+                "resultsPerPage": results_per_query,
+            }
+        )
+
+        if not run:
+            raise RuntimeError("Apify search actor run timed out with no result.")
+        if run.status != "SUCCEEDED":
+            raise RuntimeError(f"Apify search actor run ended with status: {run.status}")
+
+        items = list(self._client.dataset(run.default_dataset_id).iterate_items())
+        return self._creators_from_items(items)
+
+    # ------------------------------------------------------------------
+    # Build helpers
+    # ------------------------------------------------------------------
+
+    def _creators_from_items(self, items: list[dict]) -> list[dict]:
+        """Group video rows by author username and build per-creator dicts.
+
+        Shared by fetch() (profiles) and search() (topics) — the actor returns
+        one row per video with profile data in `authorMeta`.
+        """
         by_username: dict[str, list[dict]] = defaultdict(list)
         for item in items:
             username = item.get("authorMeta", {}).get("name", "")
@@ -111,12 +160,7 @@ class TikTokCreatorFetcher:
                 raise
             except Exception:
                 continue
-
         return creators
-
-    # ------------------------------------------------------------------
-    # Build helpers
-    # ------------------------------------------------------------------
 
     def _build_creator(self, videos: list[dict]) -> Optional[dict]:
         """Assemble a CreatorScorer-compatible dict from one creator's video rows."""
