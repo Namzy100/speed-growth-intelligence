@@ -157,10 +157,11 @@ def build_report(selected: dict[str, list[dict]], angles: dict[str, str],
             subs = int(r.get("followers", 0))
             score = r.get("composite_score", 0)
             drs = r.get("deposit_relevance_score", 0)
+            status = r.get("outreach_status", "not_contacted")
             angle = angles.get(name, "").strip() or "(pitch angle unavailable)"
             lines.append(
                 f"{i:>2}. {name} — {subs:,} subs · score {score}/100 · "
-                f"deposit relevance {drs}/20"
+                f"deposit relevance {drs}/20 · outreach: {status}"
             )
             lines.append(f"     Pitch: {angle}")
     lines.append("")
