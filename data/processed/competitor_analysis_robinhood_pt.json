@@ -1,0 +1,602 @@
+{
+  "competitor": "Robinhood",
+  "platform": "all",
+  "country": "PT",
+  "fetched_at": "2026-06-24T21:16:10.174735+00:00",
+  "total_ads": 40,
+  "scraped_before_filter": 50,
+  "ads": [
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 9,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 22,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 11,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 5,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 19,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Trade 50+ crypto assets 24 hours a day, 7 days a week.",
+      "title": "Robinhood",
+      "cta": "Learn more",
+      "format": "image",
+      "days_running": 22,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Trade popular crypto at low cost.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 11,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 11,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 8,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 5,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 4,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 8,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 6,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Trade popular crypto at low cost.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 22,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 22,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 6,
+      "is_active": true,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 6,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Stablecoins, Ethereum, Bitcoin, Robinhood… the crypto space is wild right now. \"There's gonna be the pimps. There's gonna be the hoes.\" Some profit, some lose. Which side of the bet are you on? Invest wisely, stay safe. #CryptoTruth #Stablecoins #Ethereum #Bitcoin #Robinhood #CryptoInvesting #FinancialLiteracy",
+      "title": "Coinbase, Bitcoin & Robinhood: Crypto Market Insights!",
+      "cta": "Learn more",
+      "format": "video",
+      "days_running": 24,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "The Black Business School"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 2,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 8,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 5,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 2,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 4,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 2,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 4,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Trade popular crypto at low cost.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 35,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 4,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 22,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 5,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 3,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 2,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 11,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Trade popular crypto at low cost.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 21,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 3,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 8,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 5,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 11,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 5,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 7,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    },
+    {
+      "body": "Crypto. Stock Tokens. All in one place.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 4,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "MESSENGER"
+      ],
+      "page_name": "Robinhood EU"
+    }
+  ],
+  "messaging_analysis": {
+    "messaging_angles": [
+      "All-in-one platform (crypto + stock tokens)",
+      "Low cost trading",
+      "24/7 availability",
+      "Variety of crypto assets available",
+      "Crypto market volatility/opportunity"
+    ],
+    "top_ctas": [
+      "Learn more"
+    ],
+    "buy_crypto_framing": "soft — emphasis on 'trade' rather than direct buy prompts; platform positioning over conversion urgency",
+    "fees_messaging": "Mentioned sparingly as 'low cost' benefit in ~10% of ads; not a primary focus but used as secondary selling point",
+    "simplicity_messaging": "Implicit through 'all in one place' messaging, suggesting convenience but not explicitly calling out ease-of-use or simplicity for beginners",
+    "security_messaging": "Completely absent — no trust, security, or safety messaging in the ads (except one outlier video mentioning 'invest wisely, stay safe' in educational context)",
+    "dominant_format": "carousel — used in 38 of 40 ads (95%)",
+    "longest_running_themes": [
+      "All-in-one platform (crypto + stock tokens) — seen in ads running 22d",
+      "Low cost trading — seen in ads running 22d, 35d"
+    ],
+    "summary": "This competitor uses an extremely repetitive carousel-based strategy focused on platform breadth ('all in one place') rather than friction reduction or trust-building. The dominant 'Learn more' CTA and soft trading language suggest a top-of-funnel awareness play rather than direct conversion, with minimal emphasis on fees, security, or ease-of-use despite being crypto-related products."
+  }
+}

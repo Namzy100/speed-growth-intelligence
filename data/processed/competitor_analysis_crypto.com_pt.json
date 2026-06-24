@@ -1,0 +1,339 @@
+{
+  "competitor": "Crypto.com",
+  "platform": "all",
+  "country": "PT",
+  "fetched_at": "2026-06-24T21:16:21.903487+00:00",
+  "total_ads": 20,
+  "scraped_before_filter": 50,
+  "ads": [
+    {
+      "body": "Win up to USD 1,100 of CRO with the Missions feature 🙌 🧑‍🚀 Complete Missions by using the Crypto.com App 💎 Earn up to 66 Diamonds every day 🎁 Redeem a Mystery Box with just 25 Diamonds",
+      "title": "Open Crypto.com App and Buy crypto Now",
+      "cta": "Use app",
+      "format": "video",
+      "days_running": 612,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Buy any NFT for the chance to win USD 100! There will be 10 lucky draw winners every day.",
+      "title": "Crypto.com NFT | Buy, Sell, Discover Exclusive Digital Collectibles",
+      "cta": "Sign up",
+      "format": "image",
+      "days_running": 3,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "With a Crypto.com account, you can seamlessly build up your cryptocurrency portfolio anytime on desktop web or our mobile app.",
+      "title": "{{product.name}}",
+      "cta": "Sign up",
+      "format": "carousel",
+      "days_running": 151,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "With a Crypto.com account, you can seamlessly build up your cryptocurrency portfolio anytime on desktop web or our mobile app.",
+      "title": "{{product.name}}",
+      "cta": "Sign up",
+      "format": "carousel",
+      "days_running": 157,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Be part of 100+ million users around the world when you sign up to the Crypto.com App! Registration only takes a few minutes.",
+      "title": "{{product.name}}",
+      "cta": "Sign up",
+      "format": "carousel",
+      "days_running": 142,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "With Target Price, you can automatically buy and sell crypto at your ideal price. Creating an order only takes a few seconds.",
+      "title": "{{product.name}}",
+      "cta": "Use app",
+      "format": "carousel",
+      "days_running": 313,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Con elevata liquidità ed esecuzioni rapide per ogni coppia, Crypto.com Exchange è l'unica piattaforma di cui hai bisogno per avere successo. Como miembro VIP del Exchange de Crypto.com, puedes integrar APIs de FIX 4.4, RESTful y WebSocket mientras disfrutas de límites de tasas más altos.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 552,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "El Exchange de Crypto.com tiene todo lo que necesitas para operar a nivel experto, desde acceso completo al mercado a una amplia variedad de herramientas.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 552,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "With a Crypto.com account, you can seamlessly build up your cryptocurrency portfolio anytime on desktop web or our mobile app.",
+      "title": "{{product.name}}",
+      "cta": "Sign up",
+      "format": "carousel",
+      "days_running": 157,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "With a Crypto.com account, you can seamlessly build up your cryptocurrency portfolio anytime on desktop web or our mobile app.",
+      "title": "{{product.name}}",
+      "cta": "Sign up",
+      "format": "carousel",
+      "days_running": 11,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "With a Crypto.com account, you can seamlessly build up your cryptocurrency portfolio anytime on desktop web or our mobile app.",
+      "title": "{{product.name}}",
+      "cta": "Sign up",
+      "format": "carousel",
+      "days_running": 151,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Earn uncapped crypto rewards when purchasing with your card. Plus, enjoy boosted reward rates for the first 12 months from account opening or tier upgrade.² Learn more.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 61,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Earn uncapped crypto rewards when purchasing with your card. Plus, enjoy boosted reward rates for the first 12 months from account opening or tier upgrade.² Learn more.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 61,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Earn uncapped crypto rewards when purchasing with your card. Plus, enjoy boosted reward rates for the first 12 months from account opening or tier upgrade.² Learn more.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 60,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Earn uncapped crypto rewards when purchasing with your card. Plus, enjoy boosted reward rates for the first 12 months from account opening or tier upgrade.² Learn more.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 18,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "With a Crypto.com account, you can seamlessly build up your cryptocurrency portfolio anytime on desktop web or our mobile app.",
+      "title": "{{product.name}}",
+      "cta": "Sign up",
+      "format": "carousel",
+      "days_running": 11,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER",
+        "THREADS"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "With a Crypto.com account, you can seamlessly build up your cryptocurrency portfolio anytime on desktop web or our mobile app.",
+      "title": "{{product.name}}",
+      "cta": "Sign up",
+      "format": "carousel",
+      "days_running": 151,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "Are you a crypto enthusiast? Put your knowledge to the test, from the basic concepts to the advanced details. Get hints for beginners, or go all-in with no lifeline and see if you can crack it.",
+      "title": "{{product.name}}",
+      "cta": "Learn more",
+      "format": "carousel",
+      "days_running": 34,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM"
+      ],
+      "page_name": "Sumsub"
+    },
+    {
+      "body": "Earn uncapped crypto rewards when purchasing with your card. Plus, enjoy boosted reward rates for the first 12 months from account opening or tier upgrade.² Learn more.",
+      "title": "{{product.name}}",
+      "cta": "Install now",
+      "format": "carousel",
+      "days_running": 61,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    },
+    {
+      "body": "With a Crypto.com account, you can seamlessly build up your cryptocurrency portfolio anytime on desktop web or our mobile app.",
+      "title": "{{product.name}}",
+      "cta": "Sign up",
+      "format": "carousel",
+      "days_running": 157,
+      "is_active": false,
+      "platforms": [
+        "FACEBOOK",
+        "INSTAGRAM",
+        "AUDIENCE_NETWORK",
+        "MESSENGER"
+      ],
+      "page_name": "Crypto.com"
+    }
+  ],
+  "messaging_analysis": {
+    "messaging_angles": [
+      "Gamification and rewards (Missions, Diamonds, Mystery Boxes)",
+      "Build your crypto portfolio seamlessly",
+      "Crypto rewards card with boosted rates",
+      "Large user base social proof (100M+ users)",
+      "Advanced trading tools and features",
+      "Educational engagement (crypto quizzes)"
+    ],
+    "top_ctas": [
+      "Sign up",
+      "Install now",
+      "Use app",
+      "Learn more"
+    ],
+    "buy_crypto_framing": "soft — focuses on 'building portfolio' and 'seamlessly' rather than direct buying prompts; emphasis on ecosystem features (cards, rewards, trading tools) over direct crypto purchase urgency",
+    "fees_messaging": "Completely absent — no mention of fees, pricing, or cost advantages in any ad",
+    "simplicity_messaging": "Moderate — phrases like 'seamlessly,' 'only takes a few minutes/seconds,' and 'anytime on desktop or mobile' emphasize ease, but not aggressively positioned as the primary value prop",
+    "security_messaging": "Absent — no explicit trust, security, or safety messaging found in these ads",
+    "dominant_format": "carousel — overwhelmingly the most common format (17 of 20 ads)",
+    "longest_running_themes": [
+      "Seamless portfolio building across platforms (150+ days)",
+      "Gamification/Missions rewards program (600+ days)",
+      "Advanced Exchange trading tools (550+ days)",
+      "Target Price automation feature (300+ days)",
+      "Crypto rewards card with boosted rates (60+ days)"
+    ],
+    "summary": "Crypto.com's ad strategy relies heavily on carousel formats to showcase ecosystem breadth rather than direct crypto buying. They lead with gamification rewards, social proof, and lifestyle benefits (rewards cards) while keeping purchase messaging soft and indirect. Long-running campaigns focus on portfolio building simplicity and automated trading features, with no emphasis on fees or security."
+  }
+}
