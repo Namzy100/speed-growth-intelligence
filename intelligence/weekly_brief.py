@@ -39,8 +39,12 @@ no markdown formatting:
 Robinhood and Crypto.com are currently emphasizing in their ads, drawn ONLY from \
 the COMPETITOR ANALYSIS section below. If that section is empty or absent, omit \
 this paragraph entirely.
+7. A short EU Market Context paragraph (2-3 sentences) summarizing the top 3 \
+recommended EU markets for Speed to enter first and why, drawn ONLY from the EU \
+MARKET ANALYSIS section below. If that section is empty or absent, omit this \
+paragraph entirely.
 
-Keep it under 450 words. Write for a marketing lead, not a data scientist. \
+Keep it under 550 words. Write for a marketing lead, not a data scientist. \
 Be direct and reference actual numbers from the data.
 
 When interpreting the data, follow these rules:
@@ -62,6 +66,10 @@ on the matured cohorts shown and the stated trend figure.
 --- COMPETITOR ANALYSIS ---
 {competitor_context}
 --- END COMPETITOR ANALYSIS ---
+
+--- EU MARKET ANALYSIS ---
+{eu_context}
+--- END EU MARKET ANALYSIS ---
 
 --- DATA ---
 {data_summary}
@@ -119,6 +127,35 @@ def read_competitor_context() -> str:
             f"  summary: {summary}"
         )
     return "\n\n".join(blocks)
+
+
+def read_eu_context() -> str:
+    """Read the latest EU market analysis and extract its top-3 recommendations.
+
+    Finds the newest docs/eu_market_analysis_<date>.txt by filename (the
+    YYYY_MM_DD suffix sorts chronologically), then returns the ranked "top 3
+    markets" section for the brief's EU Market Context paragraph. Returns an
+    empty string if no analysis file exists, so the prompt omits the paragraph.
+    """
+    docs_dir = _ROOT / "docs"
+    files = sorted(docs_dir.glob("eu_market_analysis_*.txt"))
+    if not files:
+        return ""
+    latest = files[-1]
+    try:
+        text = latest.read_text(encoding="utf-8")
+    except OSError:
+        return ""
+
+    # Prefer the ranked top-3 section; fall back to a capped tail if not found.
+    upper = text.upper()
+    start = upper.find("TOP 3")
+    end = upper.find("SUGGESTED FIRST MOVE", start if start != -1 else 0)
+    if start != -1:
+        excerpt = text[start:end] if end != -1 else text[start:start + 1800]
+    else:
+        excerpt = text[-1800:]
+    return f"(source: {latest.name})\n{excerpt.strip()}"
 
 
 def read_sheets_data(spreadsheet_id: str) -> dict[str, pd.DataFrame]:
@@ -261,7 +298,8 @@ def _fmt_retention(df: pd.DataFrame) -> str:
 # Generate brief via Claude
 # ------------------------------------------------------------------
 
-def generate_brief(data_summary: str, competitor_context: str = "") -> str:
+def generate_brief(data_summary: str, competitor_context: str = "",
+                   eu_context: str = "") -> str:
     api_key = os.getenv("ANTHROPIC_API_KEY")
     if not api_key:
         raise EnvironmentError("ANTHROPIC_API_KEY must be set in .env")
@@ -269,6 +307,7 @@ def generate_brief(data_summary: str, competitor_context: str = "") -> str:
     prompt = _PROMPT.format(
         data_summary=data_summary,
         competitor_context=competitor_context or "(no competitor data available)",
+        eu_context=eu_context or "(no EU market analysis available)",
     )
     client = Anthropic(api_key=api_key)
     response = client.messages.create(
@@ -314,8 +353,14 @@ def run() -> str:
     else:
         print("No competitor analyses found — Competitor Context will be omitted.")
 
+    eu_context = read_eu_context()
+    if eu_context:
+        print(f"EU market analysis loaded ({eu_context.splitlines()[0]}).")
+    else:
+        print("No EU market analysis found — EU Market Context will be omitted.")
+
     print("Calling Claude API (claude-sonnet-4-5)...")
-    brief = generate_brief(summary, competitor_context)
+    brief = generate_brief(summary, competitor_context, eu_context)
 
     path = save_brief(brief)
     print(f"\nSaved: {path.relative_to(_ROOT)}")
