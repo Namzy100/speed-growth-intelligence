@@ -13,6 +13,7 @@ Required .env keys:
 """
 
 import os
+import re
 import time
 
 import pandas as pd
@@ -20,6 +21,12 @@ import requests
 from dotenv import load_dotenv
 
 load_dotenv()
+
+
+def _redact_token(text: str) -> str:
+    """Strip the access_token value from a URL/message so it never reaches logs."""
+    return re.sub(r"(access_token=)[^&\s]+", r"\1<redacted>", text or "")
+
 
 _API_VERSION = "v23.0"
 _BASE_URL = f"https://graph.facebook.com/{_API_VERSION}"
@@ -98,13 +105,16 @@ class MetaPipeline:
             backoff = _BACKOFF_BASE_SECONDS * (2 ** attempt)
 
             # Network-level transient failures: timeouts and connection errors.
+            # str(e) can embed the full request URL (incl. access_token), so the
+            # message is redacted and the cause is not chained (`from None`).
             try:
                 resp = requests.get(url, params=params, timeout=30)
             except (requests.Timeout, requests.ConnectionError) as e:
                 if is_last:
                     raise RuntimeError(
-                        f"Meta request failed after {_MAX_ATTEMPTS} attempts: {e}"
-                    ) from e
+                        f"Meta request failed after {_MAX_ATTEMPTS} attempts: "
+                        f"{_redact_token(str(e))}"
+                    ) from None
                 time.sleep(backoff)
                 continue
 
@@ -122,12 +132,21 @@ class MetaPipeline:
             # 5xx server errors are transient — retry with exponential backoff.
             if resp.status_code >= 500:
                 if is_last:
-                    resp.raise_for_status()
+                    raise RuntimeError(
+                        f"Meta API error {resp.status_code} after {_MAX_ATTEMPTS} "
+                        f"attempts: {_redact_token(resp.url)}"
+                    )
                 time.sleep(backoff)
                 continue
 
-            # Success or a non-retryable 4xx — raise on the latter, return on success.
-            resp.raise_for_status()
+            # Non-retryable 4xx — raise with the access_token stripped from the
+            # URL (raise_for_status would leak it in the HTTPError message).
+            if resp.status_code >= 400:
+                raise RuntimeError(
+                    f"Meta API error {resp.status_code}: {_redact_token(resp.url)} "
+                    f"— {_redact_token(resp.text[:300])}"
+                )
+
             return resp.json()
         return {}
 
