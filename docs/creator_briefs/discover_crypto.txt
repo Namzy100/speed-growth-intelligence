@@ -1,12 +1,12 @@
 Outreach Brief — Discover Crypto (YouTube)
 Segment: crypto-curious | Score: 58.1/100 | 1,390,000 followers
 ------------------------------------------------------------
-Discover Crypto sits right in the sweet spot for Speed. Their 1.39M subscribers are crypto-curious by nature — people who follow altcoin breakdowns, Bitcoin explainers, and trading content because they're interested but still figuring out how this stuff actually fits into their lives. That's exactly the audience Speed is built for: folks who get the concept of Bitcoin but haven't found a reason to use it day to day. Speed gives them that reason.
+Discover Crypto sits right in the sweet spot for Speed. With 1.39M subscribers who follow them precisely because they're learning their way through altcoins, Bitcoin, and Ethereum, this is an audience that's curious and engaged but not necessarily deep into the practical, everyday side of crypto yet. They understand what Bitcoin is — they just haven't been shown a clean reason to actually use it. That gap is exactly what Speed fills.
 
-For this segment, lead with simplicity and utility, not fee-saving spreadsheets or transaction-speed benchmarks. The hooks that'll land are how easy Speed is to set up on iOS or Android, how it turns Bitcoin into something you can actually spend, and Speed Stacks letting their viewers earn sats on everyday purchases — a tangible reward that bridges "I bought some Bitcoin" and "I use Bitcoin."
+Because this is a crypto-curious crowd, lead with simplicity and real-world utility rather than fee tables or technical Lightning details. The hook is that Speed turns Bitcoin from something you watch charts about into something you can actually spend. Speed Stacks is the standout feature here — earning sats on everyday purchases gives a learning-focused audience a low-stakes, tangible reason to get started. Pair that with the iOS/Android availability and the "built for normal people" framing.
 
-Three talking points worth raising in the pitch: first, Speed converts crypto knowledge into crypto behavior — a natural next step for an audience that already understands the theory. Second, Speed Stacks gives the channel a genuinely fun, demonstrable feature to show on camera rather than just talk about. Third, this would be their first brand deal, so position Speed as a clean, credible launch partner rather than one of many.
+For the pitch, three angles worth leading with: first, that Speed bridges the exact gap their channel creates — viewers who get the theory but want a first practical step. Second, that Speed Stacks rewards everyday spending, which makes for genuinely watchable demo content. Third, that stablecoin support (USDT, USDC) gives the more cautious crypto-curious viewer a stable on-ramp without the volatility fear.
 
-For the CTA, suggest a dedicated segment or short integration walking viewers through downloading Speed and earning their first sats with Stacks, tied to a trackable link.
+Recommended CTA: a walkthrough or "I tried using Bitcoin for a week" style video where they set up Speed live and earn their first sats, with a tracked link in the description.
 
-One thing to avoid: don't frame this around trading or price speculation. Speed is a payments and utility play, and leaning into trading would attract the wrong intent and undercut the message.
+One thing to avoid: don't frame Speed as an investment or trading play. This is a payments and utility story, not another altcoin pick.

@@ -1,0 +1,12 @@
+Outreach Brief — Dương Thành Chiến (TikTok)
+Segment: crypto-curious | Score: 60.1/100 | 121,800 followers
+------------------------------------------------------------
+Dương Thành Chiến has built a 121.8K-strong TikTok audience around Bitcoin, ETH, and trading content, which means his followers already understand crypto at a conceptual level but may not have made the jump to actually using it day-to-day. That gap is exactly where Speed fits. His crypto-curious audience knows what Bitcoin is; they just need a reason and an easy on-ramp to treat it as money rather than a chart they watch. With a 6.1% engagement rate and roughly 7,500 weighted engaged viewers per post, his reach is modest but his audience is paying attention.
+
+Because his viewers lean trader and crypto-curious rather than remittance or gaming, the messaging should center on simplicity and real-world utility. The strongest hooks are zero-fee instant Lightning payments, stablecoin support in USDT and USDC for anyone wanting to sit in stable value between trades, and Speed Stacks letting them earn sats on everyday purchases.
+
+For the pitch, lead with three points: first, Speed turns the Bitcoin his audience already follows into something they can spend in seconds with no fees; second, stablecoin support gives his trading-minded followers a familiar tool for managing volatility; and third, Speed Stacks rewards everyday spending, which gives him a fresh, non-price-speculation angle for content.
+
+The call to action: invite him to a short call to walk through the app and discuss a first sponsored video, ideally a hands-on demo sending a real payment.
+
+One thing to avoid: don't frame Speed as an investment or trading platform. It's a payments wallet, and overpromising returns would mislead his audience and misrepresent the product.

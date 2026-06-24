@@ -1,12 +1,12 @@
 Outreach Brief — SMART CRYPTO WALLET (YouTube)
 Segment: crypto-curious | Score: 68.6/100 | 28,600 followers
 ------------------------------------------------------------
-SMART CRYPTO WALLET sits right in our crypto-curious sweet spot. Their audience is interested in Bitcoin and the broader crypto world but hasn't necessarily made the leap to using it for anything practical — and that's exactly the gap Speed fills. With a 10.4% engagement rate and a wallet-focused channel name, this is an audience already primed to think about how they actually hold and move their crypto, not just speculate on price. The fact that they cover lifestyle and food alongside crypto is a bonus: it means they can show Speed paying for everyday things, which is the whole point.
+SMART CRYPTO WALLET sits right in the sweet spot for Speed. Their channel is built around helping crypto-curious viewers figure out where to actually start, and that's exactly the audience we struggle to reach with most partners. With a 10.4% engagement rate and roughly 2,966 weighted engaged viewers, this is a small but genuinely active audience that trusts the creator's recommendations — and crucially, they have no prior brand deals, so a Speed partnership won't feel like the tenth sponsorship slot.
 
-For this segment, lead with simplicity and utility. The hook isn't fees or transaction speed in isolation — it's that Speed makes Bitcoin actually usable for normal people. Lightning payments settle in seconds with zero fees, stablecoin support (USDT, USDC) gives nervous newcomers a stable option, and Speed Stacks lets them earn sats on purchases they're already making.
+Because their viewers are interested in Bitcoin but still feel intimidated by it, the angle here is simplicity and everyday utility, not trading or speculation. The features that land: zero-fee instant Lightning payments that settle in seconds, stablecoin support (USDT, USDC) for anyone nervous about volatility, and Speed Stacks letting them earn sats on normal purchases. That turns "I bought some Bitcoin" into "I actually use it."
 
-Three talking points to pitch: first, Speed is the bridge between "I own some crypto" and "I actually spend it," which fits a wallet-named channel perfectly. Second, it's available on iOS and Android and built for everyday people, not just enthusiasts — easy to demo on camera. Third, Speed Stacks turns ordinary spending into sats, a natural fit for their lifestyle and food content.
+Three talking points for the pitch: first, Speed makes Bitcoin something you spend, not just hold — a natural next step for their "where do I start" audience. Second, the stablecoin option answers the volatility fear their viewers raise constantly. Third, Speed Stacks gives a concrete, low-stakes reason to download and try it today.
 
-The CTA: invite them to do a hands-on walkthrough video showing a real purchase end to end.
+For the CTA, ask them to walk through a real purchase on Speed on camera and drop a tracked download link in the description — a demo beats a read-out every time.
 
-One thing to avoid: don't frame Speed as a trading or investing tool — this is about spending, not portfolios.
+One thing to avoid: don't lean into price predictions, "get rich" framing, or NFT hype. Their audience wants confidence and clarity, and that tone would undercut Speed's everyday-utility positioning.

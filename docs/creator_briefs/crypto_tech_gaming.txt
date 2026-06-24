@@ -1,12 +1,12 @@
 Outreach Brief — Crypto Tech Gaming (YouTube)
 Segment: crypto-curious | Score: 64.6/100 | 88,600 followers
 ------------------------------------------------------------
-Crypto Tech Gaming sits right in the sweet spot for Speed. Their audience is crypto-curious by nature — people who follow altcoin, DeFi, NFT, and play-to-earn content because they're genuinely interested in where Web3 is going, but who haven't necessarily made Bitcoin part of their daily life yet. That gap between curiosity and actual use is exactly what Speed closes. With an 80% crypto content mix and a solid 5.5% engagement rate, this is an audience already primed to hear that Bitcoin can be more than something you trade or speculate on.
+Crypto Tech Gaming is a solid match for Speed because their audience sits right in our crypto-curious sweet spot. These are viewers who clearly find blockchain, web3, and Bitcoin interesting — they're watching content about altcoins, DeFi, NFTs, and play-to-earn — but a lot of them are still on the sidelines when it comes to actually using crypto day to day. That gap between curiosity and action is exactly where Speed lives, and with an 88.6k audience and a healthy 5.5% engagement rate, there's real opportunity to convert interest into wallet downloads.
 
-Because they lean crypto-curious rather than remittance or iGaming, the messaging should center on simplicity and everyday utility, not fee math or gambling deposits. The features that land hardest here are instant Lightning payments settled in seconds, zero fees, and especially Speed Stacks — earning sats on regular purchases is a tangible, low-stakes way for a curious audience to start actually using Bitcoin. Stablecoin support (USDT, USDC) is a nice reassurance for anyone wary of volatility.
+Because this is a crypto-curious crowd, the messaging should lean on simplicity and real utility rather than fee structures or trading. The hook is that Speed turns Bitcoin from a thing you read about into something you can actually spend — instant Lightning payments settled in seconds, no fees, and Speed Stacks letting them earn sats on everyday purchases. Stablecoin support (USDT, USDC) is also worth mentioning for the part of their audience that follows DeFi and wants stable value without the volatility.
 
-Three talking points worth leading with: first, Speed turns Bitcoin from a chart you watch into money you spend; second, Speed Stacks lets their viewers stack sats just by buying things they'd buy anyway — a natural bridge from play-to-earn thinking; third, it's available on iOS and Android and built for normal people, so there's no intimidating setup.
+For the pitch, I'd focus on three points: first, Speed is the bridge from "I follow crypto" to "I use crypto," which fits their educational, knowledge-forward content style. Second, the play-to-earn and gaming angle in their tags pairs naturally with earning sats through Stacks. Third, this is their first brand deal, so we can build something authentic rather than a one-off read.
 
-The CTA: invite them to a short call to scope a sponsored walkthrough or "I tried using Bitcoin for a week" style video.
+Recommended CTA: a hands-on walkthrough video where they download Speed and make a real Lightning payment on camera.
 
-Avoid framing Speed as a trading or investing tool — that misreads both the product and their audience.
+Avoid framing this as a trading or investing play — their audience wants utility, not speculation.

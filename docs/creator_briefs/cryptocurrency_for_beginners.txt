@@ -1,12 +1,12 @@
 Outreach Brief — cryptocurrency for beginners (YouTube)
 Segment: crypto-curious | Score: 56.1/100 | 24,500 followers
 ------------------------------------------------------------
-Hey team — flagging "cryptocurrency for beginners" as a moderate but worth-it candidate for outreach. The name says it all: this channel exists to help people take their first steps into Bitcoin, and that's exactly the crypto-curious audience Speed is built for. Their content leans heavily educational (around 80% crypto/Bitcoin), with a lighter, humorous, entertainment-driven tone running through it. That mix matters — their viewers aren't hardcore traders, they're curious newcomers who need things explained simply. That's our wedge.
+The "cryptocurrency for beginners" channel is exactly the kind of partner Speed should be talking to, because their whole brand is built around demystifying Bitcoin for people who are curious but intimidated. That's our crypto-curious segment almost word for word. The audience isn't a room full of traders looking for the next memecoin — they're newcomers trying to figure out what Bitcoin actually does and whether it's for them. Speed answers that question with something tangible: a wallet you can actually use to pay for things.
 
-The Speed features to lead with here are simplicity and real-world utility, not technical depth. For an audience still figuring out what Satoshi even built, the pitch is "here's Bitcoin you can actually use today" — instant payments settled in seconds, zero Lightning fees, and Speed Stacks letting them earn sats on everyday purchases. Stablecoin support (USDT, USDC) is a nice secondary mention for the ones nervous about volatility.
+Given that audience, lead with simplicity and utility, not technical depth. The strongest features to highlight are zero-fee instant Lightning payments (Bitcoin that works in seconds, not the slow expensive thing beginners assume it is), stablecoin support so nervous first-timers can hold steady value, and Speed Stacks, which makes "earning sats on everyday purchases" a concrete, friendly entry point.
 
-Three talking points for the pitch: first, Speed turns abstract crypto theory into something their viewers can hold and spend, which fits a beginner channel perfectly. Second, the Stacks rewards angle gives them a genuinely fun, demonstrable hook for an entertainment-style creator. Third, this is their first brand deal, so we can offer a clean, low-friction starter partnership and grow from there.
+Three talking points to anchor the pitch: first, Speed bridges the gap between "I've heard of Bitcoin" and "I just used Bitcoin," which mirrors their channel's exact mission. Second, it's available on iOS and Android and built for everyday people, so there's no scary onboarding. Third, the rewards angle gives them genuinely fun, entertaining content to make — fitting their humour and entertainment leanings.
 
-Recommended CTA: propose a single sponsored walkthrough video — downloading Speed and making a first real Lightning payment on camera, with a trackable link.
+For the CTA, propose a sponsored walkthrough video where they download Speed and make a real first payment on camera, with a tracked signup link.
 
-One thing to avoid: don't lean on trading, price speculation, or "get rich" framing. That betrays the beginner-trust this channel is built on.
+One thing to avoid: don't frame this as an investment or trading opportunity. Speed is about spending and using Bitcoin, not speculating on price.

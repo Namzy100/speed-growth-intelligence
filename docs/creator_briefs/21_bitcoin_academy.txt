@@ -1,0 +1,12 @@
+Outreach Brief — 21 Bitcoin Academy (TikTok)
+Segment: crypto-curious | Score: 56.2/100 | 12,800 followers
+------------------------------------------------------------
+21 Bitcoin Academy is a solid fit for Speed because their whole channel is built around teaching newcomers about Bitcoin — that "Academy" framing tells you their 12.8K followers are exactly the crypto-curious people we're trying to reach: interested in BTC, but still figuring out what to actually do with it. Their 8.2% engagement rate is genuinely strong, and the educational angle means their audience trusts them to recommend tools, not just hype coins.
+
+The pitch should lean into simplicity and real-world utility, not trading or speculation. Speed lets their audience take the natural next step after learning what Bitcoin is — actually using it. The zero-fee Lightning payments, instant settlement, and Speed Stacks (earning sats on everyday purchases) are the features that matter most here, because they answer the "okay, now what?" question their content already sets up.
+
+Three talking points: first, Speed is the logical companion to their teaching — they explain Bitcoin, Speed lets viewers go spend and earn it without friction. Second, Speed Stacks gives them a fun, concrete demo — show real sats earned on a normal purchase, which performs well for an education-first creator. Third, it's beginner-friendly on iOS and Android, no crypto-native knowledge required, which matches their audience's skill level.
+
+For the CTA, I'd propose a sponsored walkthrough video where they download Speed, send a Lightning payment, and stack sats on camera, with a trackable link or code.
+
+One thing to avoid: don't frame Speed as an investment or price-action play. Their audience is learning, and "get rich" messaging would undercut their educational credibility and ours.

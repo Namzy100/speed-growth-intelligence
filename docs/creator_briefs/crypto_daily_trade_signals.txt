@@ -1,12 +1,12 @@
 Outreach Brief — Crypto Daily Trade Signals (YouTube)
 Segment: crypto-curious | Score: 59.1/100 | 83,100 followers
 ------------------------------------------------------------
-Crypto Daily Trade Signals sits in an interesting spot for us. Their 83K subscribers come for trading signals and crypto education, which means they're already past the "what is Bitcoin" hurdle but still firmly crypto-curious when it comes to actually *using* Bitcoin day to day. That gap is exactly where Speed lives. Their audience knows how to read a chart, but most of them have never spent a sat on anything real. We can be the bridge from speculation to utility.
+Crypto Daily Trade Signals sits in a sweet spot for Speed. Their 83K subscribers are crypto-curious people who already follow Bitcoin, Ethereum, and trading content, which means they understand the concepts but may not have a clean, practical way to actually use Bitcoin day to day. That's exactly the gap Speed fills — it takes the theory their audience consumes and turns it into something they can hold in their pocket and spend.
 
-For this crowd, the simplicity and utility angle does the heavy lifting. Lead with Speed Stacks — earning sats on everyday purchases is a tangible, relatable hook for people who already think in terms of stacking. Pair it with instant Lightning payments and the stablecoin support, since a trading audience understands the value of moving between BTC and stable value without friction.
+Because this is a crypto-curious audience, lean hard on simplicity and real-world utility rather than fee math or speed stats. The hooks that matter most here are how easy Speed makes it to get started, the Lightning wallet experience that settles in seconds, and Speed Stacks letting viewers earn sats on everyday purchases — a tangible reason to actually open the app. Stablecoin support (USDT, USDC) is also worth a mention since trading-focused viewers will appreciate the option to hold stable value.
 
-Three talking points for the pitch: first, their viewers already hold or trade Bitcoin, so the "I have BTC, now what?" question writes itself. Second, Speed Stacks rewards turn everyday spending into accumulation, which speaks their language. Third, zero-fee Lightning and instant settlement show Bitcoin actually working as money, not just an asset to flip.
+Three talking points for the pitch: first, Speed bridges the gap between watching Bitcoin content and actually using Bitcoin, which is a natural next step for their viewers. Second, Speed Stacks gives the creator a concrete, rewarding demo moment — earn sats while you spend. Third, it's available on iOS and Android and built for everyday people, so it won't alienate the less technical end of their audience.
 
-For the CTA, propose a dedicated walkthrough video — downloading Speed, making a first Lightning payment, and showing Stacks rewards land in real time, with a tracked link in the description.
+Recommend a CTA of a sponsored walkthrough video where they download Speed, make a real Lightning payment, and show Speed Stacks in action, paired with a trackable signup link.
 
-One thing to avoid: don't frame Speed as an investment or trading tool. This isn't about price action or returns — leaning that way invites compliance headaches and misses the point entirely.
+Avoid framing Speed as a trading or investment tool — it's a payments wallet, and overpromising returns would misrepresent it and clash with their signals-heavy content.

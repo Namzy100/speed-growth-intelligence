@@ -1,12 +1,12 @@
 Outreach Brief — Thinking Crypto (YouTube)
 Segment: crypto-curious | Score: 63.6/100 | 194,000 followers
 ------------------------------------------------------------
-Thinking Crypto has built a 194K-strong audience that's genuinely curious about Bitcoin, blockchain, and where this whole space is heading — but curiosity isn't the same as usage. That gap is exactly where Speed fits. A lot of their viewers understand crypto conceptually but have never actually spent Bitcoin in the real world, and Speed is the bridge from "I follow the space" to "I use it daily."
+Thinking Crypto has built a 194K-strong audience that's genuinely curious about Bitcoin, blockchain, and Web3 — but here's the gap worth leaning into: this channel spends most of its energy explaining the *what* and *why* of crypto, and almost none on the *how do I actually use this in real life*. That's exactly where Speed fits. Their viewers understand Bitcoin conceptually; they just haven't been shown a clean, practical way to spend it. Speed answers that.
 
-Given their crypto-curious segment, the features to lead with are simplicity and everyday utility, not technical depth. Speed's zero-fee instant Lightning payments and the Speed Stacks rewards program (earning sats on normal purchases) make the abstract idea of using Bitcoin tangible. Stablecoin support also gives the value-stability skeptics in their audience a reason to try it without volatility anxiety.
+Because this is a crypto-curious audience, the messaging should center on simplicity and everyday utility rather than fee-savings or transaction speed (those land better with remittance and iGaming crowds). The hooks here are Lightning payments that settle in seconds, the option to hold stable value through USDT and USDC for people nervous about volatility, and Speed Stacks letting them earn sats on normal purchases — a low-stakes way to start stacking without buying in at a price.
 
-Three talking points for the pitch: first, Speed turns the theory their channel teaches into something viewers can actually do — a natural extension of their educational content. Second, Speed Stacks gives them a concrete, demonstrable hook for a video, earning real sats on a coffee or a subscription on camera. Third, the iOS/Android availability means there's no intimidating setup barrier for a mainstream-leaning audience.
+Three talking points for the pitch: first, Speed turns abstract Bitcoin knowledge into something his audience can actually do today, on iOS or Android. Second, the stablecoin support speaks directly to viewers who are interested but spooked by price swings. Third, Speed Stacks gamifies the on-ramp — earning sats on coffee is a far easier first step than a buy order.
 
-For the CTA, propose a single dedicated integration video where they walk through their first real-world Lightning payment using Speed, with a trackable link and Speed Stacks as the highlight.
+Recommend a dedicated walkthrough video where he sets up Speed and makes a real payment on camera, since his audience trusts demonstrations over endorsements.
 
-One thing to avoid: don't pitch this as another speculative "crypto investment" play. Their audience is curious about utility — leaning into price hype or trading angles undercuts the everyday-payments story that makes Speed different.
+One thing to avoid: don't pitch this as a trading or investment play. This audience wants to understand and use Bitcoin, not speculate — keep it utility-first.
