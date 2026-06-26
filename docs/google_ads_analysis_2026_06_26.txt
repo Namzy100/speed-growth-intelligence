@@ -1,0 +1,49 @@
+======================================================================
+SPEED WALLET — GOOGLE ADS ANALYSIS
+Generated 2026-06-26 21:03 UTC
+======================================================================
+
+SPEED WALLET — GOOGLE ADS PERFORMANCE ANALYSIS
+================================================
+
+
+1. PERFORMING CAMPAIGNS
+-----------------------
+
+Two campaigns are driving virtually all measured volume and both sit at efficient CPIs.
+
+New - Android Brand US: 3,699 installs at $18,647.41, CPI $5.04. This is the single largest volume campaign and performs close to the channel average eCPI of $4.90. It accounts for roughly 65% of all attributable paid installs.
+
+XAUT offers: 1,902 installs at $9,232.21, CPI $4.85. This is the most cost-efficient tracked campaign, running $0.19 below the channel eCPI. The offer-led creative theme (XAUT likely referencing a gold-backed token or promotional incentive) is outperforming on efficiency while still delivering meaningful scale.
+
+Combined, these two campaigns represent 5,601 installs and $27,879.62 in spend — essentially the entire attributable paid Google Ads base.
+
+
+2. UNDERPERFORMING / FLAGGED
+-----------------------------
+
+Android - Brand US: 82 installs, $0 cost reported, CPI $0.00 — spend integration is disconnected, so true CPI is unknown and these installs cannot be trusted for efficiency benchmarking.
+
+Cash Deposit: 3 installs, $0 cost reported, CPI $0.00 — same disconnected spend issue; additionally, 3 installs at any real CPI would signal a failing keyword theme regardless of the integration problem.
+
+Google Ads (Website): 1,796 clicks, 0 installs, 0 impressions, 0% install rate — clicks are being recorded but no impressions or installs are attributing. This sub-channel is either mistagged, routing to a broken or untracked web page, or the Adjust SDK is not firing post-click. This represents wasted spend with no recoverable return at current setup.
+
+
+3. KEYWORD AND CREATIVE THEMES
+-------------------------------
+
+Brand terms are the dominant volume driver. New - Android Brand US alone is 65% of installs, confirming that users searching Speed Wallet by name convert at high rates. The 39.32% click-to-install rate at channel level is strong and consistent with high-intent branded traffic.
+
+The XAUT offers campaign suggests that offer-led or incentive-led creative (likely a promotional hook around a specific asset or reward) can match or beat brand efficiency at $4.85 CPI. This is the most actionable non-brand signal in the data.
+
+Cash Deposit appears to test a transactional keyword theme but has produced essentially no volume, indicating either low search demand, poor ad relevance, or a landing experience mismatch.
+
+
+4. RECOMMENDATIONS
+-------------------
+
+1. Fix the spend integration for Android - Brand US and Cash Deposit immediately. Until cost data flows correctly, you cannot evaluate true CPI, cannot include these campaigns in budget decisions, and risk misreporting to stakeholders. Prioritize Adjust cost-import verification for both.
+
+2. Scale the XAUT offers campaign. At $4.85 CPI and 1,902 installs it is the most efficient tracked campaign. Test incrementally higher budgets (suggest 20-30% increase) and expand to similar offer-led creatives to confirm whether the theme scales without CPI degradation.
+
+3. Audit and fix or pause Google Ads (Website). 1,796 clicks with zero installs is pure wasted spend. Diagnose whether this is a tracking failure or a genuine conversion problem, and do not allow spend to continue until the root cause is resolved.
