@@ -59,6 +59,21 @@ class AdjustPipeline:
         )
         return self._to_df(rows, _NUMERIC["installs_by_campaign"])
 
+    def get_installs_by_campaign_window(self, since_days: int, until_days: int) -> pd.DataFrame:
+        """Installs + cost by channel/campaign for a custom window.
+
+        Window is Adjust date_period "-{since_days}d:-{until_days}d" — e.g.
+        (7, 1) = last 7 days (current week), (14, 8) = the prior 7-day week.
+        Used for week-over-week campaign trend analysis.
+        """
+        rows = self._fetch(
+            days=since_days,
+            dimensions="channel,campaign_network",
+            metrics="installs,cost",
+            date_period=f"-{since_days}d:-{until_days}d",
+        )
+        return self._to_df(rows, _NUMERIC["installs_by_campaign"])
+
     def get_installs_by_country(self, days: int = 30) -> pd.DataFrame:
         """Installs broken down by country (ISO code) for the last `days`."""
         rows = self._fetch(
@@ -89,9 +104,10 @@ class AdjustPipeline:
     # Internal helpers
     # ------------------------------------------------------------------
 
-    def _fetch(self, days: int, dimensions: str, metrics: str) -> list[dict]:
+    def _fetch(self, days: int, dimensions: str, metrics: str,
+               date_period: str | None = None) -> list[dict]:
         params = {
-            "date_period": f"-{days}d:-1d",
+            "date_period": date_period or f"-{days}d:-1d",
             "dimensions": dimensions,
             "metrics": metrics,
             "reattributed": "all",
