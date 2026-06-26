@@ -1,2 +1,0 @@
-https://datastudio.google.com/reporting/e15d81ef-6872-46e9-bca9-1624f0a61319
-Speed Wallet Marketing Intelligence Dashboard — 4 pages: Channel Performance, Campaign Breakdown, Retention, Meta Campaigns. Updates automatically when run_daily_sync.py runs.

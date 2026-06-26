@@ -68,4 +68,8 @@ python test_connections.py
 
 ## Deliverables
 
-- **Looker Studio dashboard** — [Speed Wallet Marketing Intelligence Dashboard](https://datastudio.google.com/reporting/e15d81ef-6872-46e9-bca9-1624f0a61319). 4 pages: Channel Performance, Campaign Breakdown, Retention, Meta Campaigns. Backed by the Google Sheet tabs and updates automatically when `pipelines/run_daily_sync.py` runs. URL also saved in `docs/looker_studio_url.txt`.
+All live links are also saved in `docs/live_links.txt`.
+
+- **Creative dashboard (live)** — https://creative-dashboard-speed.vercel.app — self-contained HTML deployed on Vercel from this GitHub repo; rebuilt and pushed daily by `pipelines/run_daily_sync.py` (when `DASHBOARD_AUTODEPLOY=1`).
+- **Creator dashboard (live)** — https://creative-dashboard-speed.vercel.app/creators — filterable creator-intelligence table from Supabase; rebuilt daily alongside the creative dashboard.
+- **Looker Studio dashboard** — [Speed Wallet Marketing Intelligence Dashboard](https://datastudio.google.com/reporting/e15d81ef-6872-46e9-bca9-1624f0a61319). 4 pages: Channel Performance, Campaign Breakdown, Retention, Meta Campaigns. Backed by the Google Sheet tabs and updates when `run_daily_sync.py` runs.
