@@ -90,6 +90,22 @@ SEGMENT_SEARCHES: dict[str, list[str]] = {
         "DeFi explained",
         "crypto wallet review",
     ],
+    # EU remittance focus — German-language + UK diaspora corridors, for the
+    # top-3 EU market push (Germany, UK). Run as a targeted group.
+    "remittance_eu": [
+        # German-language
+        "Geld überweisen",
+        "Geld ins Ausland senden",
+        "Remittance Deutschland",
+        "Bitcoin Deutschland",
+        "Krypto Anfänger",
+        # UK / English diaspora corridors
+        "send money Nigeria UK",
+        "send money India UK",
+        "remittance UK",
+        "diaspora money transfer",
+        "African remittance UK",
+    ],
 }
 
 MAX_RESULTS_PER_SEARCH = 10   # channels requested per search term
