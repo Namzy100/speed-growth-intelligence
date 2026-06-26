@@ -18,6 +18,7 @@ Add them here as separate steps in run() when they are ready for automation.
 """
 
 import os
+import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -130,6 +131,39 @@ def _rebuild_dashboard() -> bool:
         return False
 
 
+def _deploy_dashboard() -> bool:
+    """Push the rebuilt dashboard HTML to GitHub so Vercel auto-deploys it.
+
+    Gated behind DASHBOARD_AUTODEPLOY (set it to a truthy value in the scheduled
+    environment to enable). Commits ONLY the dashboard HTML files, and only if
+    they actually changed, then pushes. Best-effort: a git/push failure is logged
+    but never aborts the sync. Requires git push credentials in the environment.
+    """
+    if not os.getenv("DASHBOARD_AUTODEPLOY"):
+        _log("Auto-deploy: skipped (set DASHBOARD_AUTODEPLOY=1 to push dashboards "
+             "to GitHub for Vercel).")
+        return True
+
+    files = ["docs/creative_dashboard.html", "docs/creator_dashboard.html"]
+    try:
+        subprocess.run(["git", "add", *files], cwd=_ROOT, check=True)
+        # Nothing staged → no change to deploy.
+        if subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=_ROOT).returncode == 0:
+            _log("Auto-deploy: no dashboard changes to push.")
+            return True
+        stamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+        subprocess.run(
+            ["git", "commit", "-m", f"chore: auto-deploy dashboard refresh {stamp}"],
+            cwd=_ROOT, check=True,
+        )
+        subprocess.run(["git", "push"], cwd=_ROOT, check=True)
+        _log("Auto-deploy: pushed dashboard update — Vercel will redeploy.")
+        return True
+    except Exception as e:  # noqa: BLE001 — deploy must never break the data sync
+        _log(f"Auto-deploy: FAILED (non-fatal) — {e}")
+        return False
+
+
 # ------------------------------------------------------------------
 # Entrypoint
 # ------------------------------------------------------------------
@@ -161,8 +195,11 @@ def run() -> None:
         _log(f"Last Updated: FAILED — {e}")
         results["Last Updated"] = False
 
-    # Creative dashboard — final step, rebuilt from the freshly-synced data.
+    # Creative dashboard — rebuilt from the freshly-synced data.
     results["Dashboard"] = _rebuild_dashboard()
+
+    # Auto-deploy: push the refreshed dashboard to GitHub → Vercel (opt-in).
+    results["Deploy"] = _deploy_dashboard()
 
     # Summary
     succeeded = sum(results.values())
