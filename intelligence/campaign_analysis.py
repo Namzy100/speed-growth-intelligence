@@ -24,6 +24,7 @@ if str(_ROOT) not in sys.path:
 load_dotenv()
 
 from pipelines import sheets  # reuse service-account auth + retry
+from pipelines.adjust import AdjustPipeline
 
 _DOCS_DIR = _ROOT / "docs"
 _MODEL = "claude-sonnet-4-6"
@@ -110,6 +111,67 @@ def build_data_summary(adjust_rows: list[dict], meta_rows: list[dict]) -> str:
 
 
 # ------------------------------------------------------------------
+# Week-over-week trends (pulled directly from Adjust, by date window)
+# ------------------------------------------------------------------
+
+def _fmt_delta(cur: float, prev: float) -> str:
+    """Format a week-over-week change as a signed % (or 'new' / '-100% stopped')."""
+    if prev == 0:
+        return "new" if cur > 0 else "—"
+    if cur == 0:
+        return "-100% (stopped)"
+    return f"{(cur - prev) / prev * 100:+.0f}%"
+
+
+def build_wow_trends() -> str:
+    """Compare campaign installs/cost: current week (last 7d) vs prior week (8-14d).
+
+    The Campaign Installs tab is 30-day aggregated (no dates), so this pulls two
+    date windows straight from the Adjust API and computes per-campaign deltas.
+    """
+    try:
+        pipe = AdjustPipeline()
+        cur_df = pipe.get_installs_by_campaign_window(7, 1)
+        prev_df = pipe.get_installs_by_campaign_window(14, 8)
+    except Exception as e:  # noqa: BLE001 — degrade gracefully, don't kill the report
+        return f"WEEK-OVER-WEEK TRENDS: unavailable ({type(e).__name__}: {e})"
+
+    def agg(df) -> dict[str, dict]:
+        out: dict[str, dict] = {}
+        if df is None or df.empty:
+            return out
+        for _, r in df.iterrows():
+            name = str(r.get("campaign_network", "")).strip()
+            if not name or name.lower() == "unknown":
+                continue
+            e = out.setdefault(name, {"installs": 0, "cost": 0.0})
+            e["installs"] += int(_num(r.get("installs")))
+            e["cost"] += _num(r.get("cost"))
+        return out
+
+    cur, prev = agg(cur_df), agg(prev_df)
+    rows = []
+    for name in set(cur) | set(prev):
+        ci, cc = cur.get(name, {}).get("installs", 0), cur.get(name, {}).get("cost", 0.0)
+        pi, pc = prev.get(name, {}).get("installs", 0), prev.get(name, {}).get("cost", 0.0)
+        if ci == 0 and pi == 0:
+            continue
+        rows.append((name, ci, pi, cc, pc))
+    rows.sort(key=lambda r: r[1], reverse=True)
+
+    lines = ["WEEK-OVER-WEEK CAMPAIGN TRENDS (Adjust; current = last 7 days, "
+             "prior = days 8-14):"]
+    if not rows:
+        lines.append("  (no campaign-level data in either window)")
+    for name, ci, pi, cc, pc in rows[:20]:
+        lines.append(
+            f"  {name}: installs {ci:,} vs {pi:,} ({_fmt_delta(ci, pi)}), "
+            f"spend ${cc:,.0f} vs ${pc:,.0f} ({_fmt_delta(cc, pc)})"
+        )
+    return "\n".join(lines)
+
+
+# ------------------------------------------------------------------
 # Claude analysis
 # ------------------------------------------------------------------
 
@@ -140,25 +202,34 @@ section 2, give one specific, concrete action (pause, cut budget by X%, shift \
 to a proven campaign, refresh creative, fix tracking, etc.) with a one-line \
 rationale grounded in its numbers.
 
-Cite real numbers throughout. Be specific and direct. Keep it under 500 words.
+4. WEEK-OVER-WEEK TRENDS — using ONLY the WEEK-OVER-WEEK section below, call out \
+which campaigns are ACCELERATING (installs and/or spend rising) versus DECLINING \
+(falling or stopped), citing the delta percentages. Flag any campaign where \
+spend is rising while installs fall (worsening efficiency) and any that newly \
+started or stopped.
+
+Cite real numbers throughout. Be specific and direct. Keep it under 600 words.
 
 FORMATTING: Do not use markdown formatting, asterisks, or bold markers — plain \
 text only with clear section headers using dashes or equals signs.
 
 --- CAMPAIGN DATA ---
 {data_summary}
---- END DATA ---"""
+--- END DATA ---
+
+{wow_trends}"""
 
 
-def generate_analysis(data_summary: str) -> str:
+def generate_analysis(data_summary: str, wow_trends: str = "") -> str:
     api_key = os.getenv("ANTHROPIC_API_KEY")
     if not api_key:
         raise EnvironmentError("ANTHROPIC_API_KEY must be set in .env")
     client = Anthropic(api_key=api_key)
     resp = client.messages.create(
         model=_MODEL,
-        max_tokens=1500,
-        messages=[{"role": "user", "content": _PROMPT.format(data_summary=data_summary)}],
+        max_tokens=1600,
+        messages=[{"role": "user", "content": _PROMPT.format(
+            data_summary=data_summary, wow_trends=wow_trends)}],
     )
     return resp.content[0].text
 
@@ -189,8 +260,11 @@ def run() -> str:
 
     summary = build_data_summary(adjust_rows, meta_rows)
 
+    print("Pulling week-over-week windows from Adjust...")
+    wow = build_wow_trends()
+
     print(f"Generating campaign analysis ({_MODEL})...")
-    analysis = generate_analysis(summary)
+    analysis = generate_analysis(summary, wow)
 
     path = save_analysis(analysis)
     print(f"\nSaved: {path.relative_to(_ROOT)}\n")

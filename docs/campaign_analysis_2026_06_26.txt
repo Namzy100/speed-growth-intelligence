@@ -1,0 +1,86 @@
+SPEED WALLET — CAMPAIGN-LEVEL PERFORMANCE ANALYSIS
+===================================================
+
+
+SECTION 1 — TOP 5 CAMPAIGNS BY INSTALLS
+-----------------------------------------
+
+1. Google Ads / New - Android Brand US (Adjust)
+   Installs: 3,492 | eCPI: $5.12 | Spend: $17,882
+   Highest absolute install volume in the account. Efficiency is acceptable but not best-in-class.
+
+2. Google Ads / XAUT Offers (Adjust)
+   Installs: 1,887 | eCPI: $4.92 | Spend: $9,286
+   Strong volume with a competitive cost per install for a paid search campaign.
+
+3. Facebook / Payday - Android - Broad+ (Adjust)
+   Installs: 1,589 | eCPI: $3.47 | Spend: $5,515
+   Best CPI among paid campaigns with meaningful scale. Meta-reported view corroborates: 1,649 installs at $3.46 CPI, high alignment between sources.
+
+4. Apple / US - Brand - Exact (Adjust)
+   Installs: 1,306 | eCPI: $3.31 | Spend: $4,323
+   Most cost-efficient paid campaign in the set. Strong signal for Apple Search Ads brand intent.
+
+5. Website / Home>banner>android (Adjust)
+   Installs: 910 | eCPI: n/a | Spend: $0
+   No direct cost attributed, making this the highest-efficiency organic/owned touchpoint by volume.
+
+
+SECTION 2 — UNDERPERFORMING CAMPAIGNS
+---------------------------------------
+
+1. Meta / Cash Deposit
+   Spend: $645 | Installs: 12 | CPI: $53.75
+   Worst CPI in the entire dataset by a large margin — 15x worse than Payday Broad+. Generated 2,279 clicks against only 12 installs, indicating a severe drop-off between click and install. Either the landing/store page experience is broken for this audience or the creative attracts low-intent users.
+
+2. Meta / Re-engagement - Android
+   Spend: $144 | Installs: 6 | CPI: $24.07
+   Six installs from a re-engagement campaign suggests the audience is either too narrow, incorrectly segmented, or the "re-engagement" objective is firing installs against already-active users. Poor return for even a modest budget.
+
+3. Meta / Re-targeting Campaign Android & iOS
+   Spend: $218 | Installs: 16 | CPI: $13.61
+   More than 4x the CPI of Payday Broad+. High impression volume (22,257) with only 504 clicks and 16 installs points to weak creative relevance for the retargeted audience.
+
+4. Facebook / iOS - App Promotion Campaign (Adjust)
+   Spend: $988 | Installs: 118 | CPI: $8.37 (Meta-reported: $6.93, still 2x the benchmark)
+   Nearly $1,000 spent for 118 installs while the Android equivalent drives 10x more volume at less than half the CPI. iOS unit economics are significantly worse.
+
+
+SECTION 3 — RECOMMENDED ACTION PER UNDERPERFORMER
+---------------------------------------------------
+
+1. Meta / Cash Deposit
+   Action: Pause immediately and audit the post-click funnel before any further spend.
+   Rationale: A $53.75 CPI with 2,279 clicks and only 12 installs is a tracking or UX failure, not a targeting problem. Spending more before diagnosing is wasteful.
+
+2. Meta / Re-engagement - Android
+   Action: Pause and rebuild the audience definition, excluding users with any session in the past 30 days.
+   Rationale: Six installs from a re-engagement campaign almost certainly means the audience overlap with active users is too high, making this budget structurally unspendable against the true target.
+
+3. Meta / Re-targeting Campaign Android & iOS
+   Action: Refresh creative and tighten the retargeting window to the past 7 days of app visitors only.
+   Rationale: 22,257 impressions at $13.61 CPI indicates audience fatigue or wrong-window targeting; a tighter, more recent audience with new creative is the lowest-risk fix before cutting budget.
+
+4. Facebook / iOS - App Promotion Campaign
+   Action: Cut budget by 60% and reallocate to Apple / US - Brand - Exact, which delivers iOS installs at $3.31 CPI.
+   Rationale: At $8.37 CPI (Adjust) the Meta iOS campaign costs 2.5x more than the Apple Search Ads brand campaign for the same platform; the budget works harder on Apple's own channel.
+
+
+SECTION 4 — WEEK-OVER-WEEK TRENDS
+------------------------------------
+
+ACCELERATING — installs and efficiency both improving:
+
+- Apple / US - Brand - Exact: installs up 15% (361 to 414), spend down 3%. Best efficiency trend in paid this week.
+- Google Ads / New - Android Brand US: installs up 7%, spend down 2%. Volume leader maintaining gains at lower cost.
+- Google Ads / XAUT Offers: installs up 4%, spend flat. Stable and positive.
+- Partnership / Fumb: installs up 49% (68 to 101) at zero cost. Highest-momentum zero-cost channel this week. Warrants investigation into what drove the spike to replicate it.
+- Google Organic / speedwallet (exact match): installs up 133% (6 to 14). Small base but significant acceleration in brand search.
+
+DECLINING:
+
+- Facebook / Payday - Android - Broad+: installs down 33% (467 to 314) while spend fell only 13% ($1,286 to $1,117). Spend is falling slower than installs — worsening efficiency. This is the most important deterioration to watch given this campaign's scale. Likely creative fatigue; refresh ad creative now before the full campaign degrades.
+- Apple / US - Max Conversion Campaign: installs down 19%, spend down 10%. Efficiency is worsening (spend falling less than installs). Flag for creative review.
+- Apple / Global - Brand - Exact: installs down 28% (94 to 68), spend down 19%. Efficiency worsening. Low volume, but declining brand coverage outside the US.
+- Partnership / Thndr: installs down 31% (88 to 61) at zero cost. No budget to cut, but worth a partner conversation about what changed.
+- Re-engagement / Never Activated: down 42% (19 to 11). Near-zero utility
