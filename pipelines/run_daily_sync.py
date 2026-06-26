@@ -34,6 +34,7 @@ if str(_ROOT) not in sys.path:
 load_dotenv()
 
 from pipelines import build_creative_dashboard
+from pipelines import build_creator_dashboard
 from pipelines.adjust import AdjustPipeline
 from pipelines.meta import MetaPipeline
 from pipelines.sheets import (
@@ -131,6 +132,21 @@ def _rebuild_dashboard() -> bool:
         return False
 
 
+def _rebuild_creator_dashboard() -> bool:
+    """Rebuild the creator dashboard HTML from live Supabase data.
+
+    Runs after the creative dashboard so both stay fresh on each daily sync.
+    """
+    _log("Creator dashboard: rebuilding docs/creator_dashboard.html from Supabase...")
+    try:
+        build_creator_dashboard.main()
+        _log("Creator dashboard: rebuilt successfully")
+        return True
+    except Exception as e:
+        _log(f"Creator dashboard: rebuild FAILED — {e}")
+        return False
+
+
 def _deploy_dashboard() -> bool:
     """Push the rebuilt dashboard HTML to GitHub so Vercel auto-deploys it.
 
@@ -198,7 +214,10 @@ def run() -> None:
     # Creative dashboard — rebuilt from the freshly-synced data.
     results["Dashboard"] = _rebuild_dashboard()
 
-    # Auto-deploy: push the refreshed dashboard to GitHub → Vercel (opt-in).
+    # Creator dashboard — rebuilt from live Supabase data so both stay fresh.
+    results["Creator Dashboard"] = _rebuild_creator_dashboard()
+
+    # Auto-deploy: push the refreshed dashboards to GitHub → Vercel (opt-in).
     results["Deploy"] = _deploy_dashboard()
 
     # Summary
