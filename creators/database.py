@@ -43,6 +43,8 @@ CREATE TABLE IF NOT EXISTS creators (
     content_alignment       FLOAT DEFAULT 0,
     acquisition_potential   FLOAT DEFAULT 0,
     sponsorship_score       FLOAT DEFAULT 0,
+    is_influencer           BOOLEAN DEFAULT false,
+    influencer_score        FLOAT DEFAULT 0,
     outreach_status         TEXT DEFAULT 'not_contacted'
                             CHECK (outreach_status IN (
                                 'not_contacted', 'contacted', 'responded',
@@ -69,6 +71,15 @@ ADD_DEPOSIT_COLUMN_SQL = (
     "ALTER TABLE public.creators "
     "ADD COLUMN IF NOT EXISTS deposit_relevance_score FLOAT DEFAULT 0;"
 )
+
+# Migration for the influencer-pivot fields. Run in the Supabase SQL editor,
+# THEN uncomment the two lines in _merge_record() to persist them. Idempotent.
+ADD_INFLUENCER_COLUMNS_SQL = """
+ALTER TABLE public.creators
+    ADD COLUMN IF NOT EXISTS is_influencer BOOLEAN DEFAULT false;
+ALTER TABLE public.creators
+    ADD COLUMN IF NOT EXISTS influencer_score FLOAT DEFAULT 0;
+""".strip()
 
 # Migration for tables created with the original 4-value outreach_status CHECK.
 # Ensures the column exists, then replaces the value constraint to also allow
@@ -322,6 +333,10 @@ def _merge_record(creator_dict: dict, score_dict: dict) -> dict:
         "content_alignment":        scores.get("content_alignment", 0.0),
         "acquisition_potential":    scores.get("acquisition_potential", 0.0),
         "sponsorship_score":        scores.get("sponsorship_history", 0.0),
+        # Influencer-pivot fields — ENABLE after running ADD_INFLUENCER_COLUMNS_SQL
+        # in the Supabase SQL editor (uncomment the two lines below):
+        # "is_influencer":    bool(score_dict.get("is_influencer", False)),
+        # "influencer_score": score_dict.get("influencer_score", 0.0),
         # Defaults for new records
         "outreach_status": "not_contacted",
         "updated_at":      _now(),

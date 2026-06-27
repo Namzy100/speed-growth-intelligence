@@ -2,6 +2,7 @@
 
 import math
 import os
+import re
 from typing import Any
 
 # LLM fallback classifier: when rule-based scoring finds no segment match (the
@@ -44,6 +45,64 @@ CRYPTO_TAGS = {
     "finance", "personal finance", "fintech", "payments", "lightning",
     "btc", "eth", "satoshi", "hodl", "crypto investing", "crypto trading",
 }
+
+# Niche-tag signals of a real person / lifestyle creator (vs a media/finance
+# outlet). Includes YouTube topic-category style tags.
+PERSONAL_TAGS = {
+    "lifestyle", "lifestyle (sociology)", "vlog", "vlogging", "entertainment",
+    "society", "family", "comedy", "travel", "tourism", "fitness", "food",
+    "music", "sport", "association football", "hobby", "humour", "humor",
+}
+
+# Name patterns that signal a media / news / educational / brand outlet rather
+# than a personal creator. Multi-word substrings + short word-boundary tokens.
+_MEDIA_SUBSTRINGS = ("daily news", "news today", "news network", "media", "magazine", "press")
+_MEDIA_WORDS = ("news", "tv", "channel", "official", "academy", "university", "institute")
+
+
+def looks_like_media_name(name: str) -> bool:
+    """True if the channel name reads like a media/news/brand outlet, not a person."""
+    n = (name or "").lower()
+    if any(s in n for s in _MEDIA_SUBSTRINGS):
+        return True
+    return any(re.search(rf"\b{re.escape(w)}\b", n) for w in _MEDIA_WORDS)
+
+
+def detect_influencer(creator: dict) -> bool:
+    """Is this a personal influencer (vs a finance/news/brand channel)?
+
+    True when engagement is high (>3%) AND the channel is not a media/brand
+    outlet by name — a proxy for "single person, lifestyle/personal content".
+    """
+    er = float(creator.get("engagement_rate", 0) or 0)
+    if er <= 0.03:
+        return False
+    return not looks_like_media_name(creator.get("name", ""))
+
+
+def influencer_score(creator: dict) -> float:
+    """0-100 influencer fit, weighted to engagement + personal brand + authentic
+    audience size (NOT content-keyword matching).
+
+    Engagement 50% (cap 10% ER -> 100), personal-brand 30% (penalise media name,
+    reward lifestyle tags), authentic audience 20% (mid-size sweet spot).
+    """
+    er = float(creator.get("engagement_rate", 0) or 0)
+    followers = int(creator.get("followers", 0) or 0)
+    tags = {str(t).lower() for t in creator.get("niche_tags", [])}
+    name = creator.get("name", "")
+
+    eng = min(er / 0.10, 1.0) * 100
+    pb = (0 if looks_like_media_name(name) else 60) + (40 if tags & PERSONAL_TAGS else 0)
+    if followers < 5_000:
+        aud = 40.0
+    elif followers < 500_000:
+        aud = 100.0
+    elif followers < 2_000_000:
+        aud = 70.0
+    else:
+        aud = 50.0
+    return round(0.5 * eng + 0.3 * min(pb, 100) + 0.2 * aud, 1)
 
 
 class CreatorScorer:
@@ -121,6 +180,9 @@ class CreatorScorer:
             "deposit_relevance_score": round(deposit_rel, 1),
             "composite_score": composite,
             "segment_tag": segment_tag,
+            # Influencer signals — separate from the finance-weighted composite.
+            "is_influencer": detect_influencer(creator),
+            "influencer_score": influencer_score(creator),
             "reasoning": self._build_reasoning(
                 creator, composite, segment_tag,
                 audience_notes, engagement_notes,

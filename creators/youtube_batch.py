@@ -23,36 +23,23 @@ from creators.youtube import QuotaExceededError, YouTubeCreatorFetcher
 
 load_dotenv()
 
-# Per-segment search terms. iGaming gets extra variations — "crypto casino"
-# alone returned almost nothing useful in the prior test. Remittance and
-# crypto-curious are grounded in Speed's confirmed influencer markets (US,
-# Mexico, Brazil): remittance includes Spanish/Portuguese diaspora-corridor
-# terms, crypto-curious includes US-market framing.
+# Per-segment search terms. As of the influencer-pivot, remittance and
+# crypto-curious target PERSONAL creators (expat/diaspora vloggers, lifestyle
+# crypto stories) rather than finance/news channels; iGaming keeps the crypto
+# gambling terms plus reaction/streamer angles. The educational/news crypto
+# terms (e.g. "lightning network explained", "bitcoin news daily") were removed
+# because they surfaced media outlets like "Crypto Daily News".
 SEGMENT_SEARCHES: dict[str, list[str]] = {
     "remittance": [
-        "send money abroad",
-        "international money transfer hack",
-        "remittance app review",
-        "send money to family overseas",
-        "money transfer app review",
-        "send money internationally cheap",
-        "diaspora finance",
-        "immigrant money tips",
-        "remittance app comparison",
-        # Mexico/Brazil diaspora corridors (Spanish/Portuguese)
-        "enviar dinero a Mexico",
-        "remesas a Mexico",
-        "mandar dinheiro para o Brasil",
-        "enviar dinheiro para o Brasil",
-        "remessa de dinheiro Brasil",
-        "remessa internacional Brasil",
-        "send money to Mexico from US",
-        # Broader money-movement terms
-        "international wire transfer tips",
-        "cheapest way to send money abroad",
-        "Western Union alternative",
-        "send money online cheap",
-        "money transfer comparison",
+        "expat life vlog",
+        "immigrant life US",
+        "life in Germany as Nigerian",
+        "Brazilian in Portugal vlog",
+        "sending money home",
+        "diaspora vlogger",
+        "Latino life in USA",
+        "African in UK vlog",
+        "Indian in USA lifestyle",
     ],
     "iGaming": [
         "crypto casino",
@@ -64,31 +51,19 @@ SEGMENT_SEARCHES: dict[str, list[str]] = {
         "bitcoin gambling",
         "play to earn crypto",
         "crypto poker",
+        # Influencer / reaction angles
+        "sports betting wins",
+        "casino streamer",
+        "gambling wins reaction",
+        "betting strategy",
     ],
     "crypto-curious": [
-        "buy bitcoin beginner",
-        "crypto for beginners",
-        "how to start investing crypto",
-        "best crypto wallet beginners",
-        "bitcoin wallet tutorial",
-        "lightning network explained",
-        "crypto payments beginner",
-        "buy bitcoin 2025",
-        "bitcoin for beginners",
-        # US market framing
-        "bitcoin investing US 2025",
-        "crypto beginner United States",
-        "lightning network bitcoin payments",
-        # Broader crypto-curious terms
-        "best crypto apps 2025",
-        "bitcoin cash app",
-        "crypto passive income",
-        "ethereum for beginners",
-        "how to use bitcoin",
-        "crypto YouTube channel",
-        "bitcoin news daily",
-        "DeFi explained",
-        "crypto wallet review",
+        "crypto lifestyle",
+        "made money with bitcoin story",
+        "bitcoin changed my life",
+        "crypto millionaire story",
+        "financial freedom bitcoin",
+        "quit my job crypto",
     ],
     # EU remittance focus — German-language + UK diaspora corridors, for the
     # top-3 EU market push (Germany, UK). Run as a targeted group.
@@ -127,6 +102,31 @@ def is_excluded_brand(name: str) -> bool:
     """True if `name` contains an excluded competitor/brand token (case-insensitive)."""
     low = (name or "").lower()
     return any(b.lower() in low for b in EXCLUDED_BRANDS)
+
+
+# News/media/educational name patterns. Unlike EXCLUDED_BRANDS these are only
+# excluded when the channel ALSO has low engagement (<1%), so legitimate
+# personal creators with these words in their name aren't caught.
+_MEDIA_PATTERN_SUBSTR = ("daily news", "news today")
+_MEDIA_PATTERN_WORDS = ("academy", "university", "school", "institute",
+                        "official", "tv", "channel")
+_MEDIA_ENGAGEMENT_FLOOR = 0.01
+
+
+def is_low_engagement_media(creator: dict) -> bool:
+    """True for likely news/media/educational outlets with weak engagement.
+
+    Excludes a channel whose NAME matches a media/education pattern AND whose
+    engagement_rate is below 1% — so a real creator with e.g. 'TV' in their name
+    but strong engagement is kept.
+    """
+    er = float(creator.get("engagement_rate", 0) or 0)
+    if er >= _MEDIA_ENGAGEMENT_FLOOR:
+        return False
+    n = (creator.get("name", "") or "").lower()
+    if any(s in n for s in _MEDIA_PATTERN_SUBSTR):
+        return True
+    return any(re.search(rf"\b{re.escape(w)}\b", n) for w in _MEDIA_PATTERN_WORDS)
 
 
 def _normalize_name(name: str) -> str:
@@ -228,6 +228,13 @@ def run_batch() -> None:
         print(f"Excluded {len(excluded)} competitor/brand channel(s): "
               f"{[c['name'] for c in excluded]}")
         creators = [c for c in creators if not is_excluded_brand(c.get("name", ""))]
+
+    # Drop low-engagement news/media/educational outlets (name pattern + ER<1%).
+    media = [c for c in creators if is_low_engagement_media(c)]
+    if media:
+        print(f"Excluded {len(media)} low-engagement media/edu channel(s): "
+              f"{[c['name'] for c in media]}")
+        creators = [c for c in creators if not is_low_engagement_media(c)]
 
     if not creators:
         sys.exit("No creators left to save after exclusions.")
