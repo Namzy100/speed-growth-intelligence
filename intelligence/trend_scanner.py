@@ -22,7 +22,6 @@ from datetime import datetime, timezone
 from pathlib import Path
 from statistics import median
 
-from apify_client import ApifyClient
 from apify_client.errors import ApifyApiError
 from dotenv import load_dotenv
 
@@ -34,21 +33,18 @@ load_dotenv()
 
 from anthropic import Anthropic
 
+from creators.apify_tiktok import TikTokCreatorFetcher
+
 _DOCS_DIR = _ROOT / "docs"
 _MODEL = "claude-sonnet-4-6"
-_SEARCH_ACTOR = "clockworks/tiktok-scraper"
 _CATEGORIES = ["crypto", "bitcoin", "remittance", "money transfer"]
 _PER_CATEGORY = 20          # top N videos to keep per category
 _RESULTS_PER_QUERY = 35     # pull more than N so we can rank down to the top 20
 
 
-def _fetch_category(client: ApifyClient, term: str) -> list[dict]:
-    run = client.actor(_SEARCH_ACTOR).call(
-        run_input={"searchQueries": [term], "resultsPerPage": _RESULTS_PER_QUERY}
-    )
-    if not run or run.status not in ("SUCCEEDED", "TIMED-OUT"):
-        return []
-    items = list(client.dataset(run.default_dataset_id).iterate_items())
+def _fetch_category(fetcher: TikTokCreatorFetcher, term: str) -> list[dict]:
+    """Top videos for a category via apify_tiktok's TikTok search capability."""
+    items = fetcher.search_videos([term], results_per_query=_RESULTS_PER_QUERY)
     vids = [it for it in items if int(it.get("playCount", 0) or 0) > 0]
     vids.sort(key=lambda it: int(it.get("playCount", 0) or 0), reverse=True)
     return vids[:_PER_CATEGORY]
@@ -127,13 +123,13 @@ def run() -> str:
     api_key = os.getenv("APIFY_API_KEY")
     if not api_key:
         raise EnvironmentError("APIFY_API_KEY must be set in .env")
-    client = ApifyClient(api_key)
+    fetcher = TikTokCreatorFetcher(api_key)
 
     digests = []
     for term in _CATEGORIES:
         print(f"Scanning TikTok for '{term}'...")
         try:
-            vids = _fetch_category(client, term)
+            vids = _fetch_category(fetcher, term)
         except (RuntimeError, ApifyApiError) as e:
             print(f"  failed: {e}")
             vids = []
