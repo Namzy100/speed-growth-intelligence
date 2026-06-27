@@ -49,6 +49,52 @@ def _records(ss, tab: str) -> list[dict]:
     return sheets._retry(ws.get_all_records)
 
 
+def _classify_themes(name: str) -> dict[str, str]:
+    """Tag a Google Ads campaign name by keyword-theme dimensions."""
+    n = name.lower()
+    brand = "brand" if "brand" in n else "non-brand"
+    if "android" in n:
+        platform = "Android"
+    elif "ios" in n or "iphone" in n or "apple" in n:
+        platform = "iOS"
+    else:
+        platform = "unspecified"
+    if "exact" in n:
+        match = "exact"
+    elif "broad" in n:
+        match = "broad"
+    elif "phrase" in n:
+        match = "phrase"
+    else:
+        match = "other/offer" if not ("brand" in n) else "brand-default"
+    return {"brand": brand, "platform": platform, "match": match}
+
+
+def _theme_clusters(camps: list[dict]) -> str:
+    """Aggregate installs/cost/CPI by keyword-theme cluster (only paid campaigns)."""
+    from collections import defaultdict
+    dims = {"brand": defaultdict(lambda: [0, 0.0]),
+            "platform": defaultdict(lambda: [0, 0.0]),
+            "match": defaultdict(lambda: [0, 0.0])}
+    for c in camps:
+        if not c["cost"]:  # exclude $0-cost (disconnected) from efficiency clusters
+            continue
+        t = _classify_themes(c["campaign"])
+        for dim, key in t.items():
+            dims[dim][key][0] += c["installs"]
+            dims[dim][key][1] += c["cost"]
+
+    out = ["GOOGLE ADS — KEYWORD-THEME CLUSTERS (paid campaigns only; installs, cost, CPI):"]
+    labels = {"brand": "Brand vs non-brand", "platform": "Platform (OS)",
+              "match": "Match type / theme"}
+    for dim in ("brand", "platform", "match"):
+        out.append(f"  {labels[dim]}:")
+        for key, (inst, cost) in sorted(dims[dim].items(), key=lambda kv: kv[1][0], reverse=True):
+            cpi = cost / inst if inst else 0.0
+            out.append(f"    {key}: {inst:,} installs, ${cost:,.0f}, CPI ${cpi:.2f}")
+    return "\n".join(out)
+
+
 def build_data_summary(campaign_rows: list[dict], channel_rows: list[dict]) -> str:
     # Per-campaign Google Ads (installs, cost, CPI).
     camps = []
@@ -68,7 +114,12 @@ def build_data_summary(campaign_rows: list[dict], channel_rows: list[dict]) -> s
     for c in camps:
         cost_str = f"${c['cost']:,.2f}" if c["cost"] > 0 else "$0 (no cost reported — spend integration likely disconnected)"
         cpi_str = f"${c['cpi']:.2f}" if c["cpi"] is not None else "n/a"
-        lines.append(f"  {c['campaign']}: {c['installs']:,} installs, {cost_str}, CPI {cpi_str}")
+        theme = _classify_themes(c["campaign"])
+        lines.append(f"  {c['campaign']}: {c['installs']:,} installs, {cost_str}, CPI {cpi_str} "
+                     f"[{theme['brand']}, {theme['platform']}, {theme['match']}]")
+
+    lines.append("")
+    lines.append(_theme_clusters(camps))
 
     # Channel-level Google Ads (impressions, clicks → CTR + install rate).
     lines.append("")
@@ -107,10 +158,15 @@ markers — use dash/equals section headers). Cover, in order:
 with the numbers.
 2. UNDERPERFORMING / FLAGGED — weak CPI, low volume, or $0-cost reporting issues, \
 with a one-line reason each.
-3. KEYWORD & CREATIVE THEMES — what the campaign names + channel CTR/install-rate \
-suggest is working (brand vs non-brand, offer-led, etc.).
-4. THREE RECOMMENDATIONS — specific, numbered, grounded in the numbers.
-Cite real numbers throughout. Keep it under 500 words.
+3. KEYWORD-THEME EFFICIENCY — using the KEYWORD-THEME CLUSTERS, say which theme \
+clusters are most/least efficient: brand vs non-brand, Android vs iOS, and match \
+type (exact/broad/offer). Cite the per-cluster CPIs and call out the single most \
+efficient and least efficient cluster.
+4. CREATIVE ANGLES FROM CAMPAIGN NAMES — what the names imply about messaging/\
+creative (e.g. brand-defense, offer/incentive-led like "XAUT offers", \
+platform-specific), and which angles to double down on or test next.
+5. THREE RECOMMENDATIONS — specific, numbered, grounded in the numbers.
+Cite real numbers throughout. Keep it under 650 words.
 
 --- GOOGLE ADS DATA ---
 {data_summary}
@@ -124,7 +180,7 @@ def generate_analysis(data_summary: str) -> str:
     client = Anthropic(api_key=api_key)
     resp = client.messages.create(
         model=_MODEL,
-        max_tokens=1500,
+        max_tokens=1800,
         messages=[{"role": "user", "content": _PROMPT.format(data_summary=data_summary)}],
     )
     return resp.content[0].text
