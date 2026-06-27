@@ -1,101 +1,137 @@
 ======================================================================
-SPEED WALLET — US TIKTOK TREND REPORT
-Generated 2026-06-27 02:04 UTC
-(TikTok only; US approximated via English search terms)
+SPEED WALLET — US TIKTOK + INSTAGRAM TREND REPORT
+Generated 2026-06-27 22:16 UTC
+(US approximated via English terms; not strictly geo-filtered)
 ======================================================================
 
-RAW SIGNAL
-----------
-CRYPTO — top 20 videos by views (max 4,000,000, median 181,100 views)
-  top hashtags: #crypto(15), #bitcoin(5), #cryptocurrency(5), #investing(3), #xrp(3), #cryptonews(2), #cryptoinvesting(2), #blockchain(2), #cripto(2), #trading(2), #foryou(2), #cryptotrading(2)
+RAW SIGNAL — TIKTOK
+--------------------
+CRYPTO (TikTok) — top 20 videos by views (max 4,000,000, median 149,100 views)
+  top hashtags: #bitcoin(11), #crypto(8), #xrp(5), #cryptocurrency(4), #btc(3), #fyp(3), #solana(3), #money(2), #trading(2), #sol(2), #ethereum(2), #investing(2)
   top captions by views:
     [ 4,000,000 views, 60s] Bitcoin could face a problem no one can ignore Steve Keen argues that Bitcoin’s core design depends on massive energy use to secure its network. While that make
-    [ 2,800,000 views, 26s] I can’t wait this much . Follow @cryptodaily for daily News . . Shiba Inu coin Shiba Inu crypto price Shiba Inu token Shiba Inu coin news Shiba Inu coin price p
-    [ 1,100,000 views, 0s] Wondering which AI coins to watch for the 2025 bullrun? Here are my top 5 picks, with my own targets and potential growth. #crypto #ai #cryptoprediction #2025bu
-    [   558,900 views, 0s] What is next price? What will be in 2025?😱🪙💰#blockchain #crypto #cryptocurrency #cryptomarket #bitcoin #bitcoingrowth
-    [   545,900 views, 95s] I chip cervello saranno le nuove armi? Potrebbe essere tutto un delirio ma questo ragazzo ha bruciato 1.300.000 dollari per annunciarlo. E l’ha fatto nel modo i
-    [   475,700 views, 0s] XRP has broken out on the 4 hour chart today while the rest of the crypto market has traded sideways. There are some new announcements that could be playing a p
+    [ 2,200,000 views, 14s] Day 1 in crypto 😬🤝 ‼️NOT FINANCIAL ADVICE ❌ Find more here linktr.ee/trutrader ❗️ This content is for educational and entertainment purposes only. It is not fin
+    [   981,400 views, 11s] Trump Calls Bitcoin “Very Powerful” at Fintech Event President Donald Trump spoke positively about Bitcoin at a fintech event on Friday, calling it “very powerf
+    [   756,800 views, 392s] Don’t engage with the scammers pls this is my only account and I’ll never dm you first #crypto #cryptocurrency #money #bitcoin #ethereum #solana #investing #cry
+    [   681,800 views, 17s] I love crypto 🥹 #web3 #meme #lifestyle #web3space #metaverse #blockchain #fyp
+    [   448,300 views, 0s] Crypto gave me financial freedom #crypto #fyp #foryoupage
 
-BITCOIN — top 20 videos by views (max 963,600, median 76,450 views)
-  top hashtags: #bitcoin(16), #crypto(9), #btc(5), #cryptonews(4), #xrp(2), #ethereum(2), #cnbc(2), #cryptocurrency(2), #investing(2), #finance(2), #michaelsaylor(2), #solana(1)
+BITCOIN (TikTok) — top 20 videos by views (max 4,700,000, median 52,450 views)
+  top hashtags: #bitcoin(17), #crypto(15), #btc(6), #viral(2), #meme(2), #investing(2), #cnbc(2), #ai(2), #cryptocurrency(2), #edit(1), #jeromepowell(1), #fypシ(1)
   top captions by views:
-    [   963,600 views, 5s] POV: You wasted 5 years of your life 😂🤯! #crypto #bitcoin #solana #xrp
-    [   853,300 views, 0s] Lily Allen missed out on a potential fortune after turning down a Bitcoin payment in 2009. The singer was offered 200,000 Bitcoins to perform a virtual gig on S
-    [   383,800 views, 0s] Today $3.25T was wiped from the markets, with $1.75T erased from US stocks, nearly $1T from gold, $300B from silver and another $200B from crypto. The Nasdaq pl
-    [   368,100 views, 0s] Bitcoin has fallen into the $65,000 range, reaching its lowest level in two months as a fresh wave of selling pressure hit the crypto market. BTC dropped more t
-    [   219,300 views, 49s] Bitcoin extended its losses on Friday, dropping to October 2024 lows to cap an already bruising week for crypto investors. CNBC's MacKenzie Sigalos has the deta
-    [   158,700 views, 0s] Markets turned lower today as investors faced a barrage of major headlines. Google posted its worst day in over a year, erasing $264 billion in market value, wh
+    [ 4,700,000 views, 20s] good afternoon #edit #jeromepowell #crypto #bitcoin #fypシ #viral
+    [ 3,000,000 views, 12s] Trader in Dad’s House 😂 #memecoin #crypto #bitcoin #meme #btc #solana #trading
+    [   804,400 views, 12s] Here’s why Bitcoin Mining is going to save the world. It’s great economics! #kevinoleary #crypto #bitcoin #business #btc #investing
+    [   219,900 views, 49s] Bitcoin extended its losses on Friday, dropping to October 2024 lows to cap an already bruising week for crypto investors. CNBC's MacKenzie Sigalos has the deta
+    [   134,900 views, 12s] AI has officially turned financial history into a cinematic masterpiece. Thanks to OpenAI’s Sora 2, the internet is buzzing with hyper-realistic clips of a youn
+    [   132,300 views, 26s] 8 years wasted in Crypto! 📉📈 #crypto #bitcoin #xrp #cardano
 
-REMITTANCE — top 20 videos by views (max 789,600, median 40,700 views)
-  top hashtags: #remittance(4), #money(3), #fyp(3), #viral(2), #remittances(2), #sendwave(2), #moneytransfer(2), #ugandatiktok(1), #new(1), #storytime(1), #africa(1), #african(1)
+REMITTANCE (TikTok) — top 20 videos by views (max 1,200,000, median 49,250 views)
+  top hashtags: #remittance(6), #africa(2), #remittances(2), #fyp(2), #history(2), #stitch(1), #latinotiktok(1), #african(1), #remitly(1), #sendwave(1), #wise(1), #taptapsend(1)
   top captions by views:
-    [   789,600 views, 286s] Guys this is crazy! Last year Uganda receivers about $2.5B in remittances but the new Protection Sovereignty Bill wants to cap transactions in a year to one eac
+    [ 1,200,000 views, 271s] #stitch with @@genzxelcambio this is too nuanced of a take to tske seriously but I havent uploaded in a while so here you go #latinotiktok
     [   600,900 views, 49s] Which African diaspora sends more remittances? #africa #african #remittance #remittances
-    [   414,800 views, 54s] Nagpapadala ka ng pera sa pinas? Dapat alam mo to
-    [   413,000 views, 144s] Battle ng mga Remittance App sa UK. #Remitly vs #Sendwave vs #wise vs #taptapsend #UKofw #ofwtiktokersworldwide #perapadala #pinoy
-    [   363,700 views, 606s] Pakistani Exporter Ne Nojwano ko barri Offer De di... 💕 #YasirShami #ExportImports #ExportBussiness #ExportQuality #FreeTrainings
-    [   151,200 views, 0s] #savingmoney #remittance #nepal #money #tips Bidesh xau 1K बाटै लाखौं कमाउने मौका छ💸👈
+    [   415,100 views, 54s] Nagpapadala ka ng pera sa pinas? Dapat alam mo to
+    [   413,200 views, 144s] Battle ng mga Remittance App sa UK. #Remitly vs #Sendwave vs #wise vs #taptapsend #UKofw #ofwtiktokersworldwide #perapadala #pinoy
+    [   135,300 views, 0s] ada yg pernah nyobain semua? #kenshuseijapan🇮🇩🇯🇵🎌 #tokuteiginou #fyp #jepang #remittance
+    [    87,200 views, 63s] May kamag-anak ka bang nagpapadala from abroad?🤔 No need to go to remittance centers dahil derecho na sa cellphone mo ang padala nila through GCash Remittance. 
 
-MONEY TRANSFER — top 20 videos by views (max 254,800, median 23,850 views)
-  top hashtags: #moneytransfer(3), #money(3), #fyp(3), #moneytips(2), #finance(2), #senegalaise_tik_tok(2), #senegalaise_tik_tok🇸🇳(2), #postthecontent(1), #manifesting(1), #anythingcanhappen(1), #feature(1), #foryou(1)
+MONEY TRANSFER (TikTok) — top 20 videos by views (max 11,700,000, median 33,450 views)
+  top hashtags: #moneytransfer(4), #moneytransfers(2), #money(2), #senegalaise_tik_tok(2), #senegalaise_tik_tok🇸🇳(2), #eversend(1), #sendmoneyeasily(1), #transfermoney(1), #onlineshopping(1), #onlinepayment(1), #managemoney(1), #moneytok(1)
   top captions by views:
-    [   254,800 views, 5s] It’ll always get better!!!! #postthecontent #manifesting #anythingcanhappen
-    [   166,400 views, 59s] I transferred all of our money into a separate account and Chelsea just went to buy some thing.... omg her reaction... #feature #foryou #quasifam ￼￼
-    [   121,400 views, 23s] Now that’s a well-executed money transfer thanks to @WesternUnion New customers get $0 transfer fee on their first online money transfer!* *Exchange rates apply
-    [    39,500 views, 32s] #OnePayPartner Never Transfer Money Abroad Until You Know This 💸🚫 If you’ve ever sent money overseas to family or friends, OnePay makes the whole process way ea
-    [    37,900 views, 78s] How to send money via bank transfer super safely. Send a small amount first (under 10 cents) - once they have received it get them to confirm the amount. Becaus
-    [    36,800 views, 0s] Easy Naira Transfers – With Vault, send money to any Nigerian bank in just a few taps. Fast, secure, and hassle-free – your money moves when you need it! #Vault
+    [11,700,000 views, 50s] Easily verify your Eversend Account in 3 easy steps and start transctimg today 😊. It's quick and easy and only takes you less than 2 minutes 😎. In case of any c
+    [ 5,900,000 views, 32s] Send Money with ZERO FEES! Kashaf Ali trusts ACE Money Transfer to send money back home! So If you're an Expat living abroad, sign up with the Promo Code: 𝗞𝗔𝗦𝗛𝗔
+    [ 1,000,000 views, 90s] 
+    [   243,600 views, 28s] Transfer Galaxy, send money Fast, Simple and Hassle Free @TransferGalaxy
+    [   217,000 views, 13s] Security is vital when transferring money. Know that when you use Ria, your money is protected and transferred safely 🤝🏼 #moneytok #moneytransfers
+    [   100,800 views, 0s] transfer money to my bank account
+
+RAW SIGNAL — INSTAGRAM
+----------------------
+CRYPTO (Instagram) — top 13 posts by likes (max 268, median 2 likes)
+  top hashtags: #crypto(12), #sharkcash(3), #solana(3), #xrp(3), #ripple(3), #xrpripple(3), #xrpcryptowolf(3), #btc(2), #dexscreener(2), #memecoin(2), #bitcoin(1), #stockmarket(1)
+  top captions by likes:
+    [      268 likes, Sidecar] Last one will surprise you 🤯 Markets turned lower after South Korea halted KOSPI trading following an 8% crash, while Chinese hedge funds warned the AI “super b
+    [        6 likes, Sidecar] Bezrobotny a Obrotny 💰😹🙏 . . . . . . #summer #maybach #crypto #phatom #larp
+    [        5 likes, Image] SHARKCASH is making serious noise. 🦈 Up +734.65% in the last hour — momentum is building fast and the chart speaks for itself. The wave is live. Stay sharp, ver
+    [        4 likes, Image] SHARK CASH is live now. 🦈💸 #24 on DexScreener. 100x boost active. The hottest coin on the screen right now — Shark Cash just dropped. shark-cash.com #SharkCash 
+    [        3 likes, Image] Go To My X Account: XRPcryptowolf If You Want To Read The Full News Articles #xrp #ripple #xrpripple #crypto #xrpcryptowolf
+    [        2 likes, Image] Go To My X Account: XRPcryptowolf If You Want To Read The Full News Articles #xrp #ripple #xrpripple #crypto #xrpcryptowolf
+
+BITCOIN (Instagram): (no posts returned)
+
+REMITTANCE (Instagram) — top 11 posts by likes (max 19, median 2 likes)
+  top hashtags: #remittance(11), #moneytransfer(5), #globalpayments(4), #tigrispay(3), #currencyexchange(3), #forex(3), #financialservices(3), #sendmoney(3), #lowfees(3), #trustedservice(3), #moneymatters(3), #worldcup2026(2)
+  top captions by likes:
+    [       19 likes, Image] ⚽ Teamwork on the field. Trust in every transfer. Drop by Lulu Exchange Qatar – Industrial Area Branch for quick, secure, and convenient remittance services. 📍 
+    [       14 likes, Image] 🚀 Project Spotlight – Complete Bank Transfer or Remittance Order Management System After sharing our successful project launch, here's a closer look at what we 
+    [        3 likes, Image] ⚽ 𝗠𝗮𝘁𝗰𝗵 𝗗𝗮𝘆 𝗶𝘀 𝗛𝗲𝗿𝗲! The FIFA World Cup 2026 excitement continues with another thrilling showdown: 🏴 𝗘𝗻𝗴𝗹𝗮𝗻𝗱 𝘃𝘀 𝗣𝗮𝗻𝗮𝗺𝗮 🇵🇦 📅 𝟭𝟳 𝗝𝘂𝗻𝗲 𝟮𝟬𝟮𝟲 Whether you're cheering
+    [        3 likes, Image] Receive money sent from abroad through our trusted money transfer agents or TerraPay and collect it easily at any Coopbank branch with an extra 10% bonus. More 
+    [        2 likes, Image] 🏆 𝗧𝗵𝗲 𝗙𝗜𝗙𝗔 𝗪𝗼𝗿𝗹𝗱 𝗖𝘂𝗽 𝟮𝟬𝟮𝟲 𝗮𝗰𝘁𝗶𝗼𝗻 𝗰𝗼𝗻𝘁𝗶𝗻𝘂𝗲𝘀! Get ready for the upcoming clash between 𝗖𝗿𝗼𝗮𝘁𝗶𝗮 🇭🇷 𝗮𝗻𝗱 𝗚𝗵𝗮𝗻𝗮 🇬🇭 𝗼𝗻 𝟮𝟰 𝗝𝘂𝗻𝗲 𝟮𝟬𝟮𝟲 Who are you backing to win? 👇 ⚽ 𝗣𝗿𝗲
+    [        2 likes, Image] 🇬🇧➡️🇵🇰 Send Money from the UK to Pakistan with confidence! Enjoy a safe, reliable, and hassle-free transfer experience while getting more value for your money. 
+
+MONEY TRANSFER (Instagram) — top 14 posts by likes (max 19, median 1 likes)
+  top hashtags: #moneytransfer(14), #currencyexchange(6), #remittance(4), #sendmoney(4), #travelservices(3), #flightbooking(3), #cheapflights(3), #travelagency(3), #tourpackages(3), #holidaydeals(3), #internationalflights(3), #hajjpackages(3)
+  top captions by likes:
+    [       19 likes, Image] ⚽ Teamwork on the field. Trust in every transfer. Drop by Lulu Exchange Qatar – Industrial Area Branch for quick, secure, and convenient remittance services. 📍 
+    [       13 likes, Image] 🕋 Budget-Friendly Umrah Offers – Affordable Spiritual Travel 🌙 Perform your sacred Umrah journey without financial stress through our budget-friendly Umrah offe
+    [       10 likes, Image] 🕋 A Journey That Changes Your Life – Umrah & Hajj Experience 🌙 Embark on a life-changing spiritual journey with our trusted travel agency based in Luton. With o
+    [       10 likes, Image] ✈️ Travel Services – Smooth, Comfortable & Hassle-Free Journeys ✈️ Luton Travel, with over 20 years of trusted experience serving clients in both the UK and Pak
+    [        9 likes, Image] 📢 Estamos prontos para atender você! Passe na SpeedFast e conte com um atendimento rápido, seguro e confiável para enviar dinheiro para o Brasil e diversos outr
+    [        2 likes, Image] اومانی؛ خدمات مالی بین‌المللی نرخ لحظه‌ای ارز و طلا، همراه با خدمات حواله و تبدیل ارز. #Omoney #طلا #MoneyTransfer #CurrencyExchange #صرافی_عمان #Oman
 
 ======================================================================
 TRENDS
 ------
 SPEED WALLET CONTENT TRENDS — ACTIONABLE BRIEF DIRECTIONS
-=============================================================
-
-TREND 1: MISSED BITCOIN MOMENT / REGRET HOOK
----------------------------------------------
-Evidence: The Lily Allen Bitcoin story (853K views, #bitcoin) and the "POV: You wasted 5 years" clip (963K views, 5 seconds) both exploded using regret framing. Short duration + emotional hook = outsized performance in the Bitcoin category.
-
-Format/Hook: 5 to 15 seconds, POV or reaction style. Opening line: "POV: You still pay fees every time you send money home."
-
-Speed Usage (Remittance segment): Brief a creator to film a quick reaction to a fake wire transfer receipt showing $18 in fees. Cut to Speed showing $0. No voiceover needed — let the screen do the work. This mirrors the viral POV format exactly and targets diaspora senders.
+===========================================================
 
 
-TREND 2: APP COMPARISON / BATTLE FORMAT
-----------------------------------------
-Evidence: The Remitly vs Sendwave vs Wise vs TapTapSend video (413K views, 144 seconds) used a direct head-to-head structure with strong OFW/diaspora community hashtags. Remittance had the second-highest median engagement of any category.
+TREND 1 — "Zero Fees" Story Hook
+---------------------------------
+Evidence: TikTok Money Transfer, 5.9M views on ACE Money Transfer "Send Money with ZERO FEES" video using a creator testimonial format. Remittance TikTok also shows app-comparison content (Remitly vs Sendwave vs Wise) hitting 413K views. Zero-fees framing and expat trust signals drive the highest organic engagement in this category.
 
-Format/Hook: 45 to 90 seconds, side-by-side screen comparison. Opening line: "I tested five apps to send $200 to the Philippines — here's what actually arrived."
+Format/Hook: 15-30 seconds, creator-to-camera testimonial. Open with: "I used to lose $20 every time I sent money home — then I switched to this."
 
-Speed Usage (Remittance segment): Partner with a Filipino, Nigerian, or Nepali diaspora creator. They run a live test — same amount, same destination, five apps. Speed arrives instantly with zero fees. Let the final number speak. Brief should emphasize authenticity over polish; rough screen recordings outperform studio cuts in this format.
-
-
-TREND 3: SCARY STAT / NEWS HOOK WITH POLICY ANGLE
----------------------------------------------------
-Evidence: The Uganda remittance bill video (789K views, 286 seconds) was the single biggest video in the remittance category and leaned entirely on a policy threat narrative. People engage hard when their money flow feels at risk.
-
-Format/Hook: 60 to 90 seconds, talking-head or text-overlay explainer. Opening line: "Governments are starting to cap how much money you can send abroad — here's how Bitcoin protects you."
-
-Speed Usage (Remittance + Crypto-curious segments): Brief a financial commentary creator to explain how censorship-resistant Lightning payments sidestep traditional transfer restrictions. Speed is the solution shown in the final 10 seconds. Keep it educational, not salesy — the Uganda video won because it informed first.
+Speed Should Use It: Remittance segment. Brief a Filipino, Nigerian, Pakistani, or Latino diaspora creator to do a before/after comparison. Show the Speed wallet interface, emphasize zero Lightning fees, and end with a real transfer happening on screen. Run as paid TikTok spark ad seeded from an organic creator post.
 
 
-TREND 4: PRICE PREDICTION / BULLRUN ENERGY
---------------------------------------------
-Evidence: The AI coins bullrun video (1.1M views) and XRP breakout clip (475K views) show strong appetite for forward-looking crypto content. #2025bullrun and prediction framing consistently drove clicks in the Crypto category, which had the highest view ceiling of all four (4M max).
+TREND 2 — "Day 1 in Crypto" Beginner Entry Point
+--------------------------------------------------
+Evidence: TikTok Crypto, 2.2M views on a "Day 1 in crypto" video, 14 seconds long. "Crypto gave me financial freedom" at 448K with no hashtag effort. Bitcoin TikTok shows meme/humor edits at 3M-4.7M views. Beginner framing and low-stakes relatability consistently outperform analytical content in raw views.
 
-Format/Hook: 30 to 45 seconds, energetic list or countdown style. Opening line: "Everyone's talking about holding Bitcoin — nobody's talking about actually spending it."
+Format/Hook: 10-20 seconds, casual selfie or screen-record style. Open with: "I just downloaded a Bitcoin app and I genuinely don't know what I'm doing — here's what happened."
 
-Speed Usage (Crypto-curious segment): Position Speed as the bridge between holding and using. Creator brief: show a real purchase or Lightning payment made during bullrun excitement. Contrast the slow, fee-heavy on-chain experience with instant Speed payment. Tap #crypto #bitcoin #2025 hashtags for organic reach.
-
-
-TREND 5: REACTION / PRANK MONEY FORMAT
-----------------------------------------
-Evidence: The "I transferred all our money and watched her reaction" video (166K views, 59 seconds) in Money Transfer was the only genuinely viral organic post in that category. Relationship-based money humor travels fast.
-
-Format/Hook: 30 to 60 seconds, couple or roommate prank format. Opening line: "I sent my friend money in 3 seconds and told them to check their wallet."
-
-Speed Usage (iGaming / general awareness): Brief a lifestyle creator to do a "Speed challenge" — send a friend Bitcoin over Lightning mid-conversation. Play up the instant arrival. Light, shareable, no financial jargon. Good for top-of-funnel brand awareness.
+Speed Should Use It: Crypto-curious/simplicity segment. Creator brief: document a genuine first-time Bitcoin purchase using Speed, show the tap-to-pay or receive flow, keep the tone unpolished and honest. No jargon. This doubles as an onboarding demo without feeling like one.
 
 
-=============================================================
-CATEGORY NOTE: Remittance was the strongest category — high views, clear audience identity, and emotional stakes. Money Transfer was the thinnest, with weak native content and low median views; avoid heavy investment there until the format matures.
+TREND 3 — App Walkthrough Verification / Onboarding Demo
+----------------------------------------------------------
+Evidence: TikTok Money Transfer, 11.7M views on an Eversend account-verification walkthrough — "3 easy steps, less than 2 minutes." This is the single highest-performing video in the entire dataset. Screen-record or phone-held tutorial format with a friendly voiceover is clearly the breakout mechanic in the transfers category.
+
+Format/Hook: 30-50 seconds, screen-record with voiceover or creator holding phone. Open with: "Setting up took me under two minutes — let me show you exactly how."
+
+Speed Should Use It: All three segments but prioritize iGaming and remittance where friction-at-onboarding is the real objection. Ad creative direction: show Speed download, wallet creation, and first deposit to a gaming site or first send to a family member, all within one continuous screen-record. Run as pre-roll or TikTok TopView.
+
+
+TREND 4 — Culture / Humor Edit Using News or Memes
+----------------------------------------------------
+Evidence: Bitcoin TikTok has the top two videos at 4.7M ("good afternoon" Jerome Powell edit) and 3M ("Trader in Dad's House" meme) — both under 20 seconds, minimal caption, heavy meme-culture framing. These vastly outperform informational Bitcoin content. The humor-edit format requires almost no production budget.
+
+Format/Hook: 10-15 seconds, trending audio + on-screen text reaction. Open with a recognizable news clip or meme format, then cut to Speed branding. Open line example: "When you find out Bitcoin just hit a new high and your whole portfolio is in Speed Wallet already."
+
+Speed Should Use It: Crypto-curious segment as awareness. Brief an editor or small meme creator rather than a polished influencer. Use trending sounds, reaction cuts, minimal dialogue. Keep Speed logo subtle — end card only. Goal is shares and follows, not direct conversion.
+
+
+TREND 5 — Diaspora Community Pride + Send-Money Moment
+-------------------------------------------------------
+Evidence: TikTok Remittance shows Tagalog-language content at 415K and 413K views, and an Indonesian-language video at 135K — all outperforming English-language remittance content. Community-specific framing (OFW, African diaspora, Latino) creates higher resonance than generic expat messaging.
+
+Format/Hook: 45-60 seconds, native-language creator, emotional storytelling. Open with: "Nag-padala ako ng pera sa nanay ko gamit lang ang phone ko" (or equivalent in Arabic, Amharic, Spanish). Show the moment of sending and a reaction from the recipient.
+
+Speed Should Use It: Remittance segment. Brief creators natively in Tagalog, Arabic, Spanish, or Amharic. Do not translate or overdub — authenticity is the mechanism. Localized paid promotion within diaspora community audiences on TikTok.
+
+
+TIKTOK VS INSTAGRAM NOTE
+-------------------------
+TikTok across crypto, Bitcoin, and money transfer was by far the strongest category for actionable volume and scale — multiple videos in the millions. Instagram data across all four categories was extremely thin (max 268 likes, mostly 1-19 likes, significant spam and low-quality posts visible), making it unreliable for creative direction at this time. Prioritize TikTok for Speed's creator and paid strategy; Instagram may be worth a separate audit with better geo-filtering before investment.
