@@ -116,6 +116,18 @@ class TikTokCreatorFetcher:
             RuntimeError: If the Apify actor run fails or is aborted.
             ApifyApiError: For authentication or platform-level API errors.
         """
+        return self._creators_from_items(self.search_videos(queries, results_per_query))
+
+    def search_videos(self, queries: list[str], results_per_query: int = 15) -> list[dict]:
+        """Topic search returning RAW video items (one row per video).
+
+        Same actor as search() but WITHOUT grouping into creators — each item
+        keeps its per-video signals (playCount, text/caption, hashtags,
+        videoMeta), which trend analysis needs. search() builds on top of this.
+
+        Returns:
+            List of raw actor items (TikTok videos matching the queries).
+        """
         if not queries:
             return []
 
@@ -128,11 +140,12 @@ class TikTokCreatorFetcher:
 
         if not run:
             raise RuntimeError("Apify search actor run timed out with no result.")
-        if run.status != "SUCCEEDED":
+        # TIMED-OUT is acceptable — the scraper paginates and we stop it early,
+        # but the dataset still holds the items collected so far.
+        if run.status not in ("SUCCEEDED", "TIMED-OUT"):
             raise RuntimeError(f"Apify search actor run ended with status: {run.status}")
 
-        items = list(self._client.dataset(run.default_dataset_id).iterate_items())
-        return self._creators_from_items(items)
+        return list(self._client.dataset(run.default_dataset_id).iterate_items())
 
     # ------------------------------------------------------------------
     # Build helpers
