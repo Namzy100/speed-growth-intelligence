@@ -95,6 +95,8 @@ EXCLUDED_BRANDS = [
     # Media / news outlets — not individual creator partners
     "CNBC", "BBC", "Forbes", "Bloomberg", "Reuters", "CNN",
     "Fox Business", "Wall Street Journal", "Financial Times",
+    # Money-transfer companies + LatAm news outlets that slipped through
+    "Ria Money Transfer", "Latinus", "Periódico Excélsior",
 ]
 
 
