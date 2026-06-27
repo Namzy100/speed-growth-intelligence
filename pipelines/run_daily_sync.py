@@ -91,21 +91,50 @@ def _sync_country_installs(spreadsheet_id: str) -> bool:
     return write_country_installs(df, spreadsheet_id, log=_log)
 
 
+_META_STATUS = _ROOT / "data" / "processed" / "meta_sync_status.json"
+
+
+def _record_meta_status(success: bool) -> None:
+    """Persist Meta sync status so the dashboard can show a staleness label.
+
+    Keeps the last *successful* sync date so the creative dashboard can render
+    'Data as of <date> — live sync pending' when the integration is down.
+    """
+    import json
+    prev = {}
+    try:
+        prev = json.loads(_META_STATUS.read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError):
+        pass
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    status = {
+        "last_attempt": now,
+        "success": success,
+        "last_success": now if success else prev.get("last_success"),
+    }
+    _META_STATUS.parent.mkdir(parents=True, exist_ok=True)
+    _META_STATUS.write_text(json.dumps(status, indent=2), encoding="utf-8")
+
+
 def _sync_meta(spreadsheet_id: str) -> bool:
     """Pull Meta campaign data and write it to the Meta Campaigns tab.
 
     Returns True if all writes succeeded, False if any step failed.
     Individual sheet failures are logged but do not abort the others.
+    Records Meta sync status for the dashboard staleness label.
     """
     _log("Meta: pulling last 30 days...")
     try:
         data = MetaPipeline().get_all(days=30)
     except Exception as e:
         _log(f"Meta: pull FAILED — {e}")
+        _record_meta_status(False)
         return False
 
     # Single source of truth for the write loop lives in sheets.py.
-    return write_all_meta_data(data, spreadsheet_id, log=_log)
+    ok = write_all_meta_data(data, spreadsheet_id, log=_log)
+    _record_meta_status(ok)
+    return ok
 
 
 def _write_last_updated(spreadsheet_id: str) -> None:

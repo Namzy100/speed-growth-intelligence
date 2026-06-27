@@ -12,3 +12,4 @@ data/processed/creative_dashboard_insights.cache.json
 .DS_Store
 creators/.DS_Store
 **/.DS_Store
+data/processed/meta_sync_status.json

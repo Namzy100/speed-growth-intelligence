@@ -419,6 +419,30 @@ def get_insights(fingerprint: dict, channels: dict, campaigns: dict, retention: 
 
 
 # ------------------------------------------------------------------
+# Meta freshness
+# ------------------------------------------------------------------
+
+_META_STATUS = _ROOT / "data" / "processed" / "meta_sync_status.json"
+
+
+def _meta_status_note() -> str:
+    """Staleness note for the Meta section if the last Meta sync failed.
+
+    run_daily_sync writes meta_sync_status.json each run. If the most recent
+    attempt failed (e.g. expired token), return a 'Data as of <last success> —
+    live sync pending' label; otherwise return '' (data is fresh).
+    """
+    try:
+        status = json.loads(_META_STATUS.read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError):
+        return ""
+    if status.get("success"):
+        return ""
+    last = status.get("last_success") or "an earlier sync"
+    return f"⚠ Data as of {last} — live sync pending (Meta integration needs reconnection)"
+
+
+# ------------------------------------------------------------------
 # Render
 # ------------------------------------------------------------------
 
@@ -478,6 +502,7 @@ def main() -> None:
         **campaigns,
         "retention": retention,
         "meta": meta,
+        "meta_note": _meta_status_note(),
         "insights": insights["insights"],
         "insights_critical_index": insights.get("critical_index"),
         "insights_source": insights["source"],
@@ -612,6 +637,11 @@ _TEMPLATE = r"""<!doctype html>
   .muted{color:var(--muted);}
   .chart-box{position:relative; height:340px;}
 
+  /* Stale-data banner (e.g. Meta token expired) */
+  .stale-banner{margin-bottom:12px; padding:9px 14px; border-radius:var(--r-sm);
+    background:rgba(227,179,65,0.10); border:1px solid rgba(227,179,65,0.34);
+    color:var(--warn); font-size:12.5px; font-weight:600;}
+
   /* Insight cards */
   .ins-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
   @media(max-width:880px){.ins-grid{grid-template-columns:1fr;}}
@@ -697,6 +727,7 @@ _TEMPLATE = r"""<!doctype html>
   <!-- 4. Meta Campaign Performance -->
   <section>
     <div class="sec-head"><h2>Meta Campaign Performance</h2><span class="note" id="metaNote"></span></div>
+    <div class="stale-banner" id="metaStale" style="display:none"></div>
     <div class="panel"><div class="table-wrap"><table id="metaTable">
       <thead><tr><th>Campaign</th><th>Spend</th><th>Impressions</th><th>Clicks</th><th>App Installs</th><th>Creative Score</th></tr></thead>
       <tbody></tbody>
@@ -909,6 +940,8 @@ function renderRetention(){
 function renderMeta(){
   const m = DATA.meta;
   const tb = document.querySelector("#metaTable tbody");
+  const stale = document.getElementById("metaStale");
+  if (DATA.meta_note){ stale.textContent = DATA.meta_note; stale.style.display = "block"; }
   if (!m || !m.campaigns || !m.campaigns.length){
     document.getElementById("metaNote").textContent = "No active Meta campaigns this period";
     tb.innerHTML = `<tr><td colspan="6" class="muted">No Meta campaign data for this period.</td></tr>`;
