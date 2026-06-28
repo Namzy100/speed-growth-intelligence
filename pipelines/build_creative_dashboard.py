@@ -42,6 +42,9 @@ _D1_TARGET = 0.25                # D1 retention KPI threshold (green above, red 
 # skip it unless the headline numbers have moved meaningfully. Thresholds below
 # define "meaningful" per metric ("rel" = relative change, "abs" = absolute).
 _INSIGHTS_CACHE = _ROOT / "data" / "processed" / "creative_dashboard_insights.cache.json"
+# Force-regenerate insights if the cache is older than this, even when the
+# fingerprint metrics haven't shifted — so the narrative never silently freezes.
+_INSIGHTS_MAX_AGE_DAYS = 3
 _FP_THRESHOLDS: dict[str, tuple[str, float]] = {
     "total_installs":   ("rel", 0.03),   # 3% relative
     "best_paid_ecpi":   ("rel", 0.05),   # 5% relative
@@ -343,6 +346,15 @@ def _load_cache() -> dict | None:
         return None
 
 
+def _cache_age_days(cache: dict) -> float | None:
+    """Age of the cache in days from its generated_at stamp; None if unparseable."""
+    try:
+        dt = datetime.strptime(cache.get("generated_at", ""), "%Y-%m-%d %H:%M:%S UTC")
+    except (ValueError, TypeError):
+        return None
+    return (datetime.now(timezone.utc) - dt.replace(tzinfo=timezone.utc)).total_seconds() / 86400
+
+
 def _save_cache(fingerprint: dict, result: dict) -> None:
     _INSIGHTS_CACHE.parent.mkdir(parents=True, exist_ok=True)
     payload = {
@@ -386,17 +398,22 @@ def get_insights(fingerprint: dict, channels: dict, campaigns: dict, retention: 
     """
     cache = _load_cache()
     if cache and cache.get("insights"):
-        changed, reasons = _significant_change(cache.get("fingerprint", {}), fingerprint)
-        if not changed:
-            print(f"  cache HIT — data unchanged since {cache.get('generated_at', '?')}; "
-                  f"skipping Claude call")
-            return {
-                "insights": cache["insights"],
-                "critical_index": cache.get("critical_index"),
-                "source": f"{cache.get('source', _INSIGHTS_MODEL)} (cached)",
-                "cache_hit": True,
-            }
-        print(f"  cache MISS — regenerating; shifted: {'; '.join(reasons)}")
+        age = _cache_age_days(cache)
+        if age is not None and age > _INSIGHTS_MAX_AGE_DAYS:
+            print(f"  cache STALE ({age:.1f}d > {_INSIGHTS_MAX_AGE_DAYS}d max-age) — "
+                  f"forcing regeneration")
+        else:
+            changed, reasons = _significant_change(cache.get("fingerprint", {}), fingerprint)
+            if not changed:
+                print(f"  cache HIT — data unchanged since {cache.get('generated_at', '?')}; "
+                      f"skipping Claude call")
+                return {
+                    "insights": cache["insights"],
+                    "critical_index": cache.get("critical_index"),
+                    "source": f"{cache.get('source', _INSIGHTS_MODEL)} (cached)",
+                    "cache_hit": True,
+                }
+            print(f"  cache MISS — regenerating; shifted: {'; '.join(reasons)}")
     else:
         print("  cache MISS — no usable cache; generating")
 
