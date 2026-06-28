@@ -97,6 +97,8 @@ EXCLUDED_BRANDS = [
     "Fox Business", "Wall Street Journal", "Financial Times",
     # Money-transfer companies + LatAm news outlets that slipped through
     "Ria Money Transfer", "Latinus", "Periódico Excélsior",
+    # Companies / tools (not individual creators)
+    "ACE Money Transfer", "Cryptohopper",
 ]
 
 

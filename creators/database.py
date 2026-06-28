@@ -333,10 +333,9 @@ def _merge_record(creator_dict: dict, score_dict: dict) -> dict:
         "content_alignment":        scores.get("content_alignment", 0.0),
         "acquisition_potential":    scores.get("acquisition_potential", 0.0),
         "sponsorship_score":        scores.get("sponsorship_history", 0.0),
-        # Influencer-pivot fields — ENABLE after running ADD_INFLUENCER_COLUMNS_SQL
-        # in the Supabase SQL editor (uncomment the two lines below):
-        # "is_influencer":    bool(score_dict.get("is_influencer", False)),
-        # "influencer_score": score_dict.get("influencer_score", 0.0),
+        # Influencer-pivot fields (columns added via ADD_INFLUENCER_COLUMNS_SQL).
+        "is_influencer":    bool(score_dict.get("is_influencer", False)),
+        "influencer_score": score_dict.get("influencer_score", 0.0),
         # Defaults for new records
         "outreach_status": "not_contacted",
         "updated_at":      _now(),
