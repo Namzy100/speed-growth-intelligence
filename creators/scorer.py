@@ -59,6 +59,10 @@ PERSONAL_TAGS = {
 _MEDIA_SUBSTRINGS = ("daily news", "news today", "news network", "media", "magazine", "press")
 _MEDIA_WORDS = ("news", "tv", "channel", "official", "academy", "university", "institute")
 
+# Name tokens that signal a COMPANY / product / tool rather than a person — e.g.
+# "ACE Money Transfer", "Cryptohopper - Automated Crypto Trading Platform".
+_COMPANY_WORDS = ("transfer", "platform", "trading", "bot", "exchange", "software")
+
 
 def looks_like_media_name(name: str) -> bool:
     """True if the channel name reads like a media/news/brand outlet, not a person."""
@@ -68,32 +72,67 @@ def looks_like_media_name(name: str) -> bool:
     return any(re.search(rf"\b{re.escape(w)}\b", n) for w in _MEDIA_WORDS)
 
 
-def detect_influencer(creator: dict) -> bool:
-    """Is this a personal influencer (vs a finance/news/brand channel)?
+def looks_like_company(name: str) -> bool:
+    """True if the name reads like a company/product/tool (not an individual)."""
+    n = (name or "").lower()
+    return any(re.search(rf"\b{re.escape(w)}\b", n) for w in _COMPANY_WORDS)
 
-    True when engagement is high (>3%) AND the channel is not a media/brand
-    outlet by name — a proxy for "single person, lifestyle/personal content".
+
+def _real_engagement(creator: dict) -> float:
+    """A real interaction-engagement signal in 0-1, from engagement_quality.
+
+    engagement_quality (1-10) is derived from (likes+comments)/views in the
+    fetchers, so it reflects genuine interaction — unlike the legacy
+    engagement_rate (views/followers, capped at 1.0), which view-gaming inflates.
+    Mapped roughly: eq 10 -> 1.0, eq 5 -> ~0.4. Falls back to a damped legacy
+    engagement_rate only when engagement_quality is absent.
     """
-    er = float(creator.get("engagement_rate", 0) or 0)
-    if er <= 0.03:
+    eq = creator.get("engagement_quality")
+    if eq is not None:
+        return max(0.0, (float(eq) - 1) / 9.0)
+    # Fallback: damp the legacy metric hard so it can't dominate.
+    return min(float(creator.get("engagement_rate", 0) or 0), 0.3)
+
+
+def detect_influencer(creator: dict) -> bool:
+    """Is this a personal influencer (vs a finance/news/brand/company channel)?
+
+    True when GENUINE engagement is solid (engagement_quality >= 5, i.e. a real
+    interaction rate, not view-gamed) AND the name isn't a media or company
+    outlet — a proxy for "single person, lifestyle/personal content".
+    """
+    name = creator.get("name", "")
+    if looks_like_media_name(name) or looks_like_company(name):
         return False
-    return not looks_like_media_name(creator.get("name", ""))
+    eq = creator.get("engagement_quality")
+    if eq is not None:
+        return float(eq) >= 5
+    # Fallback for records without engagement_quality: require strong legacy ER.
+    return float(creator.get("engagement_rate", 0) or 0) > 0.03
 
 
 def influencer_score(creator: dict) -> float:
-    """0-100 influencer fit, weighted to engagement + personal brand + authentic
-    audience size (NOT content-keyword matching).
+    """0-100 influencer fit. Weighted to PERSONAL BRAND + authentic audience, with
+    real engagement capped at 30% so one inflated metric can't dominate.
 
-    Engagement 50% (cap 10% ER -> 100), personal-brand 30% (penalise media name,
-    reward lifestyle tags), authentic audience 20% (mid-size sweet spot).
+    Weights: engagement 30% (from engagement_quality, a real interaction signal),
+    personal-brand 40% (media/company names penalised, lifestyle tags rewarded),
+    authentic audience size 30% (mid-size sweet spot). NOT content-keyword based.
     """
-    er = float(creator.get("engagement_rate", 0) or 0)
     followers = int(creator.get("followers", 0) or 0)
     tags = {str(t).lower() for t in creator.get("niche_tags", [])}
     name = creator.get("name", "")
 
-    eng = min(er / 0.10, 1.0) * 100
-    pb = (0 if looks_like_media_name(name) else 60) + (40 if tags & PERSONAL_TAGS else 0)
+    # Engagement component (capped at 30% of total): real interaction signal.
+    eng = _real_engagement(creator) * 100  # 0-100
+
+    # Personal-brand component: media/company names score 0; lifestyle tags add.
+    if looks_like_media_name(name) or looks_like_company(name):
+        pb = 0.0
+    else:
+        pb = 60.0 + (40.0 if tags & PERSONAL_TAGS else 0.0)
+
+    # Authentic audience (mid-size sweet spot).
     if followers < 5_000:
         aud = 40.0
     elif followers < 500_000:
@@ -102,7 +141,8 @@ def influencer_score(creator: dict) -> float:
         aud = 70.0
     else:
         aud = 50.0
-    return round(0.5 * eng + 0.3 * min(pb, 100) + 0.2 * aud, 1)
+
+    return round(0.30 * eng + 0.40 * min(pb, 100) + 0.30 * aud, 1)
 
 
 class CreatorScorer:

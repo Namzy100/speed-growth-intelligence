@@ -50,6 +50,8 @@ def build_rows() -> list[dict]:
             "segment": str(r.get("segment_tag", "general")),
             "score": round(float(r.get("composite_score", 0) or 0), 1),
             "drs": round(float(r.get("deposit_relevance_score", 0) or 0), 1),
+            "infl": round(float(r.get("influencer_score", 0) or 0), 1),
+            "is_influencer": bool(r.get("is_influencer", False)),
             "outreach": str(r.get("outreach_status", "not_contacted")),
             "tags": [str(t) for t in tags[:6]],
             "brand_flag": _brand_flag(tags),
@@ -75,6 +77,7 @@ def main() -> None:
         "platforms": dict(plat_counts),
         "flagged": sum(1 for c in creators if c["brand_flag"]),
         "avg_score": round(sum(c["score"] for c in creators) / len(creators), 1) if creators else 0,
+        "influencers": sum(1 for c in creators if c["is_influencer"]),
     }
 
     _OUT.parent.mkdir(parents=True, exist_ok=True)
@@ -200,6 +203,9 @@ _TEMPLATE = r"""<!doctype html>
   .filters{display:flex; flex-wrap:wrap; gap:16px; align-items:flex-end; background:var(--panel); border:1px solid var(--hairline); border-radius:var(--r-md); padding:16px 18px; box-shadow:var(--shadow);}
   .filters label{display:block; font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:var(--faint); margin-bottom:5px; font-weight:700;}
   select,input[type=text]{background:#0e1117; color:var(--text); border:1px solid var(--hairline); border-radius:8px; padding:8px 11px; font-size:13px; min-width:150px; font-family:inherit;}
+  .toggle{display:flex; align-items:center; gap:7px; font-size:13px; color:var(--text); text-transform:none; letter-spacing:0; font-weight:500; cursor:pointer;}
+  .toggle input{accent-color:var(--accent); width:15px; height:15px;}
+  .infl-dot{color:var(--accent-2); font-size:10px;}
   select:focus,input:focus{outline:none; border-color:var(--accent);}
   input[type=range]{vertical-align:middle; width:150px; accent-color:var(--accent);}
   .rangeval{color:var(--text); font-weight:700; font-variant-numeric:tabular-nums;}
@@ -279,12 +285,14 @@ _TEMPLATE = r"""<!doctype html>
       <div><label>Min score: <span class="rangeval" id="minVal">0</span></label>
         <input type="range" id="fMin" min="0" max="100" value="0" step="1"></div>
       <div><label>Search</label><input type="text" id="fSearch" placeholder="name contains…"></div>
+      <div><label>&nbsp;</label><label class="toggle"><input type="checkbox" id="fInfl"> Influencers only</label></div>
       <div class="count" id="count"></div>
     </div>
     <div class="table-wrap"><table id="tbl">
       <thead><tr>
         <th data-k="name">Creator</th><th data-k="platform">Platform</th><th data-k="segment">Segment</th>
         <th class="num" data-k="followers">Followers</th><th class="num" data-k="score">Score</th>
+        <th class="num" data-k="infl">Influencer</th>
         <th class="num" data-k="drs">Deposit Rel.</th><th data-k="outreach">Outreach</th>
         <th data-k="brand_flag">Brand</th><th>Niche Tags</th>
       </tr></thead><tbody></tbody>
@@ -312,7 +320,7 @@ function renderKPIs(){
   const k = [
     [DATA.total, "Creators"],
     [(DATA.platforms.YouTube||0)+" / "+(DATA.platforms.TikTok||0), "YouTube / TikTok"],
-    [DATA.avg_score, "Avg composite"],
+    [DATA.influencers, "Influencers"],
     [(s["remittance"]||0)+" · "+(s["iGaming"]||0)+" · "+(s["crypto-curious"]||0), "Rem · iGam · Crypto"],
     [DATA.flagged, "Brand-flagged"],
   ];
@@ -356,9 +364,10 @@ function renderCards(){
 let sortKey="score", sortDir=-1;
 function rows(){
   const seg=fSeg.value, plat=fPlat.value, min=+fMin.value, q=fSearch.value.trim().toLowerCase();
+  const inflOnly = document.getElementById("fInfl").checked;
   let r = DATA.creators.filter(c =>
     (seg==="all"||c.segment===seg) && (plat==="all"||c.platform===plat) && c.score>=min &&
-    (!q||c.name.toLowerCase().includes(q)));
+    (!inflOnly||c.is_influencer) && (!q||c.name.toLowerCase().includes(q)));
   r.sort((a,b)=>{let x=a[sortKey],y=b[sortKey]; if(typeof x==="string"){x=x.toLowerCase();y=y.toLowerCase();} return (x<y?-1:x>y?1:0)*sortDir;});
   return r;
 }
@@ -373,6 +382,7 @@ function renderTable(){
       <td><span class="badge seg ${segClass(c.segment)}">${esc(c.segment)}</span></td>
       <td class="num">${intFmt.format(c.followers)}</td>
       <td class="num"><span class="score-pill ${scoreCls(c.score)}">${c.score.toFixed(1)}</span></td>
+      <td class="num">${c.infl.toFixed(1)}${c.is_influencer?' <span class="infl-dot" title="influencer">●</span>':''}</td>
       <td class="num">${c.drs.toFixed(1)}</td>
       <td class="muted">${esc(c.outreach)}</td>
       <td>${flag}</td>
@@ -382,6 +392,7 @@ function renderTable(){
   document.getElementById("count").textContent = `${r.length} of ${DATA.total} shown`;
 }
 ["fSeg","fPlat","fSearch"].forEach(id=>document.getElementById(id).addEventListener("input",renderTable));
+document.getElementById("fInfl").addEventListener("change",renderTable);
 fMin.addEventListener("input",e=>{document.getElementById("minVal").textContent=e.target.value; renderTable();});
 document.querySelectorAll("#tbl th[data-k]").forEach(th=>th.addEventListener("click",()=>{
   const k=th.dataset.k;
