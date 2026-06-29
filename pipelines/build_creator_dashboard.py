@@ -38,20 +38,32 @@ def _brand_flag(tags: list) -> bool:
     return False
 
 
+def _source(tags: list, is_influencer: bool) -> str:
+    """Provenance bucket: Mimanshi's vetted list > generic influencer > scraped."""
+    if any(str(t).lower() == "mimanshi_list" for t in tags):
+        return "mimanshi"
+    return "influencer" if is_influencer else "scraped"
+
+
 def build_rows() -> list[dict]:
     rows = database.get_all_creators()  # ordered by composite_score desc
     out = []
     for r in rows:
         tags = r.get("niche_tags") or []
+        score = round(float(r.get("composite_score", 0) or 0), 1)
+        is_infl = bool(r.get("is_influencer", False))
         out.append({
             "name": str(r.get("name", "")),
             "platform": str(r.get("platform", "")),
             "followers": int(r.get("followers", 0) or 0),
             "segment": str(r.get("segment_tag", "general")),
-            "score": round(float(r.get("composite_score", 0) or 0), 1),
+            "score": score,
             "drs": round(float(r.get("deposit_relevance_score", 0) or 0), 1),
             "infl": round(float(r.get("influencer_score", 0) or 0), 1),
-            "is_influencer": bool(r.get("is_influencer", False)),
+            "is_influencer": is_infl,
+            "source": _source(tags, is_infl),
+            # Mimanshi imports store fit (1-5) as composite_score = fit*20.
+            "fit_score": round(score / 20),
             "outreach": str(r.get("outreach_status", "not_contacted")),
             "tags": [str(t) for t in tags[:6]],
             "brand_flag": _brand_flag(tags),
@@ -78,12 +90,15 @@ def main() -> None:
         "flagged": sum(1 for c in creators if c["brand_flag"]),
         "avg_score": round(sum(c["score"] for c in creators) / len(creators), 1) if creators else 0,
         "influencers": sum(1 for c in creators if c["is_influencer"]),
+        "mimanshi": sum(1 for c in creators if c["source"] == "mimanshi"),
     }
 
     _OUT.parent.mkdir(parents=True, exist_ok=True)
     _OUT.write_text(_TEMPLATE.replace("/*__DATA__*/", json.dumps(data)), encoding="utf-8")
     print(f"Wrote {_OUT.relative_to(_ROOT)} ({_OUT.stat().st_size:,} bytes)")
-    print(f"  total={data['total']} platforms={data['platforms']} flagged={data['flagged']}")
+    print(f"  total={data['total']} platforms={data['platforms']} "
+          f"influencers={data['influencers']} mimanshi={data['mimanshi']} "
+          f"avg_score={data['avg_score']} flagged={data['flagged']}")
 
 
 # ------------------------------------------------------------------
@@ -96,7 +111,7 @@ _TEMPLATE = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Speed Wallet — Creator Intelligence</title>
+<title>Creator Intelligence — Speed Wallet Partner Pipeline</title>
 <style>
   :root{
     --bg:#0d1117; --panel:#161b22; --panel-2:#1b2230;
@@ -185,6 +200,8 @@ _TEMPLATE = r"""<!doctype html>
   .seg-crypto-curious{background:var(--seg-crypto-curious);} .seg-general{background:var(--seg-general); color:#e9edf3;}
   .out-pill{font-size:11px; color:var(--muted);}
   .flagchip{font-size:10px; font-weight:700; color:var(--bad); background:rgba(248,81,73,0.14); padding:1px 7px; border-radius:5px;}
+  .mimchip{font-size:10px; font-weight:700; color:#ffd66e; background:rgba(240,160,42,0.16); padding:1px 7px; border-radius:5px; border:1px solid rgba(240,160,42,0.3);}
+  .src-mimanshi{color:#ffd66e; font-weight:700;} .src-influencer{color:var(--accent-2); font-weight:650;} .src-scraped{color:var(--faint);}
 
   /* Collapsible scoring */
   details.crit{background:var(--panel); border:1px solid var(--hairline); border-radius:var(--r-md); padding:0 18px; box-shadow:var(--shadow);}
@@ -281,7 +298,9 @@ _TEMPLATE = r"""<!doctype html>
       <div><label>Segment</label>
         <select id="fSeg"><option value="all">All segments</option><option>remittance</option><option>iGaming</option><option>crypto-curious</option><option>general</option></select></div>
       <div><label>Platform</label>
-        <select id="fPlat"><option value="all">All platforms</option><option>YouTube</option><option>TikTok</option></select></div>
+        <select id="fPlat"><option value="all">All platforms</option><option>YouTube</option><option>TikTok</option><option>Instagram</option><option>X</option></select></div>
+      <div><label>Source</label>
+        <select id="fSource"><option value="all">All sources</option><option value="mimanshi">Mimanshi picks</option><option value="influencer">Influencers</option><option value="scraped">Scraped</option></select></div>
       <div><label>Min score: <span class="rangeval" id="minVal">0</span></label>
         <input type="range" id="fMin" min="0" max="100" value="0" step="1"></div>
       <div><label>Search</label><input type="text" id="fSearch" placeholder="name contains…"></div>
@@ -290,7 +309,7 @@ _TEMPLATE = r"""<!doctype html>
     </div>
     <div class="table-wrap"><table id="tbl">
       <thead><tr>
-        <th data-k="name">Creator</th><th data-k="platform">Platform</th><th data-k="segment">Segment</th>
+        <th data-k="name">Creator</th><th data-k="source">Source</th><th data-k="platform">Platform</th><th data-k="segment">Segment</th>
         <th class="num" data-k="followers">Followers</th><th class="num" data-k="score">Score</th>
         <th class="num" data-k="infl">Influencer</th>
         <th class="num" data-k="drs">Deposit Rel.</th><th data-k="outreach">Outreach</th>
@@ -312,17 +331,17 @@ const scoreColor = v => v > 50 ? "#3fb950" : (v >= 30 ? "#e3b341" : "#f85149");
 const segColor = s => getComputedStyle(document.documentElement).getPropertyValue("--seg-"+String(s).replace(/[^a-zA-Z-]/g,"")).trim() || "#6b7585";
 const fmtFollow = n => n >= 1e6 ? (n/1e6).toFixed(1)+"M" : n >= 1e3 ? (n/1e3).toFixed(n>=1e4?0:1)+"k" : String(n);
 const initials = n => (n.trim().split(/\s+/).map(w=>w[0]).join("").slice(0,2) || "?").toUpperCase();
+const sourceLabel = c => c.source==="mimanshi" ? "Mimanshi ⭐" : c.source==="influencer" ? "Influencer" : "Scraped";
 
 document.getElementById("syncTime").textContent = DATA.generated_at || "—";
 
 function renderKPIs(){
-  const s = DATA.segments || {};
   const k = [
-    [DATA.total, "Creators"],
+    [DATA.total, "Total creators"],
     [(DATA.platforms.YouTube||0)+" / "+(DATA.platforms.TikTok||0), "YouTube / TikTok"],
     [DATA.influencers, "Influencers"],
-    [(s["remittance"]||0)+" · "+(s["iGaming"]||0)+" · "+(s["crypto-curious"]||0), "Rem · iGam · Crypto"],
-    [DATA.flagged, "Brand-flagged"],
+    [DATA.mimanshi, "Mimanshi picks"],
+    [DATA.avg_score, "Avg score"],
   ];
   document.getElementById("kpis").innerHTML = k.map(([v,l]) =>
     `<div class="kpi"><div class="val">${esc(v)}</div><div class="lab">${esc(l)}</div></div>`).join("");
@@ -338,7 +357,12 @@ function ring(score){
 }
 
 function renderCards(){
-  const top = DATA.creators.slice(0, 20);
+  // Mimanshi's strongest picks (fit_score >= 4) headline the grid; the rest
+  // follow in composite-score order (DATA.creators is already sorted desc).
+  const isPriority = c => c.source==="mimanshi" && c.fit_score>=4;
+  const priority = DATA.creators.filter(isPriority);
+  const rest = DATA.creators.filter(c => !isPriority(c));
+  const top = priority.concat(rest).slice(0, 20);
   document.getElementById("cards").innerHTML = top.map((c,i) => `
     <div class="card ${c.brand_flag?'flagged':''}" style="animation-delay:${(0.03+i*0.02).toFixed(2)}s">
       <div class="card-top">
@@ -348,6 +372,7 @@ function renderCards(){
           <div class="card-meta">
             <span class="badge plat">${esc(c.platform)}</span>
             <span class="badge seg ${segClass(c.segment)}">${esc(c.segment)}</span>
+            ${c.source==="mimanshi"?'<span class="mimchip">⭐ Mimanshi</span>':''}
             ${c.brand_flag?'<span class="flagchip">⚑</span>':''}
           </div>
         </div>
@@ -363,10 +388,11 @@ function renderCards(){
 
 let sortKey="score", sortDir=-1;
 function rows(){
-  const seg=fSeg.value, plat=fPlat.value, min=+fMin.value, q=fSearch.value.trim().toLowerCase();
+  const seg=fSeg.value, plat=fPlat.value, src=fSource.value, min=+fMin.value, q=fSearch.value.trim().toLowerCase();
   const inflOnly = document.getElementById("fInfl").checked;
   let r = DATA.creators.filter(c =>
-    (seg==="all"||c.segment===seg) && (plat==="all"||c.platform===plat) && c.score>=min &&
+    (seg==="all"||c.segment===seg) && (plat==="all"||c.platform===plat) &&
+    (src==="all"||c.source===src) && c.score>=min &&
     (!inflOnly||c.is_influencer) && (!q||c.name.toLowerCase().includes(q)));
   r.sort((a,b)=>{let x=a[sortKey],y=b[sortKey]; if(typeof x==="string"){x=x.toLowerCase();y=y.toLowerCase();} return (x<y?-1:x>y?1:0)*sortDir;});
   return r;
@@ -378,6 +404,7 @@ function renderTable(){
     const flag = c.brand_flag ? "<span class='flagchip'>⚑ brand</span>" : "<span class='flag-no'>—</span>";
     return `<tr>
       <td>${esc(c.name)}</td>
+      <td><span class="src-${esc(c.source)}">${esc(sourceLabel(c))}</span></td>
       <td><span class="badge plat">${esc(c.platform)}</span></td>
       <td><span class="badge seg ${segClass(c.segment)}">${esc(c.segment)}</span></td>
       <td class="num">${intFmt.format(c.followers)}</td>
@@ -391,7 +418,7 @@ function renderTable(){
   }).join("");
   document.getElementById("count").textContent = `${r.length} of ${DATA.total} shown`;
 }
-["fSeg","fPlat","fSearch"].forEach(id=>document.getElementById(id).addEventListener("input",renderTable));
+["fSeg","fPlat","fSource","fSearch"].forEach(id=>document.getElementById(id).addEventListener("input",renderTable));
 document.getElementById("fInfl").addEventListener("change",renderTable);
 fMin.addEventListener("input",e=>{document.getElementById("minVal").textContent=e.target.value; renderTable();});
 document.querySelectorAll("#tbl th[data-k]").forEach(th=>th.addEventListener("click",()=>{
