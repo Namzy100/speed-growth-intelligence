@@ -221,6 +221,40 @@ def build_meta(rows: list[dict]) -> dict:
     return {"campaigns": camps, "totals": totals}
 
 
+def build_meta_creatives(rows: list[dict]) -> dict:
+    """Ad-level (creative) performance from the Meta Creatives tab, ranked by spend.
+
+    CTR comes straight from Meta (already a percentage); CPI is derived as
+    spend / installs (None when an ad drove no installs, to avoid /0).
+    """
+    ads = []
+    for r in rows:
+        name = str(r.get("ad_name", "")).strip()
+        if not name:
+            continue
+        spend = round(_num(r.get("spend")), 2)
+        installs = int(_num(r.get("mobile_app_install")))
+        ads.append({
+            "ad_name": name,
+            "campaign": str(r.get("campaign_name", "")).strip(),
+            "spend": spend,
+            "impressions": int(_num(r.get("impressions"))),
+            "clicks": int(_num(r.get("clicks"))),
+            "installs": installs,
+            "ctr": round(_num(r.get("ctr")), 2),
+            "cpi": round(spend / installs, 2) if installs > 0 else None,
+        })
+    ads.sort(key=lambda a: a["spend"], reverse=True)
+    totals = {
+        "spend": round(sum(a["spend"] for a in ads), 2),
+        "impressions": sum(a["impressions"] for a in ads),
+        "clicks": sum(a["clicks"] for a in ads),
+        "installs": sum(a["installs"] for a in ads),
+        "ad_count": len(ads),
+    }
+    return {"ads": ads, "totals": totals}
+
+
 # ------------------------------------------------------------------
 # Claude insights (structured cards)
 # ------------------------------------------------------------------
@@ -475,11 +509,12 @@ def main() -> None:
     print("Opening Google Sheet (live)...")
     ss = sheets._open(sid)
 
-    print("Reading tabs: Channel Overview, Campaign Installs, Retention, Meta Campaigns, Last Updated...")
+    print("Reading tabs: Channel Overview, Campaign Installs, Retention, Meta Campaigns, Meta Creatives, Last Updated...")
     channels = build_channels(_records(ss, "Channel Overview"))
     campaigns = build_campaigns(_records(ss, "Campaign Installs"))
     retention = build_retention(_records(ss, "Retention"))
     meta = build_meta(_records_optional(ss, "Meta Campaigns"))
+    meta_creatives = build_meta_creatives(_records_optional(ss, "Meta Creatives"))
 
     last_updated = ""
     lu = _records(ss, "Last Updated")
@@ -519,6 +554,7 @@ def main() -> None:
         **campaigns,
         "retention": retention,
         "meta": meta,
+        "meta_creatives": meta_creatives,
         "meta_note": _meta_status_note(),
         "insights": insights["insights"],
         "insights_critical_index": insights.get("critical_index"),
@@ -530,6 +566,7 @@ def main() -> None:
     print(f"Wrote {_OUT.relative_to(_ROOT)} ({_OUT.stat().st_size:,} bytes)")
     print(f"  channels={len(data['channels'])} campaigns={len(data['campaigns'])} "
           f"retention_cohorts={retention['cohort_count']} meta_campaigns={len(meta['campaigns'])} "
+          f"meta_creatives={len(meta_creatives['ads'])} "
           f"total_installs={kpis['total_installs']:,}")
 
 
@@ -758,18 +795,13 @@ _TEMPLATE = r"""<!doctype html>
     <div class="src" id="insightsSrc"></div>
   </section>
 
-  <!-- 6. Meta Creative Analysis placeholder -->
+  <!-- 6. Meta Creative Analysis -->
   <section>
-    <div class="sec-head"><h2>Meta Creative Analysis</h2></div>
-    <div class="empty">
-      <svg class="ico" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <line x1="3" y1="20.5" x2="21" y2="20.5"/>
-        <rect x="4.5" y="11" width="3.6" height="9.5"/>
-        <rect x="10.2" y="6" width="3.6" height="14.5"/>
-        <rect x="15.9" y="14" width="3.6" height="6.5"/>
-      </svg>
-      <div class="msg">Campaign-level Meta data is now live above. Creative-level (ad &amp; asset) breakdown is pending and will populate once wired in.</div>
-    </div>
+    <div class="sec-head"><h2>Meta Creative Analysis</h2><span class="note" id="metaCreativeNote"></span></div>
+    <div class="panel"><div class="table-wrap"><table id="metaCreativeTable">
+      <thead><tr><th>Ad</th><th>Campaign</th><th>Spend</th><th>Impressions</th><th>Clicks</th><th>Installs</th><th>CTR</th><th>CPI</th></tr></thead>
+      <tbody></tbody>
+    </table></div></div>
   </section>
 
   <footer>
@@ -981,6 +1013,34 @@ function renderMeta(){
     `${m.campaigns.length} active campaigns  ·  ${fmtMoney(t.spend)} spend  ·  ${fmtInt(t.installs)} installs`;
 }
 
+function renderMetaCreatives(){
+  const mc = DATA.meta_creatives;
+  const tb = document.querySelector("#metaCreativeTable tbody");
+  if (!mc || !mc.ads || !mc.ads.length){
+    document.getElementById("metaCreativeNote").textContent = "No ad-level Meta data this period";
+    tb.innerHTML = `<tr><td colspan="8" class="muted">No creative-level Meta data for this period.</td></tr>`;
+    return;
+  }
+  mc.ads.forEach(a => {
+    const tr = document.createElement("tr");
+    const ctr = (a.ctr && a.ctr > 0) ? a.ctr.toFixed(2) + "%" : "—";
+    const cpi = (a.cpi == null) ? "—" : fmtMoney(a.cpi);
+    tr.innerHTML =
+      `<td class="ch">${esc(a.ad_name)}</td>` +
+      `<td class="muted">${esc(a.campaign)}</td>` +
+      `<td>${fmtMoney(a.spend)}</td>` +
+      `<td class="muted">${fmtInt(a.impressions)}</td>` +
+      `<td class="muted">${fmtInt(a.clicks)}</td>` +
+      `<td class="num-good">${fmtInt(a.installs)}</td>` +
+      `<td>${ctr}</td>` +
+      `<td>${cpi}</td>`;
+    tb.appendChild(tr);
+  });
+  const t = mc.totals;
+  document.getElementById("metaCreativeNote").textContent =
+    `${t.ad_count} ads  ·  ${fmtMoney(t.spend)} spend  ·  ${fmtInt(t.installs)} installs`;
+}
+
 function renderInsights(){
   const g = document.getElementById("insights");
   const ICON = {positive:"▲", warning:"⚠", neutral:"●"};
@@ -1021,6 +1081,7 @@ function init(){
     renderCampaigns();
     renderRetention();
     renderMeta();
+    renderMetaCreatives();
     renderInsights();
     console.log("Dashboard rendered OK:",
       DATA.channels.length, "channels,",

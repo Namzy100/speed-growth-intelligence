@@ -214,6 +214,29 @@ def write_country_installs(
         return False
 
 
+def write_meta_creatives(
+    df: pd.DataFrame,
+    spreadsheet_id: str,
+    log: Callable[[str], None] = print,
+) -> bool:
+    """Write the Meta ad-level (creative) DataFrame to the 'Meta Creatives' tab.
+
+    Created if missing. Mirrors write_country_installs. Returns True on success
+    (or a no-op skip when the frame is empty), False if the write failed.
+    """
+    if df is None or df.empty:
+        log("Meta → 'Meta Creatives': skipped (no data)")
+        return True
+    try:
+        create_sheet_if_missing(spreadsheet_id, "Meta Creatives")
+        write_dataframe(df, spreadsheet_id, "Meta Creatives")
+        log(f"Meta → 'Meta Creatives': {len(df)} rows written")
+        return True
+    except Exception as e:
+        log(f"Meta → 'Meta Creatives': FAILED — {e}")
+        return False
+
+
 def _write_reports(
     data_dict: dict[str, pd.DataFrame],
     sheet_map: dict[str, str],

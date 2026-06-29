@@ -43,6 +43,7 @@ from pipelines.sheets import (
     write_all_meta_data,
     write_country_installs,
     write_dataframe,
+    write_meta_creatives,
 )
 
 
@@ -135,6 +136,23 @@ def _sync_meta(spreadsheet_id: str) -> bool:
     ok = write_all_meta_data(data, spreadsheet_id, log=_log)
     _record_meta_status(ok)
     return ok
+
+
+def _sync_meta_creatives(spreadsheet_id: str) -> bool:
+    """Pull Meta ad-level (creative) data and write it to the Meta Creatives tab.
+
+    Runs after the campaign-level Meta step. Returns True if the write succeeded
+    (or was an empty no-op), False on failure. Like the other steps, a failure is
+    logged but does not abort the remaining sync.
+    """
+    _log("Meta (creatives): pulling ad-level data, last 30 days...")
+    try:
+        df = MetaPipeline().get_creative_performance(days=30)
+    except Exception as e:
+        _log(f"Meta (creatives): pull FAILED — {e}")
+        return False
+
+    return write_meta_creatives(df, spreadsheet_id, log=_log)
 
 
 def _write_last_updated(spreadsheet_id: str) -> None:
@@ -231,6 +249,9 @@ def run() -> None:
 
     # Meta — refreshes alongside Adjust each day.
     results["Meta"] = _sync_meta(spreadsheet_id)
+
+    # Meta creatives — ad-level breakdown, pulled after the campaign-level step.
+    results["Meta Creatives"] = _sync_meta_creatives(spreadsheet_id)
 
     # Last Updated timestamp
     try:

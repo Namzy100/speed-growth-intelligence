@@ -67,6 +67,27 @@ class MetaPipeline:
         )
         return self._to_df(rows)
 
+    def get_creative_performance(self, days: int = 30) -> pd.DataFrame:
+        """Ad-level (creative) performance: one row per ad.
+
+        Unlike get_campaign_performance (which hits the campaign-level /insights
+        edge), this walks the account's /ads edge and expands each ad's `insights`
+        sub-edge for the period, yielding spend, impressions, clicks, installs,
+        CTR and CPC per individual ad. The `date_preset` is applied inside the
+        field expansion (a top-level date_preset does not propagate into a nested
+        insights edge). The campaign name is pulled via a `campaign{name}`
+        expansion so the dashboard can label each ad's campaign without a second
+        lookup. Ads with no delivery in the period (no insights) are dropped.
+        """
+        preset = _date_preset(days)
+        fields = (
+            "id,name,adset_id,campaign_id,campaign{name},"
+            f"insights.date_preset({preset})"
+            "{spend,impressions,clicks,actions,ctr,cpc}"
+        )
+        rows = self._fetch_edge("ads", {"fields": fields, "limit": 200})
+        return self._to_creative_df(rows)
+
     def get_all(self, days: int = 30) -> dict[str, pd.DataFrame]:
         """Run all reports and return a dict of DataFrames (mirrors AdjustPipeline)."""
         return {
@@ -78,24 +99,30 @@ class MetaPipeline:
     # ------------------------------------------------------------------
 
     def _fetch(self, days: int, fields: str) -> list[dict]:
-        """Fetch insights, following pagination, with retry on transient errors."""
-        url: str | None = f"{_BASE_URL}/{self._account_id}/insights"
-        params: dict | None = {
+        """Fetch campaign-level insights, following pagination."""
+        return self._fetch_edge("insights", {
             "level": "campaign",
             "fields": fields,
             "date_preset": _date_preset(days),
             "limit": 500,
-            "access_token": self._token,
-        }
+        })
+
+    def _fetch_edge(self, edge: str, params: dict) -> list[dict]:
+        """GET an account edge (e.g. 'insights' or 'ads'), following pagination.
+
+        Retries on transient errors via _fetch_page. The access token is added
+        here; the cursor `next` URL already carries every param (token included),
+        so subsequent page requests pass params=None.
+        """
+        url: str | None = f"{_BASE_URL}/{self._account_id}/{edge}"
+        next_params: dict | None = {**params, "access_token": self._token}
         all_rows: list[dict] = []
 
         while url:
-            page = self._fetch_page(url, params)
+            page = self._fetch_page(url, next_params)
             all_rows.extend(page.get("data", []))
-            # Cursor-based pagination: the `next` URL already carries all params
-            # (including the access token), so subsequent calls pass none.
             url = page.get("paging", {}).get("next")
-            params = None
+            next_params = None
 
         return all_rows
 
@@ -174,6 +201,40 @@ class MetaPipeline:
                 df[col] = pd.to_numeric(df[col], errors="coerce")
         return df
 
+    @staticmethod
+    def _to_creative_df(rows: list[dict]) -> pd.DataFrame:
+        """Flatten /ads rows (with a nested insights edge) into one row per ad."""
+        records = []
+        for ad in rows:
+            insights = (ad.get("insights") or {}).get("data") or []
+            if not insights:
+                continue  # ad had no delivery in the period — skip
+            ins = insights[0]
+            campaign = ad.get("campaign") or {}
+            records.append(
+                {
+                    "ad_id": ad.get("id"),
+                    "ad_name": ad.get("name"),
+                    "adset_id": ad.get("adset_id"),
+                    "campaign_id": ad.get("campaign_id"),
+                    "campaign_name": campaign.get("name"),
+                    "spend": ins.get("spend"),
+                    "impressions": ins.get("impressions"),
+                    "clicks": ins.get("clicks"),
+                    "mobile_app_install": _extract_installs(ins.get("actions")),
+                    "ctr": ins.get("ctr"),
+                    "cpc": ins.get("cpc"),
+                }
+            )
+
+        if not records:
+            return pd.DataFrame()
+
+        df = pd.DataFrame(records)
+        for col in ("spend", "impressions", "clicks", "mobile_app_install", "ctr", "cpc"):
+            df[col] = pd.to_numeric(df[col], errors="coerce")
+        return df.sort_values("spend", ascending=False, na_position="last").reset_index(drop=True)
+
 
 def _date_preset(days: int) -> str:
     """Map a day count to a Graph API date_preset, falling back to last_30d."""
@@ -234,3 +295,17 @@ if __name__ == "__main__":
             print(f"  Columns: {list(df.columns)}")
             print(df.to_string(index=False))
         print()
+
+    print(f"{'=' * 60}")
+    print("Report : creative_performance (ad-level)")
+    try:
+        creatives = pipeline.get_creative_performance(days=30)
+    except (requests.HTTPError, RuntimeError) as e:
+        print(f"  pull error: {e}")
+    else:
+        if creatives.empty:
+            print("  (no ad-level data returned)")
+        else:
+            print(f"  Rows   : {len(creatives)}")
+            print(f"  Columns: {list(creatives.columns)}")
+            print(creatives.head(15).to_string(index=False))
