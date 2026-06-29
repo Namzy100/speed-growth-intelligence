@@ -10,6 +10,7 @@ Run from repo root:  python pipelines/build_creator_dashboard.py
 """
 
 import json
+import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -45,6 +46,15 @@ def _source(tags: list, is_influencer: bool) -> str:
     return "influencer" if is_influencer else "scraped"
 
 
+def _fit_score(tags: list) -> int:
+    """Mimanshi's fit rating (1-5), stored as a 'fit_N' niche tag. 0 if absent."""
+    for t in tags:
+        m = re.fullmatch(r"fit_([1-5])", str(t).strip().lower())
+        if m:
+            return int(m.group(1))
+    return 0
+
+
 def build_rows() -> list[dict]:
     rows = database.get_all_creators()  # ordered by composite_score desc
     out = []
@@ -62,8 +72,8 @@ def build_rows() -> list[dict]:
             "infl": round(float(r.get("influencer_score", 0) or 0), 1),
             "is_influencer": is_infl,
             "source": _source(tags, is_infl),
-            # Mimanshi imports store fit (1-5) as composite_score = fit*20.
-            "fit_score": round(score / 20),
+            # Mimanshi's fit rating (1-5) lives in a 'fit_N' niche tag.
+            "fit_score": _fit_score(tags),
             "outreach": str(r.get("outreach_status", "not_contacted")),
             "tags": [str(t) for t in tags[:6]],
             "brand_flag": _brand_flag(tags),
