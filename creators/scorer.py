@@ -240,11 +240,22 @@ class CreatorScorer:
         crypto_pct = creator.get("crypto_content_pct", 0)
         fintech_pct = creator.get("fintech_content_pct", 0)
 
+        # Tag-match counts are capped at 3 before weighting: scraped channels
+        # carry many near-synonym topic tags (bitcoin + btc + crypto +
+        # cryptocurrency + blockchain + eth …) that all match the same segment,
+        # which used to stack 3.5pts each and pin audience_fit at the ceiling.
+        # Capping makes a tag-spammed scrape and a human-curated canonical tag
+        # set score the same from tags; crypto_content_pct then differentiates.
+        _CAP = 3
+        crypto_hits = min(len(tags & CRYPTO_TAGS), _CAP)
+        remit_hits = min(len(tags & REMITTANCE_TAGS), _CAP)
+        igaming_hits = min(len(tags & IGAMING_TAGS), _CAP)
+
         # Content percentages provide a secondary signal when tags are sparse
         raw_scores = {
-            "remittance": len(tags & REMITTANCE_TAGS) * 5 + fintech_pct * 3,
-            "iGaming": len(tags & IGAMING_TAGS) * 5,
-            "crypto-curious": len(tags & CRYPTO_TAGS) * 3.5 + crypto_pct * 6 + fintech_pct * 2,
+            "remittance": remit_hits * 5 + fintech_pct * 3,
+            "iGaming": igaming_hits * 5,
+            "crypto-curious": crypto_hits * 3.5 + crypto_pct * 6 + fintech_pct * 2,
         }
 
         # Segment precedence: a clear iGaming signal wins outright. Without this,
@@ -318,28 +329,39 @@ class CreatorScorer:
             return "crypto-curious"
         return "general"
 
+    # An engagement_rate above this is treated as a view-gaming / data artifact
+    # rather than genuine reach. The legacy engagement_rate (views/followers,
+    # capped at 1.0) is easily inflated — e.g. scraped channels carrying ER of
+    # 0.35 or even 1.0 — so we refuse to reward it and lean on the trustworthy
+    # engagement_quality signal instead.
+    _ARTIFACT_ER = 0.15
+
     def _score_engagement_quality(self, creator: dict) -> tuple[float, str]:
-        """Real vs. inflated engagement, combining quality score and rate (0–20)."""
+        """Real vs. inflated engagement, weighted to genuine interaction (0–20)."""
         eq = creator.get("engagement_quality", 5)
         er = creator.get("engagement_rate", 0)
 
-        eq_pts = (eq / 10) * 10  # quality score 1–10 → 1–10 pts
+        # engagement_quality (a real interaction signal) now carries most of the
+        # weight (up to 15 pts) — it can't be gamed by inflating views/followers.
+        eq_pts = (eq / 10) * 15
 
-        # Tiered ER benchmarks valid across TikTok/YouTube/Instagram
-        if er >= 0.08:
-            er_pts = 10.0
+        # engagement_rate is only a small corroborating bonus, and ONLY when it's
+        # plausible. An artifact-high rate (> _ARTIFACT_ER) earns nothing — it
+        # signals view-gaming, not engaged reach.
+        if er > self._ARTIFACT_ER:
+            er_pts = 0.0
         elif er >= 0.05:
-            er_pts = 8.0
+            er_pts = 5.0
         elif er >= 0.03:
-            er_pts = 6.0
-        elif er >= 0.01:
             er_pts = 4.0
+        elif er >= 0.01:
+            er_pts = 3.0
         elif er >= 0.005:
-            er_pts = 2.0
+            er_pts = 1.5
         else:
-            er_pts = 0.5
+            er_pts = 0.0
 
-        return eq_pts + er_pts, f"EQ={eq}/10, ER={er:.1%}"
+        return min(eq_pts + er_pts, 20.0), f"EQ={eq}/10, ER={er:.1%}"
 
     def _score_content_alignment(self, creator: dict) -> tuple[float, str]:
         """How much content touches crypto/fintech/payments (0–20)."""
@@ -355,7 +377,8 @@ class CreatorScorer:
     ) -> tuple[float, str]:
         """Predicted install volume proxy: followers × ER × fit ratio (0–20)."""
         followers = creator.get("followers", 0)
-        er = creator.get("engagement_rate", 0)
+        # Clamp view-gamed ER (e.g. 1.0) so it can't inflate the reach proxy.
+        er = min(creator.get("engagement_rate", 0), self._ARTIFACT_ER)
         fit_ratio = audience_fit_score / 20.0
 
         raw = followers * er * fit_ratio
