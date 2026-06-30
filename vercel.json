@@ -3,6 +3,7 @@
   "cleanUrls": true,
   "rewrites": [
     { "source": "/", "destination": "/docs/creative_dashboard.html" },
-    { "source": "/creators", "destination": "/docs/creator_dashboard.html" }
+    { "source": "/creators", "destination": "/docs/creator_dashboard.html" },
+    { "source": "/strategy", "destination": "/docs/strategy_dashboard.html" }
   ]
 }
