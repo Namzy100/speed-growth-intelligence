@@ -83,7 +83,9 @@ def build_rows() -> list[dict]:
             "tags": [str(t) for t in tags[:6]],
             "brand_flag": _brand_flag(tags),
         })
-    out.sort(key=lambda c: c["score"], reverse=True)
+    # Tiebreak by followers desc: the Mimanshi set shares identical composites
+    # (uniform import assumptions), so without this they'd order arbitrarily.
+    out.sort(key=lambda c: (c["score"], c["followers"]), reverse=True)
     return out
 
 
@@ -426,9 +428,12 @@ function ring(score){
 function renderCards(){
   // Mimanshi's strongest picks (fit_score >= 4) headline the grid; the rest
   // follow in composite-score order (DATA.creators is already sorted desc).
+  // Within each group, rank by composite then followers desc — the Mimanshi
+  // set shares identical composites, so followers is the tiebreak.
+  const byScoreThenFollowers = (a,b) => (b.score - a.score) || (b.followers - a.followers);
   const isPriority = c => c.source==="mimanshi" && c.fit_score>=4;
-  const priority = DATA.creators.filter(isPriority);
-  const rest = DATA.creators.filter(c => !isPriority(c));
+  const priority = DATA.creators.filter(isPriority).sort(byScoreThenFollowers);
+  const rest = DATA.creators.filter(c => !isPriority(c)).sort(byScoreThenFollowers);
   const top = priority.concat(rest).slice(0, 20);
   document.getElementById("cards").innerHTML = top.map((c,i) => `
     <div class="card ${c.brand_flag?'flagged':''}" style="animation-delay:${(0.03+i*0.02).toFixed(2)}s">
