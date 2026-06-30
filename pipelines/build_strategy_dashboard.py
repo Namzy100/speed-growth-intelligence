@@ -246,17 +246,27 @@ def _render_tactics(tactics: dict) -> str:
 
 
 def render(data: dict) -> str:
+    """Fill the template by replacing /*__NAME__*/ comment placeholders.
+
+    Uses str.replace (not str.format) so the CSS braces in the template need no
+    escaping — matching build_creative_dashboard.py / build_creator_dashboard.py
+    and removing the risk that a future un-doubled CSS brace crashes the build.
+    """
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     sources = " · ".join(_e(s) for s in data["sources"])
-    return _TEMPLATE.format(
-        sync=now,
-        eu=_render_eu(data["eu"]),
-        channel=_render_channel(data["channel"]),
-        whitespace=_render_whitespace(data["whitespace"]),
-        tactics=_render_tactics(data["tactics"]),
-        sources=sources,
-        gen_date=now,
-    )
+    replacements = {
+        "/*__SYNC__*/": now,
+        "/*__EU__*/": _render_eu(data["eu"]),
+        "/*__CHANNEL__*/": _render_channel(data["channel"]),
+        "/*__WHITESPACE__*/": _render_whitespace(data["whitespace"]),
+        "/*__TACTICS__*/": _render_tactics(data["tactics"]),
+        "/*__SOURCES__*/": sources,
+        "/*__GENDATE__*/": now,
+    }
+    html_out = _TEMPLATE
+    for placeholder, value in replacements.items():
+        html_out = html_out.replace(placeholder, value)
+    return html_out
 
 
 # ------------------------------------------------------------------
@@ -270,7 +280,7 @@ _TEMPLATE = r"""<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Speed Wallet — Strategy &amp; Market Intelligence</title>
 <style>
-  :root{{
+  :root{
     --bg:#0d1117; --panel:#161b22; --panel-2:#1b2230;
     --hairline:rgba(255,255,255,0.09); --hairline-strong:rgba(255,255,255,0.16);
     --text:#edf1f7; --muted:#9aa4b2; --faint:#6b7585;
@@ -280,9 +290,9 @@ _TEMPLATE = r"""<!doctype html>
     --shadow:0 10px 30px -14px rgba(0,0,0,0.7);
     --shadow-lift:0 18px 44px -16px rgba(0,0,0,0.8);
     --r-lg:16px; --r-md:12px; --r-sm:9px;
-  }}
-  *{{box-sizing:border-box}}
-  body{{
+  }
+  *{box-sizing:border-box}
+  body{
     margin:0; color:var(--text); min-height:100vh; letter-spacing:-0.005em;
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     line-height:1.5; -webkit-font-smoothing:antialiased;
@@ -292,92 +302,92 @@ _TEMPLATE = r"""<!doctype html>
       radial-gradient(720px 480px at 0% 8%, rgba(63,185,80,0.045), transparent 50%),
       var(--bg);
     background-attachment:fixed;
-  }}
-  .wrap{{position:relative; z-index:1; max-width:1180px; margin:0 auto; padding:0 24px 90px;}}
+  }
+  .wrap{position:relative; z-index:1; max-width:1180px; margin:0 auto; padding:0 24px 90px;}
 
-  .brandbar{{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; padding:20px 0; border-bottom:1px solid var(--hairline);}}
-  .brand{{font-weight:760; font-size:16px; display:flex; align-items:center;}}
-  .brand .bolt{{margin-right:8px; font-size:17px; background:linear-gradient(180deg,#ffd66e,#f0a02a);
-    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 0 6px rgba(240,160,42,0.45));}}
-  .brandbar .sync{{font-size:12px; color:var(--muted);}} .brandbar .sync b{{color:var(--text); font-weight:600;}}
+  .brandbar{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; padding:20px 0; border-bottom:1px solid var(--hairline);}
+  .brand{font-weight:760; font-size:16px; display:flex; align-items:center;}
+  .brand .bolt{margin-right:8px; font-size:17px; background:linear-gradient(180deg,#ffd66e,#f0a02a);
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 0 6px rgba(240,160,42,0.45));}
+  .brandbar .sync{font-size:12px; color:var(--muted);} .brandbar .sync b{color:var(--text); font-weight:600;}
 
-  .title-block{{margin:36px 0 26px;}}
-  h1{{font-size:30px; margin:0 0 6px; font-weight:790; letter-spacing:-0.03em;
-    background:linear-gradient(180deg,#ffffff,#c9c3e8); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}}
-  .title-block .sub{{color:var(--muted); font-size:13.5px;}}
+  .title-block{margin:36px 0 26px;}
+  h1{font-size:30px; margin:0 0 6px; font-weight:790; letter-spacing:-0.03em;
+    background:linear-gradient(180deg,#ffffff,#c9c3e8); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
+  .title-block .sub{color:var(--muted); font-size:13.5px;}
 
-  section{{margin:38px 0;}}
-  .sec-head{{display:flex; align-items:center; gap:11px; margin-bottom:18px; flex-wrap:wrap;}}
-  h2{{font-size:12.5px; text-transform:uppercase; letter-spacing:0.11em; color:var(--muted); margin:0; font-weight:700; display:flex; align-items:center; gap:10px;}}
-  h2::before{{content:""; width:3px; height:13px; border-radius:2px; background:var(--grad);}}
-  .sec-note{{font-size:12px; color:var(--faint);}}
+  section{margin:38px 0;}
+  .sec-head{display:flex; align-items:center; gap:11px; margin-bottom:18px; flex-wrap:wrap;}
+  h2{font-size:12.5px; text-transform:uppercase; letter-spacing:0.11em; color:var(--muted); margin:0; font-weight:700; display:flex; align-items:center; gap:10px;}
+  h2::before{content:""; width:3px; height:13px; border-radius:2px; background:var(--grad);}
+  .sec-note{font-size:12px; color:var(--faint);}
 
   /* Section 2 — EU rank cards */
-  .rank-grid{{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}}
-  @media(max-width:820px){{.rank-grid{{grid-template-columns:1fr;}}}}
-  .rank-card{{padding:20px; background:linear-gradient(180deg,var(--panel),rgba(22,27,34,0.55));
-    border:1px solid var(--hairline); border-radius:var(--r-lg); box-shadow:var(--shadow); position:relative; overflow:hidden;}}
-  .rank-card::before{{content:""; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--grad);}}
-  .rank-head{{display:flex; align-items:center; gap:9px; margin-bottom:8px;}}
-  .medal{{font-size:20px;}}
-  .rank-no{{font-size:10px; text-transform:uppercase; letter-spacing:0.09em; color:var(--faint); font-weight:700;}}
-  .rank-name{{font-size:22px; font-weight:770; letter-spacing:-0.02em;}}
-  .rank-metric{{display:inline-block; margin:10px 0 12px; font-size:12.5px; font-weight:680; color:var(--gold);
-    background:rgba(240,160,42,0.12); border:1px solid rgba(240,160,42,0.28); padding:3px 10px; border-radius:20px;}}
-  .rank-rationale{{font-size:13.5px; color:var(--muted); line-height:1.55;}}
+  .rank-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
+  @media(max-width:820px){.rank-grid{grid-template-columns:1fr;}}
+  .rank-card{padding:20px; background:linear-gradient(180deg,var(--panel),rgba(22,27,34,0.55));
+    border:1px solid var(--hairline); border-radius:var(--r-lg); box-shadow:var(--shadow); position:relative; overflow:hidden;}
+  .rank-card::before{content:""; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--grad);}
+  .rank-head{display:flex; align-items:center; gap:9px; margin-bottom:8px;}
+  .medal{font-size:20px;}
+  .rank-no{font-size:10px; text-transform:uppercase; letter-spacing:0.09em; color:var(--faint); font-weight:700;}
+  .rank-name{font-size:22px; font-weight:770; letter-spacing:-0.02em;}
+  .rank-metric{display:inline-block; margin:10px 0 12px; font-size:12.5px; font-weight:680; color:var(--gold);
+    background:rgba(240,160,42,0.12); border:1px solid rgba(240,160,42,0.28); padding:3px 10px; border-radius:20px;}
+  .rank-rationale{font-size:13.5px; color:var(--muted); line-height:1.55;}
 
   /* Section 3 — channel strategy columns */
-  .strat-grid{{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}}
-  @media(max-width:820px){{.strat-grid{{grid-template-columns:1fr;}}}}
-  .strat-col{{background:var(--panel); border:1px solid var(--hairline); border-radius:var(--r-md); padding:18px; box-shadow:var(--shadow);}}
-  .strat-market{{font-size:16px; font-weight:740; letter-spacing:-0.01em; padding-bottom:11px; margin-bottom:11px; border-bottom:1px solid var(--hairline);
-    background:linear-gradient(180deg,#fff,#c9c3e8); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}}
-  .strat-row{{margin:12px 0;}}
-  .strat-k{{font-size:9.5px; text-transform:uppercase; letter-spacing:0.08em; color:var(--faint); font-weight:700; margin-bottom:3px;}}
-  .strat-v{{font-size:13px; color:var(--text); line-height:1.5;}}
+  .strat-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
+  @media(max-width:820px){.strat-grid{grid-template-columns:1fr;}}
+  .strat-col{background:var(--panel); border:1px solid var(--hairline); border-radius:var(--r-md); padding:18px; box-shadow:var(--shadow);}
+  .strat-market{font-size:16px; font-weight:740; letter-spacing:-0.01em; padding-bottom:11px; margin-bottom:11px; border-bottom:1px solid var(--hairline);
+    background:linear-gradient(180deg,#fff,#c9c3e8); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
+  .strat-row{margin:12px 0;}
+  .strat-k{font-size:9.5px; text-transform:uppercase; letter-spacing:0.08em; color:var(--faint); font-weight:700; margin-bottom:3px;}
+  .strat-v{font-size:13px; color:var(--text); line-height:1.5;}
 
   /* Section 4 — white space matrix */
-  .ws-banner{{display:flex; align-items:center; gap:14px; flex-wrap:wrap; padding:16px 20px; margin-bottom:16px;
-    background:linear-gradient(120deg,rgba(63,185,80,0.12),rgba(110,64,201,0.10)); border:1px solid rgba(63,185,80,0.3); border-radius:var(--r-md);}}
-  .ws-flag{{font-size:10px; font-weight:800; letter-spacing:0.12em; color:var(--good); background:rgba(63,185,80,0.16); padding:5px 11px; border-radius:6px; white-space:nowrap;}}
-  .ws-headline{{font-size:16px; font-weight:700; letter-spacing:-0.01em;}}
-  .table-wrap{{overflow-x:auto; border:1px solid var(--hairline); border-radius:var(--r-md); background:var(--panel);}}
-  .ws-table{{width:100%; border-collapse:collapse; font-size:13px; min-width:640px;}}
-  .ws-table th,.ws-table td{{padding:13px 15px; border-bottom:1px solid var(--hairline); text-align:center;}}
-  .ws-table th{{background:#10151d; color:var(--faint); font-size:10px; text-transform:uppercase; letter-spacing:0.06em; font-weight:700;}}
-  .ws-table th:first-child,.ws-table td:first-child{{text-align:left;}}
-  .ws-table tbody tr:last-child td{{border-bottom:none;}}
-  .comp-name{{font-weight:700; font-size:14px;}}
-  .comp-focus{{display:block; font-size:11px; color:var(--faint); font-weight:500; margin-top:3px; max-width:220px;}}
-  td.mx{{font-weight:700; font-variant-numeric:tabular-nums;}}
-  td.mx.open{{color:var(--good); background:rgba(63,185,80,0.07);}}
-  td.mx.contested{{color:var(--faint);}}
-  .ws-legend{{display:flex; gap:18px; flex-wrap:wrap; margin-top:11px; font-size:11.5px;}}
-  .lg.open{{color:var(--good);}} .lg.contested{{color:var(--faint);}}
-  .ws-chips{{display:flex; gap:9px; flex-wrap:wrap; margin-top:14px;}}
-  .ws-chip{{font-size:12px; font-weight:650; color:var(--good); background:rgba(63,185,80,0.1); border:1px solid rgba(63,185,80,0.28); padding:5px 12px; border-radius:20px;}}
+  .ws-banner{display:flex; align-items:center; gap:14px; flex-wrap:wrap; padding:16px 20px; margin-bottom:16px;
+    background:linear-gradient(120deg,rgba(63,185,80,0.12),rgba(110,64,201,0.10)); border:1px solid rgba(63,185,80,0.3); border-radius:var(--r-md);}
+  .ws-flag{font-size:10px; font-weight:800; letter-spacing:0.12em; color:var(--good); background:rgba(63,185,80,0.16); padding:5px 11px; border-radius:6px; white-space:nowrap;}
+  .ws-headline{font-size:16px; font-weight:700; letter-spacing:-0.01em;}
+  .table-wrap{overflow-x:auto; border:1px solid var(--hairline); border-radius:var(--r-md); background:var(--panel);}
+  .ws-table{width:100%; border-collapse:collapse; font-size:13px; min-width:640px;}
+  .ws-table th,.ws-table td{padding:13px 15px; border-bottom:1px solid var(--hairline); text-align:center;}
+  .ws-table th{background:#10151d; color:var(--faint); font-size:10px; text-transform:uppercase; letter-spacing:0.06em; font-weight:700;}
+  .ws-table th:first-child,.ws-table td:first-child{text-align:left;}
+  .ws-table tbody tr:last-child td{border-bottom:none;}
+  .comp-name{font-weight:700; font-size:14px;}
+  .comp-focus{display:block; font-size:11px; color:var(--faint); font-weight:500; margin-top:3px; max-width:220px;}
+  td.mx{font-weight:700; font-variant-numeric:tabular-nums;}
+  td.mx.open{color:var(--good); background:rgba(63,185,80,0.07);}
+  td.mx.contested{color:var(--faint);}
+  .ws-legend{display:flex; gap:18px; flex-wrap:wrap; margin-top:11px; font-size:11.5px;}
+  .lg.open{color:var(--good);} .lg.contested{color:var(--faint);}
+  .ws-chips{display:flex; gap:9px; flex-wrap:wrap; margin-top:14px;}
+  .ws-chip{font-size:12px; font-weight:650; color:var(--good); background:rgba(63,185,80,0.1); border:1px solid rgba(63,185,80,0.28); padding:5px 12px; border-radius:20px;}
 
   /* Section 5 — tactics cards */
-  .tac-grid{{display:grid; grid-template-columns:repeat(2,1fr); gap:16px;}}
-  @media(max-width:760px){{.tac-grid{{grid-template-columns:1fr;}}}}
-  .tac-card{{padding:18px; background:linear-gradient(180deg,var(--panel),rgba(22,27,34,0.55));
-    border:1px solid var(--hairline); border-radius:var(--r-lg); box-shadow:var(--shadow); transition:transform .2s ease,border-color .2s ease;}}
-  .tac-card:hover{{transform:translateY(-3px); border-color:var(--hairline-strong);}}
-  .tac-cat{{display:inline-block; font-size:9.5px; font-weight:800; letter-spacing:0.09em; text-transform:uppercase;
-    color:var(--accent-2); background:rgba(163,113,245,0.13); border:1px solid rgba(163,113,245,0.3); padding:3px 9px; border-radius:20px;}}
-  .tac-title{{font-size:16.5px; font-weight:740; letter-spacing:-0.015em; margin:11px 0 8px;}}
-  .tac-why{{font-size:13px; color:var(--muted); line-height:1.55;}}
+  .tac-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:16px;}
+  @media(max-width:760px){.tac-grid{grid-template-columns:1fr;}}
+  .tac-card{padding:18px; background:linear-gradient(180deg,var(--panel),rgba(22,27,34,0.55));
+    border:1px solid var(--hairline); border-radius:var(--r-lg); box-shadow:var(--shadow); transition:transform .2s ease,border-color .2s ease;}
+  .tac-card:hover{transform:translateY(-3px); border-color:var(--hairline-strong);}
+  .tac-cat{display:inline-block; font-size:9.5px; font-weight:800; letter-spacing:0.09em; text-transform:uppercase;
+    color:var(--accent-2); background:rgba(163,113,245,0.13); border:1px solid rgba(163,113,245,0.3); padding:3px 9px; border-radius:20px;}
+  .tac-title{font-size:16.5px; font-weight:740; letter-spacing:-0.015em; margin:11px 0 8px;}
+  .tac-why{font-size:13px; color:var(--muted); line-height:1.55;}
 
-  footer{{margin-top:50px; padding-top:18px; border-top:1px solid var(--hairline); font-size:11.5px; color:var(--faint); line-height:1.7;}}
-  footer b{{color:var(--muted); font-weight:600;}}
-  @media (prefers-reduced-motion: reduce){{*{{transition:none!important;}}}}
+  footer{margin-top:50px; padding-top:18px; border-top:1px solid var(--hairline); font-size:11.5px; color:var(--faint); line-height:1.7;}
+  footer b{color:var(--muted); font-weight:600;}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important;}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="brandbar">
     <div class="brand"><span class="bolt">⚡</span>Speed Wallet</div>
-    <div class="sync">Synced: <b>{sync}</b></div>
+    <div class="sync">Synced: <b>/*__SYNC__*/</b></div>
   </div>
 
   <div class="title-block">
@@ -387,27 +397,27 @@ _TEMPLATE = r"""<!doctype html>
 
   <section>
     <div class="sec-head"><h2>EU Market Priority</h2><span class="sec-note">Ranked entry order from install demand &amp; corridor fit</span></div>
-    {eu}
+    /*__EU__*/
   </section>
 
   <section>
     <div class="sec-head"><h2>Per-Market Channel Strategy</h2><span class="sec-note">Top channel · messaging angle · first creator segment</span></div>
-    {channel}
+    /*__CHANNEL__*/
   </section>
 
   <section>
     <div class="sec-head"><h2>Competitive White Space</h2><span class="sec-note">Where Robinhood, Crypto.com &amp; Kraken are absent</span></div>
-    {whitespace}
+    /*__WHITESPACE__*/
   </section>
 
   <section>
     <div class="sec-head"><h2>High-Leverage Marketing Tactics</h2><span class="sec-note">Highest-leverage, underused growth plays</span></div>
-    {tactics}
+    /*__TACTICS__*/
   </section>
 
   <footer>
-    <b>Data sources:</b> {sources}<br>
-    Generated {gen_date} · Sections extracted &amp; condensed by Claude (claude-sonnet-4-6) · rebuilt by pipelines/build_strategy_dashboard.py
+    <b>Data sources:</b> /*__SOURCES__*/<br>
+    Generated /*__GENDATE__*/ · Sections extracted &amp; condensed by Claude (claude-sonnet-4-6) · rebuilt by pipelines/build_strategy_dashboard.py
   </footer>
 </div>
 </body>
