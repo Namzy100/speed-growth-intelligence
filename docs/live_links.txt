@@ -1,10 +1,10 @@
 Speed Wallet — Live Links
 
-Creative dashboard (Vercel): https://creative-dashboard-speed.vercel.app
-Creator dashboard (Vercel):  https://creative-dashboard-speed.vercel.app/creators
-Strategy dashboard (Vercel): https://creative-dashboard-speed.vercel.app/strategy
-Looker Studio dashboard:     https://datastudio.google.com/reporting/e15d81ef-6872-46e9-bca9-1624f0a61319
+Creative dashboard (GitHub Pages): https://namzy100.github.io/speed-growth-intelligence
+Creator dashboard (GitHub Pages):  https://namzy100.github.io/speed-growth-intelligence/creators
+Strategy dashboard (GitHub Pages): https://namzy100.github.io/speed-growth-intelligence/strategy
+Looker Studio dashboard:           https://datastudio.google.com/reporting/e15d81ef-6872-46e9-bca9-1624f0a61319
 
-The Vercel dashboards are self-contained HTML rebuilt daily by run_daily_sync.py
+The GitHub Pages dashboards are self-contained HTML rebuilt daily by run_daily_sync.py
 and auto-deployed via GitHub push (DASHBOARD_AUTODEPLOY=1). Looker Studio reads
 the Google Sheet tabs, which the same daily sync refreshes.
