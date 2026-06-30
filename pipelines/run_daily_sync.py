@@ -35,6 +35,7 @@ load_dotenv()
 
 from pipelines import build_creative_dashboard
 from pipelines import build_creator_dashboard
+from pipelines import build_strategy_dashboard
 from pipelines.adjust import AdjustPipeline
 from pipelines.meta import MetaPipeline
 from pipelines.sheets import (
@@ -194,6 +195,28 @@ def _rebuild_creator_dashboard() -> bool:
         return False
 
 
+def _rebuild_strategy_dashboard() -> bool:
+    """Rebuild the strategy & market-intelligence dashboard (low priority).
+
+    Gated behind STRATEGY_DASHBOARD_REBUILD because it makes several Claude calls
+    to re-extract the strategy source docs — those docs change infrequently, so
+    this is meant to run less often than the daily data sync (e.g. weekly, or
+    on-demand after the source memos are refreshed). When the flag is unset the
+    step is skipped and counts as a success so it never fails the daily run.
+    """
+    if not os.getenv("STRATEGY_DASHBOARD_REBUILD"):
+        _log("Strategy dashboard: skipped (set STRATEGY_DASHBOARD_REBUILD=1 to rebuild).")
+        return True
+    _log("Strategy dashboard: rebuilding docs/strategy_dashboard.html via Claude...")
+    try:
+        build_strategy_dashboard.main()
+        _log("Strategy dashboard: rebuilt successfully")
+        return True
+    except Exception as e:
+        _log(f"Strategy dashboard: rebuild FAILED — {e}")
+        return False
+
+
 def _deploy_dashboard() -> bool:
     """Push the rebuilt dashboard HTML to GitHub so Vercel auto-deploys it.
 
@@ -207,7 +230,11 @@ def _deploy_dashboard() -> bool:
              "to GitHub for Vercel).")
         return True
 
-    files = ["docs/creative_dashboard.html", "docs/creator_dashboard.html"]
+    files = [
+        "docs/creative_dashboard.html",
+        "docs/creator_dashboard.html",
+        "docs/strategy_dashboard.html",
+    ]
     try:
         subprocess.run(["git", "add", *files], cwd=_ROOT, check=True)
         # Nothing staged → no change to deploy.
@@ -266,6 +293,10 @@ def run() -> None:
 
     # Creator dashboard — rebuilt from live Supabase data so both stay fresh.
     results["Creator Dashboard"] = _rebuild_creator_dashboard()
+
+    # Strategy dashboard — low priority; only rebuilds when the env flag is set
+    # (source memos change infrequently and it makes several Claude calls).
+    results["Strategy Dashboard"] = _rebuild_strategy_dashboard()
 
     # Auto-deploy: push the refreshed dashboards to GitHub → Vercel (opt-in).
     results["Deploy"] = _deploy_dashboard()
