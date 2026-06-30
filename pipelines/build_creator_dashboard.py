@@ -72,6 +72,11 @@ def build_rows() -> list[dict]:
             "infl": round(float(r.get("influencer_score", 0) or 0), 1),
             "is_influencer": is_infl,
             "source": _source(tags, is_infl),
+            # Sub-dimension scores (each /20) for the click-through breakdown modal.
+            "af": round(float(r.get("audience_fit", 0) or 0), 1),
+            "eng": round(float(r.get("engagement_quality_score", 0) or 0), 1),
+            "con": round(float(r.get("content_alignment", 0) or 0), 1),
+            "acq": round(float(r.get("acquisition_potential", 0) or 0), 1),
             # Mimanshi's fit rating (1-5) lives in a 'fit_N' niche tag.
             "fit_score": _fit_score(tags),
             "outreach": str(r.get("outreach_status", "not_contacted")),
@@ -213,6 +218,28 @@ _TEMPLATE = r"""<!doctype html>
   .mimchip{font-size:10px; font-weight:700; color:#ffd66e; background:rgba(240,160,42,0.16); padding:1px 7px; border-radius:5px; border:1px solid rgba(240,160,42,0.3);}
   .src-mimanshi{color:#ffd66e; font-weight:700;} .src-influencer{color:var(--accent-2); font-weight:650;} .src-scraped{color:var(--faint);}
 
+  /* Click-to-expand score breakdown (inside each card) */
+  .card{cursor:pointer;}
+  .card-hint{font-size:10px; color:var(--faint); text-transform:uppercase; letter-spacing:0.06em; transition:opacity .2s ease;}
+  .card.expanded .card-hint{opacity:0;}
+  .breakdown{max-height:0; overflow:hidden; opacity:0;
+    transition:max-height .38s cubic-bezier(.2,.7,.2,1), opacity .28s ease, margin-top .38s ease;}
+  .card.expanded .breakdown{max-height:360px; opacity:1; margin-top:14px;}
+  .breakdown-inner{padding-top:14px; border-top:1px solid var(--hairline);}
+  .bd-row{display:grid; grid-template-columns:96px 1fr 42px; align-items:center; gap:9px; margin:7px 0;}
+  .bd-lab{font-size:10.5px; color:var(--muted); font-weight:600; letter-spacing:-0.01em;}
+  .bd-lab .ref{color:var(--faint); font-weight:600;}
+  .bd-track{height:7px; background:rgba(255,255,255,0.07); border-radius:5px; overflow:hidden;}
+  .bd-fill{height:100%; border-radius:5px; width:0; transition:width .5s cubic-bezier(.2,.7,.2,1);}
+  .bd-val{font-size:11px; font-weight:680; font-variant-numeric:tabular-nums; text-align:right; color:var(--text);}
+  .bd-total{display:flex; justify-content:space-between; align-items:baseline; margin-top:12px; padding-top:11px; border-top:1px solid var(--hairline);}
+  .bd-total .lab{font-size:10.5px; text-transform:uppercase; letter-spacing:0.07em; color:var(--faint); font-weight:700;}
+  .bd-total .val{font-size:19px; font-weight:780; font-variant-numeric:tabular-nums;}
+  .bd-total .val small{font-size:11px; color:var(--faint); font-weight:600;}
+  .bd-fit{display:flex; align-items:center; gap:8px; margin-top:11px; font-size:11px; color:var(--muted);}
+  .bd-fit .stars{font-size:14px; letter-spacing:1px; color:#ffd66e;}
+  .bd-fit .stars .empty{color:var(--faint);}
+
   /* Collapsible scoring */
   details.crit{background:var(--panel); border:1px solid var(--hairline); border-radius:var(--r-md); padding:0 18px; box-shadow:var(--shadow);}
   details.crit summary{cursor:pointer; list-style:none; padding:15px 0; font-size:12.5px; font-weight:700; color:var(--text); display:flex; align-items:center; gap:9px;}
@@ -342,6 +369,36 @@ const segColor = s => getComputedStyle(document.documentElement).getPropertyValu
 const fmtFollow = n => n >= 1e6 ? (n/1e6).toFixed(1)+"M" : n >= 1e3 ? (n/1e3).toFixed(n>=1e4?0:1)+"k" : String(n);
 const initials = n => (n.trim().split(/\s+/).map(w=>w[0]).join("").slice(0,2) || "?").toUpperCase();
 const sourceLabel = c => c.source==="mimanshi" ? "Mimanshi ⭐" : c.source==="influencer" ? "Influencer" : "Scraped";
+// Dimension bar colour: absolute /20 thresholds — green >=14, yellow >=8, red <8.
+const barColor = v => v >= 14 ? "#3fb950" : v >= 8 ? "#e3b341" : "#f85149";
+
+function breakdown(c){
+  const dims = [
+    ["Audience Fit", c.af, false],
+    ["Engagement", c.eng, false],
+    ["Content Align.", c.con, false],
+    ["Acquisition", c.acq, true],
+    ["Deposit Rel.", c.drs, false],
+  ];
+  const rows = dims.map(([lab,v,ref]) => `
+    <div class="bd-row">
+      <span class="bd-lab">${lab}${ref?' <span class="ref">*</span>':''}</span>
+      <div class="bd-track"><div class="bd-fill" data-w="${Math.min(v/20*100,100).toFixed(1)}%" style="background:${barColor(v)}"></div></div>
+      <span class="bd-val">${v.toFixed(1)}</span>
+    </div>`).join("");
+  let fit = "";
+  if(c.source==="mimanshi" && c.fit_score>0){
+    const stars = "★".repeat(c.fit_score) + `<span class="empty">${"★".repeat(5-c.fit_score)}</span>`;
+    fit = `<div class="bd-fit"><span>Mimanshi Fit Rating</span><span class="stars">${stars}</span><span>${c.fit_score}/5</span></div>`;
+  }
+  return `<div class="breakdown"><div class="breakdown-inner">
+    ${rows}
+    <div class="bd-total"><span class="lab">Composite</span>
+      <span class="val" style="color:${scoreColor(c.score)}">${c.score.toFixed(1)}<small>/100</small></span></div>
+    ${fit}
+    <div class="bd-fit" style="color:var(--faint)"><span>* Acquisition is a reference reach proxy — not part of the composite.</span></div>
+  </div></div>`;
+}
 
 document.getElementById("syncTime").textContent = DATA.generated_at || "—";
 
@@ -391,10 +448,27 @@ function renderCards(){
       <div class="card-foot">
         <div><span class="k">Followers</span> <span class="v">${fmtFollow(c.followers)}</span></div>
         <div><span class="k">Deposit rel.</span> <span class="v">${c.drs.toFixed(1)}</span></div>
-        <div><span class="out-pill">${esc(c.outreach)}</span></div>
+        <div><span class="card-hint">▾ breakdown</span></div>
       </div>
+      ${breakdown(c)}
     </div>`).join("");
 }
+
+// Accordion: clicking a card toggles its breakdown; only one open at a time.
+document.getElementById("cards").addEventListener("click", e => {
+  const card = e.target.closest(".card");
+  if(!card) return;
+  const wasOpen = card.classList.contains("expanded");
+  document.querySelectorAll("#cards .card.expanded").forEach(c => {
+    c.classList.remove("expanded");
+    c.querySelectorAll(".bd-fill").forEach(f => f.style.width = "0");
+  });
+  if(!wasOpen){
+    card.classList.add("expanded");
+    // Defer so the width transition animates from 0 as the panel slides open.
+    requestAnimationFrame(() => card.querySelectorAll(".bd-fill").forEach(f => f.style.width = f.dataset.w));
+  }
+});
 
 let sortKey="score", sortDir=-1;
 function rows(){
