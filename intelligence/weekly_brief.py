@@ -159,17 +159,28 @@ def read_eu_context() -> str:
 
 
 def read_sheets_data(spreadsheet_id: str) -> dict[str, pd.DataFrame]:
-    """Read the three Adjust report tabs from the spreadsheet."""
+    """Read the three Adjust report tabs plus the Meta Campaigns tab.
+
+    The Meta Campaigns tab (paid Facebook/Instagram spend & installs) is optional —
+    it is skipped cleanly if absent so an older sheet still produces a brief.
+    """
     spreadsheet = _sheets_client().open_by_key(spreadsheet_id)
     tabs = {
         "channel_overview": "Channel Overview",
         "installs_by_campaign": "Campaign Installs",
         "retention": "Retention",
     }
-    return {
+    out = {
         key: pd.DataFrame(spreadsheet.worksheet(name).get_all_records())
         for key, name in tabs.items()
     }
+    try:
+        out["meta_campaigns"] = pd.DataFrame(
+            spreadsheet.worksheet("Meta Campaigns").get_all_records()
+        )
+    except gspread.WorksheetNotFound:
+        out["meta_campaigns"] = pd.DataFrame()
+    return out
 
 
 # ------------------------------------------------------------------
@@ -186,6 +197,10 @@ def build_data_summary(data: dict[str, pd.DataFrame]) -> str:
     ci = data.get("installs_by_campaign", pd.DataFrame())
     if not ci.empty:
         parts.append(_fmt_campaign_installs(ci))
+
+    meta = data.get("meta_campaigns", pd.DataFrame())
+    if not meta.empty:
+        parts.append(_fmt_meta_campaigns(meta))
 
     ret = data.get("retention", pd.DataFrame())
     if not ret.empty:
@@ -234,6 +249,45 @@ def _fmt_campaign_installs(df: pd.DataFrame) -> str:
         channel = row.get("channel", "")
         campaign = row.get("campaign_network", "")
         lines.append(f"  {channel} / {campaign}: {installs:,} installs, {cost_str}")
+    return "\n".join(lines)
+
+
+def _fmt_meta_campaigns(df: pd.DataFrame) -> str:
+    """Summarise paid Meta (Facebook/Instagram) campaign spend & installs.
+
+    Speed runs Meta as paid acquisition in the US + EU. Reports blended totals
+    plus the top campaigns by spend with per-campaign eCPI and CTR.
+    """
+    df = df.copy()
+    for col in ("spend", "impressions", "clicks", "mobile_app_install"):
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0)
+    df = df.sort_values("spend", ascending=False)
+
+    total_spend = float(df["spend"].sum()) if "spend" in df.columns else 0.0
+    total_inst = int(df["mobile_app_install"].sum()) if "mobile_app_install" in df.columns else 0
+    blended = total_spend / total_inst if total_inst > 0 else 0.0
+
+    lines = [
+        f"META ADS CAMPAIGNS — last 30 days (paid US/EU; total spend "
+        f"${total_spend:,.2f}, {total_inst:,} app installs, blended eCPI "
+        f"${blended:.2f})"
+    ]
+    for _, row in df.head(10).iterrows():
+        spend = float(row.get("spend", 0))
+        if spend == 0:
+            continue
+        inst = int(row.get("mobile_app_install", 0))
+        ecpi = spend / inst if inst > 0 else 0
+        ecpi_str = f"eCPI ${ecpi:.2f}" if inst > 0 else "no installs attributed"
+        impr = int(row.get("impressions", 0))
+        clicks = int(row.get("clicks", 0))
+        ctr = (clicks / impr * 100) if impr > 0 else 0
+        name = row.get("campaign_name", "") or "(unnamed)"
+        lines.append(
+            f"  {name}: ${spend:,.2f} spend, {inst:,} installs ({ecpi_str}), "
+            f"{impr:,} impr, {clicks:,} clicks, CTR {ctr:.2f}%"
+        )
     return "\n".join(lines)
 
 
@@ -312,7 +366,10 @@ def generate_brief(data_summary: str, competitor_context: str = "",
     client = Anthropic(api_key=api_key)
     response = client.messages.create(
         model="claude-sonnet-4-5",
-        max_tokens=1024,
+        # Headroom for the full brief: 5 analysis points plus the optional
+        # Competitor Context and EU Market Context paragraphs. 1024 truncated
+        # the EU paragraph mid-sentence when both context blocks were present.
+        max_tokens=1500,
         messages=[{"role": "user", "content": prompt}],
     )
     return response.content[0].text
