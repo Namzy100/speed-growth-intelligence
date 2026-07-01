@@ -61,6 +61,17 @@ _CRYPTO_KW = {"bitcoin", "btc", "crypto", "cryptocurrency", "ethereum", "eth",
               "defi", "web3", "stablecoin", "usdt"}
 
 
+# Tracks how many items each platform's language filter dropped (per collect run).
+_FILTER_STATS = {"youtube_filtered": 0, "tiktok_filtered": 0}
+
+
+def _is_english(text: str) -> bool:
+    if not text or len(text) < 3:
+        return True
+    ascii_chars = sum(1 for c in text if ord(c) < 128)
+    return ascii_chars / len(text) > 0.80
+
+
 def classify_segment(text: str, category: str = "") -> str:
     t = f"{text} {category}".lower()
     if any(k in t for k in _IGAMING_KW):
@@ -122,8 +133,11 @@ def _fetch_youtube(term: str) -> list[dict]:
             "url": f"https://www.youtube.com/watch?v={it['id']}",
             "thumbnail": thumb,
         })
-    out.sort(key=lambda x: x["views"], reverse=True)
-    return out[:_PER_CATEGORY]
+    # English-only: drop non-English titles (search is already US/en-scoped).
+    kept = [v for v in out if _is_english(v["title"])]
+    _FILTER_STATS["youtube_filtered"] += len(out) - len(kept)
+    kept.sort(key=lambda x: x["views"], reverse=True)
+    return kept[:_PER_CATEGORY]
 
 
 # ------------------------------------------------------------------
@@ -146,6 +160,11 @@ def _fetch_tiktok(fetcher: TikTokCreatorFetcher, term: str) -> list[dict]:
         shares = int(it.get("shareCount", 0) or 0)
         saves = int(it.get("collectCount", 0) or 0)  # newly captured
         caption = " ".join(str(it.get("text", "")).split())
+        # English-only: keep if TikTok tags it English OR the caption reads ASCII.
+        lang = str(it.get("textLanguage", "")).lower()
+        if lang != "en" and not _is_english(caption):
+            _FILTER_STATS["tiktok_filtered"] += 1
+            continue
         hashtags = [h.get("name", "") if isinstance(h, dict) else str(h)
                     for h in (it.get("hashtags", []) or [])]
         author = (it.get("authorMeta", {}) or {}).get("name", "")
@@ -179,6 +198,8 @@ def collect_signals() -> dict:
     if not os.getenv("APIFY_API_KEY"):
         raise EnvironmentError("APIFY_API_KEY must be set in .env")
 
+    _FILTER_STATS["youtube_filtered"] = 0
+    _FILTER_STATS["tiktok_filtered"] = 0
     fetcher = TikTokCreatorFetcher(os.getenv("APIFY_API_KEY"))
     youtube, tiktok = [], []
     for term in _CATEGORIES:
@@ -221,11 +242,15 @@ def collect_signals() -> dict:
     prior = _prior_snapshot()
     feedback, died = _feedback(snapshot, prior)
 
+    print(f"Language filter dropped: {_FILTER_STATS['youtube_filtered']} YouTube, "
+          f"{_FILTER_STATS['tiktok_filtered']} TikTok (non-English).")
+
     return {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "youtube": youtube, "tiktok": tiktok, "by_segment": by_segment,
         "platform_signal": signal, "snapshot": snapshot,
         "feedback": feedback, "died": died,
+        "filter_stats": dict(_FILTER_STATS),
     }
 
 
