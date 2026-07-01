@@ -36,6 +36,7 @@ load_dotenv()
 from pipelines import build_creative_dashboard
 from pipelines import build_creator_dashboard
 from pipelines import build_strategy_dashboard
+from pipelines import build_trend_dashboard
 from pipelines.adjust import AdjustPipeline
 from pipelines.meta import MetaPipeline
 from pipelines.sheets import (
@@ -217,6 +218,29 @@ def _rebuild_strategy_dashboard() -> bool:
         return False
 
 
+def _rebuild_trend_dashboard() -> bool:
+    """Rebuild the trend-intelligence dashboard — weekly (Mondays only).
+
+    Gated behind TREND_DASHBOARD_REBUILD (it makes Apify + YouTube + Claude calls),
+    and only fires on Mondays since the trend data is a weekly window. When the flag
+    is unset or it's not Monday, the step is skipped and counts as a success.
+    """
+    if not os.getenv("TREND_DASHBOARD_REBUILD"):
+        _log("Trend dashboard: skipped (set TREND_DASHBOARD_REBUILD=1 to enable).")
+        return True
+    if datetime.now(timezone.utc).weekday() != 0:  # 0 = Monday
+        _log("Trend dashboard: skipped (only rebuilds on Mondays).")
+        return True
+    _log("Trend dashboard: rebuilding docs/trend_dashboard.html (YouTube+TikTok+Claude)...")
+    try:
+        build_trend_dashboard.main()
+        _log("Trend dashboard: rebuilt successfully")
+        return True
+    except Exception as e:
+        _log(f"Trend dashboard: rebuild FAILED — {e}")
+        return False
+
+
 def _deploy_dashboard() -> bool:
     """Push the rebuilt dashboard HTML to GitHub so Vercel auto-deploys it.
 
@@ -234,6 +258,7 @@ def _deploy_dashboard() -> bool:
         "docs/creative_dashboard.html",
         "docs/creator_dashboard.html",
         "docs/strategy_dashboard.html",
+        "docs/trend_dashboard.html",
     ]
     try:
         subprocess.run(["git", "add", *files], cwd=_ROOT, check=True)
@@ -297,6 +322,9 @@ def run() -> None:
     # Strategy dashboard — low priority; only rebuilds when the env flag is set
     # (source memos change infrequently and it makes several Claude calls).
     results["Strategy Dashboard"] = _rebuild_strategy_dashboard()
+
+    # Trend dashboard — weekly (Mondays), gated behind TREND_DASHBOARD_REBUILD.
+    results["Trend Dashboard"] = _rebuild_trend_dashboard()
 
     # Auto-deploy: push the refreshed dashboards to GitHub → Vercel (opt-in).
     results["Deploy"] = _deploy_dashboard()

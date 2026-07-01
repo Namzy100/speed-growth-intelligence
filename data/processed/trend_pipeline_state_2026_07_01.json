@@ -1,236 +1,165 @@
 {
-  "generated_at": "2026-07-01T16:12:24.416654+00:00",
+  "generated_at": "2026-07-01T19:18:05.466731+00:00",
   "categories": {
+    "bitcoin|YouTube": {
+      "median_reach": 183174,
+      "avg_er": 0.0436,
+      "hashtags": {}
+    },
+    "fintech|YouTube": {
+      "median_reach": 17306,
+      "avg_er": 0.027,
+      "hashtags": {}
+    },
+    "send money|YouTube": {
+      "median_reach": 28957,
+      "avg_er": 0.0227,
+      "hashtags": {}
+    },
+    "money transfer|YouTube": {
+      "median_reach": 62286,
+      "avg_er": 0.0333,
+      "hashtags": {}
+    },
+    "crypto|YouTube": {
+      "median_reach": 180223,
+      "avg_er": 0.0709,
+      "hashtags": {}
+    },
+    "lightning network|YouTube": {
+      "median_reach": 1247,
+      "avg_er": 0.0413,
+      "hashtags": {}
+    },
+    "remittance|YouTube": {
+      "median_reach": 5745,
+      "avg_er": 0.03,
+      "hashtags": {}
+    },
     "bitcoin|TikTok": {
-      "median_reach": 76300,
-      "avg_er": 0.025,
+      "median_reach": 166300,
+      "avg_er": 0.0306,
       "hashtags": {
-        "bitcoin": 11,
-        "crypto": 6,
-        "btc": 5,
+        "bitcoin": 9,
+        "btc": 4,
+        "crypto": 4,
         "cryptonews": 4,
-        "cryptocurrency": 3,
+        "cryptocurrency": 2,
         "fyp": 2,
         "stockmarket": 2,
-        "investing": 2,
-        "usa": 2,
-        "michaelsaylor": 2,
-        "cryptocrash": 1,
-        "bitcoinpriceprediction": 1
+        "bullrun": 1,
+        "hanocrypto": 1,
+        "finance": 1,
+        "dollar": 1,
+        "cryptocrash": 1
       }
     },
     "crypto|TikTok": {
-      "median_reach": 237800,
-      "avg_er": 0.0324,
+      "median_reach": 284800,
+      "avg_er": 0.0472,
       "hashtags": {
-        "crypto": 12,
-        "cryptocurrency": 7,
-        "fyp": 5,
-        "bitcoin": 4,
-        "investing": 4,
-        "finance": 3,
-        "memecoin": 3,
-        "cryptok": 2,
-        "xrp": 2,
-        "ethereum": 2,
+        "crypto": 9,
+        "cryptocurrency": 3,
+        "xrp": 3,
+        "bitcoin": 3,
+        "top": 2,
+        "fyp": 2,
+        "memecoin": 2,
         "trump": 2,
-        "solana": 2
-      }
-    },
-    "crypto|Instagram": {
-      "median_reach": 2,
-      "avg_er": 0.0,
-      "hashtags": {
-        "crypto": 8,
-        "bitcoin": 4,
-        "tradedocktv": 3,
-        "btc": 3,
-        "blockchain": 2,
-        "trump": 2,
-        "cryptonews": 2,
-        "mica": 1,
-        "europe": 1,
-        "buy": 1,
-        "ethereum": 1,
-        "coinedition": 1
+        "foryou": 2,
+        "shibainu": 1,
+        "shibaswap": 1,
+        "shibaarmy": 1
       }
     },
     "remittance|TikTok": {
-      "median_reach": 49000,
-      "avg_er": 0.0478,
+      "median_reach": 155300,
+      "avg_er": 0.0506,
       "hashtags": {
-        "remittances": 5,
+        "remittance": 5,
         "money": 2,
-        "economy": 2,
-        "migration": 2,
-        "banking": 2,
+        "remittances": 2,
+        "nepal": 2,
         "stitch": 1,
         "latinotiktok": 1,
-        "ugandatiktok": 1,
-        "viral": 1,
-        "new": 1,
-        "storytime": 1,
-        "nepal": 1
-      }
-    },
-    "remittance|Instagram": {
-      "median_reach": 1,
-      "avg_er": 0.0,
-      "hashtags": {
-        "remittance": 7,
-        "bangladesh": 3,
-        "moneytransfer": 3,
-        "centristnation": 1,
-        "bfc": 1,
-        "bahrain": 1,
-        "westernunion": 1,
-        "sendmoney": 1,
-        "cmbspotlight": 1,
-        "ria": 1,
-        "moneygram": 1,
-        "hamdanexchange": 1
-      }
-    },
-    "money transfer|TikTok": {
-      "median_reach": 87900,
-      "avg_er": 0.0385,
-      "hashtags": {
-        "money": 2,
-        "fyp": 2,
-        "remitly": 2,
-        "moneytransfer": 2,
-        "moneytips": 2,
-        "banktransfer": 1,
-        "paymiapp": 1,
-        "transfer": 1,
-        "couple": 1,
-        "couplegoals": 1,
-        "husbandwife": 1,
-        "comedy": 1
-      }
-    },
-    "money transfer|Instagram": {
-      "median_reach": 3,
-      "avg_er": 0.0,
-      "hashtags": {
-        "moneytransfer": 10,
-        "sendmoneyabroad": 2,
-        "moneygram": 2,
-        "foreignexchange": 2,
-        "remittance": 2,
-        "bharatesevakendra": 2,
-        "digitalindia": 2,
-        "financialinclusion": 2,
-        "bankingservices": 2,
-        "aeps": 2,
-        "miniatm": 2,
-        "digitalseva": 2
+        "hundi": 1,
+        "nepalipaisa": 1,
+        "ideapreneurnepal": 1,
+        "africa": 1,
+        "african": 1,
+        "remitly": 1
       }
     },
     "send money|TikTok": {
-      "median_reach": 20800,
-      "avg_er": 0.0714,
+      "median_reach": 13500,
+      "avg_er": 0.071,
       "hashtags": {
-        "fyp": 9,
-        "money": 4,
-        "cashapp": 3,
-        "viralvideos": 2,
-        "explore": 2,
-        "protectyourself": 2,
-        "education": 2,
-        "sherasevenadvice": 2,
-        "paypigtips": 2,
-        "femdomforbeginners": 2,
-        "hesentthemoney": 2,
-        "howtoaskformoney": 2
+        "fyp": 3,
+        "money": 2,
+        "reiki": 1,
+        "asmr": 1,
+        "energyhealing": 1,
+        "protection": 1,
+        "sherasevenadvice": 1,
+        "paypigtips": 1,
+        "femdomforbeginners": 1,
+        "hesentthemoney": 1,
+        "howtoaskformoney": 1,
+        "dustyfreezone": 1
       }
     },
-    "send money|Instagram": {
-      "median_reach": 3,
-      "avg_er": 0.0,
+    "money transfer|TikTok": {
+      "median_reach": 104200,
+      "avg_er": 0.0531,
       "hashtags": {
-        "sendmoney": 15,
-        "moneytransfer": 10,
-        "remittance": 5,
-        "bahrain": 3,
-        "digitalwallet": 2,
-        "rwandaindependenceday": 2,
-        "fintech": 2,
-        "upesimoney": 2,
-        "fx": 2,
-        "currencyexchange": 2,
-        "bfc": 2,
-        "sendthistoyourcrush": 1
+        "money": 2,
+        "moneytransfer": 2,
+        "moneytips": 2,
+        "couplecomedy": 1,
+        "relationshiphumor": 1,
+        "groceryshopping": 1,
+        "vacation": 1,
+        "carterpcs": 1,
+        "tech": 1,
+        "zelle": 1,
+        "venmo": 1,
+        "cashapp": 1
       }
     },
     "lightning network|TikTok": {
-      "median_reach": 8270,
-      "avg_er": 0.0285,
+      "median_reach": 25900,
+      "avg_er": 0.0584,
       "hashtags": {
-        "bitcoin": 7,
-        "lightningnetwork": 4,
-        "btc": 3,
-        "fyp": 3,
-        "bitcoinvs": 2,
-        "crypto": 2,
-        "bitcon": 1,
-        "postepay": 1,
-        "cuoriosit\u00e0": 1,
-        "bitcoineducation": 1,
-        "security": 1,
-        "bigcomfy": 1
-      }
-    },
-    "lightning network|Instagram": {
-      "median_reach": 2,
-      "avg_er": 0.0,
-      "hashtags": {
-        "lightningnetwork": 6,
         "bitcoin": 5,
+        "blockchain": 3,
+        "bitcon": 3,
+        "lightning": 2,
+        "uk": 2,
+        "lightningnetwork": 2,
         "btc": 2,
-        "breez": 2,
-        "bitcoinparaguay": 1,
-        "bitcoincommunity": 1,
-        "asubitcoinmeetup": 1,
-        "bitcoinlightning": 1,
-        "bitcoinforgood": 1,
-        "bitcoincats": 1,
-        "bitvalve": 1,
-        "crypto": 1
+        "bitcoinvs": 2,
+        "cuoriosit\u00e0": 2,
+        "lightningstrike": 1,
+        "stormchasing": 1,
+        "joy": 1
       }
     },
     "fintech|TikTok": {
-      "median_reach": 24200,
-      "avg_er": 0.0341,
+      "median_reach": 35800,
+      "avg_er": 0.0495,
       "hashtags": {
-        "fintech": 10,
-        "finance": 5,
-        "work": 3,
-        "fyp": 2,
-        "entrepreneur": 2,
-        "startup": 2,
+        "fintech": 8,
+        "finance": 4,
+        "entrepreneur": 3,
+        "startup": 3,
+        "money": 2,
+        "business": 2,
+        "founder": 2,
+        "banking": 2,
+        "work": 2,
         "paymentid": 1,
         "uangdigital": 1,
-        "nik": 1,
-        "bankindonesia": 1,
-        "transaksidigital": 1,
-        "urangjabar": 1
-      }
-    },
-    "fintech|Instagram": {
-      "median_reach": 1,
-      "avg_er": 0.0,
-      "hashtags": {
-        "burnrate": 1,
-        "runway": 1,
-        "gestaofinanceira": 1,
-        "startups": 1,
-        "flowmetrix": 1,
-        "empreendedorismo": 1,
-        "fluxodecaixa": 1,
-        "fintech": 1,
-        "pme": 1,
-        "fundadores": 1
+        "nik": 1
       }
     }
   }
