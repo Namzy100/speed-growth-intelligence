@@ -117,8 +117,16 @@ def current_kpis(spreadsheet_id: str) -> dict:
     }
 
 
+# Commit-message prefixes that signal routine/noise rather than real work.
+_NOISE_PREFIXES = ("chore:", "refresh", "auto-deploy", "nudge", "redeploy", "update")
+
+
 def commits_last_7_days() -> list[str]:
-    """Meaningful commit subjects from the last 7 days (drops auto-deploy noise)."""
+    """Top 10 meaningful commit subjects from the last 7 days (most recent first).
+
+    Filters out routine/noise commits (chore:, Refresh, auto-deploy, Nudge,
+    Redeploy, Update) and caps at 10; shows all if fewer than 10 remain.
+    """
     try:
         out = subprocess.run(
             ["git", "log", "--since=7 days ago", "--pretty=format:%s"],
@@ -127,14 +135,14 @@ def commits_last_7_days() -> list[str]:
     except Exception:
         return []
     seen, subjects = set(), []
-    for line in out.splitlines():
+    for line in out.splitlines():  # git log is newest-first
         line = line.strip()
-        if not line or line.lower().startswith("chore: auto-deploy"):
+        if not line or line.lower().startswith(_NOISE_PREFIXES):
             continue
         if line not in seen:
             seen.add(line)
             subjects.append(line)
-    return subjects
+    return subjects[:10]
 
 
 def outreach_summary() -> list[tuple[str, int]]:
@@ -229,10 +237,31 @@ def send(subject: str, body: str) -> None:
         server.send_message(msg)
 
 
+def refresh_brief() -> None:
+    """Regenerate today's weekly brief so the email carries current data.
+
+    Calls weekly_brief.run() directly (it exposes one). Best-effort: if it fails,
+    the email falls back to the most recent brief already on disk.
+    """
+    print("Regenerating weekly brief for fresh data...")
+    try:
+        if hasattr(weekly_brief, "run"):
+            weekly_brief.run()
+        else:  # fallback if the entrypoint is ever renamed
+            subprocess.run(
+                [sys.executable, str(_ROOT / "intelligence" / "weekly_brief.py")],
+                cwd=_ROOT, check=True, timeout=120,
+            )
+    except Exception as e:
+        print(f"  brief refresh failed ({e}); using the latest brief on disk.")
+
+
 def run(dry_run: bool = False) -> None:
     spreadsheet_id = os.getenv("GOOGLE_SHEETS_ID")
     if not spreadsheet_id:
         raise EnvironmentError("GOOGLE_SHEETS_ID must be set in .env")
+
+    refresh_brief()
 
     print("Composing weekly update...")
     subject, body = compose(spreadsheet_id)
