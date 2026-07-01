@@ -1,0 +1,267 @@
+======================================================================
+SPEED WALLET — TREND-TO-ACTION PIPELINE
+Generated 2026-07-01 16:13 UTC · TikTok + Instagram · 7 categories
+======================================================================
+
+FEEDBACK LOOP (week-over-week)
+--------------------------------
+No prior snapshot found — this is the baseline week. Next week's run will show what gained traction, died, or emerged.
+
+
+ACTIONABLE CREATIVE BRIEFS (ranked)
+--------------------------------
+
+MOMENTUM SUMMARY
+This is baseline week — no prior delta to measure. Two signals worth front-running immediately: Remittance TikTok is the highest-engagement category in the data set (4.8% avg, one video at 5.9M reach) with a direct competitor already running a zero-fees hook — Speed needs to own that phrase before it gets commoditized. Lightning Network TikTok has a breakout outlier at 9.8M reach on a speed/simplicity angle, signaling mainstream curiosity is cresting right now.
+
+---
+
+TREND IDENTIFICATION AND CLASSIFICATION
+
+Trend 1: Zero-Fees Remittance Hook — Remittance TikTok, #remittances, reach up to 5.9M, 4.8% engagement. Classification: (a) DIRECTLY USABLE. A competitor ad is literally running "Send Money with ZERO FEES!" and pulling massive numbers. Speed does this natively on Lightning.
+
+Trend 2: Lightning Speed as a Wow Fact — Lightning Network TikTok, #lightningnetwork #bitcoin, reach up to 9.8M, 2.9% engagement. Hook pattern: "In just 1 second you can..." Classification: (a) DIRECTLY USABLE. The product IS the trend.
+
+Trend 3: Crypto Market Volatility / Price Drop Anxiety — Crypto TikTok, #crypto #bitcoin #btc, reach up to 927K, 3.2% engagement. Opening lines centered on "$665B wiped," "Bitcoin under $65K." Classification: (b) ADAPTABLE. Fear of holding becomes a reason to use — Speed lets you spend Bitcoin instantly instead of watching it drop.
+
+Trend 4: "I've Been Living on Bitcoin" Credibility Format — Lightning Network TikTok, #bitcoineducation #lightningnetwork, mid-tier reach, 2.9% engagement. Hook: "After 12 years living on Bitcoin, these are the only tools I actually use." Classification: (b) ADAPTABLE. Authentic practitioner format maps directly to Speed as the daily-use tool.
+
+Trend 5: Instant Payment / Quickest Form of Payment — Money Transfer TikTok, #moneytransfer #banktransfer, reach up to 1M, 3.9% engagement. Hook: "Quickest form of payment!" Classification: (a) DIRECTLY USABLE. Lightning's core technical advantage is the claim, not a metaphor.
+
+Trend 6: Conspiracy / Missing-Person Clickbait Hook — Bitcoin TikTok, #bitcoin #crypto, reach up to 825K, 2.5% engagement. Hook: "This kid went missing after exposing this bitcoin chart trend!" Classification: (c) IRRELEVANT. Pure engagement-bait with no product utility; brand risk outweighs any CTR benefit for a financial app.
+
+Trend 7: Fintech Startup Drama / Valuation Collapse Storytelling — Fintech TikTok, #fintech, reach up to 11.1M, 3.4% engagement. Hook: "They called it the UK's next Apple. $2.7B valuation. The product barely worked." Classification: (c) IRRELEVANT. Fintech skepticism content actively undermines trust in new payment apps — wrong emotional context for conversion.
+
+---
+
+CREATIVE BRIEFS — RANKED BY ACTIONABILITY
+
+---
+
+BRIEF 1 — RANKED #1
+
+Trend and evidence: Zero-Fees Remittance Hook. Remittance TikTok. #remittances (5 uses), #money, #banking. Reach max 5,900,000, median 49,000, avg engagement 4.8% — highest engagement rate in the entire data set. A direct competitor (ACE Money Transfer) is already running a near-identical hook organically and getting traction.
+
+Classification: (a) DIRECTLY USABLE
+
+Exact hook to use: "They're charging your family $15 to receive your money. Speed Wallet charges zero. Watch."
+
+15-second script outline:
+Beat 1 (0-3s): Hook line delivered to camera, no graphics — raw, direct. Show a phone with a competitor transfer receipt highlighting the fee line.
+Beat 2 (4-8s): Quick screen-record of a Speed Wallet send — amount typed, recipient selected, sent. Timer on screen shows under 2 seconds.
+Beat 3 (9-12s): Cut to text overlay: "$0 fee. Arrives in seconds. Every time." Creator nods, no extra words needed.
+Beat 4 (13-15s): CTA card: "Download Speed Wallet — link in bio" with an urgency nudge: "Send free today."
+
+Speed segment targeted: Remittance — diaspora senders (Latin American, South Asian, African corridors based on hashtag geography in signals).
+
+Paid channel to test first: TikTok. Reason: Remittance TikTok is the top-engagement category here at 4.8%, the competitor content is already native to TikTok format, and the broad audience skews mobile-first working-age immigrants who are heavy TikTok users. Meta is the fallback for Payday targeting once creative is validated.
+
+Estimated CPI impact vs $3.17 benchmark: $1.80–$2.60. Rationale: Zero-fee remittance is a direct functional claim with proven organic traction at 4.8% engagement — high relevance signals strong thumb-stop and intent alignment, which typically cuts CPI 18–43% versus a broad benchmark on a functionally differentiated hook.
+
+---
+
+BRIEF 2 — RANKED #2
+
+Trend and evidence: Instant Payment / Quickest Form of Payment. Money Transfer TikTok. #moneytransfer #banktransfer #paymiapp. Reach up to 1,000,000, median 87,900, avg engagement 3.9%. Hook "Quickest form of payment!" drove the top-reach item in this category.
+
+Classification: (a) DIRECTLY USABLE
+
+Exact hook to use: "What's the fastest way to send money right now? I timed it. Speed Wallet: 1.3 seconds."
+
+15-second script outline:
+Beat 1 (0-3s): Creator holds phone, says hook line with a timer already running on screen — creates instant curiosity loop.
+Beat 2 (4-7s): Live screen-record of Speed Wallet send — no edits, real time. Timer stops. Show the number.
+Beat 3 (8-12s): Quick comparison text on screen: "Bank wire: 1-3 days. Western Union: minutes + fees. Speed Wallet: 1.3 seconds, $0." No voiceover — let the visual carry it.
+Beat 4 (13-15s): Creator back on camera: "Download link in bio. First send is free." Hard cut.
+
+Speed segment targeted: Remittance primary, iGaming secondary (instant deposit angle is identical technically).
+
+Paid channel to test first: TikTok. Reason: Short-form native content with a timer mechanic is a proven TikTok pattern; the 38-second median length in this signal cluster suggests audiences are pre-conditioned to quick-cut utility content. iGaming angle can be tested as a separate ad set on Meta where iGaming audiences are more addressable via interest stacking.
+
+Estimated CPI impact vs $3.17 benchmark: $2.10–$2.80. Rationale: Speed claim is concrete and verifiable — specificity (1.3 seconds vs. "fast") increases trust signals and should improve CVR post-install, pulling effective CPI down 12–34% from benchmark.
+
+---
+
+BRIEF 3 — RANKED #3
+
+Trend and evidence: Lightning Speed as a Wow Fact. Lightning Network TikTok. #lightningnetwork #bitcoin #btc. Reach max 9,800,000 (single breakout video), median 8,270, avg engagement 2.9%. Top hook: "In just 1 second, what can you do? Lightning Network — Bitcoin transfer in 1 second."
+
+Classification: (a) DIRECTLY USABLE
+
+Exact hook to use: "In 1 second, your coffee gets cold. Your blink ends. And with Speed Wallet, your Bitcoin arrives."
+
+15-second script outline:
+Beat 1 (0-4s): Hook delivered as voiceover over rapid-cut B-roll: coffee steam rising, eye blinking, phone screen lighting up with a received payment. No talking head yet — pure visual rhythm.
+Beat 2 (5-9s): Creator appears: "Lightning Network payments are instant. Speed Wallet runs on Lightning. Here's what that actually looks like." Screen-record send, timer overlay.
+Beat 3 (10-13s): Text card: "Bitcoin. Instant. Zero fees. Speed Wallet." Lightning bolt emoji pulsing.
+Beat 4 (14-15s): "Download below. Takes 60 seconds to set up."
+
+Speed segment targeted: Crypto-curious — the 9.8M-reach outlier video was educational/wonder-framing, not technical. That audience doesn't know Lightning exists yet. This brief bridges the gap.
+
+Paid channel to test first: TikTok. Reason: The 9.8M reach outlier proves the format can break through at scale on TikTok; the wonder-hook style is native to the platform's educational entertainment lane. Instagram Reels is the second test since Lightning Network IG content exists but is low-reach — an ad could dominate with minimal competitive noise.
+
+Estimated CPI impact vs $3.17 benchmark: $2.50–$3.40. Rationale: Crypto-curious is a wider, less intent-dense audience than remittance senders, so CPI premium is possible; however, the wonder-hook format tends to drive strong thumb-stop rates which can offset the audience coldness. Net result is near-benchmark or slight premium, justified by volume and top-of-funnel value.
+
+---
+
+BRIEF 4 — RANKED #4
+
+Trend and evidence: "I've Been Living on Bitcoin" Credibility Format. Lightning Network TikTok. #bitcoineducation #lightningnetwork #bitcoin. Mid-tier reach, 2.9% avg engagement. Caption: "After 12 years living on Bitcoin, these are the only tools I actually use every day."
+
+Classification: (b) ADAPTABLE
+
+Exact hook to use: "I've been paid in Bitcoin for three years. There's only one app I actually use to spend it instantly."
+
+15-second script outline:
+Beat 1 (0-4s): Creator delivers hook to camera — no polish, slightly rough lighting builds authenticity. This is UGC format, not produced.
+Beat 2 (5-9s): "The problem with most Bitcoin apps is they make you wait, convert, pay fees. Speed Wallet runs on Lightning — money moves in a second, no fees, no conversion needed."
+Beat 3 (10-13s): Screen-record: open app, send, done. "That's it. Real time."
+Beat 4 (14-15s): "Link below. It's free." No jingle, no animation. Abrupt cut is intentional — feels organic, not ad-like.
+
+Speed segment targeted: Crypto-curious and Bitcoin holders who are not yet using Lightning — the "I know Bitcoin but haven't used it for payments" cohort.
+
+Paid channel to test first: Meta (Instagram Reels placement). Reason: This format needs a slightly older, more financially-engaged audience (25-45 Bitcoin holders) who are more reachable via Meta's interest graph than TikTok's younger skew. Meta also allows retargeting crypto app page visitors which amplifies this credibility hook's conversion power.
+
+Estimated CPI impact vs $3.17 benchmark: $2.70–$3.50. Rationale: UGC credibility format typically outperforms polished ads on Meta by 15–25% on CPM, but the crypto-curious audience requires more consideration before install than remittance senders, keeping CPI close to or slightly above benchmark. Worth testing as a trust-builder for retargeting sequences.
+
+---
+
+BRIEF 5 — RANKED #5
+
+Trend and evidence: Crypto Market Volatility / Price Drop Anxiety. Crypto TikTok and Bitcoin TikTok. #crypto #bitcoin #btc #cryptocrash. Reach up to 927,300, median 237,800 — highest median reach in the data set. Avg engagement 3.2%. Dominant content is fear/anxiety about drops: "$665B wiped," "Bitcoin under $65K," "different coins, same cause."
+
+Classification: (b) ADAPTABLE
+
+Exact hook to use: "Bitcoin dropped again. Here's what people who actually use it every day do instead of panic-selling."
+
+15-second script outline:
+Beat 1 (0-3
+
+
+--- RAW TREND SIGNALS ---
+
+BITCOIN (TikTok) — 15 top items · reach max 825,000 / median 76,300 · median length 47s · avg engagement 2.5%
+  hashtag clusters: #bitcoin(11), #crypto(6), #btc(5), #cryptonews(4), #cryptocurrency(3), #fyp(2), #stockmarket(2), #investing(2), #usa(2), #michaelsaylor(2), #cryptocrash(1), #bitcoinpriceprediction(1)
+  opening-line patterns: This kid went missing after exposing this | crypto futures trading#crypto #bitcoin #fyp | Bitcoin has fallen into the $65,000 range, | Compro bitcoin hace 16 años y no | Saya memprediksi Bitcoin sampai april2027 akhir Bearish
+  top captions:
+    - This kid went missing after exposing this bitcoin chart trend! #bitcoin #btc #crypto #cryptocurrency #cryptonews
+    - crypto futures trading#crypto #bitcoin #fyp
+    - Bitcoin has fallen into the $65,000 range, reaching its lowest level in two months as a fresh wave of selling pressure hit the crypto market. BTC dropped more t
+    - Compro bitcoin hace 16 años y no vas a creer lo que le paso.. 🤯
+    - Saya memprediksi Bitcoin sampai april2027 akhir Bearish nya. #Bitcoin #Trading #Fyp
+
+CRYPTO (TikTok) — 15 top items · reach max 927,300 / median 237,800 · median length 46s · avg engagement 3.2%
+  hashtag clusters: #crypto(12), #cryptocurrency(7), #fyp(5), #bitcoin(4), #investing(4), #finance(3), #memecoin(3), #cryptok(2), #xrp(2), #ethereum(2), #trump(2), #solana(2)
+  opening-line patterns: My top 5 #cryptos that im buying. | Today $665B was wiped from the markets, | Bitcoin under sixty-five thousand. XRP back at | TODAY'S IMPORTANT CRYPTO NEWS #FINTOK #CRYPTOK #INVESTING | The Clarity Act, which would create regulation
+  top captions:
+    - My top 5 #cryptos that im buying. #cryptotok #cryptok #galagames #matic #xrp #cryptoinvesting #buycrypto
+    - Today $665B was wiped from the markets, $575B from US stocks and $90B from crypto. The selloff was led by enterprise software and tech, hit by a second straight
+    - Bitcoin under sixty-five thousand. XRP back at a dollar twenty. Solana down near seventy. Different coins, same cause. Wall Street is quietly trading crypto for
+    - TODAY'S IMPORTANT CRYPTO NEWS #FINTOK #CRYPTOK #INVESTING #CRYPTO #WEB3 #FOREX #CRYPTOCURRENCY #NEWS #FORYOU#MONEY#FINANCE #BITCOIN
+    - The Clarity Act, which would create regulation for the #cryptocurrency industry, cleared the Senate banking committee. The bill is the top legislative priority 
+
+CRYPTO (Instagram) — 8 top items · reach max 3 / median 2 · median length 0s · avg engagement 0.0%
+  hashtag clusters: #crypto(8), #bitcoin(4), #tradedocktv(3), #btc(3), #blockchain(2), #trump(2), #cryptonews(2), #mica(1), #europe(1), #buy(1), #ethereum(1), #coinedition(1)
+  opening-line patterns: 🚨 BREAKING: Europe’s Crypto Rulebook Is Taking | Don't let hype make your decisions. These | 🚨 BREAKING: Trump's latest financial disclosure has | Trump’s financial disclosures reveal over $100 million | 💰 $1.25 BILLION in Bitcoin? Strategy has
+  top captions:
+    - 🚨 BREAKING: Europe’s Crypto Rulebook Is Taking Shape! 🇪🇺 Venga has officially secured a MiCA license from Spain’s CNMV, marking another major step toward a full
+    - Don't let hype make your decisions. These 4 questions can help you invest smarter. ✨ #crypto #Buy
+    - 🚨 BREAKING: Trump's latest financial disclosure has put crypto back in the spotlight. Reports claim he earned over $1 billion linked to cryptocurrency-related v
+    - Trump’s financial disclosures reveal over $100 million in crypto holdings, with both Bitcoin and Ethereum wallets reportedly valued above $50 million each. The 
+    - 💰 $1.25 BILLION in Bitcoin? Strategy has announced it may sell up to $1.25 billion worth of BTC as part of a broader treasury and liquidity strategy. 📊 Is this 
+
+REMITTANCE (TikTok) — 15 top items · reach max 5,900,000 / median 49,000 · median length 56s · avg engagement 4.8%
+  hashtag clusters: #remittances(5), #money(2), #economy(2), #migration(2), #banking(2), #stitch(1), #latinotiktok(1), #ugandatiktok(1), #viral(1), #new(1), #storytime(1), #nepal(1)
+  opening-line patterns: Send Money with ZERO FEES! Kashaf Ali | #stitch with @@genzxelcambio this is too nuanced | Guys this is crazy! Last year Uganda | Did you know that the true backbone | Replying to @Dawn
+  top captions:
+    - Send Money with ZERO FEES! Kashaf Ali trusts ACE Money Transfer to send money back home! So If you're an Expat living abroad, sign up with the Promo Code: 𝗞𝗔𝗦𝗛𝗔
+    - #stitch with @@genzxelcambio this is too nuanced of a take to tske seriously but I havent uploaded in a while so here you go #latinotiktok
+    - Guys this is crazy! Last year Uganda receivers about $2.5B in remittances but the new Protection Sovereignty Bill wants to cap transactions in a year to one eac
+    - Did you know that the true backbone of Nepal's economy isn't just agriculture or tourism? It's the remittances sent home! 💸🏡 Every day, ₹7 billion flows in, all
+    - Replying to @Dawn
+
+REMITTANCE (Instagram) — 7 top items · reach max 3 / median 1 · median length 0s · avg engagement 0.0%
+  hashtag clusters: #remittance(7), #bangladesh(3), #moneytransfer(3), #centristnation(1), #bfc(1), #bahrain(1), #westernunion(1), #sendmoney(1), #cmbspotlight(1), #ria(1), #moneygram(1), #hamdanexchange(1)
+  opening-line patterns: Bangladesh received a record $35.56 billion in | Two trusted names. Now closer than ever. | CMB Spotlight Interview 📅 Friday, 3rd July | Today, we celebrate the dedication, compassion, and | 🌍 BIG NEWS! We’ve Expanded Our Remittance
+  top captions:
+    - Bangladesh received a record $35.56 billion in remittances during FY2025–26, marking a 17.3% increase from the previous fiscal year and setting a new all-time h
+    - Two trusted names. Now closer than ever. Introducing Western Union to our family of money transfer services. Now you can send money to your loved ones around th
+    - CMB Spotlight Interview 📅 Friday, 3rd July 2026 🕤 9:30 AM Join us for an insightful discussion with Mohamed Kajalee Sall, Head of Remittance, hosted by Fatima D
+    - Today, we celebrate the dedication, compassion, and unwavering commitment of doctors who work tirelessly to keep our communities healthy and safe.#hamdanexchang
+    - 🌍 BIG NEWS! We’ve Expanded Our Remittance Services! 🎉 Sending money home has never been easier. Overseas Express Ltd is proud to offer fast, secure, and reliabl
+
+MONEY TRANSFER (TikTok) — 15 top items · reach max 1,000,000 / median 87,900 · median length 38s · avg engagement 3.9%
+  hashtag clusters: #money(2), #fyp(2), #remitly(2), #moneytransfer(2), #moneytips(2), #banktransfer(1), #paymiapp(1), #transfer(1), #couple(1), #couplegoals(1), #husbandwife(1), #comedy(1)
+  opening-line patterns: Quickest form of payment! #banktransfer #paymiapp #transfer | Do you think she bought everything? 😂 | It’ll always get better!!!! #postthecontent #manifesting #anythingcanhappen | Lemfi money transfer app | 😂😂😂😂😂😂😂
+  top captions:
+    - Quickest form of payment! #banktransfer #paymiapp #transfer #money #fyp
+    - 
+    - Do you think she bought everything? 😂 #couple #couplegoals #husbandwife #comedy #trend #trending
+    - It’ll always get better!!!! #postthecontent #manifesting #anythingcanhappen
+    - Lemfi money transfer app
+
+MONEY TRANSFER (Instagram) — 10 top items · reach max 12 / median 3 · median length 0s · avg engagement 0.0%
+  hashtag clusters: #moneytransfer(10), #sendmoneyabroad(2), #moneygram(2), #foreignexchange(2), #remittance(2), #bharatesevakendra(2), #digitalindia(2), #financialinclusion(2), #bankingservices(2), #aeps(2), #miniatm(2), #digitalseva(2)
+  opening-line patterns: 💼✈️ Business Travel Solution – Professional & | Eден трансфер може да помогне за сметки, | Your international journey begins long before you | In Lebanon, love has its own language | Need to send money to Uganda without
+  top captions:
+    - 💼✈️ Business Travel Solution – Professional & Hassle-Free Corporate Travel 🌍 Manage your corporate journeys with ease through our reliable Business Travel Solut
+    - Eден трансфер може да помогне за сметки, за домот и за мирот на оние што ги сакате. Со Moneta и MoneyGram, парите може едноставно да се подигнат во нашите локац
+    - Your international journey begins long before you board your flight. Make sure your funds reach your destination ahead of you, so you're ready for tuition, acco
+    - In Lebanon, love has its own language ❤️ It’s checking in twice a day It’s asking if you ate It’s worrying when you don’t answer your phone Not always the words
+    - Need to send money to Uganda without the cross-border headaches? 🇺🇬💸 Whether you're paying key business suppliers or sending quick support to family, Afrisend m
+
+SEND MONEY (TikTok) — 15 top items · reach max 235,800 / median 20,800 · median length 15s · avg engagement 7.1%
+  hashtag clusters: #fyp(9), #money(4), #cashapp(3), #viralvideos(2), #explore(2), #protectyourself(2), #education(2), #sherasevenadvice(2), #paypigtips(2), #femdomforbeginners(2), #hesentthemoney(2), #howtoaskformoney(2)
+  opening-line patterns: like ur gonna have to pay me | Can I still get the money tho… | No fee, no giftcards, no registration payrol | You don’t beg for money — you | Since I’m from Belgium. I dont have
+  top captions:
+    - like ur gonna have to pay me to watch all those tiktok’s u send me 😭
+    - Can I still get the money tho… #fyp #femalegiftok #giftok #bf #ihatemybf
+    - No fee, no giftcards, no registration payrol bs. They take a screenshot and add it with Photoshop and paint to trick you into believing Paypal asks for it. Now 
+    - 
+    - You don’t beg for money — you command it. Here’s how. #SheraSevenAdvice #PayPigTips #FemdomForBeginners #HeSentTheMoney #HowToAskForMoney #DustyFreeZone #SpoilM
+
+SEND MONEY (Instagram) — 15 top items · reach max 36 / median 3 · median length 0s · avg engagement 0.0%
+  hashtag clusters: #sendmoney(15), #moneytransfer(10), #remittance(5), #bahrain(3), #digitalwallet(2), #rwandaindependenceday(2), #fintech(2), #upesimoney(2), #fx(2), #currencyexchange(2), #bfc(2), #sendthistoyourcrush(1)
+  opening-line patterns: Send money with @worldremit , its fast | Why settle for less when you can | Online money transfer rates of the day. | 🇷🇼 Happy Rwanda Independence Day! 🎉 Today, | Have you used Sendcoins to send or
+  top captions:
+    - Send money with @worldremit , its fast , reliable and convenient. We are the only money remittance company with many cash pick up points. @worldremit #sendmoney
+    - Why settle for less when you can get more? ✨ Make every transfer count with competitive exchange rates and low transfer fees. Plus, send money this month for a 
+    - Online money transfer rates of the day. Follow Unimoni Qatar or download the Unimoni Qatar app to get updates on currency conversion rates. Branches - https://u
+    - 🇷🇼 Happy Rwanda Independence Day! 🎉 Today, we celebrate the strength, unity, and remarkable journey of the people of Rwanda. As families and friends come togeth
+    - Have you used Sendcoins to send or receive money? Now’s the perfect time to tell us what you think! We’re looking for real stories from our amazing community, a
+
+LIGHTNING NETWORK (TikTok) — 15 top items · reach max 9,800,000 / median 8,270 · median length 49s · avg engagement 2.9%
+  hashtag clusters: #bitcoin(7), #lightningnetwork(4), #btc(3), #fyp(3), #bitcoinvs(2), #crypto(2), #bitcon(1), #postepay(1), #cuoriosità(1), #bitcoineducation(1), #security(1), #bigcomfy(1)
+  opening-line patterns: Yalnızca 1 saniyede neler yapılabilir❓ ⚡Lightning Network | The National Lightning Detection Network counts all | E con la differenza potete comprarci anche | After 12 years living on Bitcoin, these | How do you feel about the lightning
+  top captions:
+    - Yalnızca 1 saniyede neler yapılabilir❓ ⚡Lightning Network ile yalnızca 1 saniyede Bitcoin transferi yapabilirsiniz! ⚡
+    - The National Lightning Detection Network counts all of the lightning flashes and strikes across the U.S. Some Michigan counties had much more lightning in 2025 
+    - E con la differenza potete comprarci anche 10 Goleador! 😂 #bitcon #postepay #bitcoinvs#bitcoinvs #cuoriosità
+    - After 12 years living on Bitcoin, these are the only tools I actually use every day. #bitcoin #btc #bitcoineducation #security #lightningnetwork
+    - How do you feel about the lightning network? #BigComfy #bitcoin #mcdonalds #walmart
+
+LIGHTNING NETWORK (Instagram) — 6 top items · reach max 17 / median 2 · median length 0s · avg engagement 0.0%
+  hashtag clusters: #lightningnetwork(6), #bitcoin(5), #btc(2), #breez(2), #bitcoinparaguay(1), #bitcoincommunity(1), #asubitcoinmeetup(1), #bitcoinlightning(1), #bitcoinforgood(1), #bitcoincats(1), #bitvalve(1), #crypto(1)
+  opening-line patterns: No te olvides que nos encontramos nuevamente | Dicen que Bitcoin es para quienes tienen | The future of Bitcoin transfers is almost | ⚡ Bitcoin just broke another barrier... but | Ab Bitcoin se seedha stablecoins bhejo! Breez
+  top captions:
+    - No te olvides que nos encontramos nuevamente este miércoles 1 de julio ⚡️ Tendremos una edición especial con un taller sobre la Red Lightning, ideal para quiene
+    - Dicen que Bitcoin es para quienes tienen paciencia y quienes viven con gatos ya llevan ventaja. 😹⚡ Si quieres ayudar a nuestros michitos, ahora también puedes h
+    - The future of Bitcoin transfers is almost here. BitValve is bringing Lightning Network support, making it easier to send and receive BTC with greater speed and 
+    - ⚡ Bitcoin just broke another barrier... but not the way you think. What if you could send USDC or USDT across 30+ blockchains; using only your Bitcoin Lightning
+    - Ab Bitcoin se seedha stablecoins bhejo! Breez ka naya feature ab cross-chain payments ko super easy bana raha hai. No extra wallet, no hassle, bas simple transa
+
+FINTECH (TikTok) — 15 top items · reach max 11,100,000 / median 24,200 · median length 152s · avg engagement 3.4%
+  hashtag clusters: #fintech(10), #finance(5), #work(3), #fyp(2), #entrepreneur(2), #startup(2), #paymentid(1), #uangdigital(1), #nik(1), #bankindonesia(1), #transaksidigital(1), #urangjabar(1)
+  opening-line patterns: Mulai 17 Agustus 2025, Bank Indonesia akan | Looking for a role in Fintech?#internship #grads | 💰 "LIMPANDO" DINHEIRO DO CRIME Fuzilado no | They called it “the UK’s next Apple.” | how much I worked this week—fintech life
+  top captions:
+    - Mulai 17 Agustus 2025, Bank Indonesia akan meluncurkan sistem baru bernama Payment ID—kode unik berbasis NIK yang akan merekam seluruh transaksi digital kita. P
+    - Looking for a role in Fintech?#internship #grads #summerintern #fintech #finance
+    - 💰 "LIMPANDO" DINHEIRO DO CRIME Fuzilado no Aeroporto Internacional de São Paulo, em novembro de 2024, logo após o início formal de delação premiada, o corretor 
+    - They called it “the UK’s next Apple.” $176M raised. $2.7B valuation. A fintech so hyped it took over London’s skyline. But behind the headlines… the product bar
+    - how much I worked this week—fintech life in new york city #work #nyc #nyclife #corporatelife
+
+FINTECH (Instagram) — 1 top items · reach max 1 / median 1 · median length 0s · avg engagement 0.0%
+  hashtag clusters: #burnrate(1), #runway(1), #gestaofinanceira(1), #startups(1), #flowmetrix(1), #empreendedorismo(1), #fluxodecaixa(1), #fintech(1), #pme(1), #fundadores(1)
+  opening-line patterns: A empresa tinha produto. Tinha cliente. Tinha
+  top captions:
+    - A empresa tinha produto. Tinha cliente. Tinha time. Não tinha controle do caixa. Monitorar o Burn Rate não é opcional — é o que separa empresas que sobrevivem d
