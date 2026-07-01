@@ -79,11 +79,19 @@ def current_kpis(spreadsheet_id: str) -> dict:
 
     co = data.get("channel_overview", pd.DataFrame())
     total_installs = int(_num(co["installs"]).sum()) if "installs" in co else 0
+
+    # Best eCPI is the lowest CAMPAIGN-level cost-per-install (Campaign Installs
+    # tab: cost / installs), not the blended channel-level figure — the campaign
+    # number (e.g. Apple US Brand Exact) is more accurate and more impressive.
     best_ecpi = 0.0
-    if {"installs", "ecpi"} <= set(co.columns):
-        paid = co[(_num(co["installs"]) > 0) & (_num(co["ecpi"]) > 0)]
-        if not paid.empty:
-            best_ecpi = float(_num(paid["ecpi"]).min())
+    ci = data.get("installs_by_campaign", pd.DataFrame())
+    if {"installs", "cost"} <= set(ci.columns):
+        c = ci.copy()
+        c["_inst"] = _num(c["installs"])
+        c["_cost"] = _num(c["cost"])
+        c = c[(c["_inst"] > 0) & (c["_cost"] > 0)]
+        if not c.empty:
+            best_ecpi = float((c["_cost"] / c["_inst"]).min())
 
     meta = data.get("meta_campaigns", pd.DataFrame())
     meta_spend = float(_num(meta["spend"]).sum()) if "spend" in meta else 0.0
