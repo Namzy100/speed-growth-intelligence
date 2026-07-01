@@ -27,6 +27,7 @@ from email.message import EmailMessage
 from pathlib import Path
 
 import pandas as pd
+from anthropic import Anthropic
 from dotenv import load_dotenv
 
 _ROOT = Path(__file__).resolve().parent.parent
@@ -37,7 +38,7 @@ load_dotenv(_ROOT / ".env")
 
 from intelligence import weekly_brief  # reuse the sheet readers
 
-_RECIPIENTS = ["niyati@tryspeed.com", "sumit@tryspeed.com"]
+_MODEL = "claude-sonnet-4-6"
 _BRIEFS_DIR = _ROOT / "docs" / "weekly_briefs"
 
 # Internship week 1 began the week of this Monday; used to number the update.
@@ -169,63 +170,107 @@ def outreach_summary() -> list[tuple[str, int]]:
 
 
 # ------------------------------------------------------------------
-# Compose
+# Compose — two differentiated versions
 # ------------------------------------------------------------------
 
-def compose(spreadsheet_id: str) -> tuple[str, str]:
-    n = week_number()
-    subject = f"Speed Growth Intelligence — Week {n} Update | Naman"
+def _kpi_lines(kpis: dict) -> str:
+    return (
+        f"Total installs: {kpis['total_installs']:,}\n"
+        f"Best eCPI: ${kpis['best_ecpi']:.2f}\n"
+        f"D1 retention: {kpis['d1_retention']:.1%}\n"
+        f"Meta spend: ${kpis['meta_spend']:,.2f}"
+    )
 
-    kpis = current_kpis(spreadsheet_id)
-    built = commits_last_7_days()
-    outreach = outreach_summary()
-    brief = latest_brief()
 
-    built_block = "\n".join(f"  - {s}" for s in built) or "  (no commits in the last 7 days)"
-    outreach_block = "\n".join(f"  {stage:<16}{count:>5}" for stage, count in outreach)
+def _shared_context(spreadsheet_id: str) -> dict:
+    return {
+        "n": week_number(),
+        "kpis": current_kpis(spreadsheet_id),
+        "built": commits_last_7_days(),
+        "brief": latest_brief(),
+    }
 
-    body = f"""Hi Niyati and Sumit,
 
-Here's the Week {n} Speed growth-intelligence update.
+# Persona prompts. Niyati = operational (what was built); Sumit = strategic
+# (what it means). Both get identical data, framed differently.
+_PERSONA_PROMPTS = {
+    "niyati": (
+        "You are Naman, a marketing & analytics intern at Speed Wallet, writing your "
+        "weekly update to Niyati, your day-to-day manager. Voice: direct, confident, "
+        "human — a quick sync from a teammate, NOT a formal status report. Structure:\n"
+        "(1) a one-line opener;\n"
+        "(2) 'What I shipped' — the top 3 most meaningful items from the shipped list, "
+        "in plain language (what it does for the team, not the raw commit text);\n"
+        "(3) a tight KPI snapshot using the EXACT figures given;\n"
+        "(4) 'Next week' — 2-3 concrete things you'll do, inferred from the brief's "
+        "recommendations.\n"
+        "Under 220 words. Open with 'Hey Niyati,'. Do NOT add a sign-off, your name, "
+        "or any links — those are appended automatically."
+    ),
+    "sumit": (
+        "You are Naman, writing a weekly growth-intelligence note to Sumit, a senior "
+        "leader. Voice: concise, high-signal, strategic. LEAD with the 2-3 most "
+        "important strategic findings and your recommendation (drawn from the brief) — "
+        "what they mean for growth and where to lean in. Do NOT lead with a task list. "
+        "After the findings, a compact KPI snapshot (EXACT figures given), then one line "
+        "on the single strategic priority for next week.\n"
+        "Under 220 words. Open with 'Hey Sumit,'. Do NOT add a sign-off, your name, or "
+        "any links — those are appended automatically."
+    ),
+}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-KPIs — last 30 days
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  Total installs      {kpis['total_installs']:>12,}
-  Best eCPI           {'$' + format(kpis['best_ecpi'], '.2f'):>12}
-  D1 retention        {format(kpis['d1_retention'], '.1%'):>12}
-  Meta spend          {'$' + format(kpis['meta_spend'], ',.2f'):>12}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-What was built this week
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-{built_block}
+# These go out as plain-text email, so markdown would render as literal noise.
+_PLAINTEXT_RULE = (
+    "\n\nIMPORTANT: write PLAIN TEXT only. No markdown — no asterisks for bold, no "
+    "'#' headers, no pipe tables. Use short line breaks, ALL-CAPS or a trailing colon "
+    "for section labels, and simple hyphen bullets. It must read cleanly in a plain "
+    "email client."
+)
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Creator outreach pipeline
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-{outreach_block}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-This week's brief
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-{brief}
+def _ai_body(persona: str, ctx: dict) -> str:
+    """Claude-composed persona narrative (no sign-off/links — appended later)."""
+    built = "\n".join(f"- {s}" for s in ctx["built"][:6]) or "- (nothing notable)"
+    data = (
+        f"Week number: {ctx['n']}\n\n"
+        f"KPIs (use these exact figures):\n{_kpi_lines(ctx['kpis'])}\n\n"
+        f"Most meaningful things shipped this week:\n{built}\n\n"
+        f"This week's growth brief (findings + recommendation):\n{ctx['brief']}"
+    )
+    client = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+    resp = client.messages.create(
+        model=_MODEL, max_tokens=700,
+        messages=[{"role": "user",
+                   "content": _PERSONA_PROMPTS[persona] + _PLAINTEXT_RULE + "\n\n--- DATA ---\n" + data}],
+    )
+    return resp.content[0].text.strip()
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Live dashboards
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-{_DASHBOARDS}
 
-— Naman
-"""
-    return subject, body
+def _assemble(body: str) -> str:
+    return f"{body.rstrip()}\n\nDashboards:\n{_DASHBOARDS}\n\n— Naman\n"
+
+
+def compose_niyati(ctx: dict) -> tuple[str, str]:
+    return f"Week {ctx['n']} update — Naman", _assemble(_ai_body("niyati", ctx))
+
+
+def compose_sumit(ctx: dict) -> tuple[str, str]:
+    return "Growth intelligence — weekly findings | Naman", _assemble(_ai_body("sumit", ctx))
+
+
+# Recipient → (label, compose fn). One tailored email each.
+_PERSONAS = [
+    ("niyati", "niyati@tryspeed.com", compose_niyati),
+    ("sumit", "sumit@tryspeed.com", compose_sumit),
+]
 
 
 # ------------------------------------------------------------------
 # Send
 # ------------------------------------------------------------------
 
-def send(subject: str, body: str) -> None:
+def send(to: str, subject: str, body: str) -> None:
     user = os.getenv("GMAIL_USER")
     password = os.getenv("GMAIL_APP_PASSWORD")
     if not user or not password:
@@ -235,7 +280,7 @@ def send(subject: str, body: str) -> None:
         )
     msg = EmailMessage()
     msg["From"] = user
-    msg["To"] = ", ".join(_RECIPIENTS)
+    msg["To"] = to
     msg["Subject"] = subject
     msg.set_content(body)
 
@@ -246,10 +291,10 @@ def send(subject: str, body: str) -> None:
 
 
 def refresh_brief() -> None:
-    """Regenerate today's weekly brief so the email carries current data.
+    """Regenerate today's weekly brief so the emails carry current data.
 
     Calls weekly_brief.run() directly (it exposes one). Best-effort: if it fails,
-    the email falls back to the most recent brief already on disk.
+    the emails fall back to the most recent brief already on disk.
     """
     print("Regenerating weekly brief for fresh data...")
     try:
@@ -264,31 +309,35 @@ def refresh_brief() -> None:
         print(f"  brief refresh failed ({e}); using the latest brief on disk.")
 
 
-def run(dry_run: bool = False) -> None:
+def run(dry_run: bool = False, only: str | None = None) -> None:
     spreadsheet_id = os.getenv("GOOGLE_SHEETS_ID")
     if not spreadsheet_id:
         raise EnvironmentError("GOOGLE_SHEETS_ID must be set in .env")
 
     refresh_brief()
+    print("Building shared context (KPIs, commits, brief)...")
+    ctx = _shared_context(spreadsheet_id)
 
-    print("Composing weekly update...")
-    subject, body = compose(spreadsheet_id)
-
-    if dry_run:
-        print("\n--- DRY RUN (not sent) ---")
-        print(f"To: {', '.join(_RECIPIENTS)}")
-        print(f"Subject: {subject}\n")
-        print(body)
-        return
-
-    print(f"Sending to {', '.join(_RECIPIENTS)}...")
-    send(subject, body)
-    print("Sent.")
+    for key, email, compose_fn in _PERSONAS:
+        if only and key != only:
+            continue
+        print(f"\nComposing {key} version ({email})...")
+        subject, body = compose_fn(ctx)
+        if dry_run:
+            print(f"--- DRY RUN (not sent) ---\nTo: {email}\nSubject: {subject}\n")
+            print(body)
+        else:
+            send(email, subject, body)
+            print(f"Sent to {email}.")
 
 
 if __name__ == "__main__":
+    only = None
+    for arg in sys.argv[1:]:
+        if arg.startswith("--only="):
+            only = arg.split("=", 1)[1].strip().lower()
     try:
-        run(dry_run="--dry-run" in sys.argv)
+        run(dry_run="--dry-run" in sys.argv, only=only)
     except (EnvironmentError, FileNotFoundError) as e:
         print(f"Config error: {e}")
         sys.exit(1)
