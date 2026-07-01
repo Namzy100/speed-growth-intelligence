@@ -1,0 +1,68 @@
+======================================================================
+SPEED WALLET — CREATOR OUTREACH EMAIL TEMPLATES (v2)
+Human voice · less corporate · rewritten 2026-07-01
+Placeholders: {creator_name} {recent_video_topic} {platform} {corridor}
+======================================================================
+
+
+SEGMENT: REMITTANCE
+----------------------------------------------------------------------
+
+SUBJECT: the $15 fee thing you mentioned — we kind of fixed it
+
+Hey {creator_name},
+
+I went down a bit of a rabbit hole on your channel this week, and your video on {recent_video_topic} stuck with me — specifically the part where you actually did the math on what people lose sending money home. Most creators hand-wave that number. You didn't, and your comments section clearly felt seen.
+
+That's the whole reason I'm emailing. I work on Speed Wallet — you send money abroad over Bitcoin Lightning, it lands in seconds, and the fee is basically zero. No bank on either end, no $15-30 disappearing every time someone sends rent money to their mom.
+
+Here's my ask, and I'll be straight about it: I'd love to bring you on as an affiliate partner. You get a cut every time someone from your audience makes their first send — real recurring upside, not a one-off.
+
+Worth 20 minutes to see if it's actually a fit? I'll work around whatever your week looks like.
+
+— [Your name]
+Speed Wallet · Partnerships
+
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+SEGMENT: CRYPTO-CURIOUS
+----------------------------------------------------------------------
+
+SUBJECT: you explain crypto without the eye-roll — rare
+
+Hey {creator_name},
+
+Your {recent_video_topic} video is the reason I'm in your inbox. You explained it without making anyone feel stupid and without the usual "to the moon" nonsense — that mix of honest and actually-clear is way harder than it looks, and it's exactly the audience I'm trying to reach.
+
+Quick pitch: most people who get curious about Bitcoin bounce because it feels like homework. Speed is the app that kills that friction — download, scan a QR code, pay for something real. That's the entire demo, and it'd make for a genuinely honest piece of content.
+
+So the ask is simple: would you be up for a paid integration where you just... use it on camera? No script, no forced talking points — just you trying it live and reacting for real. If it's clunky, say so. I trust your audience can tell when something's staged.
+
+If that's even mildly interesting, hit reply and I'll send the details over.
+
+— [Your name]
+Speed Wallet · Partnerships
+
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+SEGMENT: IGAMING
+----------------------------------------------------------------------
+
+SUBJECT: the deposit-wait thing your viewers complain about
+
+Hey {creator_name},
+
+I've been watching your {platform} content, and it's obvious you actually get your audience — the {recent_video_topic} breakdown wasn't surface-level filler, it was the stuff players genuinely care about. That's why I wanted to reach out instead of blasting a generic pitch.
+
+Here's the thing we solve: Speed Wallet plugs into platforms that support Lightning, so deposits land instantly and withdrawals do too. No 3-5 day bank crawl, no card that randomly gets declined at the worst moment. That friction is a real, daily annoyance for your viewers — and it mostly just... goes away.
+
+What I'd love to explore is a rev-share deal — you earn ongoing commission tied to your audience actually using it, not a flat fee that pays once and forgets you.
+
+Free for a quick 15 minutes this week? I'll keep it tight and to the point.
+
+— [Your name]
+Speed Wallet · Partnerships
