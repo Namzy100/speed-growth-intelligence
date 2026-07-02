@@ -13,3 +13,4 @@ data/processed/creative_dashboard_insights.cache.json
 creators/.DS_Store
 **/.DS_Store
 data/processed/meta_sync_status.json
+data/processed/trend_raw_cache.json

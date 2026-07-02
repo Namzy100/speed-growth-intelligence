@@ -1,0 +1,17 @@
+{
+  "timestamp": "2026-07-02T03:11:22.089414+00:00",
+  "overall": 9.6,
+  "scores": {
+    "Data freshness": 10.0,
+    "Dashboard integrity": 10.0,
+    "KPI sanity": 10.0,
+    "Creator DB health": 10.0,
+    "Language filter": 10.0,
+    "Code syntax": 10.0,
+    "Output completeness": 10.0,
+    "Brief quality": 8.0,
+    "Trend quality": 8.7
+  },
+  "total_installs": 42412,
+  "issues": []
+}
