@@ -257,6 +257,7 @@ def _deploy_dashboard() -> bool:
         "docs/creator_dashboard.html",
         "docs/strategy_dashboard.html",
         "docs/trend_dashboard.html",
+        "docs/dashboard_state.json",  # trend dashboard status/results — persist across rebuilds
     ]
     try:
         subprocess.run(["git", "add", *files], cwd=_ROOT, check=True)

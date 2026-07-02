@@ -1,0 +1,242 @@
+{
+  "schema": 1,
+  "updated_at": "2026-07-02",
+  "items": {
+    "organic-guys-uganda-received-2-5-billion-in-remittances-": {
+      "id": "organic-guys-uganda-received-2-5-billion-in-remittances-",
+      "type": "organic",
+      "hook": "Guys, Uganda received $2.5 BILLION in remittances last year \u2014 but how much of that got eaten by fees?",
+      "segment": "remittance",
+      "estimate": "62000",
+      "estimate_num": 62000,
+      "payload": {
+        "platform": "TikTok",
+        "outline": "Beat 1 (0-8s): Creator on camera, shocked face, drops the $2.5B stat to earn attention. Beat 2 (9-25s): Screen-record shows a traditional wire transfer app charging 5-8% fees on a $200 send \u2014 '$16 gone before mom sees a cent.' Beat 3 (26-45s): Switch to Speed Wallet screen-record \u2014 same $200 sent, zero fee, arrives in seconds. Beat 4 (46-55s): Back to talking head \u2014 'Link in bio. Stop donating your money to banks.'",
+        "production_notes": "Phone camera only. Use CapCut auto-captions. Overlay the fee math as bold text cards. Film in one take, keep energy high on the stat drop. No tripod needed \u2014 handheld adds authenticity."
+      },
+      "status": "suggested",
+      "results": {
+        "views": null,
+        "er": null,
+        "saves": null
+      },
+      "first_seen": "2026-07-02",
+      "last_seen": "2026-07-02"
+    },
+    "organic-sending-money-to-family-is-my-love-language-but-": {
+      "id": "organic-sending-money-to-family-is-my-love-language-but-",
+      "type": "organic",
+      "hook": "Sending money to family is my love language \u2014 but I refuse to let fees steal part of it.",
+      "segment": "remittance",
+      "estimate": "28000",
+      "estimate_num": 28000,
+      "payload": {
+        "platform": "Instagram Reels",
+        "outline": "Beat 1 (0-7s): Creator (ideally Latina or Filipino woman) holds phone, warm tone \u2014 'Every month I send money home, no matter what.' Beat 2 (8-22s): Shows old method \u2014 'Used to lose $12-20 every single send. That's $240 a year just\u2026 gone.' Beat 3 (23-45s): Opens Speed Wallet, shows zero-fee send completing in real time, recipient gets a notification. Beat 4 (46-58s): 'This is how I keep the full love in the transfer. Try it free \u2014 link in bio.'",
+        "production_notes": "Warm home lighting, kitchen or living room setting for authenticity. UGC creator preferred \u2014 source via micro-influencer brief for $50-150. Add soft background music. Subtitles mandatory (85% watch muted)."
+      },
+      "status": "suggested",
+      "results": {
+        "views": null,
+        "er": null,
+        "saves": null
+      },
+      "first_seen": "2026-07-02",
+      "last_seen": "2026-07-02"
+    },
+    "organic-i-tried-sending-bitcoin-for-the-first-time-and-i": {
+      "id": "organic-i-tried-sending-bitcoin-for-the-first-time-and-i",
+      "type": "organic",
+      "hook": "I tried sending Bitcoin for the first time and it took 11 seconds. I literally panicked.",
+      "segment": "crypto-curious",
+      "estimate": "45000",
+      "estimate_num": 45000,
+      "payload": {
+        "platform": "TikTok",
+        "outline": "Beat 1 (0-6s): Creator, genuinely surprised face \u2014 'I thought crypto was complicated. I was wrong.' Beat 2 (7-20s): Screen-record of downloading Speed Wallet, setting up a wallet in under 60 seconds \u2014 show the clock. Beat 3 (21-42s): Sends $5 via Lightning to a friend's phone number \u2014 transaction confirms in real time. Beat 4 (43-58s): Reaction shot \u2014 'No seed phrases, no gas fees, no waiting. This is what Bitcoin was supposed to feel like.'",
+        "production_notes": "Screen-record the real app \u2014 no mock-ups. Use phone mount for steady screen shot. Add 'SENT \u2705' text pop on confirmation. Keep creator energy authentic and slightly disbelieving \u2014 mirrors audience skepticism."
+      },
+      "status": "suggested",
+      "results": {
+        "views": null,
+        "er": null,
+        "saves": null
+      },
+      "first_seen": "2026-07-02",
+      "last_seen": "2026-07-02"
+    },
+    "organic-which-african-diaspora-sends-the-most-money-home": {
+      "id": "organic-which-african-diaspora-sends-the-most-money-home",
+      "type": "organic",
+      "hook": "Which African diaspora sends the most money home? The answer might surprise you \u2014 and the fees will anger you.",
+      "segment": "remittance",
+      "estimate": "95000",
+      "estimate_num": 95000,
+      "payload": {
+        "platform": "TikTok",
+        "outline": "Beat 1 (0-8s): Creator poses the diaspora remittance question on camera \u2014 builds tribal curiosity. Beat 2 (9-28s): Quick text-card animation ranking top sending countries (Nigeria, Ghana, Kenya, Ethiopia) with total volume stats \u2014 source World Bank data. Beat 3 (29-45s): 'But look at what gets lost in fees' \u2014 show a graphic of 5-8% fee cut on average $300 send. Beat 4 (46-58s): 'Speed Wallet sends zero fees over Lightning. Same money, full amount. Link in bio.' End with #remittance #africa #diaspora tags.",
+        "production_notes": "Use CapCut's text animation for the ranking cards \u2014 free template. Creator should be Black African or African-American for cultural authenticity. Source a micro-creator in the diaspora finance niche ($75-150). World Bank data is public and citable."
+      },
+      "status": "suggested",
+      "results": {
+        "views": null,
+        "er": null,
+        "saves": null
+      },
+      "first_seen": "2026-07-02",
+      "last_seen": "2026-07-02"
+    },
+    "organic-crypto-gave-me-financial-freedom-and-it-started-": {
+      "id": "organic-crypto-gave-me-financial-freedom-and-it-started-",
+      "type": "organic",
+      "hook": "Crypto gave me financial freedom \u2014 and it started with one $5 send.",
+      "segment": "crypto-curious",
+      "estimate": "38000",
+      "estimate_num": 38000,
+      "payload": {
+        "platform": "Instagram Reels",
+        "outline": "Beat 1 (0-7s): Creator (young, relatable) \u2014 'I used to think Bitcoin was for tech bros with $10K to invest. Then someone sent me $5.' Beat 2 (8-22s): Shows receiving $5 on Speed Wallet \u2014 'Instantly in my wallet. No bank account needed. No ID drama.' Beat 3 (23-44s): 'I learned how it worked in a week. Now I use it to actually move money.' Quick montage of app screens \u2014 send, receive, balance. Beat 4 (45-58s): 'Start with $1. Seriously. Link in bio.'",
+        "production_notes": "Film in natural daylight. Keep the $1 CTA \u2014 low barrier is the entire point. Use trending audio from Instagram's royalty-free library. Overlay 'NO BANK NEEDED' and 'INSTANT' as text stickers. Creator should be 22-32, not finance-bro coded."
+      },
+      "status": "suggested",
+      "results": {
+        "views": null,
+        "er": null,
+        "saves": null
+      },
+      "first_seen": "2026-07-02",
+      "last_seen": "2026-07-02"
+    },
+    "paid-your-family-never-gets-the-full-amount-you-send-": {
+      "id": "paid-your-family-never-gets-the-full-amount-you-send-",
+      "type": "paid",
+      "hook": "Your family never gets the full amount you send. Here's why \u2014 and how to fix it in 60 seconds.",
+      "segment": "general",
+      "estimate": "$1.80-$2.60 (below $3.17 benchmark \u2014 high relevance + fear-of-loss creative typically drives 20-40% CPI reduction in remittance verticals)",
+      "estimate_num": null,
+      "payload": {
+        "problem": "Cut to split-screen: left side shows a $300 transfer with $18 in fees deducted, right side shows a tearful phone call \u2014 'Mom said she only got $282.' Voiceover: 'Every major remittance service skims 5-8% off every send. On $300 a month, that's $216 a year stolen from your family.'",
+        "solution": "Screen-record of Speed Wallet: enter amount ($300), select recipient by phone number, hit send \u2014 confirmation in 9 seconds. Bold text overlay: '$300 SENT. $300 RECEIVED. $0 IN FEES.' Voiceover: 'Speed Wallet uses Bitcoin Lightning \u2014 the only way to send money globally with zero fees and instant delivery.'",
+        "cta": "Download Speed Wallet free. Send your first transfer today \u2014 zero fees, guaranteed.",
+        "audience": "Meta (Facebook + Instagram): Hispanic 25-45, Filipino 25-44, Nigerian/Ghanaian 22-40, US-based, interests: international money transfer, Western Union, Remitly, family abroad, immigrant communities"
+      },
+      "status": "suggested",
+      "results": {
+        "views": null,
+        "er": null,
+        "saves": null
+      },
+      "first_seen": "2026-07-02",
+      "last_seen": "2026-07-02"
+    },
+    "paid-i-bought-my-first-bitcoin-in-11-seconds-no-excha": {
+      "id": "paid-i-bought-my-first-bitcoin-in-11-seconds-no-excha",
+      "type": "paid",
+      "hook": "I bought my first Bitcoin in 11 seconds. No exchange. No wallet setup. No idea what I was doing.",
+      "segment": "crypto-curious",
+      "estimate": "$2.40-$3.10 (near benchmark \u2014 curiosity-gap + low-barrier CTA should offset crypto category's typically higher CPIs)",
+      "estimate_num": null,
+      "payload": {
+        "problem": "Talking head \u2014 relatable 26-year-old: 'Every time I tried to get into crypto, I gave up. Coinbase wanted my ID for 3 days. MetaMask gave me 12 words to memorize and I lost them. It felt like crypto didn't want regular people.' Cut to frustrated phone tapping.",
+        "solution": "Screen-record: download Speed Wallet, enter phone number, receive $5 from a friend \u2014 wallet live in 45 seconds. 'No seed phrases. No KYC wait. No minimums. Just scan, send, done.' Show the Lightning payment confirm animation. Creator: 'This is actually how easy it should have always been.'",
+        "cta": "Get Speed Wallet. Start with $1. It takes less time than this ad.",
+        "audience": "TikTok: crypto-curious 18-34, interests: personal finance, investing for beginners, financial freedom, Robinhood, Cash App, followed finance creators \u2014 exclude existing crypto holders"
+      },
+      "status": "suggested",
+      "results": {
+        "views": null,
+        "er": null,
+        "saves": null
+      },
+      "first_seen": "2026-07-02",
+      "last_seen": "2026-07-02"
+    },
+    "paid-withdrew-my-winnings-in-4-seconds-not-4-days-4-s": {
+      "id": "paid-withdrew-my-winnings-in-4-seconds-not-4-days-4-s",
+      "type": "paid",
+      "hook": "Withdrew my winnings in 4 seconds. Not 4 days. 4 seconds.",
+      "segment": "general",
+      "estimate": "$2.90-$3.80 (slightly above benchmark possible due to small iGaming audience pool; strong instant-gratification creative should compress toward benchmark with frequency optimization)",
+      "estimate_num": null,
+      "payload": {
+        "problem": "UGC-style creator, casual tone: 'I used to play on sites where cashing out took 3-5 business days. Then they'd ask for documents I'd already submitted. Meanwhile my money is just\u2026 hostage.' Cut to dramatized waiting \u2014 phone refresh, clock spinning.",
+        "solution": "Screen-record of iGaming platform deposit via Speed Wallet Lightning QR \u2014 funds hit instantly. Then withdrawal \u2014 same speed, same zero fee. 'Speed Wallet connects to Lightning-native gaming sites. Deposit instantly. Withdraw in seconds. No holds, no minimums, no fees.' Show balance update in real time.",
+        "cta": "Speed Wallet. Instant deposits. Instant withdrawals. Download now.",
+        "audience": "Meta + TikTok: iGaming 21-40 male, interests: online poker, sports betting, casino apps, crypto gambling, DraftKings, FanDuel \u2014 geo: US states where online gaming is legal (NJ, PA, MI, NV, CO, IL)"
+      },
+      "status": "suggested",
+      "results": {
+        "views": null,
+        "er": null,
+        "saves": null
+      },
+      "first_seen": "2026-07-02",
+      "last_seen": "2026-07-02"
+    }
+  },
+  "hook_history": {
+    "week": "2026-07-02",
+    "hooks": [
+      {
+        "key": "bestdayofmylifefinatheangelcouplegoalsre",
+        "hook": "Best day of my life @Fina The Angel #couplegoals #relationshipgoal",
+        "views": 1200000,
+        "er": 0.2115
+      },
+      {
+        "key": "themenswinnerofthemoonpayneverbeendoneaw",
+        "hook": "The men\u2019s winner of the @moonpay Never Been Done Award",
+        "views": 35498,
+        "er": 0.1789
+      },
+      {
+        "key": "teachinggoodhabitsstartswithsmallconvers",
+        "hook": "Teaching good habits starts with small conversations. \ud83d\udc9a I love",
+        "views": 112580,
+        "er": 0.164
+      },
+      {
+        "key": "satoshisunriseisanewcryptoscifiepicprodu",
+        "hook": "Satoshi Sunrise is a new crypto sci-fi epic produced by",
+        "views": 191743,
+        "er": 0.1265
+      },
+      {
+        "key": "thewomenswinnerofthemoonpayneverbeendone",
+        "hook": "The women\u2019s winner of the MoonPay Never Been Done Award",
+        "views": 34789,
+        "er": 0.1145
+      },
+      {
+        "key": "hetoldmehisnamewasloseridonothing",
+        "hook": "HE TOLD ME HIS NAME WAS LOSER. I do nothing.",
+        "views": 3200000,
+        "er": 0.1136
+      },
+      {
+        "key": "sendingmemoneyishislovelanguagehesnotmy",
+        "hook": "Sending me money is his love language! (He\u2019s not my",
+        "views": 46200,
+        "er": 0.1008
+      },
+      {
+        "key": "guysthisiscrazylastyearugandareceiversab",
+        "hook": "Guys this is crazy! Last year Uganda receivers about $2.5B",
+        "views": 790200,
+        "er": 0.0935
+      },
+      {
+        "key": "thiskidwentmissingafterexposingthisbitco",
+        "hook": "This kid went missing after exposing this bitcoin chart trend!",
+        "views": 830300,
+        "er": 0.0912
+      },
+      {
+        "key": "moneymovesbutmakeitsmartfasttransfersto",
+        "hook": "Money moves but make it smart . Fast transfers to",
+        "views": 41000,
+        "er": 0.088
+      }
+    ]
+  }
+}
