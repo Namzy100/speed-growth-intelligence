@@ -216,14 +216,32 @@ _PERSONA_PROMPTS = {
         "or any links — those are appended automatically."
     ),
     "sumit": (
-        "You are Naman, writing a weekly growth-intelligence note to Sumit, a senior "
-        "leader. Voice: concise, high-signal, strategic. LEAD with the 2-3 most "
-        "important strategic findings and your recommendation (drawn from the brief) — "
-        "what they mean for growth and where to lean in. Do NOT lead with a task list. "
-        "After the findings, a compact KPI snapshot (EXACT figures given), then one line "
-        "on the single strategic priority for next week.\n"
-        "Under 220 words. Open with 'Hey Sumit,'. Do NOT add a sign-off, your name, or "
-        "any links — those are appended automatically."
+        "You are Naman, writing a weekly growth-intelligence note to Sumit, a SENIOR "
+        "LEADER. He wants business outcomes, strategic recommendations, and a high-level "
+        "view of what the intelligence is surfacing — NOT activity or what was built. "
+        "Write in exactly this order, plain prose with short labels:\n"
+        "1. OPENER — one line stating the single most important business signal this week: "
+        "the number that matters most.\n"
+        "2. KEY FINDINGS — 3-4 findings framed as BUSINESS INSIGHTS (what the data MEANS, "
+        "not what was built). Each cites the specific numbers and, where relevant, the "
+        "implied action. Example of the style: 'Re-engagement is spending $1,575 at 0.09% "
+        "conversion — recommend pausing and reallocating to Payday Broad+ at $3.15 CPI.' "
+        "Draw these strictly from the brief's data.\n"
+        "3. RECOMMENDATION — one clear, specific, actionable strategic recommendation for "
+        "the week.\n"
+        "4. THE SYSTEM — 2-3 lines describing the growth-intelligence system as BUSINESS "
+        "INFRASTRUCTURE: what it monitors (paid performance, the creator partner pipeline, "
+        "market & competitor signals, content trends), that it refreshes automatically "
+        "every day/week, and what decisions it informs. Frame it as infrastructure, not "
+        "technology.\n"
+        "5. EU OPPORTUNITY — if the brief shows meaningful organic install demand in "
+        "Germany / UK / Portugal, surface it in 1-2 lines as a market-entry opportunity "
+        "with the numbers. Skip entirely if not meaningful.\n\n"
+        "HARD RULES: Maximum 250 words. Use the EXACT figures from the data. Do NOT "
+        "include any 'what I built' or activity section. Do NOT name ANY software, vendor, "
+        "or tool (no GitHub, Supabase, Apify, Claude, dashboards-by-name, etc.). "
+        "Open with 'Hey Sumit,'. Do NOT add a sign-off, your name, or links — those are "
+        "appended automatically."
     ),
 }
 
@@ -264,7 +282,11 @@ def compose_niyati(ctx: dict) -> tuple[str, str]:
 
 
 def compose_sumit(ctx: dict) -> tuple[str, str]:
-    return "Growth intelligence — weekly findings | Naman", _assemble(_ai_body("sumit", ctx))
+    # "week of" = the Monday of the current week, e.g. "Jun 30, 2026".
+    today = datetime.now(timezone.utc).date()
+    monday = today - timedelta(days=today.weekday())
+    subject = f"Growth intelligence — week of {monday:%b} {monday.day}, {monday.year} | Naman"
+    return subject, _assemble(_ai_body("sumit", ctx))
 
 
 # Recipient → (label, compose fn). One tailored email each.
