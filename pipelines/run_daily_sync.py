@@ -197,17 +197,15 @@ def _rebuild_creator_dashboard() -> bool:
 
 
 def _rebuild_strategy_dashboard() -> bool:
-    """Rebuild the strategy & market-intelligence dashboard (low priority).
+    """Rebuild the strategy & market-intelligence dashboard every day.
 
-    Gated behind STRATEGY_DASHBOARD_REBUILD because it makes several Claude calls
-    to re-extract the strategy source docs — those docs change infrequently, so
-    this is meant to run less often than the daily data sync (e.g. weekly, or
-    on-demand after the source memos are refreshed). When the flag is unset the
-    step is skipped and counts as a success so it never fails the daily run.
+    Runs daily like the creative and creator dashboards — measured at ~21s and 4
+    Claude calls, so the daily cost is small. The source docs (eu_gtm_plan,
+    eu_channel_strategy, competitor analyses, fintech strategies) change
+    infrequently, so most days the extracted content is similar; the value is a
+    fresh sync timestamp and automatically picking up any new/updated source docs.
+    A failure is logged but never aborts the sync.
     """
-    if not os.getenv("STRATEGY_DASHBOARD_REBUILD"):
-        _log("Strategy dashboard: skipped (set STRATEGY_DASHBOARD_REBUILD=1 to rebuild).")
-        return True
     _log("Strategy dashboard: rebuilding docs/strategy_dashboard.html via Claude...")
     try:
         build_strategy_dashboard.main()
@@ -319,8 +317,8 @@ def run() -> None:
     # Creator dashboard — rebuilt from live Supabase data so both stay fresh.
     results["Creator Dashboard"] = _rebuild_creator_dashboard()
 
-    # Strategy dashboard — low priority; only rebuilds when the env flag is set
-    # (source memos change infrequently and it makes several Claude calls).
+    # Strategy dashboard — rebuilt daily (~21s, 4 Claude calls) so its timestamp
+    # stays fresh and new/updated source docs are picked up automatically.
     results["Strategy Dashboard"] = _rebuild_strategy_dashboard()
 
     # Trend dashboard — weekly (Mondays), gated behind TREND_DASHBOARD_REBUILD.
