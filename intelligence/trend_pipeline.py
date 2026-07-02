@@ -53,9 +53,13 @@ _BENCHMARK_CPI = 3.17
 _IG_ACTOR = "apify/instagram-reel-scraper"
 _IG_RESULTS_PER_HANDLE = 6
 INSTAGRAM_HANDLES = [
-    "coinbureau", "aantonop", "cryptosrus", "altcoinbuzz", "boxmining",
-    "digitalassetbuyingclub", "wenmoon", "cryptobanter", "themoonnCarl",
-    "bitcoinbravado", "sendwyre", "strike", "cashapp", "moonpay", "bitrefill",
+    # Kept from the original seed (returned usable content).
+    "cryptosrus", "altcoinbuzz", "boxmining", "wenmoon", "strike",
+    "cashapp", "moonpay", "bitrefill",
+    # US-active fintech / crypto / remittance creators & brands.
+    "grayscale", "coinbase", "river_financial", "swanbitcoin", "unchainedcapital",
+    "strike_app", "muunwallet", "walletofsatoshi", "lightspark", "voltage_cloud",
+    "fold_app", "thebitcoinlayer", "breedlove22", "gladstein", "saifedean",
 ]
 
 # Replicability thresholds (the "anyone-with-a-phone-could-make-this" signal).
