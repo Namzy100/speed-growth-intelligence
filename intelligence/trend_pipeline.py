@@ -1,19 +1,16 @@
-"""Trend-to-action pipeline for Speed Wallet (YouTube + TikTok).
+"""Trend-to-action pipeline for Speed Wallet — US market, YouTube + TikTok.
 
-Weekly system that turns trending content into ready-to-brief ad creative:
-  1. Pull trending YouTube videos (Data API, last 7 days, by views) + TikTok
-     videos (Apify search) for Speed's categories.
-  2. Classify each item into a Speed segment (remittance / iGaming / crypto-curious)
-     and extract engagement: YouTube ER = (likes+comments)/views; TikTok true ER =
-     (likes+comments+shares+saves)/views.
-  3. Claude classifies trends (usable / adaptable / irrelevant) and writes ranked
-     creative briefs.
+Weekly system that turns US trending content into ready-to-use organic ideas and
+paid ad hooks:
+  1. Pull trending YouTube (Data API, US, last 7 days) + TikTok (Apify) for Speed's
+     categories, with STRICT US + English filters.
+  2. Per item, extract engagement, save-rate (TikTok), channel size (YouTube), a
+     hook pattern, a replication signal, and a Speed segment.
+  3. Rank hooks by engagement; the dashboard layer asks Claude to enrich the top
+     hooks and generate an organic content calendar + paid ad briefs.
   4. Feedback loop: diff this week's signal against last week's snapshot.
 
-Instagram was removed: the anonymous hashtag scraper returns errors, not posts.
-
-Output: docs/trend_pipeline_YYYY_MM_DD.txt (+ a machine snapshot in data/processed/).
-Reusable: collect_signals() returns the structured data the trend dashboard bakes in.
+collect_signals() returns the structured data the trend dashboard bakes in.
 
 Run from repo root:  python intelligence/trend_pipeline.py
 """
@@ -47,9 +44,16 @@ _CATEGORIES = ["bitcoin", "crypto", "remittance", "send money",
                "money transfer", "lightning network", "fintech"]
 _RESULTS_PER_QUERY = 30
 _PER_CATEGORY = 15
-_BENCHMARK_CPI = 3.17  # Payday - Android - Broad+ (best Meta CPI)
+_BENCHMARK_CPI = 3.17
 
-# Segment keyword sets. Priority at classify time: iGaming > remittance > crypto.
+# Replicability thresholds (the "anyone-with-a-phone-could-make-this" signal).
+_SMALL_VIEWS = 500_000
+_SMALL_SUBS = 500_000
+_HIGH_ER = 0.03
+_HIGH_SAVE_RATE = 0.02
+
+_FILTER_STATS = {"youtube_filtered": 0, "tiktok_filtered": 0, "non_us": 0}
+
 _IGAMING_KW = {"casino", "bet", "betting", "gambling", "gamble", "poker", "slots",
                "sportsbook", "wager", "roulette", "blackjack", "jackpot", "stake"}
 _REMITTANCE_KW = {"send money", "remittance", "remit", "money transfer",
@@ -59,10 +63,6 @@ _REMITTANCE_KW = {"send money", "remittance", "remit", "money transfer",
 _CRYPTO_KW = {"bitcoin", "btc", "crypto", "cryptocurrency", "ethereum", "eth",
               "blockchain", "wallet", "lightning", "satoshi", "sats", "altcoin",
               "defi", "web3", "stablecoin", "usdt"}
-
-
-# Tracks how many items each platform's language filter dropped (per collect run).
-_FILTER_STATS = {"youtube_filtered": 0, "tiktok_filtered": 0}
 
 
 def _is_english(text: str) -> bool:
@@ -83,9 +83,45 @@ def classify_segment(text: str, category: str = "") -> str:
     return "general"
 
 
+def classify_track(item: dict) -> str:
+    """ORGANIC (team can film on a phone) vs PAID (produced ad format)."""
+    if item.get("replicable"):
+        return "organic"
+    if item["platform"] == "TikTok" and item.get("save_rate", 0) >= 0.015:
+        return "organic"
+    return "paid"
+
+
+def hook_pattern(text: str) -> str:
+    """Approximate the first ~3 seconds — the opening words of the caption/title."""
+    return " ".join(str(text or "").split()[:10])
+
+
 # ------------------------------------------------------------------
-# YouTube (Data API v3)
+# YouTube (Data API v3) — US, last 7 days, with channel-level US filter
 # ------------------------------------------------------------------
+
+def _yt_channels(key: str, ids: list[str]) -> dict:
+    """Return {channelId: {country, subs, desc}} via channels.list (batched)."""
+    out = {}
+    for i in range(0, len(ids), 50):
+        batch = ids[i:i + 50]
+        try:
+            r = requests.get(f"{_YT_BASE}/channels", params={
+                "key": key, "id": ",".join(batch), "part": "snippet,statistics"}, timeout=30)
+            if r.status_code != 200:
+                continue
+            for it in r.json().get("items", []):
+                sn, st = it.get("snippet", {}), it.get("statistics", {})
+                out[it["id"]] = {
+                    "country": sn.get("country", ""),
+                    "subs": int(st.get("subscriberCount", 0) or 0),
+                    "desc": sn.get("description", ""),
+                }
+        except requests.RequestException:
+            continue
+    return out
+
 
 def _fetch_youtube(term: str) -> list[dict]:
     key = os.getenv("YOUTUBE_API_KEY")
@@ -95,7 +131,7 @@ def _fetch_youtube(term: str) -> list[dict]:
     try:
         s = requests.get(f"{_YT_BASE}/search", params={
             "key": key, "q": term, "part": "snippet", "type": "video",
-            "order": "viewCount", "publishedAfter": after, "maxResults": 10,
+            "order": "viewCount", "publishedAfter": after, "maxResults": 12,
             "regionCode": "US", "relevanceLanguage": "en"}, timeout=30)
         if s.status_code != 200:
             print(f"    YouTube '{term}' search error {s.status_code}")
@@ -112,36 +148,52 @@ def _fetch_youtube(term: str) -> list[dict]:
         print(f"    YouTube '{term}' failed: {e}")
         return []
 
-    out = []
+    raw = []
     for it in v.json().get("items", []):
         sn, st = it["snippet"], it.get("statistics", {})
         views = int(st.get("viewCount", 0) or 0)
-        likes = int(st.get("likeCount", 0) or 0)
-        comments = int(st.get("commentCount", 0) or 0)
         if views <= 0:
             continue
+        title = sn.get("title", "")
+        if not _is_english(title):
+            _FILTER_STATS["youtube_filtered"] += 1
+            continue
+        likes = int(st.get("likeCount", 0) or 0)
+        comments = int(st.get("commentCount", 0) or 0)
         thumbs = sn.get("thumbnails", {}) or {}
         thumb = (thumbs.get("medium") or thumbs.get("high") or thumbs.get("default") or {}).get("url", "")
-        title = sn.get("title", "")
-        out.append({
-            "platform": "YouTube", "category": term,
-            "segment": classify_segment(title, term),
-            "title": title, "channel": sn.get("channelTitle", ""),
-            "views": views, "likes": likes, "comments": comments,
-            "er": round((likes + comments) / views, 4),
-            "publish_date": sn.get("publishedAt", "")[:10],
-            "url": f"https://www.youtube.com/watch?v={it['id']}",
-            "thumbnail": thumb,
+        raw.append({
+            "platform": "YouTube", "category": term, "channelId": sn.get("channelId", ""),
+            "segment": classify_segment(title, term), "title": title,
+            "channel": sn.get("channelTitle", ""), "views": views, "likes": likes,
+            "comments": comments, "er": round((likes + comments) / views, 4),
+            "save_rate": 0.0, "publish_date": sn.get("publishedAt", "")[:10],
+            "url": f"https://www.youtube.com/watch?v={it['id']}", "thumbnail": thumb,
+            "hook": hook_pattern(title),
         })
-    # English-only: drop non-English titles (search is already US/en-scoped).
-    kept = [v for v in out if _is_english(v["title"])]
-    _FILTER_STATS["youtube_filtered"] += len(out) - len(kept)
+
+    # US filter via channel country / description language, and attach subs.
+    chans = _yt_channels(key, list({r["channelId"] for r in raw if r["channelId"]}))
+    kept = []
+    for r in raw:
+        c = chans.get(r["channelId"], {})
+        country, desc = c.get("country", ""), c.get("desc", "")
+        is_us = (country == "US") or (not country and _is_english(desc))
+        if not is_us:
+            _FILTER_STATS["non_us"] += 1
+            continue
+        r["subs"] = c.get("subs", 0)
+        # "Low production value / replicable" signal: small creator, high engagement.
+        r["replicable"] = (r["views"] < _SMALL_VIEWS and 0 < r["subs"] < _SMALL_SUBS
+                           and r["er"] > _HIGH_ER)
+        r["track"] = classify_track(r)
+        kept.append(r)
     kept.sort(key=lambda x: x["views"], reverse=True)
     return kept[:_PER_CATEGORY]
 
 
 # ------------------------------------------------------------------
-# TikTok (Apify search)
+# TikTok (Apify search) — strict English, prioritized by save-rate
 # ------------------------------------------------------------------
 
 def _fetch_tiktok(fetcher: TikTokCreatorFetcher, term: str) -> list[dict]:
@@ -155,83 +207,88 @@ def _fetch_tiktok(fetcher: TikTokCreatorFetcher, term: str) -> list[dict]:
         views = int(it.get("playCount", 0) or 0)
         if views <= 0:
             continue
+        # Strict: TikTok must self-tag the caption as English.
+        if str(it.get("textLanguage", "")).lower() != "en":
+            _FILTER_STATS["tiktok_filtered"] += 1
+            continue
         likes = int(it.get("diggCount", 0) or 0)
         comments = int(it.get("commentCount", 0) or 0)
         shares = int(it.get("shareCount", 0) or 0)
-        saves = int(it.get("collectCount", 0) or 0)  # newly captured
+        saves = int(it.get("collectCount", 0) or 0)
         caption = " ".join(str(it.get("text", "")).split())
-        # English-only: keep if TikTok tags it English OR the caption reads ASCII.
-        lang = str(it.get("textLanguage", "")).lower()
-        if lang != "en" and not _is_english(caption):
-            _FILTER_STATS["tiktok_filtered"] += 1
-            continue
         hashtags = [h.get("name", "") if isinstance(h, dict) else str(h)
                     for h in (it.get("hashtags", []) or [])]
-        author = (it.get("authorMeta", {}) or {}).get("name", "")
-        out.append({
+        item = {
             "platform": "TikTok", "category": term,
             "segment": classify_segment(caption + " " + " ".join(hashtags), term),
-            "title": caption[:140], "channel": author,
-            "views": views, "likes": likes, "comments": comments,
-            "shares": shares, "saves": saves,
-            # true engagement uses ALL interactions, not just views/likes
-            "er": round((likes + comments + shares + saves) / views, 4),
+            "title": caption[:140], "channel": (it.get("authorMeta", {}) or {}).get("name", ""),
+            "views": views, "likes": likes, "comments": comments, "shares": shares,
+            "saves": saves, "er": round((likes + comments + shares + saves) / views, 4),
+            "save_rate": round(saves / views, 4), "subs": 0,
             "duration": int((it.get("videoMeta", {}) or {}).get("duration", 0) or 0),
-            "publish_date": str(it.get("createTimeISO", ""))[:10],  # newly captured
-            "url": it.get("webVideoUrl", ""),
-            "hashtags": [h.lower() for h in hashtags if h],
-            "thumbnail": "",
-        })
-    out.sort(key=lambda x: x["views"], reverse=True)
+            "publish_date": str(it.get("createTimeISO", ""))[:10],
+            "url": it.get("webVideoUrl", ""), "hashtags": [h.lower() for h in hashtags if h],
+            "thumbnail": "", "hook": hook_pattern(caption),
+        }
+        # TikTok is phone-native; strong save-rate marks the most copyable pieces.
+        item["replicable"] = item["save_rate"] >= _HIGH_SAVE_RATE or item["er"] > _HIGH_ER
+        item["track"] = classify_track(item)
+        out.append(item)
+    # Prioritize by save-rate (intent to copy/return), then views.
+    out.sort(key=lambda x: (x["save_rate"], x["views"]), reverse=True)
     return out[:_PER_CATEGORY]
 
 
 # ------------------------------------------------------------------
-# Collect (reusable by the dashboard)
+# Collect
 # ------------------------------------------------------------------
 
 _SEGMENTS = ["remittance", "crypto-curious", "iGaming"]
 
 
 def collect_signals() -> dict:
-    """Fetch YouTube + TikTok trends, classify, and return structured data."""
     if not os.getenv("APIFY_API_KEY"):
         raise EnvironmentError("APIFY_API_KEY must be set in .env")
+    for k in _FILTER_STATS:
+        _FILTER_STATS[k] = 0
 
-    _FILTER_STATS["youtube_filtered"] = 0
-    _FILTER_STATS["tiktok_filtered"] = 0
     fetcher = TikTokCreatorFetcher(os.getenv("APIFY_API_KEY"))
     youtube, tiktok = [], []
     for term in _CATEGORIES:
         print(f"Scanning '{term}'...")
         yt = _fetch_youtube(term)
         tt = _fetch_tiktok(fetcher, term)
-        print(f"  YouTube: {len(yt)} · TikTok: {len(tt)}")
+        print(f"  YouTube(US): {len(yt)} · TikTok(en): {len(tt)}")
         youtube += yt
         tiktok += tt
 
-    # De-dup YouTube by url (same video can match multiple category queries).
-    seen = set()
-    yt_unique = []
+    seen, yt_unique = set(), []
     for v in sorted(youtube, key=lambda x: x["views"], reverse=True):
         if v["url"] not in seen:
             seen.add(v["url"])
             yt_unique.append(v)
     youtube = yt_unique
 
-    by_segment = {seg: {"youtube": [], "tiktok": []} for seg in _SEGMENTS}
-    for v in youtube:
-        if v["segment"] in by_segment:
-            by_segment[v["segment"]]["youtube"].append(v)
-    for v in tiktok:
-        if v["segment"] in by_segment:
-            by_segment[v["segment"]]["tiktok"].append(v)
+    all_items = youtube + tiktok
+    # Top hooks: rank by ER, but only genuinely relevant, English, non-trivial
+    # items — exclude 'general' (viral junk that merely matched a search term)
+    # and re-apply the English check to the hook text itself.
+    top_hooks = sorted(
+        [v for v in all_items if v["views"] >= 10_000
+         and v["segment"] in _SEGMENTS and _is_english(v["title"])],
+        key=lambda x: x["er"], reverse=True)
 
-    # Platform signal: avg ER per segment per platform.
+    by_segment = {seg: {"youtube": [], "tiktok": [], "organic": [], "paid": []} for seg in _SEGMENTS}
+    for v in all_items:
+        seg = v["segment"]
+        if seg not in by_segment:
+            continue
+        by_segment[seg]["youtube" if v["platform"] == "YouTube" else "tiktok"].append(v)
+        by_segment[seg][v["track"]].append(v)
+
     signal = {}
     for seg in _SEGMENTS:
-        yv = by_segment[seg]["youtube"]
-        tv = by_segment[seg]["tiktok"]
+        yv, tv = by_segment[seg]["youtube"], by_segment[seg]["tiktok"]
         signal[seg] = {
             "youtube_er": round(sum(x["er"] for x in yv) / len(yv), 4) if yv else 0.0,
             "tiktok_er": round(sum(x["er"] for x in tv) / len(tv), 4) if tv else 0.0,
@@ -239,23 +296,22 @@ def collect_signals() -> dict:
         }
 
     snapshot = _snapshot(youtube, tiktok)
-    prior = _prior_snapshot()
-    feedback, died = _feedback(snapshot, prior)
+    feedback, died = _feedback(snapshot, _prior_snapshot())
 
-    print(f"Language filter dropped: {_FILTER_STATS['youtube_filtered']} YouTube, "
-          f"{_FILTER_STATS['tiktok_filtered']} TikTok (non-English).")
+    print(f"Filters dropped: {_FILTER_STATS['youtube_filtered']} non-English YT, "
+          f"{_FILTER_STATS['non_us']} non-US YT, {_FILTER_STATS['tiktok_filtered']} non-English TikTok.")
 
     return {
         "generated_at": datetime.now(timezone.utc).isoformat(),
-        "youtube": youtube, "tiktok": tiktok, "by_segment": by_segment,
-        "platform_signal": signal, "snapshot": snapshot,
-        "feedback": feedback, "died": died,
+        "youtube": youtube, "tiktok": tiktok, "all_items": all_items,
+        "top_hooks": top_hooks, "by_segment": by_segment, "platform_signal": signal,
+        "snapshot": snapshot, "feedback": feedback, "died": died,
         "filter_stats": dict(_FILTER_STATS),
     }
 
 
 # ------------------------------------------------------------------
-# Feedback loop (week-over-week)
+# Feedback loop
 # ------------------------------------------------------------------
 
 def _snapshot(youtube: list[dict], tiktok: list[dict]) -> dict:
@@ -267,14 +323,10 @@ def _snapshot(youtube: list[dict], tiktok: list[dict]) -> dict:
             c["er"].append(v["er"])
             for h in v.get("hashtags", []):
                 c["tags"][h] += 1
-        return {
-            f"{cat}|{platform}": {
-                "median_reach": int(median(d["reach"])) if d["reach"] else 0,
-                "avg_er": round(sum(d["er"]) / len(d["er"]), 4) if d["er"] else 0.0,
-                "hashtags": dict(d["tags"].most_common(12)),
-            }
-            for cat, d in by_cat.items()
-        }
+        return {f"{cat}|{platform}": {
+            "median_reach": int(median(d["reach"])) if d["reach"] else 0,
+            "avg_er": round(sum(d["er"]) / len(d["er"]), 4) if d["er"] else 0.0,
+            "hashtags": dict(d["tags"].most_common(12))} for cat, d in by_cat.items()}
     cats = {}
     cats.update(agg(youtube, "YouTube"))
     cats.update(agg(tiktok, "TikTok"))
@@ -292,10 +344,9 @@ def _prior_snapshot() -> dict | None:
 
 
 def _feedback(current: dict, prior: dict | None) -> tuple[str, list[str]]:
-    """Return (human-readable feedback, list of 'what died' lines)."""
     if not prior:
-        return ("No prior snapshot found — this is the baseline week. Next week's "
-                "run will show what gained traction, died, or emerged.", [])
+        return ("No prior snapshot found — baseline week. Next week's run will show "
+                "what gained traction, died, or emerged.", [])
     lines, died = [], []
     for key, cur in current["categories"].items():
         old = prior.get("categories", {}).get(key)
@@ -306,103 +357,58 @@ def _feedback(current: dict, prior: dict | None) -> tuple[str, list[str]]:
         delta = ((cur["median_reach"] - o_reach) / o_reach * 100) if o_reach else 0
         arrow = "▲" if delta > 5 else "▼" if delta < -5 else "▬"
         cur_t, old_t = set(cur["hashtags"]), set(old.get("hashtags", {}))
-        emerging = sorted(cur_t - old_t)[:5]
-        faded = sorted(old_t - cur_t)[:5]
-        lines.append(
-            f"  {key}: reach {arrow} {delta:+.0f}% | emerging: "
-            f"{', '.join('#'+t for t in emerging) or '—'} | faded: "
-            f"{', '.join('#'+t for t in faded) or '—'}"
-        )
+        emerging, faded = sorted(cur_t - old_t)[:5], sorted(old_t - cur_t)[:5]
+        lines.append(f"  {key}: reach {arrow} {delta:+.0f}% | emerging: "
+                     f"{', '.join('#'+t for t in emerging) or '—'} | faded: "
+                     f"{', '.join('#'+t for t in faded) or '—'}")
         if delta < -15:
             died.append(f"{key}: reach fell {delta:.0f}% week-over-week — cooling off.")
         for t in faded[:3]:
             died.append(f"#{t} ({key.split('|')[1]}) dropped out of the top hashtags.")
-    prior_date = prior.get("generated_at", "")[:10]
-    return (f"Compared against snapshot from {prior_date}:\n" + "\n".join(lines), died)
+    return (f"Compared against snapshot from {prior.get('generated_at','')[:10]}:\n" + "\n".join(lines), died)
 
 
 # ------------------------------------------------------------------
-# Digest + Claude briefs (for the .txt report)
+# .txt report (standalone run) — briefs via Claude
 # ------------------------------------------------------------------
 
 def _digest(data: dict) -> str:
-    parts = []
-    for label, items in (("YouTube", data["youtube"]), ("TikTok", data["tiktok"])):
-        if not items:
-            parts.append(f"{label}: (no data)")
-            continue
-        top = items[:10]
-        lines = [f"{label} — top {len(top)} of {len(items)} by views:"]
-        for v in top:
-            lines.append(
-                f"  [{v['segment']}] {v['views']:,} views, {v['er']:.1%} ER, "
-                f"{v['publish_date']} — {v['title'][:90]}"
-            )
-        parts.append("\n".join(lines))
-    return "\n\n".join(parts)
+    lines = []
+    for v in data["top_hooks"][:20]:
+        lines.append(f"[{v['segment']}/{v['track']}] {v['platform']} {v['views']:,}v "
+                     f"{v['er']:.1%}ER save{v.get('save_rate',0):.1%} — {v['hook']}")
+    return "TOP HOOKS THIS WEEK (US, ranked by engagement):\n" + "\n".join(lines)
 
-
-def generate_briefs(digest: str, feedback: str) -> str:
-    client = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
-    prompt = (
-        "You are a growth-creative strategist for Speed Wallet, a Bitcoin Lightning "
-        "payments app. Segments: remittance (zero fees), iGaming (instant deposits), "
-        "crypto-curious (simplicity). Best current paid CPI benchmark is "
-        f"${_BENCHMARK_CPI:.2f} (Meta, Payday Android Broad+).\n\n"
-        "Below are this week's trending YouTube + TikTok signals (already segment-tagged), "
-        "plus a week-over-week feedback section.\n\n"
-        "TASK:\n"
-        "1. Open with a 2-line MOMENTUM summary from the feedback (what's rising worth acting on).\n"
-        "2. Identify the 5-7 strongest trends. Classify EACH as (a) DIRECTLY USABLE, "
-        "(b) ADAPTABLE with a Speed angle, or (c) IRRELEVANT (name + one-line why, then skip).\n"
-        "3. For every (a)/(b), a ranked hand-to-creative brief: Trend & evidence "
-        "(platform, views/ER); Classification; Exact hook line; 15-second script (3-4 beats); "
-        "Speed segment; Paid channel to test first (Meta/TikTok) and why; "
-        f"Estimated CPI impact vs the ${_BENCHMARK_CPI:.2f} benchmark (range + rationale).\n\n"
-        "Concrete, plain text, no markdown headers.\n\n"
-        "--- WEEK-OVER-WEEK FEEDBACK ---\n" + feedback +
-        "\n\n--- THIS WEEK'S TREND SIGNALS ---\n" + digest
-    )
-    resp = client.messages.create(
-        model=_MODEL, max_tokens=3000,
-        messages=[{"role": "user", "content": prompt}],
-    )
-    return resp.content[0].text
-
-
-# ------------------------------------------------------------------
-# Run (writes the .txt report + snapshot)
-# ------------------------------------------------------------------
 
 def run() -> Path:
     if not os.getenv("ANTHROPIC_API_KEY"):
         raise EnvironmentError("ANTHROPIC_API_KEY must be set in .env")
-
     data = collect_signals()
-    if not data["youtube"] and not data["tiktok"]:
-        raise RuntimeError("No trend data returned from either platform.")
-
+    if not data["all_items"]:
+        raise RuntimeError("No trend data returned.")
     digest = _digest(data)
-    print(f"\nGenerating creative briefs ({_MODEL})...")
-    briefs = generate_briefs(digest, data["feedback"])
+
+    print(f"\nGenerating briefs ({_MODEL})...")
+    client = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+    resp = client.messages.create(model=_MODEL, max_tokens=2600, messages=[{"role": "user",
+        "content": ("You are Speed Wallet's growth-creative strategist (Bitcoin Lightning app; "
+            "segments: remittance/zero-fee, crypto-curious/simplicity, iGaming/instant deposits). "
+            f"Benchmark CPI ${_BENCHMARK_CPI:.2f}. From these US trending hooks, write a MOMENTUM "
+            "line, then 5-7 ranked creative briefs (hook, 15s script, segment, organic-or-paid, "
+            "platform, est CPI impact). Plain text.\n\n" + data["feedback"] + "\n\n" + digest)}])
+    briefs = resp.content[0].text
 
     stamp = datetime.now(timezone.utc).strftime("%Y_%m_%d")
-    header = (
-        "=" * 70 + "\nSPEED WALLET — TREND-TO-ACTION PIPELINE (YouTube + TikTok)\n"
-        f"Generated {datetime.now(timezone.utc):%Y-%m-%d %H:%M UTC} · "
-        f"{len(data['youtube'])} YouTube + {len(data['tiktok'])} TikTok items · "
-        f"{len(_CATEGORIES)} categories\n" + "=" * 70 + "\n\n"
-        "FEEDBACK LOOP (week-over-week)\n" + "-" * 32 + "\n" + data["feedback"] + "\n\n\n"
-        "ACTIONABLE CREATIVE BRIEFS (ranked)\n" + "-" * 32 + "\n\n"
-    )
+    header = ("=" * 70 + "\nSPEED WALLET — TREND-TO-ACTION PIPELINE (US · YouTube + TikTok)\n"
+              f"Generated {datetime.now(timezone.utc):%Y-%m-%d %H:%M UTC} · "
+              f"{len(data['youtube'])} YouTube + {len(data['tiktok'])} TikTok · "
+              f"filters: {data['filter_stats']}\n" + "=" * 70 + "\n\n"
+              "FEEDBACK LOOP\n" + "-" * 32 + "\n" + data["feedback"] + "\n\n\nBRIEFS\n" + "-" * 32 + "\n\n")
     out = _DOCS / f"trend_pipeline_{stamp}.txt"
-    out.write_text(header + briefs + "\n\n\n--- RAW TREND SIGNALS ---\n\n" + digest,
-                   encoding="utf-8")
-
+    out.write_text(header + briefs + "\n\n\n--- RAW TOP HOOKS ---\n\n" + digest, encoding="utf-8")
     _STATE_DIR.mkdir(parents=True, exist_ok=True)
     (_STATE_DIR / f"trend_pipeline_state_{stamp}.json").write_text(
         json.dumps(data["snapshot"], indent=2), encoding="utf-8")
-
     print(f"\nSaved: {out.relative_to(_ROOT)}")
     return out
 

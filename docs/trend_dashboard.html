@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Speed Wallet — Trend Intelligence</title>
+<title>Speed Wallet — Trend Intelligence (US)</title>
 <style>
   :root{
     --bg:#0d1117; --panel:#161b22; --panel-2:#1b2230;
@@ -23,7 +23,7 @@
     background:radial-gradient(1100px 600px at 50% -10%, rgba(110,64,201,0.20), transparent 58%),
       radial-gradient(820px 520px at 100% 0%, rgba(163,113,245,0.09), transparent 52%), var(--bg);
     background-attachment:fixed;}
-  .wrap{max-width:1200px; margin:0 auto; padding:0 24px 90px;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 24px 90px;}
   .brandbar{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; padding:20px 0; border-bottom:1px solid var(--hairline);}
   .brand{font-weight:760; font-size:16px; display:flex; align-items:center; gap:8px;}
   .brand .bolt{background:linear-gradient(180deg,#ffd66e,#f0a02a); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
@@ -36,64 +36,56 @@
   h2{font-size:12.5px; text-transform:uppercase; letter-spacing:0.11em; color:var(--muted); font-weight:700; display:flex; align-items:center; gap:10px;}
   h2::before{content:""; width:3px; height:13px; border-radius:2px; background:var(--grad);}
   .sec-note{font-size:12px; color:var(--faint);}
-  .seg-chip{display:inline-block; font-size:11px; font-weight:800; letter-spacing:0.03em; padding:4px 12px; border-radius:20px; color:#0d1117;}
-  .seg-chip.remittance{background:var(--seg-remittance);} .seg-chip.cryptocurious{background:var(--seg-cryptocurious);} .seg-chip.iGaming{background:var(--seg-iGaming);}
-
-  /* A: trending lanes */
-  .seg-block{margin-bottom:30px;}
-  .seg-h{margin-bottom:12px;}
-  .lane{margin:10px 0;}
-  .lane-lab{font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:var(--faint); font-weight:700; margin-bottom:8px;}
-  .cards{display:flex; gap:14px; overflow-x:auto; padding-bottom:8px;}
-  .tcard{flex:0 0 250px; background:linear-gradient(180deg,var(--panel),rgba(22,27,34,0.55)); border:1px solid var(--hairline); border-radius:var(--r-md); overflow:hidden; text-decoration:none; color:var(--text); transition:transform .2s ease, border-color .2s ease;}
-  .tcard:hover{transform:translateY(-3px); border-color:var(--hairline-strong);}
-  .thumb{position:relative; aspect-ratio:16/9; background:#000; overflow:hidden;}
-  .thumb img{width:100%; height:100%; object-fit:cover;}
-  .thumb.noimg{display:flex; align-items:center; justify-content:center;}
-  .thumb.noimg.tt{background:linear-gradient(135deg,#111,#0c2a2a);} .thumb.noimg.yt{background:linear-gradient(135deg,#1a0000,#2a0c0c);}
-  .thumb .glyph{font-size:44px; opacity:0.6;}
-  .thumb.tt .glyph{color:var(--tt);} .thumb.yt .glyph{color:var(--yt);}
-  .pill{position:absolute; top:8px; left:8px; font-size:9.5px; font-weight:800; padding:2px 7px; border-radius:5px; text-transform:uppercase; letter-spacing:0.04em;}
-  .pill.yt{background:var(--yt); color:#fff;} .pill.tt{background:var(--tt); color:#04201f;}
-  .tbody{padding:12px 13px;}
-  .ttitle{font-size:13px; font-weight:650; line-height:1.35; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; min-height:35px;}
-  .tchan{font-size:11.5px; color:var(--faint); margin:5px 0 8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-  .tstats{display:flex; gap:9px; font-size:11px; color:var(--muted); font-variant-numeric:tabular-nums; flex-wrap:wrap;}
-  .tstats .er{color:var(--good); font-weight:700;} .tstats .date{color:var(--faint); margin-left:auto;}
+  .badge{display:inline-flex; align-items:center; font-size:10px; font-weight:800; padding:2px 8px; border-radius:6px; letter-spacing:0.03em;}
+  .badge.yt{background:var(--yt); color:#fff;} .badge.tt{background:var(--tt); color:#04201f;}
+  .badge.plat{background:var(--panel-2); color:var(--muted);}
+  .badge.seg{color:#0d1117;} .badge.seg.remittance{background:var(--seg-remittance);} .badge.seg.cryptocurious{background:var(--seg-cryptocurious);} .badge.seg.iGaming{background:var(--seg-iGaming);}
   .empty{color:var(--faint); font-size:13px; padding:10px 0;}
 
-  /* B: content recs */
-  .rec-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
-  @media(max-width:900px){.rec-grid{grid-template-columns:1fr;}}
-  .rec-col{background:var(--panel); border:1px solid var(--hairline); border-radius:var(--r-md); padding:16px;}
-  .rec-col .seg-chip{margin-bottom:12px;}
-  .idea{border-top:1px solid var(--hairline); padding:12px 0;}
-  .idea:first-of-type{border-top:none;}
-  .idea-hook{font-size:14px; font-weight:650; line-height:1.4;}
-  .idea-meta{display:flex; gap:8px; margin:8px 0 6px;}
-  .idea-meta span{font-size:10.5px; font-weight:700; padding:2px 8px; border-radius:6px;}
-  .idea-meta .fmt{background:rgba(163,113,245,0.15); color:var(--accent-2);}
-  .idea-meta .plat{background:var(--panel-2); color:var(--muted);}
-  .idea-why{font-size:12.5px; color:var(--muted); line-height:1.5;}
+  /* 1: top hooks */
+  .hook-card{display:flex; gap:16px; align-items:flex-start; background:linear-gradient(180deg,var(--panel),rgba(22,27,34,0.55)); border:1px solid var(--hairline); border-radius:var(--r-md); padding:16px 18px; margin-bottom:11px;}
+  .hook-rank{font-size:22px; font-weight:850; color:var(--accent-2); min-width:26px; font-variant-numeric:tabular-nums;}
+  .hook-main{flex:1; min-width:0;}
+  .hook-text{display:block; font-size:15.5px; font-weight:680; color:var(--text); text-decoration:none; line-height:1.35;}
+  .hook-text:hover{color:var(--accent-2);}
+  .hook-meta{display:flex; flex-wrap:wrap; gap:7px; align-items:center; margin:9px 0 7px;}
+  .hook-meta .m{font-size:11px; color:var(--muted); font-variant-numeric:tabular-nums;}
+  .hook-meta .er{color:var(--good); font-weight:700;} .hook-meta .fmt{color:var(--accent-2); font-weight:600;} .hook-meta .cost{color:var(--faint);}
+  .hook-why{font-size:12.5px; color:var(--muted); font-style:italic;}
+  .hook-repl{flex:0 0 auto; text-align:right; min-width:96px;}
+  .repl-lab{font-size:9px; text-transform:uppercase; letter-spacing:0.07em; color:var(--faint); font-weight:700; margin-bottom:5px;}
+  .repl{display:inline-block; width:70px; height:7px; background:rgba(255,255,255,0.08); border-radius:5px; overflow:hidden; vertical-align:middle;}
+  .repl-fill{display:block; height:100%; background:linear-gradient(90deg,#2c8c3c,var(--good)); border-radius:5px;}
+  .repl-n{font-size:11px; font-weight:700; color:var(--muted); margin-left:7px;}
 
-  /* C: ad briefs */
-  .briefs{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
-  @media(max-width:900px){.briefs{grid-template-columns:1fr;}}
-  .brief{display:flex; gap:14px; background:linear-gradient(180deg,var(--panel),rgba(22,27,34,0.55)); border:1px solid var(--hairline); border-radius:var(--r-md); padding:18px;}
-  .brief-n{font-size:26px; font-weight:850; color:var(--accent-2); flex:0 0 auto;}
-  .brief-fmt{font-size:15px; font-weight:740; margin-bottom:10px;}
-  .brief-row{margin:9px 0;}
-  .brief-row .k{display:block; font-size:9.5px; text-transform:uppercase; letter-spacing:0.07em; color:var(--faint); font-weight:700; margin-bottom:2px;}
-  .brief-row .v{font-size:12.5px; color:var(--text); line-height:1.45;}
-  .brief-row .v.cpi{color:var(--good); font-weight:700;}
+  /* 2: calendar */
+  .cal-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:14px;}
+  @media(max-width:1000px){.cal-grid{grid-template-columns:1fr 1fr;}}
+  @media(max-width:640px){.cal-grid{grid-template-columns:1fr;}}
+  .cal-card{background:var(--panel); border:1px solid var(--hairline); border-radius:var(--r-md); padding:15px; display:flex; flex-direction:column; gap:9px;}
+  .cal-day{font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:var(--accent-2); font-weight:800;}
+  .cal-hook{font-size:14px; font-weight:700; line-height:1.35;}
+  .cal-outline{font-size:12px; color:var(--muted); line-height:1.5; flex:1;}
+  .cal-foot{display:flex; flex-wrap:wrap; gap:6px; align-items:center;}
+  .cal-reach{font-size:11px; color:var(--gold); font-weight:700; margin-left:auto;}
+  .cal-notes{font-size:11px; color:var(--faint); border-top:1px solid var(--hairline); padding-top:8px;}
 
-  /* D: what died */
+  /* 3: paid briefs */
+  .paid-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
+  @media(max-width:900px){.paid-grid{grid-template-columns:1fr;}}
+  .paid-card{display:flex; gap:13px; background:linear-gradient(180deg,var(--panel),rgba(22,27,34,0.55)); border:1px solid var(--hairline); border-radius:var(--r-md); padding:17px;}
+  .paid-n{font-size:24px; font-weight:850; color:var(--accent-2);}
+  .paid-row{margin:8px 0;}
+  .paid-row .k{display:block; font-size:9px; text-transform:uppercase; letter-spacing:0.06em; color:var(--faint); font-weight:700; margin-bottom:2px;}
+  .paid-row .v{font-size:12.5px; color:var(--text); line-height:1.4;} .paid-row .v.cpi{color:var(--good); font-weight:700;}
+
+  /* 4: dying */
   .died-list{list-style:none; display:flex; flex-direction:column; gap:9px;}
   .died-list li{background:rgba(248,81,73,0.07); border:1px solid rgba(248,81,73,0.25); border-radius:var(--r-sm); padding:11px 15px; font-size:13px; color:var(--muted);}
   .died-list li::before{content:"↓ "; color:var(--bad); font-weight:800;}
   .died-empty{color:var(--faint); font-size:13px; background:var(--panel); border:1px solid var(--hairline); border-radius:var(--r-md); padding:16px;}
 
-  /* E: platform signal */
+  /* 5: signal */
   .signal{background:var(--panel); border:1px solid var(--hairline); border-radius:var(--r-md); padding:18px 22px;}
   .sig-row{display:grid; grid-template-columns:130px 1fr 130px; align-items:center; gap:16px; padding:12px 0; border-top:1px solid var(--hairline);}
   .sig-row:first-child{border-top:none;}
@@ -112,367 +104,296 @@
 <div class="wrap">
   <div class="brandbar">
     <div class="brand"><span class="bolt">⚡</span>Speed Wallet</div>
-    <div class="sync">Synced: <b>2026-07-01 19:45 UTC</b></div>
+    <div class="sync">Synced: <b>2026-07-01 20:37 UTC</b></div>
   </div>
-
   <div class="title-block">
-    <h1>Trend Intelligence</h1>
-    <div class="sub">What's trending in Speed's categories on YouTube &amp; TikTok — and exactly what to make about it. <span style="color:var(--faint)">52 YouTube · 105 TikTok videos this week</span></div>
+    <h1>Trend Intelligence — US</h1>
+    <div class="sub">US-only trending hooks on YouTube &amp; TikTok, turned into content you can post and ads you can brief. <span style="color:var(--faint)">24 YouTube · 105 TikTok (US + English) · filtered 55 non-US/EN YT, 47 non-EN TikTok</span></div>
   </div>
 
   <section>
-    <div class="sec-head"><h2>What's Trending Now</h2><span class="sec-note">Top 5 per platform, per segment · this week · ranked by views</span></div>
+    <div class="sec-head"><h2>This Week's Top Hooks</h2><span class="sec-note">US only · ranked by engagement rate</span></div>
     
-      <div class="seg-block">
-        <div class="seg-h"><span class="seg-chip remittance">Remittance</span></div>
-        <div class="lane"><div class="lane-lab">YouTube</div><div class="cards">
-      <a class="tcard" href="https://www.youtube.com/watch?v=iuZx-NBaky0" target="_blank" rel="noopener">
-        <div class="thumb"><img src="https://i.ytimg.com/vi/iuZx-NBaky0/mqdefault.jpg" alt="" loading="lazy"><span class="pill yt">YouTube</span></div>
-        <div class="tbody">
-          <div class="ttitle">He Transferred His Grandma&#x27;s Brain to Find Hidden Money! 🧠💰 #Funny #Shorts</div>
-          <div class="tchan">This is Belal</div>
-          <div class="tstats"><span>303k views</span><span class="er">4.9% ER</span><span class="date">2026-06-30</span></div>
+      <div class="hook-card">
+        <div class="hook-rank">1</div>
+        <div class="hook-main">
+          <a class="hook-text" href="https://www.tiktok.com/@coachnessc/video/7527430048329125133" target="_blank" rel="noopener">“Let’s clear the confusion: ❌ You do NOT need to”</a>
+          <div class="hook-meta">
+            <span class="badge tt">TikTok</span>
+            <span class="badge seg remittance">Remittance</span>
+            <span class="m">15k views</span>
+            <span class="m er">13.0% ER</span>
+            <span class="m fmt">text-on-screen</span>
+            <span class="m cost">$0 (phone video)</span>
+          </div>
+          <div class="hook-why">Myth-busting / curiosity gap — &#x27;you do NOT need to&#x27; pattern stops the scroll and positions Speed as the clarifying authority on a confusing process</div>
         </div>
-      </a>
-      <a class="tcard" href="https://www.youtube.com/watch?v=Q5cV49mHX8s" target="_blank" rel="noopener">
-        <div class="thumb"><img src="https://i.ytimg.com/vi/Q5cV49mHX8s/mqdefault.jpg" alt="" loading="lazy"><span class="pill yt">YouTube</span></div>
-        <div class="tbody">
-          <div class="ttitle">TỪ NGÀY 1/7 QUY ĐỊNH MỚI VỚI CÁC GIAO DỊCH CHUYỂN TIỀN TỪ 10 TRIỆU ĐỒNG -CẦN LƯU Ý #tintuc #thoisu</div>
-          <div class="tchan">TIN NÓNG 365</div>
-          <div class="tstats"><span>192k views</span><span class="er">1.6% ER</span><span class="date">2026-06-28</span></div>
-        </div>
-      </a>
-      <a class="tcard" href="https://www.youtube.com/watch?v=ASKX19gpWc0" target="_blank" rel="noopener">
-        <div class="thumb"><img src="https://i.ytimg.com/vi/ASKX19gpWc0/mqdefault.jpg" alt="" loading="lazy"><span class="pill yt">YouTube</span></div>
-        <div class="tbody">
-          <div class="ttitle">Never Trust Unexpected Bank Transfers | Powerful Life Lesson</div>
-          <div class="tchan">Heart storm</div>
-          <div class="tstats"><span>186k views</span><span class="er">2.4% ER</span><span class="date">2026-06-29</span></div>
-        </div>
-      </a>
-      <a class="tcard" href="https://www.youtube.com/watch?v=N-wsS0HzuYI" target="_blank" rel="noopener">
-        <div class="thumb"><img src="https://i.ytimg.com/vi/N-wsS0HzuYI/mqdefault.jpg" alt="" loading="lazy"><span class="pill yt">YouTube</span></div>
-        <div class="tbody">
-          <div class="ttitle">Skip faltu cashbacks - Switch to Amazon Pay UPI, bade kaam ka cashback</div>
-          <div class="tchan">Amazon Pay India</div>
-          <div class="tstats"><span>153k views</span><span class="er">0.3% ER</span><span class="date">2026-06-25</span></div>
-        </div>
-      </a>
-      <a class="tcard" href="https://www.youtube.com/watch?v=pIT5GRMa3Xg" target="_blank" rel="noopener">
-        <div class="thumb"><img src="https://i.ytimg.com/vi/pIT5GRMa3Xg/mqdefault.jpg" alt="" loading="lazy"><span class="pill yt">YouTube</span></div>
-        <div class="tbody">
-          <div class="ttitle">Có 4G nhưng vẫn mua thẻ điện thoại và xin chuyển khoản</div>
-          <div class="tchan">Ngộ Radio</div>
-          <div class="tstats"><span>76k views</span><span class="er">2.6% ER</span><span class="date">2026-06-28</span></div>
-        </div>
-      </a></div></div>
-        <div class="lane"><div class="lane-lab">TikTok</div><div class="cards">
-      <a class="tcard" href="https://www.tiktok.com/@mileyhighruss/video/7394876373568916766" target="_blank" rel="noopener">
-        <div class="thumb noimg tt"><span class="glyph">♪</span><span class="pill tt">TikTok</span></div>
-        <div class="tbody">
-          <div class="ttitle">#stitch with @@genzxelcambio this is too nuanced of a take to tske seriously but I havent uploaded in a while </div>
-          <div class="tchan">mileyhighruss</div>
-          <div class="tstats"><span>1.2M views</span><span class="er">17.1% ER</span><span class="date">2024-07-23</span></div>
-        </div>
-      </a>
-      <a class="tcard" href="https://www.tiktok.com/@preamblehqdotcom/video/7337375053492800801" target="_blank" rel="noopener">
-        <div class="thumb noimg tt"><span class="glyph">♪</span><span class="pill tt">TikTok</span></div>
-        <div class="tbody">
-          <div class="ttitle">Which African diaspora sends more remittances? #africa #african #remittance #remittances</div>
-          <div class="tchan">preamblehqdotcom</div>
-          <div class="tstats"><span>601k views</span><span class="er">6.2% ER</span><span class="date">2024-02-19</span></div>
-        </div>
-      </a>
-      <a class="tcard" href="https://www.tiktok.com/@docalvinfrancisco/video/7611894743223700756" target="_blank" rel="noopener">
-        <div class="thumb noimg tt"><span class="glyph">♪</span><span class="pill tt">TikTok</span></div>
-        <div class="tbody">
-          <div class="ttitle">Nagpapadala ka ng pera sa pinas? Dapat alam mo to</div>
-          <div class="tchan">docalvinfrancisco</div>
-          <div class="tstats"><span>416k views</span><span class="er">5.1% ER</span><span class="date">2026-02-28</span></div>
-        </div>
-      </a>
-      <a class="tcard" href="https://www.tiktok.com/@raketengineer/video/7256085027216198914" target="_blank" rel="noopener">
-        <div class="thumb noimg tt"><span class="glyph">♪</span><span class="pill tt">TikTok</span></div>
-        <div class="tbody">
-          <div class="ttitle">Battle ng mga Remittance App sa UK. #Remitly vs #Sendwave vs #wise vs #taptapsend #UKofw #ofwtiktokersworldwid</div>
-          <div class="tchan">raketengineer</div>
-          <div class="tstats"><span>414k views</span><span class="er">1.8% ER</span><span class="date">2023-07-15</span></div>
-        </div>
-      </a>
-      <a class="tcard" href="https://www.tiktok.com/@nepalinfocus/video/7644522150560402709" target="_blank" rel="noopener">
-        <div class="thumb noimg tt"><span class="glyph">♪</span><span class="pill tt">TikTok</span></div>
-        <div class="tbody">
-          <div class="ttitle">Did you know that the true backbone of Nepal&#x27;s economy isn&#x27;t just agriculture or tourism? It&#x27;s the remittances</div>
-          <div class="tchan">nepalinfocus</div>
-          <div class="tstats"><span>364k views</span><span class="er">6.8% ER</span><span class="date">2026-05-27</span></div>
-        </div>
-      </a></div></div>
+        <div class="hook-repl"><div class="repl-lab">Replication</div><span class="repl"><span class="repl-fill" style="width:90%"></span></span><span class="repl-n">9/10</span></div>
       </div>
-
-      <div class="seg-block">
-        <div class="seg-h"><span class="seg-chip cryptocurious">Crypto-Curious</span></div>
-        <div class="lane"><div class="lane-lab">YouTube</div><div class="cards">
-      <a class="tcard" href="https://www.youtube.com/watch?v=SZ9kRjMhCog" target="_blank" rel="noopener">
-        <div class="thumb"><img src="https://i.ytimg.com/vi/SZ9kRjMhCog/mqdefault.jpg" alt="" loading="lazy"><span class="pill yt">YouTube</span></div>
-        <div class="tbody">
-          <div class="ttitle">$300 Billion GONE! Elon Musk Lost This Much in One Week! Biggest Fall of Wealth Ever #shorts</div>
-          <div class="tchan">FactTechz</div>
-          <div class="tstats"><span>3.0M views</span><span class="er">4.9% ER</span><span class="date">2026-06-25</span></div>
+      <div class="hook-card">
+        <div class="hook-rank">2</div>
+        <div class="hook-main">
+          <a class="hook-text" href="https://www.tiktok.com/@nepalinfocus/video/7644522150560402709" target="_blank" rel="noopener">“Did you know that the true backbone of Nepal&#x27;s economy”</a>
+          <div class="hook-meta">
+            <span class="badge tt">TikTok</span>
+            <span class="badge seg remittance">Remittance</span>
+            <span class="m">364k views</span>
+            <span class="m er">6.8% ER</span>
+            <span class="m fmt">talking-head</span>
+            <span class="m cost">$0 (phone video)</span>
+          </div>
+          <div class="hook-why">Identity signal + social proof — diaspora pride hooks a tight community and makes sharing feel like advocacy for one&#x27;s home country</div>
         </div>
-      </a>
-      <a class="tcard" href="https://www.youtube.com/watch?v=WqtmUQXzoWk" target="_blank" rel="noopener">
-        <div class="thumb"><img src="https://i.ytimg.com/vi/WqtmUQXzoWk/mqdefault.jpg" alt="" loading="lazy"><span class="pill yt">YouTube</span></div>
-        <div class="tbody">
-          <div class="ttitle">Parte 1   La Prueba del Millón   ¡Perdió su herencia en Bitcoin! 💰🏎️📉 #StoryTime  #storytime</div>
-          <div class="tchan">HISTORIAS FUTBOLERAS Y DE GENTE IMPORTANTE</div>
-          <div class="tstats"><span>476k views</span><span class="er">2.6% ER</span><span class="date">2026-06-27</span></div>
-        </div>
-      </a>
-      <a class="tcard" href="https://www.youtube.com/watch?v=TzuvZLuXzAE" target="_blank" rel="noopener">
-        <div class="thumb"><img src="https://i.ytimg.com/vi/TzuvZLuXzAE/mqdefault.jpg" alt="" loading="lazy"><span class="pill yt">YouTube</span></div>
-        <div class="tbody">
-          <div class="ttitle">&quot;I Just Sold Everything” - WTF Happened To Bitcoin?!</div>
-          <div class="tchan">Graham Stephan</div>
-          <div class="tstats"><span>397k views</span><span class="er">2.6% ER</span><span class="date">2026-06-29</span></div>
-        </div>
-      </a>
-      <a class="tcard" href="https://www.youtube.com/watch?v=vUZjY1BI61s" target="_blank" rel="noopener">
-        <div class="thumb"><img src="https://i.ytimg.com/vi/vUZjY1BI61s/mqdefault.jpg" alt="" loading="lazy"><span class="pill yt">YouTube</span></div>
-        <div class="tbody">
-          <div class="ttitle">Bitcoin&#x27;s 5 Greatest Crashes, What Always Happened Next?</div>
-          <div class="tchan">Bitinning</div>
-          <div class="tstats"><span>252k views</span><span class="er">2.5% ER</span><span class="date">2026-06-25</span></div>
-        </div>
-      </a>
-      <a class="tcard" href="https://www.youtube.com/watch?v=puQUX35J0to" target="_blank" rel="noopener">
-        <div class="thumb"><img src="https://i.ytimg.com/vi/puQUX35J0to/mqdefault.jpg" alt="" loading="lazy"><span class="pill yt">YouTube</span></div>
-        <div class="tbody">
-          <div class="ttitle">Crypto Gold Live Trading 25 June  - stock_learners</div>
-          <div class="tchan">Stock Learners</div>
-          <div class="tstats"><span>229k views</span><span class="er">13.4% ER</span><span class="date">2026-06-25</span></div>
-        </div>
-      </a></div></div>
-        <div class="lane"><div class="lane-lab">TikTok</div><div class="cards">
-      <a class="tcard" href="https://www.tiktok.com/@steven/video/7625737968195521814" target="_blank" rel="noopener">
-        <div class="thumb noimg tt"><span class="glyph">♪</span><span class="pill tt">TikTok</span></div>
-        <div class="tbody">
-          <div class="ttitle">Bitcoin could face a problem no one can ignore Steve Keen argues that Bitcoin’s core design depends on massive</div>
-          <div class="tchan">steven</div>
-          <div class="tstats"><span>4.0M views</span><span class="er">3.9% ER</span><span class="date">2026-04-06</span></div>
-        </div>
-      </a>
-      <a class="tcard" href="https://www.tiktok.com/@market.charts/video/7434191661917310240" target="_blank" rel="noopener">
-        <div class="thumb noimg tt"><span class="glyph">♪</span><span class="pill tt">TikTok</span></div>
-        <div class="tbody">
-          <div class="ttitle">I asked A.I. to predict the Bitcoin price till 2030🤖📈 #bitcoin #crypto #ai #usa #election #investing</div>
-          <div class="tchan">market.charts</div>
-          <div class="tstats"><span>2.9M views</span><span class="er">1.9% ER</span><span class="date">2024-11-06</span></div>
-        </div>
-      </a>
-      <a class="tcard" href="https://www.tiktok.com/@khun.coin/video/7653062553257413904" target="_blank" rel="noopener">
-        <div class="thumb noimg tt"><span class="glyph">♪</span><span class="pill tt">TikTok</span></div>
-        <div class="tbody">
-          <div class="ttitle">crypto futures trading#crypto #bitcoin #fyp</div>
-          <div class="tchan">khun.coin</div>
-          <div class="tstats"><span>600k views</span><span class="er">4.5% ER</span><span class="date">2026-06-19</span></div>
-        </div>
-      </a>
-      <a class="tcard" href="https://www.tiktok.com/@finanzeinfach/video/7650861211302513953" target="_blank" rel="noopener">
-        <div class="thumb noimg tt"><span class="glyph">♪</span><span class="pill tt">TikTok</span></div>
-        <div class="tbody">
-          <div class="ttitle">Hast du früh genug in Bitcoin investiert? 🤔💰 #bitcoin #finanzen #geld #investieren</div>
-          <div class="tchan">finanzeinfach</div>
-          <div class="tstats"><span>564k views</span><span class="er">1.4% ER</span><span class="date">2026-06-13</span></div>
-        </div>
-      </a>
-      <a class="tcard" href="https://www.tiktok.com/@user208866963/video/7646415365743922450" target="_blank" rel="noopener">
-        <div class="thumb noimg tt"><span class="glyph">♪</span><span class="pill tt">TikTok</span></div>
-        <div class="tbody">
-          <div class="ttitle">Saya memprediksi Bitcoin sampai april2027 akhir Bearish nya. #Bitcoin #Trading #Fyp</div>
-          <div class="tchan">user208866963</div>
-          <div class="tstats"><span>240k views</span><span class="er">1.8% ER</span><span class="date">2026-06-01</span></div>
-        </div>
-      </a></div></div>
+        <div class="hook-repl"><div class="repl-lab">Replication</div><span class="repl"><span class="repl-fill" style="width:80%"></span></span><span class="repl-n">8/10</span></div>
       </div>
-
-      <div class="seg-block">
-        <div class="seg-h"><span class="seg-chip iGaming">iGaming</span></div>
-        <div class="lane"><div class="lane-lab">YouTube</div><div class="cards">
-      <a class="tcard" href="https://www.youtube.com/watch?v=lEv54Gc6d1Y" target="_blank" rel="noopener">
-        <div class="thumb"><img src="https://i.ytimg.com/vi/lEv54Gc6d1Y/mqdefault.jpg" alt="" loading="lazy"><span class="pill yt">YouTube</span></div>
-        <div class="tbody">
-          <div class="ttitle">Why Cred Became WhatsApp&#x27;s Biggest Bet #fintech #investment #india</div>
-          <div class="tchan">Kotak Neo</div>
-          <div class="tstats"><span>24k views</span><span class="er">0.2% ER</span><span class="date">2026-06-29</span></div>
+      <div class="hook-card">
+        <div class="hook-rank">3</div>
+        <div class="hook-main">
+          <a class="hook-text" href="https://www.tiktok.com/@preamblehqdotcom/video/7337375053492800801" target="_blank" rel="noopener">“Which African diaspora sends more remittances? #africa #african #remittance #remittances”</a>
+          <div class="hook-meta">
+            <span class="badge tt">TikTok</span>
+            <span class="badge seg remittance">Remittance</span>
+            <span class="m">601k views</span>
+            <span class="m er">6.2% ER</span>
+            <span class="m fmt">talking-head</span>
+            <span class="m cost">$0 (phone video)</span>
+          </div>
+          <div class="hook-why">Community identity signal — diaspora comparison triggers tribal engagement and comment-section debate, driving algorithmic lift</div>
         </div>
-      </a></div></div>
-        <div class="lane"><div class="lane-lab">TikTok</div><div class="cards">
-      <a class="tcard" href="https://www.tiktok.com/@cryptodailyfeed/video/7647033024378391838" target="_blank" rel="noopener">
-        <div class="thumb noimg tt"><span class="glyph">♪</span><span class="pill tt">TikTok</span></div>
-        <div class="tbody">
-          <div class="ttitle">Bitcoin has fallen into the $65,000 range, reaching its lowest level in two months as a fresh wave of selling </div>
-          <div class="tchan">cryptodailyfeed</div>
-          <div class="tstats"><span>380k views</span><span class="er">2.4% ER</span><span class="date">2026-06-03</span></div>
+        <div class="hook-repl"><div class="repl-lab">Replication</div><span class="repl"><span class="repl-fill" style="width:80%"></span></span><span class="repl-n">8/10</span></div>
+      </div>
+      <div class="hook-card">
+        <div class="hook-rank">4</div>
+        <div class="hook-main">
+          <a class="hook-text" href="https://www.tiktok.com/@santiago100x/video/7588767728773729550" target="_blank" rel="noopener">“Crypto gave me financial freedom #crypto #fyp #foryoupage”</a>
+          <div class="hook-meta">
+            <span class="badge tt">TikTok</span>
+            <span class="badge seg cryptocurious">Crypto-Curious</span>
+            <span class="m">450k views</span>
+            <span class="m er">5.8% ER</span>
+            <span class="m fmt">ugc</span>
+            <span class="m cost">$0 (phone video)</span>
+          </div>
+          <div class="hook-why">Aspirational identity signal — &#x27;financial freedom&#x27; narrative lets viewers project themselves into the outcome, priming conversion intent</div>
         </div>
-      </a>
-      <a class="tcard" href="https://www.tiktok.com/@cryptodailyfeed/video/7645537281532611871" target="_blank" rel="noopener">
-        <div class="thumb noimg tt"><span class="glyph">♪</span><span class="pill tt">TikTok</span></div>
-        <div class="tbody">
-          <div class="ttitle">Bitcoin has been declared dead 472 times. If you had invested just $100 every time someone publicly claimed Bi</div>
-          <div class="tchan">cryptodailyfeed</div>
-          <div class="tstats"><span>62k views</span><span class="er">3.3% ER</span><span class="date">2026-05-30</span></div>
+        <div class="hook-repl"><div class="repl-lab">Replication</div><span class="repl"><span class="repl-fill" style="width:90%"></span></span><span class="repl-n">9/10</span></div>
+      </div>
+      <div class="hook-card">
+        <div class="hook-rank">5</div>
+        <div class="hook-main">
+          <a class="hook-text" href="https://www.tiktok.com/@cryptodylnews/video/7656648524985109774" target="_blank" rel="noopener">“This kid went missing after exposing this bitcoin chart trend!”</a>
+          <div class="hook-meta">
+            <span class="badge tt">TikTok</span>
+            <span class="badge seg cryptocurious">Crypto-Curious</span>
+            <span class="m">826k views</span>
+            <span class="m er">9.2% ER</span>
+            <span class="m fmt">text-on-screen</span>
+            <span class="m cost">$50-200 (basic edit)</span>
+          </div>
+          <div class="hook-why">Curiosity gap / fear of missing out — conspiratorial framing (&#x27;went missing after exposing&#x27;) compels clicks even from skeptics; adaptable as &#x27;what banks don&#x27;t want you to know about fees&#x27;</div>
         </div>
-      </a>
-      <a class="tcard" href="https://www.tiktok.com/@cryptodailyfeed/video/7652851713660964126" target="_blank" rel="noopener">
-        <div class="thumb noimg tt"><span class="glyph">♪</span><span class="pill tt">TikTok</span></div>
-        <div class="tbody">
-          <div class="ttitle">Bitcoin has just fallen below $63,000. Why has this happened? It happened because of the Fed. The FOMC kept in</div>
-          <div class="tchan">cryptodailyfeed</div>
-          <div class="tstats"><span>27k views</span><span class="er">2.8% ER</span><span class="date">2026-06-18</span></div>
+        <div class="hook-repl"><div class="repl-lab">Replication</div><span class="repl"><span class="repl-fill" style="width:70%"></span></span><span class="repl-n">7/10</span></div>
+      </div>
+      <div class="hook-card">
+        <div class="hook-rank">6</div>
+        <div class="hook-main">
+          <a class="hook-text" href="https://www.tiktok.com/@silentassets/video/7520515728840101150" target="_blank" rel="noopener">“You don’t beg for money — you command it. Here’s”</a>
+          <div class="hook-meta">
+            <span class="badge tt">TikTok</span>
+            <span class="badge seg remittance">Remittance</span>
+            <span class="m">44k views</span>
+            <span class="m er">5.8% ER</span>
+            <span class="m fmt">talking-head</span>
+            <span class="m cost">$0 (phone video)</span>
+          </div>
+          <div class="hook-why">Empowerment / identity signal — commanding language shifts sender psychology from passive to powerful, aligning with Speed&#x27;s zero-fee value prop</div>
         </div>
-      </a>
-      <a class="tcard" href="https://www.tiktok.com/@zabeton/video/7616494949021846815" target="_blank" rel="noopener">
-        <div class="thumb noimg tt"><span class="glyph">♪</span><span class="pill tt">TikTok</span></div>
-        <div class="tbody">
-          <div class="ttitle">Remittances received from United States in 2025. #zabeton #tiktoklearningcampaign</div>
-          <div class="tchan">zabeton</div>
-          <div class="tstats"><span>62k views</span><span class="er">4.0% ER</span><span class="date">2026-03-12</span></div>
+        <div class="hook-repl"><div class="repl-lab">Replication</div><span class="repl"><span class="repl-fill" style="width:90%"></span></span><span class="repl-n">9/10</span></div>
+      </div>
+      <div class="hook-card">
+        <div class="hook-rank">7</div>
+        <div class="hook-main">
+          <a class="hook-text" href="https://www.tiktok.com/@itse145/video/7634094841093278989" target="_blank" rel="noopener">“well, atleast i tried. now im 30$ down”</a>
+          <div class="hook-meta">
+            <span class="badge tt">TikTok</span>
+            <span class="badge seg remittance">Remittance</span>
+            <span class="m">2.2M views</span>
+            <span class="m er">17.2% ER</span>
+            <span class="m fmt">ugc</span>
+            <span class="m cost">$0 (phone video)</span>
+          </div>
+          <div class="hook-why">Fear of loss / relatability — raw, unpolished admission of losing money on fees triggers empathy and positions Speed as the obvious remedy</div>
         </div>
-      </a>
-      <a class="tcard" href="https://www.tiktok.com/@nickyrazzzy/video/7616347057682402567" target="_blank" rel="noopener">
-        <div class="thumb noimg tt"><span class="glyph">♪</span><span class="pill tt">TikTok</span></div>
-        <div class="tbody">
-          <div class="ttitle">Someone sends money to your bank account and later says it was a &quot;mistake.&quot;😳 Be careful what you do next‼️ Mos</div>
-          <div class="tchan">nickyrazzzy</div>
-          <div class="tstats"><span>22k views</span><span class="er">1.2% ER</span><span class="date">2026-03-12</span></div>
+        <div class="hook-repl"><div class="repl-lab">Replication</div><span class="repl"><span class="repl-fill" style="width:100%"></span></span><span class="repl-n">10/10</span></div>
+      </div>
+      <div class="hook-card">
+        <div class="hook-rank">8</div>
+        <div class="hook-main">
+          <a class="hook-text" href="https://www.tiktok.com/@cbseveningnews/video/7657331582675488013" target="_blank" rel="noopener">“BREAKING: A new financial disclosure shows President Trump made over”</a>
+          <div class="hook-meta">
+            <span class="badge tt">TikTok</span>
+            <span class="badge seg cryptocurious">Crypto-Curious</span>
+            <span class="m">33k views</span>
+            <span class="m er">5.3% ER</span>
+            <span class="m fmt">text-on-screen</span>
+            <span class="m cost">$50-200 (basic edit)</span>
+          </div>
+          <div class="hook-why">News-jacking / authority — &#x27;BREAKING&#x27; pattern applied to Bitcoin or remittance regulation captures curiosity-gap traffic from a broader finance audience</div>
         </div>
-      </a></div></div>
+        <div class="hook-repl"><div class="repl-lab">Replication</div><span class="repl"><span class="repl-fill" style="width:70%"></span></span><span class="repl-n">7/10</span></div>
+      </div>
+      <div class="hook-card">
+        <div class="hook-rank">9</div>
+        <div class="hook-main">
+          <a class="hook-text" href="https://www.youtube.com/watch?v=g4FiHz14W14" target="_blank" rel="noopener">“Bitcoin: Bottom Indicators to Watch”</a>
+          <div class="hook-meta">
+            <span class="badge yt">YouTube</span>
+            <span class="badge seg cryptocurious">Crypto-Curious</span>
+            <span class="m">115k views</span>
+            <span class="m er">6.4% ER</span>
+            <span class="m fmt">talking-head</span>
+            <span class="m cost">$200+ (produced)</span>
+          </div>
+          <div class="hook-why">Authority / fear of loss — indicator-style framing attracts crypto-curious viewers already in a decision-making mindset, warm for a wallet CTA</div>
+        </div>
+        <div class="hook-repl"><div class="repl-lab">Replication</div><span class="repl"><span class="repl-fill" style="width:60%"></span></span><span class="repl-n">6/10</span></div>
       </div>
   </section>
 
   <section>
-    <div class="sec-head"><h2>Content Recommendations</h2><span class="sec-note">Make these this week</span></div>
-    <div class="rec-grid"><div class="rec-col"><div class="seg-chip remittance">Remittance</div>
-        <div class="idea">
-          <div class="idea-hook">“Battle of the remittance apps — but none of them are FREE. Until now.”</div>
-          <div class="idea-meta"><span class="fmt">60s video</span><span class="plat">TikTok</span></div>
-          <div class="idea-why">The Remitly vs Wise vs Sendwave comparison TikTok hit 414K views — Speed wins this format by entering the same battle-style comparison and flipping it with a zero-fee knockout punch.</div>
+    <div class="sec-head"><h2>Organic Content Calendar</h2><span class="sec-note">5 pieces to post this week · phone-filmable</span></div>
+    <div class="cal-grid">
+      <div class="cal-card">
+        <div class="cal-day">Post 1</div>
+        <div class="cal-hook">“I was losing $47 every time I sent money home — then I found this”</div>
+        <div class="cal-outline">Beat 1 (0-8s): Creator holds up phone showing a remittance app fee screen — &#x27;3% fee, $47 gone.&#x27; Beat 2 (9-25s): Side-by-side: old app showing fee deducted vs. Speed showing $0 fee, full amount received. Beat 3 (26-45s): Text overlay: &#x27;Speed Wallet. Bitcoin Lightning. Zero fees. Money arrives in seconds.&#x27; Beat 4 (46-58s): Creator looks at camera — &#x27;Why are you still paying fees? Link in bio.&#x27;</div>
+        <div class="cal-foot">
+          <span class="badge seg remittance">remittance</span>
+          <span class="badge plat">TikTok</span>
+          <span class="cal-reach">~8,000–22,000 (based on 13,800-view / 62.4% ER benchmark for remittance; high save-rate format)</span>
         </div>
-        <div class="idea">
-          <div class="idea-hook">“Nagpapadala ka ng pera sa Pinas? Here&#x27;s what they&#x27;re NOT telling you about the fees.”</div>
-          <div class="idea-meta"><span class="fmt">15s Short</span><span class="plat">YouTube</span></div>
-          <div class="idea-why">The Filipino OFW send-money TikTok hit 416K views at 5.1% ER — a YouTube Short in Tagalog targeting the same diaspora audience directly ties Speed&#x27;s zero-fee angle to a proven high-intent content pocket.</div>
+        <div class="cal-notes">🎬 Film on iPhone in one take, natural light. Show real app screens via screen-record insert. No music needed — raw authenticity drives saves.</div>
+      </div>
+      <div class="cal-card">
+        <div class="cal-day">Post 2</div>
+        <div class="cal-hook">“Let&#x27;s clear the confusion: you do NOT need a bank account to send money internationally”</div>
+        <div class="cal-outline">Beat 1 (0-6s): Text pops on screen: &#x27;MYTH: You need a bank account to send money abroad.&#x27; Beat 2 (7-22s): Creator debunks — &#x27;All you need is a phone and the Speed app. Download, scan a QR code, done.&#x27; Beat 3 (23-42s): Quick screen-record of onboarding flow: download → create wallet → send — total 60 seconds shown. Beat 4 (43-58s): &#x27;No bank. No fees. No waiting. Speed Wallet — link in bio.&#x27;</div>
+        <div class="cal-foot">
+          <span class="badge seg remittance">remittance</span>
+          <span class="badge plat">TikTok</span>
+          <span class="cal-reach">~10,000–28,000 (myth-bust text-on-screen format mirrors index-4 benchmark at 13.0% ER; high save-rate expected ~4%)</span>
         </div>
-        <div class="idea">
-          <div class="idea-hook">“Did you know remittances are the true backbone of Nepal&#x27;s economy? Here&#x27;s how workers are getting robbed by fees.”</div>
-          <div class="idea-meta"><span class="fmt">carousel</span><span class="plat">Instagram Reels</span></div>
-          <div class="idea-why">The Nepal remittance TikTok earned 6.8% ER on 364K views — a carousel repackaging that emotional economic angle as shareable infographic content primes diaspora communities to tag and share Speed as the solution.</div>
-        </div></div><div class="rec-col"><div class="seg-chip cryptocurious">Crypto-Curious</div>
-        <div class="idea">
-          <div class="idea-hook">“Everyone&#x27;s saying Bitcoin is dead again. Here&#x27;s what always happens next.”</div>
-          <div class="idea-meta"><span class="fmt">60s video</span><span class="plat">YouTube</span></div>
-          <div class="idea-why">Bitcoin&#x27;s 5 Greatest Crashes video hit 251K views at 2.5% ER and the &#x27;I Sold Everything&#x27; video spiked on fear — Speed can ride the crash-narrative cycle by positioning Lightning as the calm, practical use case that survives every dip.</div>
+        <div class="cal-notes">🎬 Film talking-head segment on iPhone. Use built-in TikTok text tool for myth overlay. Screen-record onboarding on same phone. Total edit time: 10 mins in CapCut.</div>
+      </div>
+      <div class="cal-card">
+        <div class="cal-day">Post 3</div>
+        <div class="cal-hook">“Crypto gave me a superpower — I can send money anywhere in the world in 3 seconds”</div>
+        <div class="cal-outline">Beat 1 (0-8s): Creator: &#x27;I used to think crypto was complicated. Then I tried Bitcoin Lightning.&#x27; Beat 2 (9-28s): Show Speed app open — type an amount, hit send, recipient confirmation pops up. Stopwatch on screen: 3.2 seconds. Beat 3 (29-48s): &#x27;No exchange rate markups, no 3-5 business days, no nothing. Just money — instantly.&#x27; Beat 4 (49-58s): &#x27;First-timer? Speed Wallet is literally the easiest Bitcoin app I&#x27;ve used. Try it free.&#x27;</div>
+        <div class="cal-foot">
+          <span class="badge seg cryptocurious">crypto-curious</span>
+          <span class="badge plat">TikTok</span>
+          <span class="cal-reach">~18,000–55,000 (aspirational UGC mirrors index-21 at 450K views / 5.8% ER; Lightning speed demo adds save-rate lift)</span>
         </div>
-        <div class="idea">
-          <div class="idea-hook">“You don&#x27;t need to invest in Bitcoin. Just use it. I&#x27;ll show you in 60 seconds.”</div>
-          <div class="idea-meta"><span class="fmt">15s Short</span><span class="plat">TikTok</span></div>
-          <div class="idea-why">The 4M-view TikTok about Bitcoin&#x27;s design problem signals mass curiosity mixed with skepticism — Speed defuses the investing anxiety entirely by repositioning Bitcoin as a payments tool, not a speculation bet.</div>
+        <div class="cal-notes">🎬 Film UGC-style, slightly shaky for authenticity. Use phone stopwatch as prop. Screen-record the send flow as a picture-in-picture. No voiceover — speak naturally to camera.</div>
+      </div>
+      <div class="cal-card">
+        <div class="cal-day">Post 4</div>
+        <div class="cal-hook">“Which diaspora community sends the most money home — and which loses the most to fees?”</div>
+        <div class="cal-outline">Beat 1 (0-10s): Text cards flash — &#x27;Latin America: $96B sent home annually. Africa: $54B. Southeast Asia: $130B.&#x27; Beat 2 (11-28s): &#x27;But up to 6% disappears in fees every single time. That&#x27;s billions lost.&#x27; Beat 3 (29-48s): &#x27;Speed Wallet charges zero. Every dollar you send arrives whole.&#x27; Beat 4 (49-58s): &#x27;Tag someone who sends money home — they need to see this.&#x27;</div>
+        <div class="cal-foot">
+          <span class="badge seg remittance">remittance</span>
+          <span class="badge plat">Instagram Reels</span>
+          <span class="cal-reach">~12,000–40,000 (community identity hook mirrors index-17 at 601K views / 6.2% ER; stat-reveal format drives shares)</span>
         </div>
-        <div class="idea">
-          <div class="idea-hook">“I asked AI to predict Bitcoin to 2030. Then I stopped obsessing and just sent $10 to a friend instantly.”</div>
-          <div class="idea-meta"><span class="fmt">Story</span><span class="plat">Instagram Reels</span></div>
-          <div class="idea-why">The AI-predicts-Bitcoin TikTok pulled 2.9M views — Speed can subvert the hype format with a deadpan pivot that converts prediction-fatigue into first-use curiosity, targeting the crypto-curious who are tired of speculation content.</div>
-        </div></div><div class="rec-col"><div class="seg-chip iGaming">iGaming</div>
-        <div class="idea">
-          <div class="idea-hook">“Your withdrawal is still &#x27;processing&#x27;? Mine hit in 3 seconds. Here&#x27;s why.”</div>
-          <div class="idea-meta"><span class="fmt">15s Short</span><span class="plat">TikTok</span></div>
-          <div class="idea-why">iGaming trending content this week skews toward Bitcoin volatility and financial anxiety — Speed should cut through with a pure speed-of-settlement contrast ad that makes the 3-second Lightning withdrawal the hero moment players actually care about.</div>
+        <div class="cal-notes">🎬 Create stat cards in Canva (free). Record voiceover on iPhone. Assemble in CapCut with auto-captions. Budget: $0. Post Tuesday or Thursday for diaspora peak engagement.</div>
+      </div>
+      <div class="cal-card">
+        <div class="cal-day">Post 5</div>
+        <div class="cal-hook">“I deposited $50 into my gaming account and it cleared before I finished typing”</div>
+        <div class="cal-outline">Beat 1 (0-8s): Creator at laptop: &#x27;I&#x27;ve been waiting 3 days for a deposit to clear on [generic gaming site]. Never again.&#x27; Beat 2 (9-28s): Screen-record: open Speed Wallet, scan iGaming site&#x27;s QR code, confirm send — notification: &#x27;Deposit confirmed&#x27; in under 5 seconds. Beat 3 (29-48s): &#x27;Bitcoin Lightning is instant. No card declines, no bank blocks, no waiting.&#x27; Beat 4 (49-58s): &#x27;Speed Wallet. Download free. Your next deposit takes 5 seconds — link in bio.&#x27;</div>
+        <div class="cal-foot">
+          <span class="badge seg iGaming">iGaming</span>
+          <span class="badge plat">TikTok</span>
+          <span class="cal-reach">~5,000–18,000 (iGaming organic is thin — only 2 benchmark items — so conservative estimate; high intent audience means lower reach but strong CTR)</span>
         </div>
-        <div class="idea">
-          <div class="idea-hook">“Bitcoin dropped to $63K and I still cashed out my winnings instantly. Lightning doesn&#x27;t care about the price.”</div>
-          <div class="idea-meta"><span class="fmt">60s video</span><span class="plat">TikTok</span></div>
-          <div class="idea-why">Three iGaming-adjacent TikToks this week tied Bitcoin price drops to financial stress — Speed can own the counter-narrative by showing that Lightning settlement is price-agnostic, reassuring iGaming users that Speed works regardless of market conditions.</div>
-        </div>
-        <div class="idea">
-          <div class="idea-hook">“Someone said Bitcoin payments for gaming were &#x27;too complicated.&#x27; So I timed it. Watch.”</div>
-          <div class="idea-meta"><span class="fmt">Story</span><span class="plat">Instagram Reels</span></div>
-          <div class="idea-why">The Cred/WhatsApp fintech YouTube story shows iGaming audiences respond to credibility-through-simplicity narratives — a timed screen-record deposit/withdrawal Story directly dismantles the friction objection with zero scripted persuasion needed.</div>
-        </div></div></div>
+        <div class="cal-notes">🎬 Film laptop screen with phone camera or use screen-record. Keep energy high and casual. Do NOT show specific gambling platforms by name — keep generic. Film in one take.</div>
+      </div></div>
   </section>
 
   <section>
-    <div class="sec-head"><h2>Ad Creative Briefs</h2><span class="sec-note">Top 3 trending formats to test as paid ads</span></div>
-    <div class="briefs">
-      <div class="brief">
-        <div class="brief-n">1</div>
-        <div class="brief-body">
-          <div class="brief-fmt">15s Short</div>
-          <div class="brief-row"><span class="k">Hook to steal</span><span class="v">“Battle of the remittance apps — none of them are free. Until now.”</span></div>
-          <div class="brief-row"><span class="k">15-sec script</span><span class="v">0-3s: Rapid-cut logos of Remitly, Wise, Sendwave with fee ticker ticking up. 3-8s: VO — &#x27;Every one of these takes a cut of the money your family needs.&#x27; 8-13s: Speed app open, $200 sent, fee line reads $0.00. 13-15s: Super — &#x27;Speed. Zero fees. Instant.&#x27; CTA button: Download now.</span></div>
-          <div class="brief-row"><span class="k">Audience</span><span class="v">Meta: ages 22-45, interests in wire transfer / international money transfer / OFW / diaspora communities (Philippines, Nepal, Nigeria, Mexico); TikTok: behavioral targeting — remittance app users, fintech engagers</span></div>
-          <div class="brief-row"><span class="k">Est. CPI</span><span class="v cpi">$2.10–$2.80 — below $3.17 benchmark because the comparison-app format mirrors the 414K-view organic TikTok that already proved pull in this exact audience without paid spend; competitive fee contrast is a high-purchase-intent trigger for a pre-warmed segment</span></div>
+    <div class="sec-head"><h2>Paid Ad Creative Briefs</h2><span class="sec-note">3 concepts ready to brief · 15s structure</span></div>
+    <div class="paid-grid">
+      <div class="paid-card">
+        <div class="paid-n">1</div>
+        <div class="paid-body">
+          <div class="paid-row"><span class="k">Hook · 0-3s</span><span class="v">“She sent $300 home to her mom. Her mom received $283. Here&#x27;s what happened to the other $17.”</span></div>
+          <div class="paid-row"><span class="k">Problem · 4-8s</span><span class="v">Secs 4-8: Cut to fee breakdown screen — &#x27;5.7% transfer fee + exchange rate markup + processing charge.&#x27; Text overlay: &#x27;Traditional remittance apps take up to 6% every single time. That&#x27;s money your family never sees.&#x27;</span></div>
+          <div class="paid-row"><span class="k">Speed · 9-15s</span><span class="v">Secs 9-15: &#x27;Speed Wallet uses Bitcoin Lightning — the fastest payment network on earth. Zero fees. Your $300 arrives as $300. In seconds. Not days.&#x27; Show app send flow with $0 fee confirmed on screen.</span></div>
+          <div class="paid-row"><span class="k">CTA · final 3s</span><span class="v">Secs 16-18: &#x27;Download Speed Wallet free. Send your first payment — keep every dollar.&#x27; App store badge on screen.</span></div>
+          <div class="paid-row"><span class="k">Audience</span><span class="v">Meta: Interest targeting — international money transfer, Western Union, Remitly, MoneyGram, WorldRemit + Hispanic/Latino diaspora, Filipino-American, West African-American demographics, ages 22-45, US only. Lookalike: 1% LAL from Speed existing users.</span></div>
+          <div class="paid-row"><span class="k">Est. CPI</span><span class="v cpi">$1.80–$2.60 vs $3.17 benchmark — fear-of-loss fee reveal is a high-intent trigger for an audience actively sending remittances; problem is immediately recognizable, reducing funnel friction</span></div>
         </div>
       </div>
-      <div class="brief">
-        <div class="brief-n">2</div>
-        <div class="brief-body">
-          <div class="brief-fmt">15s Short</div>
-          <div class="brief-row"><span class="k">Hook to steal</span><span class="v">“Everyone&#x27;s saying Bitcoin is dead again. You don&#x27;t have to invest. Just use it.”</span></div>
-          <div class="brief-row"><span class="k">15-sec script</span><span class="v">0-3s: Montage of &#x27;Bitcoin is dead&#x27; headlines flashing fast. 3-7s: VO — &#x27;You&#x27;ve heard this 472 times. Relax. You don&#x27;t need to bet on it.&#x27; 7-12s: Screen record — user opens Speed, sends $5 to a friend, confirmed in 2 seconds. 12-15s: Super — &#x27;Bitcoin payments. No charts required.&#x27; CTA: Try Speed free.</span></div>
-          <div class="brief-row"><span class="k">Audience</span><span class="v">Meta: ages 18-35, interests in cryptocurrency / Bitcoin / investing beginners / fintech; TikTok: lookalike of crypto-curious engagers, exclude existing Bitcoin wallet owners to stay top-of-funnel</span></div>
-          <div class="brief-row"><span class="k">Est. CPI</span><span class="v cpi">$2.50–$3.40 — near benchmark; crypto-curious audience is large but broad, creative must work hard to separate from noise; the anxiety-subversion angle differentiates from typical &#x27;buy Bitcoin&#x27; ads and should outperform generic crypto creatives proven in the 4M-view organic TikTok context</span></div>
+      <div class="paid-card">
+        <div class="paid-n">2</div>
+        <div class="paid-body">
+          <div class="paid-row"><span class="k">Hook · 0-3s</span><span class="v">“I tried Bitcoin for the first time last week. It took me 60 seconds. Here&#x27;s exactly what I did.”</span></div>
+          <div class="paid-row"><span class="k">Problem · 4-8s</span><span class="v">Secs 4-8: &#x27;Everyone told me crypto was complicated — wallets, seed phrases, exchanges. I almost didn&#x27;t bother.&#x27; Text: &#x27;The #1 reason people never try Bitcoin: it sounds too hard.&#x27;</span></div>
+          <div class="paid-row"><span class="k">Speed · 9-15s</span><span class="v">Secs 9-15: &#x27;Speed Wallet changed that. I downloaded it, skipped the confusing stuff, and sent my first Bitcoin payment in under a minute. No exchange account. No technical knowledge. Just tap, scan, done.&#x27; Show clean onboarding screen-record at 2x speed.</span></div>
+          <div class="paid-row"><span class="k">CTA · final 3s</span><span class="v">Secs 16-18: &#x27;Your first Bitcoin transaction is free. Download Speed Wallet now.&#x27; Bold text on clean background.</span></div>
+          <div class="paid-row"><span class="k">Audience</span><span class="v">TikTok: Interest — personal finance, investing for beginners, fintech apps, Coinbase, Cash App users. Behavioral: engaged with crypto content but no crypto app install signal. Ages 18-34, US. Exclude: existing crypto wallet owners.</span></div>
+          <div class="paid-row"><span class="k">Est. CPI</span><span class="v cpi">$2.50–$3.40 vs $3.17 benchmark — curiosity-gap &#x27;first time&#x27; UGC format performs well for fintech but crypto-curious segment requires slightly more education, keeping CPI near benchmark; TikTok&#x27;s lower CPM partially offsets</span></div>
         </div>
       </div>
-      <div class="brief">
-        <div class="brief-n">3</div>
-        <div class="brief-body">
-          <div class="brief-fmt">60s video</div>
-          <div class="brief-row"><span class="k">Hook to steal</span><span class="v">“Your withdrawal is still processing. Mine cleared 3 seconds ago.”</span></div>
-          <div class="brief-row"><span class="k">15-sec script</span><span class="v">0-5s: Player character waiting, progress bar spinning, frustrated face. 5-15s: VO — &#x27;Traditional casino withdrawals take hours, sometimes days. Your money just sits there.&#x27; 15-35s: Side-by-side screen record — legacy withdrawal pending vs Speed Lightning withdrawal confirmed in real time with timestamp. 35-50s: VO — &#x27;Speed uses Bitcoin Lightning. No bank. No wait. No cut.&#x27; Show deposit flow equally fast. 50-60s: Super — &#x27;Instant in. Instant out. Speed Wallet.&#x27; CTA overlay: Download and fund in 60 seconds.</span></div>
-          <div class="brief-row"><span class="k">Audience</span><span class="v">Meta: ages 21-45, interests in online casino / sports betting / poker / iGaming; behavioral — frequent mobile app purchasers; TikTok: interests in casino games, gambling apps, Bitcoin payments; geo-target regulated iGaming markets</span></div>
-          <div class="brief-row"><span class="k">Est. CPI</span><span class="v cpi">$3.00–$4.20 — slightly above benchmark possible because iGaming audiences are high-LTV but also heavily contested by casino brands with large budgets; the Lightning speed-proof format is a direct functional differentiator that should keep CPI competitive if creative hooks within first 3 seconds; optimize toward deposit-event not just install to justify higher CPIs</span></div>
+      <div class="paid-card">
+        <div class="paid-n">3</div>
+        <div class="paid-body">
+          <div class="paid-row"><span class="k">Hook · 0-3s</span><span class="v">“Your deposit is still &#x27;processing&#x27;? I&#x27;ll show you how to fix that in 30 seconds.”</span></div>
+          <div class="paid-row"><span class="k">Problem · 4-8s</span><span class="v">Secs 4-8: Split screen — left: &#x27;Deposit pending… estimated 1-3 business days&#x27; with frustrated player. Right: clock ticking. &#x27;Card declines. Bank blocks. Waiting. iGaming deposits shouldn&#x27;t work like this.&#x27;</span></div>
+          <div class="paid-row"><span class="k">Speed · 9-15s</span><span class="v">Secs 9-15: &#x27;Speed Wallet sends Bitcoin Lightning payments instantly — no bank in the middle, no holds, no declines. Scan the site&#x27;s QR code, confirm, and your balance is live in under 5 seconds. Withdraw the same way.&#x27; Show real-time deposit confirmation animation.</span></div>
+          <div class="paid-row"><span class="k">CTA · final 3s</span><span class="v">Secs 16-18: &#x27;Download Speed Wallet. Instant deposits, instant withdrawals — always.&#x27; App store CTA with urgency text: &#x27;Don&#x27;t miss another hand.&#x27;</span></div>
+          <div class="paid-row"><span class="k">Audience</span><span class="v">Meta + TikTok: Interest — online poker, sports betting, fantasy sports, DraftKings, FanDuel, casino games. Behavioral: mobile gaming app installs, high LTV spender signals. Ages 21-45, US states where iGaming is legal (NJ, PA, MI, CO, IL, NV). Exclude: flagged problem gambling audiences per platform policy.</span></div>
+          <div class="paid-row"><span class="k">Est. CPI</span><span class="v cpi">$2.20–$3.00 vs $3.17 benchmark — iGaming audience has extremely high payment urgency (every second of delay = lost action); problem-solution fit is near-perfect, driving above-average CVR and suppressing CPI below benchmark</span></div>
         </div>
       </div></div>
   </section>
 
   <section>
-    <div class="sec-head"><h2>What Died This Week</h2><span class="sec-note">Losing traction vs last week — don't make these</span></div>
-    <ul class="died-list"><li>crypto|YouTube: reach fell -24% week-over-week — cooling off.</li><li>bitcoin|TikTok: reach fell -19% week-over-week — cooling off.</li><li>#bullrun (TikTok) dropped out of the top hashtags.</li><li>#cryptocrash (TikTok) dropped out of the top hashtags.</li><li>#cryptonews (TikTok) dropped out of the top hashtags.</li><li>#foryou (TikTok) dropped out of the top hashtags.</li><li>#shibaarmy (TikTok) dropped out of the top hashtags.</li><li>#shibaswap (TikTok) dropped out of the top hashtags.</li></ul>
+    <div class="sec-head"><h2>What's Dying</h2><span class="sec-note">Losing traction — don't make these</span></div>
+    <ul class="died-list"><li>bitcoin|YouTube: reach fell -22% week-over-week — cooling off.</li><li>money transfer|YouTube: reach fell -51% week-over-week — cooling off.</li><li>fintech|YouTube: reach fell -39% week-over-week — cooling off.</li><li>send money|YouTube: reach fell -42% week-over-week — cooling off.</li><li>lightning network|YouTube: reach fell -79% week-over-week — cooling off.</li><li>bitcoin|TikTok: reach fell -84% week-over-week — cooling off.</li><li>#bullrun (TikTok) dropped out of the top hashtags.</li><li>#cryptocrash (TikTok) dropped out of the top hashtags.</li></ul>
   </section>
 
   <section>
-    <div class="sec-head"><h2>Platform Signal</h2><span class="sec-note">Avg engagement rate · TikTok vs YouTube per segment</span></div>
+    <div class="sec-head"><h2>Platform Signal</h2><span class="sec-note">Avg engagement · TikTok vs YouTube per segment</span></div>
     <div class="signal">
       <div class="sig-row">
         <div class="sig-seg">Remittance</div>
         <div class="sig-bars">
-          <div class="sig-bar"><span class="sig-lab">YT</span><div class="sig-track"><div class="sig-fill yt" style="width:43%"></div></div><span class="sig-val">2.2%</span></div>
-          <div class="sig-bar"><span class="sig-lab">TT</span><div class="sig-track"><div class="sig-fill tt" style="width:100%"></div></div><span class="sig-val">5.1%</span></div>
+          <div class="sig-bar"><span class="sig-lab">YT</span><div class="sig-track"><div class="sig-fill yt" style="width:43%"></div></div><span class="sig-val">3.5%</span></div>
+          <div class="sig-bar"><span class="sig-lab">TT</span><div class="sig-track"><div class="sig-fill tt" style="width:100%"></div></div><span class="sig-val">8.2%</span></div>
         </div>
         <div class="sig-win">TikTok stronger</div>
       </div>
-
       <div class="sig-row">
         <div class="sig-seg">Crypto-Curious</div>
         <div class="sig-bars">
-          <div class="sig-bar"><span class="sig-lab">YT</span><div class="sig-track"><div class="sig-fill yt" style="width:100%"></div></div><span class="sig-val">5.2%</span></div>
-          <div class="sig-bar"><span class="sig-lab">TT</span><div class="sig-track"><div class="sig-fill tt" style="width:87%"></div></div><span class="sig-val">4.5%</span></div>
+          <div class="sig-bar"><span class="sig-lab">YT</span><div class="sig-track"><div class="sig-fill yt" style="width:57%"></div></div><span class="sig-val">3.1%</span></div>
+          <div class="sig-bar"><span class="sig-lab">TT</span><div class="sig-track"><div class="sig-fill tt" style="width:100%"></div></div><span class="sig-val">5.4%</span></div>
         </div>
-        <div class="sig-win">YouTube stronger</div>
+        <div class="sig-win">TikTok stronger</div>
       </div>
-
       <div class="sig-row">
         <div class="sig-seg">iGaming</div>
         <div class="sig-bars">
-          <div class="sig-bar"><span class="sig-lab">YT</span><div class="sig-track"><div class="sig-fill yt" style="width:11%"></div></div><span class="sig-val">0.2%</span></div>
-          <div class="sig-bar"><span class="sig-lab">TT</span><div class="sig-track"><div class="sig-fill tt" style="width:100%"></div></div><span class="sig-val">2.2%</span></div>
+          <div class="sig-bar"><span class="sig-lab">YT</span><div class="sig-track"><div class="sig-fill yt" style="width:0%"></div></div><span class="sig-val">0.0%</span></div>
+          <div class="sig-bar"><span class="sig-lab">TT</span><div class="sig-track"><div class="sig-fill tt" style="width:100%"></div></div><span class="sig-val">2.5%</span></div>
         </div>
         <div class="sig-win">TikTok stronger</div>
       </div></div>
   </section>
 
   <footer>
-    Data: YouTube Data API (trending, last 7 days) + TikTok via Apify · recommendations &amp; briefs by Claude (claude-sonnet-4-6).<br>
+    Data: YouTube Data API (US, trending last 7d) + TikTok via Apify (English-only) · enrichment, calendar &amp; briefs by Claude (claude-sonnet-4-6).<br>
     Rebuilt weekly by pipelines/build_trend_dashboard.py.
   </footer>
 </div>
