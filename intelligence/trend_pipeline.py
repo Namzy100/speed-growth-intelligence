@@ -46,13 +46,26 @@ _RESULTS_PER_QUERY = 30
 _PER_CATEGORY = 15
 _BENCHMARK_CPI = 3.17
 
+# Instagram has no login-free hashtag discovery, so Reels are pulled PROFILE-based
+# from a seed list of US fintech/crypto/remittance creators (username mode works
+# without login). Add/remove handles here — irrelevant or off-topic reels are
+# filtered out downstream by segment classification + the top-hooks view floor.
+_IG_ACTOR = "apify/instagram-reel-scraper"
+_IG_RESULTS_PER_HANDLE = 6
+INSTAGRAM_HANDLES = [
+    "coinbureau", "aantonop", "cryptosrus", "altcoinbuzz", "boxmining",
+    "digitalassetbuyingclub", "wenmoon", "cryptobanter", "themoonnCarl",
+    "bitcoinbravado", "sendwyre", "strike", "cashapp", "moonpay", "bitrefill",
+]
+
 # Replicability thresholds (the "anyone-with-a-phone-could-make-this" signal).
 _SMALL_VIEWS = 500_000
 _SMALL_SUBS = 500_000
 _HIGH_ER = 0.03
 _HIGH_SAVE_RATE = 0.02
 
-_FILTER_STATS = {"youtube_filtered": 0, "tiktok_filtered": 0, "non_us": 0}
+_FILTER_STATS = {"youtube_filtered": 0, "tiktok_filtered": 0, "non_us": 0,
+                 "instagram_filtered": 0}
 
 _IGAMING_KW = {"casino", "bet", "betting", "gambling", "gamble", "poker", "slots",
                "sportsbook", "wager", "roulette", "blackjack", "jackpot", "stake"}
@@ -240,6 +253,61 @@ def _fetch_tiktok(fetcher: TikTokCreatorFetcher, term: str) -> list[dict]:
 
 
 # ------------------------------------------------------------------
+# Instagram Reels (Apify, profile/username mode — works without login)
+# ------------------------------------------------------------------
+
+def _fetch_instagram_reels(handles: list[str]) -> list[dict]:
+    """Recent Reels from a seed list of creator handles, shaped like YT/TikTok items.
+
+    Instagram blocks login-free hashtag discovery, so this scrapes named profiles
+    instead. Handles with no public reels return error records (skipped). Off-topic
+    or old reels are filtered out later by segment classification + the view floor.
+    """
+    from apify_client import ApifyClient
+    client = ApifyClient(os.getenv("APIFY_API_KEY"))
+    try:
+        run = client.actor(_IG_ACTOR).call(run_input={
+            "username": handles, "resultsLimit": _IG_RESULTS_PER_HANDLE})
+        ds = run.default_dataset_id if hasattr(run, "default_dataset_id") else run["defaultDatasetId"]
+        items = list(client.dataset(ds).iterate_items())
+    except Exception as e:
+        print(f"    Instagram Reels fetch failed: {e}")
+        return []
+
+    out = []
+    for it in items:
+        if it.get("error") or "videoViewCount" not in it:
+            continue  # no-reels / restricted / error record
+        views = int(it.get("videoViewCount", 0) or 0)
+        if views <= 0:
+            continue
+        caption = " ".join(str(it.get("caption", "")).split())
+        if not _is_english(caption):
+            _FILTER_STATS["instagram_filtered"] += 1
+            continue
+        likes = int(it.get("likesCount", 0) or 0)
+        comments = int(it.get("commentsCount", 0) or 0)
+        handle = it.get("ownerUsername", "")
+        item = {
+            "platform": "Instagram", "category": handle,
+            "segment": classify_segment(caption, handle),
+            "title": caption[:140], "channel": handle,
+            "views": views, "likes": likes, "comments": comments, "shares": 0,
+            "saves": 0, "er": round((likes + comments) / views, 4),
+            "save_rate": 0.0, "subs": 0,
+            "publish_date": str(it.get("timestamp", ""))[:10],
+            "url": it.get("url", ""), "hashtags": [],
+            "thumbnail": "", "hook": hook_pattern(caption),
+        }
+        # Reels are phone-native like TikTok; high engagement marks copyable pieces.
+        item["replicable"] = item["er"] > _HIGH_ER
+        item["track"] = classify_track(item)
+        out.append(item)
+    out.sort(key=lambda x: x["views"], reverse=True)
+    return out
+
+
+# ------------------------------------------------------------------
 # Collect
 # ------------------------------------------------------------------
 
@@ -269,7 +337,17 @@ def collect_signals() -> dict:
             yt_unique.append(v)
     youtube = yt_unique
 
-    all_items = youtube + tiktok
+    print(f"Scanning Instagram Reels ({len(INSTAGRAM_HANDLES)} handles)...")
+    instagram = _fetch_instagram_reels(INSTAGRAM_HANDLES)
+    print(f"  Instagram(en): {len(instagram)}")
+
+    # Deduplicate every source by URL.
+    all_items, urls = [], set()
+    for v in youtube + tiktok + instagram:
+        if v["url"] and v["url"] not in urls:
+            urls.add(v["url"])
+            all_items.append(v)
+
     # Top hooks: rank by ER, but only genuinely relevant, English, non-trivial
     # items — exclude 'general' (viral junk that merely matched a search term)
     # and re-apply the English check to the hook text itself.
@@ -278,32 +356,37 @@ def collect_signals() -> dict:
          and v["segment"] in _SEGMENTS and _is_english(v["title"])],
         key=lambda x: x["er"], reverse=True)
 
-    by_segment = {seg: {"youtube": [], "tiktok": [], "organic": [], "paid": []} for seg in _SEGMENTS}
+    _BUCKET = {"YouTube": "youtube", "TikTok": "tiktok", "Instagram": "instagram"}
+    by_segment = {seg: {"youtube": [], "tiktok": [], "instagram": [], "organic": [], "paid": []}
+                  for seg in _SEGMENTS}
     for v in all_items:
         seg = v["segment"]
         if seg not in by_segment:
             continue
-        by_segment[seg]["youtube" if v["platform"] == "YouTube" else "tiktok"].append(v)
+        by_segment[seg][_BUCKET[v["platform"]]].append(v)
         by_segment[seg][v["track"]].append(v)
 
     signal = {}
     for seg in _SEGMENTS:
-        yv, tv = by_segment[seg]["youtube"], by_segment[seg]["tiktok"]
+        yv, tv, iv = (by_segment[seg]["youtube"], by_segment[seg]["tiktok"],
+                      by_segment[seg]["instagram"])
         signal[seg] = {
             "youtube_er": round(sum(x["er"] for x in yv) / len(yv), 4) if yv else 0.0,
             "tiktok_er": round(sum(x["er"] for x in tv) / len(tv), 4) if tv else 0.0,
-            "youtube_n": len(yv), "tiktok_n": len(tv),
+            "instagram_er": round(sum(x["er"] for x in iv) / len(iv), 4) if iv else 0.0,
+            "youtube_n": len(yv), "tiktok_n": len(tv), "instagram_n": len(iv),
         }
 
-    snapshot = _snapshot(youtube, tiktok)
+    snapshot = _snapshot(youtube, tiktok + instagram)
     feedback, died = _feedback(snapshot, _prior_snapshot())
 
     print(f"Filters dropped: {_FILTER_STATS['youtube_filtered']} non-English YT, "
-          f"{_FILTER_STATS['non_us']} non-US YT, {_FILTER_STATS['tiktok_filtered']} non-English TikTok.")
+          f"{_FILTER_STATS['non_us']} non-US YT, {_FILTER_STATS['tiktok_filtered']} non-English TikTok, "
+          f"{_FILTER_STATS['instagram_filtered']} non-English IG.")
 
     return {
         "generated_at": datetime.now(timezone.utc).isoformat(),
-        "youtube": youtube, "tiktok": tiktok, "all_items": all_items,
+        "youtube": youtube, "tiktok": tiktok, "instagram": instagram, "all_items": all_items,
         "top_hooks": top_hooks, "by_segment": by_segment, "platform_signal": signal,
         "snapshot": snapshot, "feedback": feedback, "died": died,
         "filter_stats": dict(_FILTER_STATS),

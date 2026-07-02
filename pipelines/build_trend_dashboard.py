@@ -164,7 +164,7 @@ def render_hooks(candidates: list[dict], enrich: dict) -> str:
         rank += 1
         if rank > _TOP_HOOKS:
             break
-        plat_cls = "yt" if v["platform"] == "YouTube" else "tt"
+        plat_cls = {"YouTube": "yt", "TikTok": "tt", "Instagram": "ig"}.get(v["platform"], "tt")
         rows.append(f"""
       <div class="hook-card">
         <div class="hook-rank">{rank}</div>
@@ -236,17 +236,20 @@ def render_signal(data: dict) -> str:
     rows = []
     for seg in _SEGMENTS:
         s = sig.get(seg, {})
-        yt, tt = s.get("youtube_er", 0), s.get("tiktok_er", 0)
-        mx = max(yt, tt, 0.0001)
-        winner = "TikTok" if tt > yt else "YouTube" if yt > tt else "Even"
+        yt, tt, ig = s.get("youtube_er", 0), s.get("tiktok_er", 0), s.get("instagram_er", 0)
+        mx = max(yt, tt, ig, 0.0001)
+        ranked = {"YouTube": yt, "TikTok": tt, "Instagram": ig}
+        top = max(ranked, key=ranked.get)
+        winner = f"{top} stronger" if ranked[top] > 0 else "no data"
         rows.append(f"""
       <div class="sig-row">
         <div class="sig-seg">{_e(_SEG_LABEL[seg])}</div>
         <div class="sig-bars">
           <div class="sig-bar"><span class="sig-lab">YT</span><div class="sig-track"><div class="sig-fill yt" style="width:{yt/mx*100:.0f}%"></div></div><span class="sig-val">{yt:.1%}</span></div>
           <div class="sig-bar"><span class="sig-lab">TT</span><div class="sig-track"><div class="sig-fill tt" style="width:{tt/mx*100:.0f}%"></div></div><span class="sig-val">{tt:.1%}</span></div>
+          <div class="sig-bar"><span class="sig-lab">IG</span><div class="sig-track"><div class="sig-fill ig" style="width:{ig/mx*100:.0f}%"></div></div><span class="sig-val">{ig:.1%}</span></div>
         </div>
-        <div class="sig-win">{winner} stronger</div>
+        <div class="sig-win">{winner}</div>
       </div>""")
     return "".join(rows)
 
@@ -254,9 +257,10 @@ def render_signal(data: dict) -> str:
 def render(data: dict, enrich: dict, candidates: list[dict]) -> str:
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     fs = data.get("filter_stats", {})
-    counts = (f"{len(data['youtube'])} YouTube · {len(data['tiktok'])} TikTok (US + English) · "
+    counts = (f"{len(data['youtube'])} YouTube · {len(data['tiktok'])} TikTok · "
+              f"{len(data.get('instagram', []))} Instagram Reels (US + English) · "
               f"filtered {fs.get('non_us',0)+fs.get('youtube_filtered',0)} non-US/EN YT, "
-              f"{fs.get('tiktok_filtered',0)} non-EN TikTok")
+              f"{fs.get('tiktok_filtered',0)} non-EN TikTok, {fs.get('instagram_filtered',0)} non-EN IG")
     repl = {
         "/*__SYNC__*/": now, "/*__COUNTS__*/": counts,
         "/*__HOOKS__*/": render_hooks(candidates, enrich),
@@ -303,7 +307,7 @@ _TEMPLATE = r"""<!doctype html>
     --text:#edf1f7; --muted:#9aa4b2; --faint:#6b7585;
     --accent:#6e40c9; --accent-2:#a371f7;
     --good:#3fb950; --warn:#e3b341; --bad:#f85149; --gold:#ffd66e;
-    --yt:#ff4d4d; --tt:#25f4ee;
+    --yt:#ff4d4d; --tt:#25f4ee; --ig:#dd2a7b;
     --grad:linear-gradient(120deg,#6e40c9,#a371f7);
     --shadow:0 10px 30px -14px rgba(0,0,0,0.7);
     --r-lg:16px; --r-md:12px; --r-sm:9px;
@@ -330,6 +334,7 @@ _TEMPLATE = r"""<!doctype html>
   .sec-note{font-size:12px; color:var(--faint);}
   .badge{display:inline-flex; align-items:center; font-size:10px; font-weight:800; padding:2px 8px; border-radius:6px; letter-spacing:0.03em;}
   .badge.yt{background:var(--yt); color:#fff;} .badge.tt{background:var(--tt); color:#04201f;}
+  .badge.ig{background:linear-gradient(120deg,#f58529,#dd2a7b,#8134af); color:#fff;}
   .badge.plat{background:var(--panel-2); color:var(--muted);}
   .badge.seg{color:#0d1117;} .badge.seg.remittance{background:var(--seg-remittance);} .badge.seg.cryptocurious{background:var(--seg-cryptocurious);} .badge.seg.iGaming{background:var(--seg-iGaming);}
   .empty{color:var(--faint); font-size:13px; padding:10px 0;}
@@ -385,7 +390,7 @@ _TEMPLATE = r"""<!doctype html>
   .sig-bar{display:flex; align-items:center; gap:8px; margin:4px 0;}
   .sig-lab{font-size:10px; color:var(--faint); font-weight:700; width:20px;}
   .sig-track{flex:1; height:8px; background:rgba(255,255,255,0.06); border-radius:5px; overflow:hidden;}
-  .sig-fill{height:100%; border-radius:5px;} .sig-fill.yt{background:var(--yt);} .sig-fill.tt{background:var(--tt);}
+  .sig-fill{height:100%; border-radius:5px;} .sig-fill.yt{background:var(--yt);} .sig-fill.tt{background:var(--tt);} .sig-fill.ig{background:linear-gradient(90deg,#dd2a7b,#8134af);}
   .sig-val{font-size:11px; font-variant-numeric:tabular-nums; color:var(--muted); width:44px; text-align:right;}
   .sig-win{font-size:12px; font-weight:700; color:var(--accent-2); text-align:right;}
 
