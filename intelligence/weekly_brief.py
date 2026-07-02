@@ -291,6 +291,14 @@ def _fmt_meta_campaigns(df: pd.DataFrame) -> str:
     return "\n".join(lines)
 
 
+# Adjust retention cohorts lag ~2 days: D1 return events keep getting attributed
+# for a couple of days after install, so the two most-recent cohort days always
+# read artificially low (e.g. a fresh cohort showing 12% D1 next to a stable 25%
+# band). We exclude the 2 most-recent cohort days from every D1 stat and flag them
+# as immature rather than let them trigger a false "retention collapse" alarm.
+_IMMATURE_COHORT_DAYS = 2
+
+
 def _fmt_retention(df: pd.DataFrame) -> str:
     df = df.copy()
     for col in df.columns:
@@ -299,27 +307,37 @@ def _fmt_retention(df: pd.DataFrame) -> str:
     if "day" in df.columns:
         df = df.sort_values("day", ascending=False)
 
-    # A DN retention figure is only valid once N full days have elapsed since the
-    # cohort's install day. Cohorts where cohort_day + N >= today are still maturing
-    # and read artificially low — including them produces false "collapse" alarms.
     today = datetime.now(timezone.utc).date()
 
-    lines = ["D1 RETENTION BY DATE (most recent first; immature cohorts excluded)"]
+    def _cohort_date(day):
+        try:
+            return datetime.strptime(str(day), "%Y-%m-%d").date()
+        except (ValueError, TypeError):
+            return None
+
+    # The N most-recent cohort dates present are treated as immature (data lag).
+    dated = [d for d in (_cohort_date(r.get("day", "")) for _, r in df.iterrows()) if d]
+    immature_dates = set(sorted(set(dated), reverse=True)[:_IMMATURE_COHORT_DAYS])
+
+    lines = ["D1 RETENTION BY DATE (most recent first)"]
     d1_values = []
-    immature = 0
+    excluded = 0
     for _, row in df.iterrows():
         day = row.get("day", "")
-        try:
-            cohort_date = datetime.strptime(str(day), "%Y-%m-%d").date()
-        except (ValueError, TypeError):
-            cohort_date = None
+        cohort_date = _cohort_date(day)
+        d1 = float(row.get("retention_rate_d1", 0))
 
-        # D1 matures only after the day following the cohort has fully elapsed.
-        if cohort_date is not None and cohort_date + timedelta(days=1) >= today:
-            immature += 1
+        # Immature if among the 2 most-recent cohort days OR the day-after hasn't
+        # fully elapsed yet — either way it's excluded from the D1 average.
+        is_immature = (cohort_date is not None and
+                       (cohort_date in immature_dates
+                        or cohort_date + timedelta(days=1) >= today))
+        if is_immature:
+            excluded += 1
+            note = f"  {day}: D1={d1:.1%} (IMMATURE — cohort still maturing, excluded from average)"
+            lines.append(note)
             continue
 
-        d1 = float(row.get("retention_rate_d1", 0))
         if d1 == 0:
             continue
         d7 = float(row.get("retention_rate_d7", 0))
@@ -327,16 +345,16 @@ def _fmt_retention(df: pd.DataFrame) -> str:
         lines.append(f"  {day}: D1={d1:.1%}{d7_str}")
         d1_values.append(d1)
 
-    if immature:
-        lines.append(
-            f"  ({immature} most recent cohort day(s) excluded — D1 not yet matured)"
-        )
+    if excluded:
+        lines.append(f"  ({excluded} most-recent cohort day(s) flagged immature and "
+                     f"excluded — Adjust retention lags ~{_IMMATURE_COHORT_DAYS} days)")
 
-    if len(d1_values) >= 4:
+    if d1_values:
         recent = d1_values[:7]
+        recent_avg = sum(recent) / len(recent)
+        lines.append(f"  D1 AVERAGE (matured cohorts, last {len(recent)}d): {recent_avg:.1%}")
         older = d1_values[7:14]
         if older:
-            recent_avg = sum(recent) / len(recent)
             older_avg = sum(older) / len(older)
             delta = recent_avg - older_avg
             trend = "improving" if delta > 0.01 else "declining" if delta < -0.01 else "flat"

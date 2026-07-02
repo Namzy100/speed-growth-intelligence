@@ -97,19 +97,27 @@ def current_kpis(spreadsheet_id: str) -> dict:
     meta = data.get("meta_campaigns", pd.DataFrame())
     meta_spend = float(_num(meta["spend"]).sum()) if "spend" in meta else 0.0
 
-    # D1: average of matured cohorts only (cohort_day + 1 < today), last 7.
+    # D1: average of matured cohorts, last 7. Adjust retention lags ~2 days, so the
+    # 2 most-recent cohort days are always immature (under-counted) and excluded —
+    # matches weekly_brief._fmt_retention so the email's KPI agrees with the brief.
     ret = data.get("retention", pd.DataFrame())
     d1 = 0.0
     if {"day", "retention_rate_d1"} <= set(ret.columns):
         today = datetime.now(timezone.utc).date()
+
+        def _cd(day):
+            try:
+                return datetime.strptime(str(day), "%Y-%m-%d").date()
+            except (ValueError, TypeError):
+                return None
+
+        dated = [d for d in (_cd(r["day"]) for _, r in ret.iterrows()) if d]
+        immature = set(sorted(set(dated), reverse=True)[:2])
         vals = []
         for _, r in ret.sort_values("day", ascending=False).iterrows():
-            try:
-                cohort = datetime.strptime(str(r["day"]), "%Y-%m-%d").date()
-            except (ValueError, TypeError):
-                continue
-            if cohort + timedelta(days=1) >= today:
-                continue  # immature
+            cohort = _cd(r["day"])
+            if cohort is None or cohort in immature or cohort + timedelta(days=1) >= today:
+                continue  # immature — excluded
             v = float(pd.to_numeric(r["retention_rate_d1"], errors="coerce") or 0)
             if v > 0:
                 vals.append(v)
