@@ -229,6 +229,15 @@ def _rebuild_trend_dashboard() -> bool:
     if datetime.now(timezone.utc).weekday() != 0:  # 0 = Monday
         _log("Trend dashboard: skipped (only rebuilds on Mondays).")
         return True
+    # Auto-fill posted paid-brief results from Meta/Adjust BEFORE the rebuild, so
+    # the imported numbers are already in dashboard_state.json when it bakes.
+    try:
+        from pipelines import import_results
+        _log("Trend results: importing posted paid results from Meta/Adjust...")
+        import_results.run()
+    except Exception as e:  # best-effort — never block the rebuild
+        _log(f"Trend results: import skipped ({e})")
+
     _log("Trend dashboard: rebuilding docs/trend_dashboard.html (YouTube+TikTok+Claude)...")
     try:
         build_trend_dashboard.main()

@@ -189,6 +189,9 @@ def merge_state(prev: dict, recs: list[dict], week: str) -> dict:
             "payload": rec["payload"],
             "status": old.get("status", "suggested"),
             "results": old.get("results", {"views": None, "er": None, "saves": None}),
+            # Preserve auto-import provenance + the Meta match key across rebuilds.
+            "results_source": old.get("results_source"),
+            "ad_ref": old.get("ad_ref"),
             "first_seen": old.get("first_seen", week), "last_seen": week,
         }
     for iid, old in prev_items.items():
@@ -287,8 +290,11 @@ def _results_block(item: dict) -> str:
     r = item.get("results") or {}
     def val(k):
         return "" if r.get(k) in (None, "") else _e(r.get(k))
+    # Manual inputs are always available (unchanged). An auto-import readout +
+    # source badge appear on top when the importer has filled real numbers.
     return f"""
         <div class="results" data-role="results">
+          <div class="res-auto" data-role="autoread"></div>
           <div class="res-inputs">
             <label>Views <input type="number" data-f="views" value="{val('views')}" placeholder="—"></label>
             <label>ER % <input type="number" step="0.1" data-f="er" value="{val('er')}" placeholder="—"></label>
@@ -389,7 +395,7 @@ def render_calendar(items: dict) -> str:
         <div class="rec-top">
           <span class="badge seg {str(it.get('segment','')).replace('-','')}">{_e(it.get('segment'))}</span>
           <span class="badge plat">{_e(p.get('platform'))}</span>
-          {_status_tag(it)}{carried}
+          {_status_tag(it)}<span class="src-badge" data-role="source"></span>{carried}
         </div>
         <div class="rec-hook">“{_e(it['hook'])}”</div>
         <div class="rec-line"><span class="rec-est">Est. reach ~{_e(it.get('estimate'))}</span></div>
@@ -414,10 +420,12 @@ def render_paid(items: dict) -> str:
       <div class="rec-card" data-id="{_e(it['id'])}" data-est="">
         <div class="rec-top">
           <span class="badge seg {str(it.get('segment','')).replace('-','')}">{_e(it.get('segment'))}</span>
-          {_status_tag(it)}{carried}
+          {_status_tag(it)}<span class="src-badge" data-role="source"></span>{carried}
         </div>
         <div class="rec-hook">“{_e(it['hook'])}”</div>
         <div class="rec-line"><span class="rec-est cpi">Est. CPI {_e(it.get('estimate'))}</span></div>
+        <label class="adref">Meta ad / campaign name (for auto-import)
+          <input type="text" data-f="ad_ref" value="{_e(it.get('ad_ref') or '')}" placeholder="e.g. Payday - Android - Broad+"></label>
         <button class="expand" data-act="expand">▾ full 15s script</button>
         <div class="rec-detail" hidden>
           <div class="paid-row"><span class="k">Problem · 4-8s</span> {_e(p.get('problem'))}</div>
@@ -627,6 +635,12 @@ _TEMPLATE = r"""<!doctype html>
   .res-inputs input{width:80px; background:#0e1117; border:1px solid var(--hairline); border-radius:6px; color:var(--text); padding:5px 7px; font-size:12px; font-family:inherit;}
   .res-compare{font-size:12px; margin-top:9px; font-weight:600;}
   .res-compare .beat{color:var(--good);} .res-compare .miss{color:var(--bad);} .res-compare .ontrack{color:var(--muted);}
+  .res-auto{display:none; font-size:12px; font-weight:700; color:var(--good); margin-bottom:9px;}
+  .src-badge{font-size:8.5px; font-weight:800; letter-spacing:0.06em; padding:2px 7px; border-radius:5px;}
+  .src-badge.src-auto{background:rgba(63,185,80,0.16); color:var(--good);}
+  .src-badge.src-manual{background:var(--panel-2); color:var(--faint);}
+  .adref{display:block; font-size:9px; text-transform:uppercase; letter-spacing:0.05em; color:var(--faint); font-weight:700; margin:8px 0 4px;}
+  .adref input{display:block; width:100%; margin-top:4px; background:#0e1117; border:1px solid var(--hairline); border-radius:6px; color:var(--text); padding:6px 8px; font-size:12px; font-family:inherit; text-transform:none; letter-spacing:0;}
 
   /* top hooks */
   .hook-card{display:flex; gap:15px; align-items:flex-start; background:linear-gradient(180deg,var(--panel),rgba(22,27,34,0.55)); border:1px solid var(--hairline); border-radius:var(--r-md); padding:14px 16px; margin-bottom:10px;}
@@ -751,7 +765,10 @@ function save(){ localStorage.setItem(LS_KEY, JSON.stringify(overrides));
 function eff(id){ // effective item = baked merged with local override
   const base = (BAKED.items && BAKED.items[id]) || {status:"suggested", results:{}};
   const o = overrides[id] || {};
-  return {status: o.status || base.status, results: Object.assign({}, base.results||{}, o.results||{})};
+  return {status: o.status || base.status,
+          ad_ref: (o.ad_ref !== undefined ? o.ad_ref : (base.ad_ref || "")),
+          results_source: base.results_source || null,
+          results: Object.assign({}, base.results||{}, o.results||{})};
 }
 
 function applyCard(card){
@@ -766,10 +783,29 @@ function applyCard(card){
     const show = (e.status === "posted" || e.status === "results_in");
     res.classList.toggle("show", show);
     res.querySelectorAll("input[data-f]").forEach(inp=>{
+      if(inp.dataset.f === "ad_ref") return;   // ad_ref handled below, not a result
       const v = e.results[inp.dataset.f];
       if(document.activeElement !== inp) inp.value = (v==null?"":v);
     });
     compare(card, id, e);
+  }
+  // ad_ref input (paid cards)
+  const ar = card.querySelector('input[data-f="ad_ref"]');
+  if(ar && document.activeElement !== ar) ar.value = e.ad_ref || "";
+  // source badge (AUTO / MANUAL)
+  const sb = card.querySelector('[data-role="source"]');
+  if(sb){
+    if(e.results_source){ sb.textContent = e.results_source.toUpperCase(); sb.className = "src-badge src-" + e.results_source; }
+    else { sb.textContent = ""; sb.className = "src-badge"; }
+  }
+  // auto-import readout
+  const auto = card.querySelector('[data-role="autoread"]');
+  if(auto){
+    const r = e.results || {};
+    if(e.results_source === "auto" && (r.cpi != null || r.spend != null)){
+      auto.innerHTML = `Auto (Meta): $${Number(r.spend||0).toLocaleString()} spend · ${r.installs||0} installs · CPI ${r.cpi!=null?("$"+r.cpi):"n/a"}${r.imported_at?(" · "+r.imported_at):""}`;
+      auto.style.display = "block";
+    } else { auto.innerHTML = ""; auto.style.display = "none"; }
   }
 }
 
@@ -813,7 +849,11 @@ document.body.addEventListener("input", ev=>{
   const inp = ev.target;
   if(inp.matches('input[data-f]')){
     const card = inp.closest(".rec-card"); const id = card.dataset.id;
-    overrides[id] = overrides[id] || {}; overrides[id].results = overrides[id].results || {};
+    overrides[id] = overrides[id] || {};
+    if(inp.dataset.f === "ad_ref"){          // item-level match key, not a result
+      overrides[id].ad_ref = inp.value; save(); return;
+    }
+    overrides[id].results = overrides[id].results || {};
     overrides[id].results[inp.dataset.f] = inp.value === "" ? null : Number(inp.value);
     save(); compare(card, id, eff(id));
   }
@@ -824,6 +864,7 @@ document.getElementById("download").addEventListener("click", ()=>{
   for(const id in overrides){
     if(!out.items[id]) continue;
     if(overrides[id].status) out.items[id].status = overrides[id].status;
+    if(overrides[id].ad_ref !== undefined) out.items[id].ad_ref = overrides[id].ad_ref;
     if(overrides[id].results) out.items[id].results = Object.assign(out.items[id].results||{}, overrides[id].results);
   }
   out.updated_at = new Date().toISOString().slice(0,10);
