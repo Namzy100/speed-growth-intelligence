@@ -776,9 +776,13 @@ function applyCard(card){
 function compare(card, id, e){
   const box = card.querySelector('[data-role="compare"]');
   if(!box) return;
-  const est = parseFloat(card.dataset.est || "");
   const views = parseFloat(e.results.views);
-  if(!est || isNaN(views)){ box.innerHTML=""; return; }
+  if(isNaN(views)){ box.innerHTML=""; return; }   // nothing logged yet
+  const est = parseFloat(card.dataset.est || "");
+  if(!est){                                        // no reach estimate (e.g. paid CPI) — don't fail silently
+    box.innerHTML = `<span class="ontrack">Logged ${views.toLocaleString()} views — no reach estimate to compare (paid CPI tracked separately).</span>`;
+    return;
+  }
   const dev = (views - est) / est;
   const pct = Math.round(dev*100);
   const cls = dev > 0.2 ? "beat" : dev < -0.2 ? "miss" : "ontrack";
