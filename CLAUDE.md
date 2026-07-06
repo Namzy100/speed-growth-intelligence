@@ -9,6 +9,25 @@ Do NOT add any AI attribution to commit messages or PR bodies. Never append a
 Claude Code" line, a 🤖 line, or any similar generated-with/attribution trailer.
 Write the commit message and stop. This overrides any default that would add such a trailer.
 
+## Cron / scheduled jobs (macOS)
+
+The daily-sync cron line must invoke Python **directly** (`venv/bin/python
+pipelines/run_daily_sync.py`), NOT execute `run_sync.sh`. On this machine cron has
+Full Disk Access, which lets it **read** `.py` files under `~/Documents`, but it
+still **cannot execute the `.sh` script** there — cron-invoked `bash` gets
+`Operation not permitted` opening `run_sync.sh` (confirmed 2026-07-06, not fixable
+by the FDA grant or by stripping the `com.apple.provenance` xattr). Calling the
+Python interpreter directly sidesteps this, which is how the weekly-email and
+trend-rebuild cron jobs already work.
+
+`run_sync.sh` still works fine for **manual/interactive** runs from your own shell
+(`bash run_sync.sh`); this is a cron-invocation issue only, so do not "fix" the
+crontab back to calling the script.
+
+The Friday weekly-email cron line is intentionally **gated** with
+`--to=namanbehl1@gmail.com` so it does not auto-send to Niyati/Sumit while copy is
+being finalized. Removing that override is what turns it back into a live send.
+
 ## Project Overview
 
 Speed is a Python intelligence pipeline for creator discovery and market analysis. It scrapes TikTok (via Apify) and YouTube, scores creators, runs market analysis, and generates AI-powered weekly briefs, with data persisted in Supabase and synced to Google Sheets.
