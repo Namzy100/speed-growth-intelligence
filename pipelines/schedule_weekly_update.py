@@ -17,6 +17,7 @@ Usage:
   python pipelines/schedule_weekly_update.py --dry-run  # compose + print, no send
 """
 
+import json
 import os
 import smtplib
 import ssl
@@ -190,12 +191,70 @@ def _kpi_lines(kpis: dict) -> str:
     )
 
 
+def _trend_summary() -> dict:
+    """Read REAL trend-loop numbers from docs/dashboard_state.json (no placeholders)."""
+    path = _ROOT / "docs" / "dashboard_state.json"
+    if not path.exists():
+        return {}
+    try:
+        st = json.loads(path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return {}
+    items = list((st.get("items") or {}).values())
+    from collections import Counter
+    sc = Counter(v.get("status") for v in items)
+    def pick(pred):
+        return [v for v in items if pred(v)]
+    return {
+        "total": len(items),
+        "status_counts": dict(sc),
+        "posted": pick(lambda v: v.get("status") == "posted"),
+        "results_in": pick(lambda v: v.get("status") == "results_in"),
+        "auto_paid": pick(lambda v: v.get("results_source") == "auto" and v.get("type") == "paid"),
+        "awaiting": pick(lambda v: v.get("status") in ("suggested", "briefed")),
+    }
+
+
+def _trend_lines(t: dict) -> str:
+    """Compact, tool-neutral rendering of the trend loop for the email data blob."""
+    if not t:
+        return "(no trend tracker data on file)"
+    sc = t.get("status_counts", {})
+    L = [f"Tracked content items: {t.get('total', 0)} — suggested {sc.get('suggested', 0)}, "
+         f"briefed {sc.get('briefed', 0)}, in_production {sc.get('in_production', 0)}, "
+         f"posted {sc.get('posted', 0)}, results_in {sc.get('results_in', 0)}"]
+    posted = t.get("posted", [])
+    L.append("Posted (awaiting results): "
+             + ("; ".join(p["hook"][:60] for p in posted) if posted else "none yet"))
+    ri = t.get("results_in", [])
+    if ri:
+        for r in ri:
+            res = r.get("results", {})
+            L.append(f"Results in — \"{r['hook'][:50]}\": "
+                     f"views={res.get('views')}, cpi={res.get('cpi')}, installs={res.get('installs')}")
+    else:
+        L.append("Results in (measured actuals): none yet")
+    auto = t.get("auto_paid", [])
+    if auto:
+        L.append("Paid results auto-imported this week: "
+                 + "; ".join(f"\"{a['hook'][:38]}\" CPI ${a.get('results', {}).get('cpi')}" for a in auto))
+    else:
+        L.append("Paid auto-import: LIVE and verified against real ad-platform data "
+                 "(no paid brief has reached 'posted' yet, so nothing auto-filled this week)")
+    L.append("Organic results: manual entry only — no automated organic tracking exists yet")
+    aw = t.get("awaiting", [])
+    L.append(f"Awaiting a decision (suggested/briefed): {len(aw)}"
+             + (" — " + "; ".join(a["hook"][:44] for a in aw[:5]) if aw else ""))
+    return "\n".join(L)
+
+
 def _shared_context(spreadsheet_id: str) -> dict:
     return {
         "n": week_number(),
         "kpis": current_kpis(spreadsheet_id),
         "built": commits_last_7_days(),
         "brief": latest_brief(),
+        "trend": _trend_summary(),
     }
 
 
@@ -210,9 +269,14 @@ _PERSONA_PROMPTS = {
         "(2) 'What I shipped' — the top 3 most meaningful items from the shipped list, "
         "in plain language (what it does for the team, not the raw commit text);\n"
         "(3) a tight KPI snapshot using the EXACT figures given;\n"
-        "(4) 'Next week' — 2-3 concrete things you'll do, inferred from the brief's "
-        "recommendations.\n"
-        "Under 220 words. Open with 'Hey Niyati,'. Do NOT add a sign-off, your name, "
+        "(4) 'Content loop' — 3-4 lines using the EXACT numbers from the TREND CONTENT "
+        "LOOP data: what's posted, any results-in with their actual numbers, and state "
+        "plainly that paid results now pull in AUTOMATICALLY from Meta/Adjust while "
+        "organic is still logged manually, plus how many items are sitting in "
+        "suggested/briefed that need her decision this week. If nothing is posted yet, "
+        "say so honestly (the loop just went live) — do not invent posted items or results;\n"
+        "(5) 'Next week' — 2-3 concrete things you'll do, inferred from the brief.\n"
+        "Under 270 words. Open with 'Hey Niyati,'. Do NOT add a sign-off, your name, "
         "or any links — those are appended automatically."
     ),
     "sumit": (
@@ -234,10 +298,17 @@ _PERSONA_PROMPTS = {
         "market & competitor signals, content trends), that it refreshes automatically "
         "every day/week, and what decisions it informs. Frame it as infrastructure, not "
         "technology.\n"
-        "5. EU OPPORTUNITY — if the brief shows meaningful organic install demand in "
+        "5. THE ACCURACY SHIFT — 2-3 lines: the content engine has moved from a "
+        "disposable weekly report to a system that TRACKS ITS OWN ACCURACY — predicted "
+        "vs actual performance is now automatically measured for paid content, so we can "
+        "see whether what we predicted actually happened. Frame this as the "
+        "outcome-over-infrastructure move leadership asked for (measuring results, not "
+        "just producing more reports). Describe what it ENABLES, not how it's built. "
+        "Do not claim measured results that don't exist in the data.\n"
+        "6. EU OPPORTUNITY — if the brief shows meaningful organic install demand in "
         "Germany / UK / Portugal, surface it in 1-2 lines as a market-entry opportunity "
         "with the numbers. Skip entirely if not meaningful.\n\n"
-        "HARD RULES: Maximum 250 words. Use the EXACT figures from the data. Do NOT "
+        "HARD RULES: Maximum 260 words. Use the EXACT figures from the data. Do NOT "
         "include any 'what I built' or activity section. Do NOT name ANY software, vendor, "
         "or tool (no GitHub, Supabase, Apify, Claude, dashboards-by-name, etc.). "
         "Open with 'Hey Sumit,'. Do NOT add a sign-off, your name, or links — those are "
@@ -262,6 +333,8 @@ def _ai_body(persona: str, ctx: dict) -> str:
         f"Week number: {ctx['n']}\n\n"
         f"KPIs (use these exact figures):\n{_kpi_lines(ctx['kpis'])}\n\n"
         f"Most meaningful things shipped this week:\n{built}\n\n"
+        f"TREND CONTENT LOOP (real numbers from the content tracker — use these exactly):\n"
+        f"{_trend_lines(ctx.get('trend', {}))}\n\n"
         f"This week's growth brief (findings + recommendation):\n{ctx['brief']}"
     )
     client = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
