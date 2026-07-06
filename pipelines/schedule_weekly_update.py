@@ -138,12 +138,21 @@ def current_kpis(spreadsheet_id: str) -> dict:
 # Commit-message prefixes that signal routine/noise rather than real work.
 _NOISE_PREFIXES = ("chore:", "refresh", "auto-deploy", "nudge", "redeploy", "update")
 
+# Substrings that mark work on the reporting/email system ITSELF (meta-tooling),
+# not marketing/growth work. These are irrelevant to a marketing manager's update,
+# so they're filtered out of the "what I shipped" list entirely.
+_META_TOOLING = (
+    "weekly email", "weekly update", "email persona", "email prompt", "email tone",
+    "persona", "sign-off", "co-authored", "attribution trailer", "schedule_weekly",
+)
+
 
 def commits_last_7_days() -> list[str]:
     """Top 10 meaningful commit subjects from the last 7 days (most recent first).
 
     Filters out routine/noise commits (chore:, Refresh, auto-deploy, Nudge,
-    Redeploy, Update) and caps at 10; shows all if fewer than 10 remain.
+    Redeploy, Update) AND commits about the reporting/email system itself
+    (meta-tooling, irrelevant to a marketing update); caps at 10.
     """
     try:
         out = subprocess.run(
@@ -155,7 +164,10 @@ def commits_last_7_days() -> list[str]:
     seen, subjects = set(), []
     for line in out.splitlines():  # git log is newest-first
         line = line.strip()
-        if not line or line.lower().startswith(_NOISE_PREFIXES):
+        low = line.lower()
+        if not line or low.startswith(_NOISE_PREFIXES):
+            continue
+        if any(m in low for m in _META_TOOLING):  # skip email/reporting-system work
             continue
         if line not in seen:
             seen.add(line)
@@ -273,7 +285,11 @@ _PERSONA_PROMPTS = {
         "this update being late because you were traveling. One sentence, keep it light, "
         "do not over-explain or make it its own section;\n"
         "(2) 'What I shipped' — the top 3 most meaningful items from the shipped list, "
-        "in plain language (what it does for the team, not the raw commit text);\n"
+        "in plain language (what it does for the team, not the raw commit text). Pick only "
+        "genuine marketing/growth work (content pipeline, creator lists, campaign or "
+        "dashboard analysis, auto-import). Do NOT mention any work on the reporting or email "
+        "system itself (email tone, personas, how these updates are written); that is "
+        "internal tooling, not relevant to her, so leave it out even if it appears below;\n"
         "(3) a tight KPI snapshot using the EXACT figures given;\n"
         "(4) 'Content loop' — 3-4 lines using the EXACT numbers from the TREND CONTENT "
         "LOOP data: what's posted, any results-in with their actual numbers, and state "
@@ -281,18 +297,13 @@ _PERSONA_PROMPTS = {
         "organic is still logged manually, plus how many items are sitting in "
         "suggested/briefed that need her decision this week. If nothing is posted yet, "
         "say so honestly (the loop just went live) — do not invent posted items or results;\n"
-        "(5) 'Next week' — your actual plan, not a list. Say which of the suggested "
-        "content items you intend to move to briefed and by when, and for the key paid "
-        "findings give the specific action, but framed as what you'll PROPOSE or flag for "
-        "sign-off (e.g. the exact budget shift you'll recommend, and what you'll check "
-        "afterward to know it worked). Each line should read as a concrete next step with a "
-        "number or a date where you can, not a restated finding.\n"
-        "AUTHORITY: you are an intern. You do not execute ad-spend or budget decisions "
-        "yourself. Content items you can move through the pipeline (briefing, drafting). But "
-        "for anything involving budget, pausing/scaling campaigns, or spend, write it as a "
-        "recommendation you'll put up for approval ('I'll propose pausing X', 'I'd recommend "
-        "shifting ~$Y, pending sign-off'), never as an action you're taking ('I'm pausing X', "
-        "'I'm moving $Y').\n"
+        "(5) 'Next week' — a short, honest note (one or two sentences, not a list) on what "
+        "you're working on improving next on the system side. Draw from real gaps in the "
+        "data above, e.g. closing the organic-attribution gap so organic results aren't "
+        "manual-only, or extending the paid auto-import beyond the campaigns it covers today. "
+        "Frame it as ongoing work you're chipping away at, not promises with hard dates. Do "
+        "NOT include tactical budget or campaign-reallocation plans here; those are handled "
+        "elsewhere and are not hers to action.\n"
         "Throughout, when you raise something, add a few words on what you're going to DO "
         "about it, not just what it is. Under 270 words total: if that runs long, tighten the "
         "shipped and content-loop sections rather than dropping the next-step detail. Open "
@@ -309,8 +320,8 @@ _PERSONA_PROMPTS = {
         "implications himself. This is the most important rule:\n"
         "- Do NOT explain what a finding means or why it matters when he already knows. "
         "State the number and the call, then stop. Kill textbook-style explanatory clauses. "
-        "For example, write 'Apple Search Ads is at $2.40 eCPI vs Google Brand at $4.51, I'd "
-        "recommend shifting budget over this week, worth a quick sign-off', NOT 'that gap is "
+        "For example, write 'Apple Search Ads is at $2.40 eCPI vs Google Brand at $4.51, might "
+        "be worth trying a budget shift toward Apple this week', NOT 'that gap is "
         "too wide to leave alone' or 'organic "
         "is a structural advantage worth protecting before we scale paid on top of it'. "
         "He knows why a gap matters and what organic means.\n"
@@ -329,16 +340,17 @@ _PERSONA_PROMPTS = {
         "- The two or three findings that actually deserve his attention, each as a plain "
         "statement of the number(s) with your recommended call folded in. For each call, "
         "add the concrete next step, briefly: roughly how much, what you'll check afterward "
-        "to know it worked, and by when, all framed as a proposal for sign-off (e.g. 'I'd "
-        "recommend shifting ~$X to Apple this week, worth a quick sign-off, and I'll check "
-        "blended eCPI by Friday'). Give him the plan, not just the recommendation.\n"
-        "AUTHORITY: you are a junior on the team, not a decision-maker on spend. You do NOT "
-        "move, pause, or reallocate budget on your own. Every budget or campaign call is "
-        "something you RECOMMEND and flag for his (or the paid team's) approval, then action "
-        "once signed off. Write 'I'd recommend pausing X', 'worth pausing, can action once "
-        "approved', 'flagging this for the paid team to action this week', never 'I'm pausing "
-        "X' or 'I'm moving $Y'. Keep the specifics (the dollar figure, the check-in point, "
-        "what you'll look at and when); only fix who is doing the action.\n"
+        "to know it worked, and by when (e.g. 'a shift of ~$X toward Apple might be worth a "
+        "try this week, I'll check blended eCPI by Friday'). Give him the plan, not just the "
+        "call.\n"
+        "REGISTER (important): the calls are TENTATIVE suggestions, not confident directives. "
+        "Default to a low-certainty, exploratory register: 'might be worth a try', 'could be "
+        "worth shifting', 'worth testing', 'might be worth pausing to see'. Do NOT write 'I'd "
+        "recommend', 'I'd move', 'we should', or anything that states the call with "
+        "confidence. You are floating an idea for him to weigh, not issuing a recommendation. "
+        "Keep every specific (the dollar figure, the eCPI numbers, the check-in point and "
+        "day); only soften the certainty of the call itself. You are a junior floating "
+        "suggestions, you do not move, pause, or reallocate budget on your own.\n"
         "- Any data-quality gap that blocks a real decision, stated plainly.\n"
         "- Only if there is something real to say: one sentence that paid content is now "
         "measured predicted-vs-actual automatically, so we will see whether the calls were "
