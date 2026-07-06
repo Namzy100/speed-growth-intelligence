@@ -183,11 +183,15 @@ def outreach_summary() -> list[tuple[str, int]]:
 # ------------------------------------------------------------------
 
 def _kpi_lines(kpis: dict) -> str:
+    # Each figure is labeled with its REAL query window. Installs, eCPI and Meta
+    # spend come from Adjust/Meta tabs pulled at days=30 (NOT weekly). D1 is the
+    # average of the last 7 matured daily cohorts (a genuine recent-week figure).
+    # The model is instructed to keep these windows in the copy.
     return (
-        f"Total installs: {kpis['total_installs']:,}\n"
-        f"Best eCPI: ${kpis['best_ecpi']:.2f}\n"
-        f"D1 retention: {kpis['d1_retention']:.1%}\n"
-        f"Meta spend: ${kpis['meta_spend']:,.2f}"
+        f"Total installs (last 30 days): {kpis['total_installs']:,}\n"
+        f"Best campaign eCPI (last 30 days): ${kpis['best_ecpi']:.2f}\n"
+        f"D1 retention (avg of last 7 matured daily cohorts): {kpis['d1_retention']:.1%}\n"
+        f"Meta ad spend (last 30 days): ${kpis['meta_spend']:,.2f}"
     )
 
 
@@ -277,9 +281,16 @@ _PERSONA_PROMPTS = {
         "organic is still logged manually, plus how many items are sitting in "
         "suggested/briefed that need her decision this week. If nothing is posted yet, "
         "say so honestly (the loop just went live) — do not invent posted items or results;\n"
-        "(5) 'Next week' — 2-3 concrete things you'll do, inferred from the brief.\n"
-        "Under 270 words. Open with 'Hey Niyati,'. Do NOT add a sign-off, your name, "
-        "or any links — those are appended automatically."
+        "(5) 'Next week' — your actual plan, not a list. Say which of the suggested "
+        "content items you intend to move to briefed and by when, and for the key paid "
+        "findings give the specific action (e.g. the exact budget shift you'll propose and "
+        "what you'll check afterward to know it worked). Each line should read as a concrete "
+        "next step with a number or a date where you can, not a restated finding.\n"
+        "Throughout, when you raise something, add a few words on what you're going to DO "
+        "about it, not just what it is. Under 270 words total: if that runs long, tighten the "
+        "shipped and content-loop sections rather than dropping the next-step detail. Open "
+        "with 'Hey Niyati,'. Do NOT add a sign-off, your name, or any links; those are "
+        "appended automatically."
     ),
     "sumit": (
         "You are Naman, a sharp junior on the growth team, writing your weekly note to "
@@ -308,7 +319,10 @@ _PERSONA_PROMPTS = {
         "- 'Hey Sumit,' then one short, genuine sentence that this is a bit late because you "
         "were traveling, then the single number that matters most this week.\n"
         "- The two or three findings that actually deserve his attention, each as a plain "
-        "statement of the number(s) with your recommended call folded in.\n"
+        "statement of the number(s) with your recommended call folded in. For each call, "
+        "add the concrete next step you're taking, briefly: roughly how much, by when, and "
+        "what you'll check afterward to know it worked (e.g. 'moving ~$X to Apple this week, "
+        "checking blended eCPI by Friday'). Give him the plan, not just the recommendation.\n"
         "- Any data-quality gap that blocks a real decision, stated plainly.\n"
         "- Only if there is something real to say: one sentence that paid content is now "
         "measured predicted-vs-actual automatically, so we will see whether the calls were "
@@ -316,7 +330,9 @@ _PERSONA_PROMPTS = {
         "do not describe how it is built.\n"
         "- If organic demand in Germany, the UK, or Portugal is meaningful, close with one "
         "line naming the number as a possible EU entry signal.\n\n"
-        "HARD RULES: under 210 words. Use the EXACT figures from the data. No 'what I built' "
+        "HARD RULES: under 210 words (if the next-step detail runs long, cut interpretation "
+        "and connective phrases, never the numbers or the next steps). Use the EXACT figures "
+        "from the data, each with its real time window. No 'what I built' "
         "or activity recap. Do NOT name any software, vendor, or tool (no GitHub, Supabase, "
         "Apify, Claude, or dashboards by name). Do NOT add a sign-off, your name, or links; "
         "those are appended automatically."
@@ -338,7 +354,13 @@ _PLAINTEXT_RULE = (
     "or mirror-image parallel construction. Make the point plainly in one direction.\n"
     "3. Avoid other stiff AI tells: skip phrases like 'it's worth noting' and 'that said', "
     "skip forced rule-of-three lists, and skip grandiose wrap-up sentences. Keep it direct, "
-    "specific, and conversational, the way a sharp teammate actually writes."
+    "specific, and conversational, the way a sharp teammate actually writes.\n\n"
+    "ACCURACY (do not get this wrong): every KPI you are given is labeled with its real "
+    "time window, e.g. '(last 30 days)' or '(avg of last 7 matured daily cohorts)'. Always "
+    "describe each number with its actual window. NEVER call a 30-day figure 'this week' or "
+    "imply it is weekly. If you cite installs, eCPI, or spend, say 'over the last 30 days' "
+    "(or similar); only D1 retention is a recent-week figure. If you have no true weekly "
+    "number for something, use the real window rather than inventing a weekly frame."
 )
 
 
@@ -363,7 +385,7 @@ def _ai_body(persona: str, ctx: dict) -> str:
 
 
 def _assemble(body: str) -> str:
-    return f"{body.rstrip()}\n\nDashboards:\n{_DASHBOARDS}\n\n— Naman\n"
+    return f"{body.rstrip()}\n\nDashboards:\n{_DASHBOARDS}\n\nRegards,\nNaman\n"
 
 
 def compose_niyati(ctx: dict) -> tuple[str, str]:
