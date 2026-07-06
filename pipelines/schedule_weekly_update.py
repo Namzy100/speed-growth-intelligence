@@ -319,10 +319,19 @@ _PERSONA_PROMPTS = {
 
 # These go out as plain-text email, so markdown would render as literal noise.
 _PLAINTEXT_RULE = (
-    "\n\nIMPORTANT: write PLAIN TEXT only. No markdown — no asterisks for bold, no "
+    "\n\nIMPORTANT (FORMAT): write PLAIN TEXT only. No markdown, no asterisks for bold, no "
     "'#' headers, no pipe tables. Use short line breaks, ALL-CAPS or a trailing colon "
     "for section labels, and simple hyphen bullets. It must read cleanly in a plain "
-    "email client."
+    "email client.\n\n"
+    "STYLE (write like a real person, not an AI). These are hard rules:\n"
+    "1. Do NOT use em dashes or en dashes (the characters '—' or '–') ANYWHERE in the "
+    "output. Whenever you would reach for one, either split it into two separate sentences, "
+    "or use a comma, a period, or parentheses. (Plain hyphens '-' for bullet points are fine.)\n"
+    "2. Do NOT use 'not just X, but Y', 'not only X but also Y', or any symmetric, balanced, "
+    "or mirror-image parallel construction. Make the point plainly in one direction.\n"
+    "3. Avoid other stiff AI tells: skip phrases like 'it's worth noting' and 'that said', "
+    "skip forced rule-of-three lists, and skip grandiose wrap-up sentences. Keep it direct, "
+    "specific, and conversational, the way a sharp teammate actually writes."
 )
 
 
