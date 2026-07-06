@@ -265,7 +265,9 @@ _PERSONA_PROMPTS = {
         "You are Naman, a marketing & analytics intern at Speed Wallet, writing your "
         "weekly update to Niyati, your day-to-day manager. Voice: direct, confident, "
         "human — a quick sync from a teammate, NOT a formal status report. Structure:\n"
-        "(1) a one-line opener;\n"
+        "(1) a one-line opener that naturally works in a short, genuine apology for "
+        "this update being late because you were traveling. One sentence, keep it light, "
+        "do not over-explain or make it its own section;\n"
         "(2) 'What I shipped' — the top 3 most meaningful items from the shipped list, "
         "in plain language (what it does for the team, not the raw commit text);\n"
         "(3) a tight KPI snapshot using the EXACT figures given;\n"
@@ -284,8 +286,9 @@ _PERSONA_PROMPTS = {
         "LEADER. He wants business outcomes, strategic recommendations, and a high-level "
         "view of what the intelligence is surfacing — NOT activity or what was built. "
         "Write in exactly this order, plain prose with short labels:\n"
-        "1. OPENER — one line stating the single most important business signal this week: "
-        "the number that matters most.\n"
+        "1. OPENER — briefly and naturally note that this update is a little late because "
+        "you were traveling (one short sentence, not a paragraph), then state the single "
+        "most important business signal this week: the number that matters most.\n"
         "2. KEY FINDINGS — 3-4 findings framed as BUSINESS INSIGHTS (what the data MEANS, "
         "not what was built). Each cites the specific numbers and, where relevant, the "
         "implied action. Example of the style: 'Re-engagement is spending $1,575 at 0.09% "
@@ -421,7 +424,7 @@ def refresh_brief() -> None:
         print(f"  brief refresh failed ({e}); using the latest brief on disk.")
 
 
-def run(dry_run: bool = False, only: str | None = None) -> None:
+def run(dry_run: bool = False, only: str | None = None, to: str | None = None) -> None:
     spreadsheet_id = os.getenv("GOOGLE_SHEETS_ID")
     if not spreadsheet_id:
         raise EnvironmentError("GOOGLE_SHEETS_ID must be set in .env")
@@ -433,23 +436,33 @@ def run(dry_run: bool = False, only: str | None = None) -> None:
     for key, email, compose_fn in _PERSONAS:
         if only and key != only:
             continue
-        print(f"\nComposing {key} version ({email})...")
+        # --to overrides the real recipient (for test sends); the persona/subject
+        # are unchanged so the test copy reads exactly as the real one will.
+        recipient = to or email
+        print(f"\nComposing {key} version (would go to {email}"
+              + (f", sending TEST to {recipient}" if to else "") + ")...")
         subject, body = compose_fn(ctx)
         if dry_run:
-            print(f"--- DRY RUN (not sent) ---\nTo: {email}\nSubject: {subject}\n")
+            print(f"--- DRY RUN (not sent) ---\nTo: {recipient}\nSubject: {subject}\n")
             print(body)
         else:
-            send(email, subject, body)
-            print(f"Sent to {email}.")
+            if to:  # test send: show exactly what went out
+                print(f"--- TEST SEND -> {recipient} (real recipient would be {email}) ---")
+                print(f"Subject: {subject}\n{body}")
+            send(recipient, subject, body)
+            print(f"Sent to {recipient}"
+                  + (f" (TEST override; real recipient is {email})" if to else "") + ".")
 
 
 if __name__ == "__main__":
-    only = None
+    only, to = None, None
     for arg in sys.argv[1:]:
         if arg.startswith("--only="):
             only = arg.split("=", 1)[1].strip().lower()
+        elif arg.startswith("--to="):
+            to = arg.split("=", 1)[1].strip()
     try:
-        run(dry_run="--dry-run" in sys.argv, only=only)
+        run(dry_run="--dry-run" in sys.argv, only=only, to=to)
     except (EnvironmentError, FileNotFoundError) as e:
         print(f"Config error: {e}")
         sys.exit(1)
