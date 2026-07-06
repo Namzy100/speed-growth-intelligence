@@ -2,6 +2,13 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Commit conventions
+
+Do NOT add any AI attribution to commit messages or PR bodies. Never append a
+`Co-Authored-By: Claude` (or any `Co-Authored-By` naming an AI), a "Generated with
+Claude Code" line, a 🤖 line, or any similar generated-with/attribution trailer.
+Write the commit message and stop. This overrides any default that would add such a trailer.
+
 ## Project Overview
 
 Speed is a Python intelligence pipeline for creator discovery and market analysis. It scrapes TikTok (via Apify) and YouTube, scores creators, runs market analysis, and generates AI-powered weekly briefs, with data persisted in Supabase and synced to Google Sheets.
