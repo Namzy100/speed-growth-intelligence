@@ -49,7 +49,10 @@ _DEFAULT_START = date(2026, 6, 9)
 _DASHBOARDS = (
     "Creative:  https://namzy100.github.io/speed-growth-intelligence\n"
     "Creator:   https://namzy100.github.io/speed-growth-intelligence/creators\n"
-    "Strategy:  https://namzy100.github.io/speed-growth-intelligence/strategy"
+    "Strategy:  https://namzy100.github.io/speed-growth-intelligence/strategy\n"
+    "\n"
+    "Full weekly breakdown (optional, detailed version of this update):\n"
+    "https://namzy100.github.io/speed-growth-intelligence/weekly_update.html"
 )
 
 
