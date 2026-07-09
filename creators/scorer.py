@@ -238,7 +238,7 @@ class CreatorScorer:
             "sponsorship_data_available": spons_available,
             "segment_tag": segment_tag,
             # Influencer signals — separate from the finance-weighted composite.
-            "is_influencer": detect_influencer(creator),
+            "is_influencer": self._detect_influencer(creator),
             "influencer_score": influencer_score(creator),
             "reasoning": self._build_reasoning(
                 creator, composite, segment_tag, spons_available,
@@ -345,6 +345,84 @@ class CreatorScorer:
         if "crypto" in text:
             return "crypto-curious"
         return "general"
+
+    def _classify_individual_brand(self, creator: dict) -> bool | None:
+        """Coarse individual-vs-brand call via one cheap Claude (Haiku) call.
+
+        Returns True for an INDIVIDUAL (single person / personal creator / named
+        persona), False for a BRAND (company, product, app, exchange, publication,
+        or media/news outlet), or None if the call can't run (no API key / SDK
+        missing / API error) — callers then fall back to the rule-based name check.
+
+        Replaces the keyword name-heuristic for the individual/brand half of
+        detect_influencer. Keyword matching cannot separate surface-identical
+        names like "Crypto Wall Street" (brand) from "Crypto Casey" (person) —
+        that is a world-knowledge judgment. This is a coarse categorical identity
+        call, not a fabricated numeric signal. See the 2026-07 influencer audit.
+        """
+        api_key = os.getenv("ANTHROPIC_API_KEY")
+        if not api_key:
+            return None
+
+        name = creator.get("name", "")
+        description = (creator.get("description") or "")[:400]
+        tags = ", ".join(creator.get("niche_tags", [])) or "(none)"
+
+        prompt = (
+            "You are labelling a social-media account as either INDIVIDUAL or "
+            "BRAND.\n"
+            "- INDIVIDUAL: a single real person, personal creator, or a named "
+            "persona who is the face of the channel (even if the name contains "
+            "words like trading, news, crypto, or a show title).\n"
+            "- BRAND: a company, product, app, exchange, publication, or "
+            "media/news outlet — an organization rather than one person.\n\n"
+            f"Account name: {name}\n"
+            f"Description: {description}\n"
+            f"Niche tags: {tags}\n\n"
+            "Reply with EXACTLY one word: INDIVIDUAL or BRAND."
+        )
+
+        try:
+            if self._llm_client is None:
+                from anthropic import Anthropic
+                self._llm_client = Anthropic(api_key=api_key)
+            resp = self._llm_client.messages.create(
+                model=_FALLBACK_MODEL,
+                max_tokens=8,
+                messages=[{"role": "user", "content": prompt}],
+            )
+            text = resp.content[0].text.strip().upper().strip("\"'.")
+        except Exception:
+            return None
+
+        if "INDIVIDUAL" in text:
+            return True
+        if "BRAND" in text:
+            return False
+        return None
+
+    def _detect_influencer(self, creator: dict) -> bool:
+        """Instance detect_influencer: same engagement gate as the module-level
+        rule-based version, but the individual-vs-brand half uses the LLM
+        classifier when use_llm_fallback is on (falling back to the keyword name
+        heuristic when the LLM is unavailable or disabled).
+        """
+        # Engagement gate — identical to the rule-based detect_influencer.
+        eq = creator.get("engagement_quality")
+        if eq is not None:
+            eng_ok = float(eq) >= 5
+        else:
+            eng_ok = float(creator.get("engagement_rate", 0) or 0) > 0.03
+        if not eng_ok:
+            return False
+
+        # Individual-vs-brand: LLM when enabled, else the rule-based name check.
+        if self._use_llm_fallback:
+            verdict = self._classify_individual_brand(creator)
+            if verdict is not None:
+                return verdict
+        name = creator.get("name", "")
+        return not (looks_like_media_name(name) or looks_like_company(name))
 
     # An engagement_rate above this is treated as a view-gaming / data artifact
     # rather than genuine reach. The legacy engagement_rate (views/followers,
