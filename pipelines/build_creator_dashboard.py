@@ -267,7 +267,8 @@ _TEMPLATE = r"""<!doctype html>
   select,input[type=text]{background:#0e1117; color:var(--text); border:1px solid var(--hairline); border-radius:8px; padding:8px 11px; font-size:13px; min-width:150px; font-family:inherit;}
   .toggle{display:flex; align-items:center; gap:7px; font-size:13px; color:var(--text); text-transform:none; letter-spacing:0; font-weight:500; cursor:pointer;}
   .toggle input{accent-color:var(--accent); width:15px; height:15px;}
-  .infl-dot{color:var(--accent-2); font-size:10px;}
+  .type-indiv{background:rgba(88,166,255,.12); color:#58a6ff; border:1px solid rgba(88,166,255,.3);}
+  .type-brand{background:rgba(139,148,158,.10); color:var(--faint); border:1px solid var(--hairline);}
   select:focus,input:focus{outline:none; border-color:var(--accent);}
   input[type=range]{vertical-align:middle; width:150px; accent-color:var(--accent);}
   .rangeval{color:var(--text); font-weight:700; font-variant-numeric:tabular-nums;}
@@ -358,8 +359,8 @@ _TEMPLATE = r"""<!doctype html>
     <div class="table-wrap"><table id="tbl">
       <thead><tr>
         <th data-k="name">Creator</th><th data-k="source">Source</th><th data-k="platform">Platform</th><th data-k="segment">Segment</th>
-        <th class="num" data-k="followers">Followers</th><th class="num" data-k="score">Score</th>
-        <th class="num" data-k="infl">Influencer</th>
+        <th class="num" data-k="followers">Followers</th><th class="num" data-k="score">Partner Score</th>
+        <th data-k="is_influencer">Type</th>
         <th data-k="spavail">Sponsorship</th><th data-k="outreach">Outreach</th>
         <th data-k="brand_flag">Brand</th><th>Niche Tags</th>
       </tr></thead><tbody></tbody>
@@ -407,7 +408,8 @@ function breakdown(c){
     <div class="bd-total"><span class="lab">Composite</span>
       <span class="val" style="color:${scoreColor(c.score)}">${c.score.toFixed(1)}<small>/100</small></span></div>
     ${fit}
-    <div class="bd-fit" style="color:var(--faint)"><span>* Acquisition is a reference reach proxy — not part of the composite. † No sponsorship data available — excluded from the composite, weight redistributed.</span></div>
+    <div class="bd-fit"><span>Influencer signal ‡</span><span>${c.is_influencer?'Individual':'Brand/Media'}</span><span>${c.infl.toFixed(1)}/100</span></div>
+    <div class="bd-fit" style="color:var(--faint)"><span>* Acquisition is a reference reach proxy — not part of the composite. † No sponsorship data available — excluded from the composite, weight redistributed. ‡ Influencer signal is authentic-audience strength (engagement + reach), separate from Partner Score; the Individual/Brand-Media call is the is_influencer classifier.</span></div>
   </div></div>`;
 }
 
@@ -507,7 +509,9 @@ function renderTable(){
       <td><span class="badge seg ${segClass(c.segment)}">${esc(c.segment)}</span></td>
       <td class="num">${intFmt.format(c.followers)}</td>
       <td class="num"><span class="score-pill ${scoreCls(c.score)}">${c.score.toFixed(1)}</span></td>
-      <td class="num">${c.infl.toFixed(1)}${c.is_influencer?' <span class="infl-dot" title="influencer">●</span>':''}</td>
+      <td>${c.is_influencer
+        ? '<span class="badge type-indiv" title="Individual creator (personal account)">Individual</span>'
+        : '<span class="badge type-brand" title="Brand / media / company account">Brand/Media</span>'}</td>
       <td>${c.spavail?`<span class="badge" style="background:rgba(63,185,80,.12);color:#3fb950;border:1px solid rgba(63,185,80,.3)">measured ${c.spons.toFixed(1)}</span>`:'<span class="muted" title="excluded from composite; weight redistributed">no data</span>'}</td>
       <td class="muted">${esc(c.outreach)}</td>
       <td>${flag}</td>

@@ -46,14 +46,6 @@ CRYPTO_TAGS = {
     "btc", "eth", "satoshi", "hodl", "crypto investing", "crypto trading",
 }
 
-# Niche-tag signals of a real person / lifestyle creator (vs a media/finance
-# outlet). Includes YouTube topic-category style tags.
-PERSONAL_TAGS = {
-    "lifestyle", "lifestyle (sociology)", "vlog", "vlogging", "entertainment",
-    "society", "family", "comedy", "travel", "tourism", "fitness", "food",
-    "music", "sport", "association football", "hobby", "humour", "humor",
-}
-
 # Name patterns that signal a media / news / educational / brand outlet rather
 # than a personal creator. Multi-word substrings + short word-boundary tokens.
 _MEDIA_SUBSTRINGS = ("daily news", "news today", "news network", "media", "magazine", "press")
@@ -112,25 +104,23 @@ def detect_influencer(creator: dict) -> bool:
 
 
 def influencer_score(creator: dict) -> float:
-    """0-100 influencer fit. Weighted to PERSONAL BRAND + authentic audience, with
-    real engagement capped at 30% so one inflated metric can't dominate.
+    """0-100 influencer fit from authentic-audience signals only: real engagement
+    and audience size, weighted 50/50.
 
-    Weights: engagement 30% (from engagement_quality, a real interaction signal),
-    personal-brand 40% (media/company names penalised, lifestyle tags rewarded),
-    authentic audience size 30% (mid-size sweet spot). NOT content-keyword based.
+    The individual-vs-brand/media call is deliberately NOT recomputed here — that
+    is what detect_influencer() / is_influencer already does (and it's surfaced
+    directly in the UI). The old 40%-weighted "personal-brand" component was
+    dropped in the 2026-07 audit for two reasons: its name string-match merely
+    recycled the is_influencer classifier (double-counting), and its +40
+    lifestyle bonus was driven by YouTube auto topic-categories (society, tourism,
+    football) rather than any real lifestyle signal — it handed the max score to
+    brand/media accounts like BTC-ECHO and Altcoin Daily. See the deposit_relevance
+    removal for the same class of fix.
     """
     followers = int(creator.get("followers", 0) or 0)
-    tags = {str(t).lower() for t in creator.get("niche_tags", [])}
-    name = creator.get("name", "")
 
-    # Engagement component (capped at 30% of total): real interaction signal.
+    # Engagement component: real interaction signal (from engagement_quality).
     eng = _real_engagement(creator) * 100  # 0-100
-
-    # Personal-brand component: media/company names score 0; lifestyle tags add.
-    if looks_like_media_name(name) or looks_like_company(name):
-        pb = 0.0
-    else:
-        pb = 60.0 + (40.0 if tags & PERSONAL_TAGS else 0.0)
 
     # Authentic audience (mid-size sweet spot).
     if followers < 5_000:
@@ -142,7 +132,7 @@ def influencer_score(creator: dict) -> float:
     else:
         aud = 50.0
 
-    return round(0.30 * eng + 0.40 * min(pb, 100) + 0.30 * aud, 1)
+    return round(0.50 * eng + 0.50 * aud, 1)
 
 
 class CreatorScorer:
