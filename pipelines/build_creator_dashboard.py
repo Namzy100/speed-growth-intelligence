@@ -2,7 +2,7 @@
 
 Reads every creator from Supabase at build time and bakes the data into a single
 self-contained HTML file (docs/creator_dashboard.html) — same pattern + aesthetic
-as build_creative_dashboard.py (dark theme, purple accent, Speed Wallet brand).
+as build_creative_dashboard.py (dark theme, Speed-blue accent, Speed Wallet brand).
 A top-20 card grid headlines, with a searchable/filterable table for the full set
 and a collapsible scoring-criteria explainer.
 
@@ -179,7 +179,7 @@ def main() -> None:
 
 # ------------------------------------------------------------------
 # Self-contained HTML template — data injected at /*__DATA__*/.
-# Matches the creative dashboard: dark #0d1117, panels #161b22, accent #6e40c9.
+# Matches the creative dashboard: dark #0d1117, panels #161b22, accent #2f5dfb.
 # ------------------------------------------------------------------
 
 _TEMPLATE = r"""<!doctype html>
@@ -193,14 +193,14 @@ _TEMPLATE = r"""<!doctype html>
     --bg:#0d1117; --panel:#161b22; --panel-2:#1b2230;
     --hairline:rgba(255,255,255,0.09); --hairline-strong:rgba(255,255,255,0.16);
     --text:#edf1f7; --muted:#9aa4b2; --faint:#6b7585;
-    --accent:#6e40c9; --accent-2:#a371f7;
+    --accent:#2f5dfb; --accent-2:#6f9dff;
     --good:#3fb950; --warn:#e3b341; --bad:#f85149;
-    --grad:linear-gradient(120deg,#6e40c9,#a371f7);
+    --grad:linear-gradient(120deg,#2f5dfb,#6f9dff);
     --shadow:0 10px 30px -14px rgba(0,0,0,0.7);
     --shadow-lift:0 18px 44px -16px rgba(0,0,0,0.8);
     --r-lg:16px; --r-md:12px; --r-sm:9px;
     --seg-remittance:#3fb950; --seg-iGaming:#e3b341;
-    --seg-crypto-curious:#a371f7; --seg-general:#6b7585;
+    --seg-crypto-curious:#6f9dff; --seg-general:#6b7585;
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -209,8 +209,8 @@ _TEMPLATE = r"""<!doctype html>
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     line-height:1.5; -webkit-font-smoothing:antialiased;
     background:
-      radial-gradient(1100px 600px at 50% -10%, rgba(110,64,201,0.20), transparent 58%),
-      radial-gradient(820px 520px at 100% 0%, rgba(163,113,245,0.09), transparent 52%),
+      radial-gradient(1100px 600px at 50% -10%, rgba(47,93,251,0.20), transparent 58%),
+      radial-gradient(820px 520px at 100% 0%, rgba(111,157,255,0.09), transparent 52%),
       radial-gradient(720px 480px at 0% 8%, rgba(63,185,80,0.045), transparent 50%),
       var(--bg);
     background-attachment:fixed;
@@ -222,7 +222,7 @@ _TEMPLATE = r"""<!doctype html>
   /* Brand bar */
   .brandbar{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; padding:20px 0; border-bottom:1px solid var(--hairline);}
   .brand{font-weight:760; font-size:16px; letter-spacing:-0.02em; display:flex; align-items:center;}
-  .brand .bolt{margin-right:8px; font-size:17px; background:linear-gradient(180deg,#ffd66e,#f0a02a);
+  .brand .bolt{margin-right:8px; font-size:17px; background:linear-gradient(180deg,#f5c400,#f0a02a);
     -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 0 6px rgba(240,160,42,0.45));}
   .brandbar .sync{font-size:12px; color:var(--muted);} .brandbar .sync b{color:var(--text); font-weight:600;}
 
@@ -276,8 +276,8 @@ _TEMPLATE = r"""<!doctype html>
   .seg-crypto-curious{background:var(--seg-crypto-curious);} .seg-general{background:var(--seg-general); color:#e9edf3;}
   .out-pill{font-size:11px; color:var(--muted);}
   .flagchip{font-size:10px; font-weight:700; color:var(--bad); background:rgba(248,81,73,0.14); padding:1px 7px; border-radius:5px;}
-  .mimchip{font-size:10px; font-weight:700; color:#ffd66e; background:rgba(240,160,42,0.16); padding:1px 7px; border-radius:5px; border:1px solid rgba(240,160,42,0.3);}
-  .src-mimanshi{color:#ffd66e; font-weight:700;} .src-influencer{color:var(--accent-2); font-weight:650;} .src-scraped{color:var(--faint);}
+  .mimchip{font-size:10px; font-weight:700; color:#f5c400; background:rgba(240,160,42,0.16); padding:1px 7px; border-radius:5px; border:1px solid rgba(240,160,42,0.3);}
+  .src-mimanshi{color:#f5c400; font-weight:700;} .src-influencer{color:var(--accent-2); font-weight:650;} .src-scraped{color:var(--faint);}
 
   /* Click-to-expand score breakdown (inside each card) */
   .card{cursor:pointer;}
@@ -298,7 +298,7 @@ _TEMPLATE = r"""<!doctype html>
   .bd-total .val{font-size:19px; font-weight:780; font-variant-numeric:tabular-nums;}
   .bd-total .val small{font-size:11px; color:var(--faint); font-weight:600;}
   .bd-fit{display:flex; align-items:center; gap:8px; margin-top:11px; font-size:11px; color:var(--muted);}
-  .bd-fit .stars{font-size:14px; letter-spacing:1px; color:#ffd66e;}
+  .bd-fit .stars{font-size:14px; letter-spacing:1px; color:#f5c400;}
   .bd-fit .stars .empty{color:var(--faint);}
 
   /* Collapsible scoring */

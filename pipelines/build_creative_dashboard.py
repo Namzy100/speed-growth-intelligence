@@ -590,10 +590,10 @@ _TEMPLATE = r"""<!doctype html>
     --hairline:rgba(255,255,255,0.09);
     --hairline-strong:rgba(255,255,255,0.15);
     --text:#edf1f7; --muted:#9aa4b2; --faint:#6b7585;
-    --accent:#6e40c9; --accent-2:#a371f7;
+    --accent:#2f5dfb; --accent-2:#6f9dff;
     --good:#3fb950; --good-2:#56d364; --warn:#e3b341;
     --bad:#f85149; --bad-2:#ff7b72;
-    --grad:linear-gradient(120deg,#6e40c9,#a371f7);
+    --grad:linear-gradient(120deg,#2f5dfb,#6f9dff);
     --shadow:0 10px 30px -14px rgba(0,0,0,0.65);
     --shadow-lift:0 18px 44px -16px rgba(0,0,0,0.75);
     --r-lg:16px; --r-md:12px; --r-sm:9px;
@@ -605,8 +605,8 @@ _TEMPLATE = r"""<!doctype html>
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     line-height:1.5; -webkit-font-smoothing:antialiased; letter-spacing:-0.005em;
     background:
-      radial-gradient(1100px 600px at 50% -8%, rgba(110,64,201,0.22), transparent 58%),
-      radial-gradient(820px 520px at 100% 2%, rgba(163,113,245,0.10), transparent 52%),
+      radial-gradient(1100px 600px at 50% -8%, rgba(47,93,251,0.22), transparent 58%),
+      radial-gradient(820px 520px at 100% 2%, rgba(111,157,255,0.10), transparent 52%),
       radial-gradient(720px 480px at 0% 10%, rgba(63,185,80,0.05), transparent 50%),
       var(--bg);
     background-attachment:fixed;
@@ -622,7 +622,7 @@ _TEMPLATE = r"""<!doctype html>
   .brand{font-weight:750; font-size:16px; letter-spacing:-0.02em; display:flex; align-items:center;}
   .brand .bolt{
     margin-right:8px; font-size:17px;
-    background:linear-gradient(180deg,#ffd66e,#f0a02a); -webkit-background-clip:text; background-clip:text;
+    background:linear-gradient(180deg,#f5c400,#f0a02a); -webkit-background-clip:text; background-clip:text;
     -webkit-text-fill-color:transparent; filter:drop-shadow(0 0 6px rgba(240,160,42,0.45));
   }
   .brandbar .sync{font-size:12px; color:var(--muted);}
@@ -711,7 +711,7 @@ _TEMPLATE = r"""<!doctype html>
   .ins-ico{flex:0 0 auto; width:30px; height:30px; border-radius:var(--r-sm); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700;}
   .ins-positive{color:var(--good); background:rgba(63,185,80,0.15);}
   .ins-warning{color:var(--warn); background:rgba(227,179,65,0.15);}
-  .ins-neutral{color:var(--accent-2); background:rgba(110,64,201,0.18);}
+  .ins-neutral{color:var(--accent-2); background:rgba(47,93,251,0.18);}
   .ins-card.critical .ins-ico{color:#fff; background:linear-gradient(180deg,var(--bad-2),var(--bad));}
   .ins-head{font-size:14.5px; font-weight:680; letter-spacing:-0.01em; margin-bottom:4px;}
   .ins-detail{font-size:12.5px; color:var(--muted); line-height:1.5;}
@@ -721,7 +721,7 @@ _TEMPLATE = r"""<!doctype html>
   .empty{
     display:flex; flex-direction:column; align-items:center; justify-content:center;
     padding:52px 20px; text-align:center; border:1px dashed var(--hairline-strong); border-radius:var(--r-lg);
-    background:radial-gradient(420px 200px at 50% 0%, rgba(110,64,201,0.10), transparent 70%);
+    background:radial-gradient(420px 200px at 50% 0%, rgba(47,93,251,0.10), transparent 70%);
   }
   .empty .ico{color:var(--accent-2); margin-bottom:14px; opacity:0.85;}
   .empty .msg{color:var(--muted); font-size:14px; max-width:440px;}
@@ -920,7 +920,7 @@ function renderCampaigns(){
   const installs = DATA.campaigns.map(c => c.installs);
   const ctx = document.getElementById("cmpChart").getContext("2d");
   const grad = ctx.createLinearGradient(0, 0, 560, 0);
-  grad.addColorStop(0, "#6e40c9"); grad.addColorStop(1, "#a371f7");
+  grad.addColorStop(0, "#2f5dfb"); grad.addColorStop(1, "#6f9dff");
   new Chart(ctx, {
     type:"bar",
     data:{labels, datasets:[{
@@ -958,15 +958,15 @@ function renderRetention(){
   if (typeof Chart === "undefined"){ chartFallback("retChart"); return; }
   const rctx = document.getElementById("retChart").getContext("2d");
   const fill = rctx.createLinearGradient(0, 0, 0, 340);
-  fill.addColorStop(0, "rgba(163,113,245,0.42)");
-  fill.addColorStop(1, "rgba(110,64,201,0.02)");
+  fill.addColorStop(0, "rgba(111,157,255,0.42)");
+  fill.addColorStop(1, "rgba(47,93,251,0.02)");
   new Chart(rctx, {
     type:"line",
     data:{labels:r.labels, datasets:[{
       label:"Retention", data:r.values.map(v=>+(v*100).toFixed(2)),
-      borderColor:"#a371f7", backgroundColor:fill, borderWidth:2.5,
+      borderColor:"#6f9dff", backgroundColor:fill, borderWidth:2.5,
       fill:true, tension:0.35,
-      pointRadius:4, pointHoverRadius:6, pointBackgroundColor:"#a371f7",
+      pointRadius:4, pointHoverRadius:6, pointBackgroundColor:"#6f9dff",
       pointBorderColor:"#0a0c11", pointBorderWidth:2,
     }]},
     options:{

@@ -284,9 +284,9 @@ _TEMPLATE = r"""<!doctype html>
     --bg:#0d1117; --panel:#161b22; --panel-2:#1b2230;
     --hairline:rgba(255,255,255,0.09); --hairline-strong:rgba(255,255,255,0.16);
     --text:#edf1f7; --muted:#9aa4b2; --faint:#6b7585;
-    --accent:#6e40c9; --accent-2:#a371f7;
-    --good:#3fb950; --warn:#e3b341; --bad:#f85149; --gold:#ffd66e;
-    --grad:linear-gradient(120deg,#6e40c9,#a371f7);
+    --accent:#2f5dfb; --accent-2:#6f9dff;
+    --good:#3fb950; --warn:#e3b341; --bad:#f85149; --gold:#f5c400;
+    --grad:linear-gradient(120deg,#2f5dfb,#6f9dff);
     --shadow:0 10px 30px -14px rgba(0,0,0,0.7);
     --shadow-lift:0 18px 44px -16px rgba(0,0,0,0.8);
     --r-lg:16px; --r-md:12px; --r-sm:9px;
@@ -297,8 +297,8 @@ _TEMPLATE = r"""<!doctype html>
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     line-height:1.5; -webkit-font-smoothing:antialiased;
     background:
-      radial-gradient(1100px 600px at 50% -10%, rgba(110,64,201,0.20), transparent 58%),
-      radial-gradient(820px 520px at 100% 0%, rgba(163,113,245,0.09), transparent 52%),
+      radial-gradient(1100px 600px at 50% -10%, rgba(47,93,251,0.20), transparent 58%),
+      radial-gradient(820px 520px at 100% 0%, rgba(111,157,255,0.09), transparent 52%),
       radial-gradient(720px 480px at 0% 8%, rgba(63,185,80,0.045), transparent 50%),
       var(--bg);
     background-attachment:fixed;
@@ -307,7 +307,7 @@ _TEMPLATE = r"""<!doctype html>
 
   .brandbar{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; padding:20px 0; border-bottom:1px solid var(--hairline);}
   .brand{font-weight:760; font-size:16px; display:flex; align-items:center;}
-  .brand .bolt{margin-right:8px; font-size:17px; background:linear-gradient(180deg,#ffd66e,#f0a02a);
+  .brand .bolt{margin-right:8px; font-size:17px; background:linear-gradient(180deg,#f5c400,#f0a02a);
     -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 0 6px rgba(240,160,42,0.45));}
   .brandbar .sync{font-size:12px; color:var(--muted);} .brandbar .sync b{color:var(--text); font-weight:600;}
 
@@ -348,7 +348,7 @@ _TEMPLATE = r"""<!doctype html>
 
   /* Section 4 — white space matrix */
   .ws-banner{display:flex; align-items:center; gap:14px; flex-wrap:wrap; padding:16px 20px; margin-bottom:16px;
-    background:linear-gradient(120deg,rgba(63,185,80,0.12),rgba(110,64,201,0.10)); border:1px solid rgba(63,185,80,0.3); border-radius:var(--r-md);}
+    background:linear-gradient(120deg,rgba(63,185,80,0.12),rgba(47,93,251,0.10)); border:1px solid rgba(63,185,80,0.3); border-radius:var(--r-md);}
   .ws-flag{font-size:10px; font-weight:800; letter-spacing:0.12em; color:var(--good); background:rgba(63,185,80,0.16); padding:5px 11px; border-radius:6px; white-space:nowrap;}
   .ws-headline{font-size:16px; font-weight:700; letter-spacing:-0.01em;}
   .table-wrap{overflow-x:auto; border:1px solid var(--hairline); border-radius:var(--r-md); background:var(--panel);}
@@ -374,7 +374,7 @@ _TEMPLATE = r"""<!doctype html>
     border:1px solid var(--hairline); border-radius:var(--r-lg); box-shadow:var(--shadow); transition:transform .2s ease,border-color .2s ease;}
   .tac-card:hover{transform:translateY(-3px); border-color:var(--hairline-strong);}
   .tac-cat{display:inline-block; font-size:9.5px; font-weight:800; letter-spacing:0.09em; text-transform:uppercase;
-    color:var(--accent-2); background:rgba(163,113,245,0.13); border:1px solid rgba(163,113,245,0.3); padding:3px 9px; border-radius:20px;}
+    color:var(--accent-2); background:rgba(111,157,255,0.13); border:1px solid rgba(111,157,255,0.3); padding:3px 9px; border-radius:20px;}
   .tac-title{font-size:16.5px; font-weight:740; letter-spacing:-0.015em; margin:11px 0 8px;}
   .tac-why{font-size:13px; color:var(--muted); line-height:1.55;}
 

@@ -557,24 +557,24 @@ _TEMPLATE = r"""<!doctype html>
     --bg:#0d1117; --panel:#161b22; --panel-2:#1b2230;
     --hairline:rgba(255,255,255,0.09); --hairline-strong:rgba(255,255,255,0.16);
     --text:#edf1f7; --muted:#9aa4b2; --faint:#6b7585;
-    --accent:#6e40c9; --accent-2:#a371f7;
-    --good:#3fb950; --warn:#e3b341; --bad:#f85149; --gold:#ffd66e; --blue:#4b8bf5;
+    --accent:#2f5dfb; --accent-2:#6f9dff;
+    --good:#3fb950; --warn:#e3b341; --bad:#f85149; --gold:#f5c400; --blue:#2f5dfb;
     --yt:#ff4d4d; --tt:#25f4ee; --ig:#dd2a7b;
-    --grad:linear-gradient(120deg,#6e40c9,#a371f7);
+    --grad:linear-gradient(120deg,#2f5dfb,#6f9dff);
     --shadow:0 10px 30px -14px rgba(0,0,0,0.7);
     --r-lg:16px; --r-md:12px; --r-sm:9px;
-    --seg-remittance:#3fb950; --seg-cryptocurious:#a371f7; --seg-iGaming:#e3b341;
+    --seg-remittance:#3fb950; --seg-cryptocurious:#6f9dff; --seg-iGaming:#e3b341;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   body{color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     letter-spacing:-0.005em; line-height:1.5; -webkit-font-smoothing:antialiased; min-height:100vh;
-    background:radial-gradient(1100px 600px at 50% -10%, rgba(110,64,201,0.20), transparent 58%),
-      radial-gradient(820px 520px at 100% 0%, rgba(163,113,245,0.09), transparent 52%), var(--bg);
+    background:radial-gradient(1100px 600px at 50% -10%, rgba(47,93,251,0.20), transparent 58%),
+      radial-gradient(820px 520px at 100% 0%, rgba(111,157,255,0.09), transparent 52%), var(--bg);
     background-attachment:fixed;}
   .wrap{max-width:1180px; margin:0 auto; padding:0 24px 90px;}
   .brandbar{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; padding:20px 0; border-bottom:1px solid var(--hairline);}
   .brand{font-weight:760; font-size:16px; display:flex; align-items:center; gap:8px;}
-  .brand .bolt{background:linear-gradient(180deg,#ffd66e,#f0a02a); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
+  .brand .bolt{background:linear-gradient(180deg,#f5c400,#f0a02a); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
   .sync{font-size:12px; color:var(--muted);} .sync b{color:var(--text);}
   .title-block{margin:34px 0 22px;}
   h1{font-size:30px; font-weight:790; letter-spacing:-0.03em; background:linear-gradient(180deg,#fff,#c9c3e8); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
@@ -601,7 +601,7 @@ _TEMPLATE = r"""<!doctype html>
   .st-results_in{background:var(--good);}
 
   /* This week's actions */
-  .actions{background:linear-gradient(180deg,rgba(110,64,201,0.10),rgba(22,27,34,0.4)); border:1px solid var(--hairline-strong); border-radius:var(--r-lg); padding:20px;}
+  .actions{background:linear-gradient(180deg,rgba(47,93,251,0.10),rgba(22,27,34,0.4)); border:1px solid var(--hairline-strong); border-radius:var(--r-lg); padding:20px;}
   .actions-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:16px;}
   @media(max-width:900px){.actions-grid{grid-template-columns:1fr 1fr;}}
   @media(max-width:560px){.actions-grid{grid-template-columns:1fr;}}
