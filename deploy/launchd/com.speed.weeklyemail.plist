@@ -30,9 +30,11 @@
     <integer>0</integer>
   </dict>
 
+  <!-- Logs OUTSIDE ~/Documents — see com.speed.dailysync.plist for why
+       (launchd can't open StandardOut/Err in TCC-protected ~/Documents). -->
   <key>StandardOutPath</key>
-  <string>/Users/namzysacc/Documents/Speed/weekly_update.log</string>
+  <string>/Users/namzysacc/Library/Logs/speed/weekly_update.log</string>
   <key>StandardErrorPath</key>
-  <string>/Users/namzysacc/Documents/Speed/weekly_update.log</string>
+  <string>/Users/namzysacc/Library/Logs/speed/weekly_update.log</string>
 </dict>
 </plist>

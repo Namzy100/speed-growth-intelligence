@@ -14,9 +14,18 @@ fires); if it's powered off, that fire is skipped.
 
 | Agent | Schedule | What it runs |
 |-------|----------|--------------|
-| `com.speed.dailysync`   | 08:00 daily        | `run_daily_sync.py` then `agent_evaluator.py` (`DASHBOARD_AUTODEPLOY=1`) → `sync.log` |
-| `com.speed.weeklyemail` | 12:00 Fridays      | `schedule_weekly_update.py --to=namanbehl1@gmail.com` (test-gated) → `weekly_update.log` |
-| `com.speed.trend`       | 07:00 Mondays      | `run_daily_sync.py` with `TREND_DASHBOARD_REBUILD=1` → rebuilds + deploys the trend dashboard → `trend_pipeline.log` |
+| `com.speed.dailysync`   | 08:00 daily        | `run_daily_sync.py` then `agent_evaluator.py` (`DASHBOARD_AUTODEPLOY=1`) → `~/Library/Logs/speed/sync.log` |
+| `com.speed.weeklyemail` | 12:00 Fridays      | `schedule_weekly_update.py --to=namanbehl1@gmail.com` (test-gated) → `~/Library/Logs/speed/weekly_update.log` |
+| `com.speed.trend`       | 07:00 Mondays      | `run_daily_sync.py` with `TREND_DASHBOARD_REBUILD=1` → rebuilds + deploys the trend dashboard → `~/Library/Logs/speed/trend_pipeline.log` |
+
+> **Why logs live in `~/Library/Logs/speed/`, not next to the code in `~/Documents`:**
+> launchd (the daemon) opens each agent's `StandardOutPath`/`StandardErrorPath`
+> *itself* at spawn time. `~/Documents` is a TCC-protected folder that the launchd
+> daemon can't open, so a log path there makes `bootstrap` fail with
+> **`Bootstrap failed: 5: Input/output error`** and the job exits **`78` (EX_CONFIG)**
+> with no output. (The job *itself*, once running, reads/writes `~/Documents` fine —
+> only launchd's own file-open at spawn is blocked.) Do not move the logs back into
+> `~/Documents`.
 
 Secrets are NOT in these plists — the pipeline loads API keys from `.env` via
 `python-dotenv`. Only non-secret flags (`DASHBOARD_AUTODEPLOY`,
@@ -30,6 +39,13 @@ Secrets are NOT in these plists — the pipeline loads API keys from `.env` via
 
 ```bash
 cd /Users/namzysacc/Documents/Speed
+
+# 0. Log dir must exist (launchd creates the log FILE but not the parent dir),
+#    and clear any half-registered prior attempt (ignore "not found" errors).
+mkdir -p ~/Library/Logs/speed
+for L in com.speed.dailysync com.speed.weeklyemail com.speed.trend; do
+  launchctl bootout gui/$(id -u)/$L 2>/dev/null
+done
 
 # 1. Copy all three into your LaunchAgents directory
 cp deploy/launchd/com.speed.dailysync.plist   ~/Library/LaunchAgents/
@@ -46,7 +62,7 @@ launchctl kickstart -k gui/$(id -u)/com.speed.dailysync
 
 # 4. Watch the log — confirm a REAL completed run, e.g.
 #    "[...] Sync complete — N/N steps succeeded"  (not just that it started)
-tail -f sync.log
+tail -f ~/Library/Logs/speed/sync.log
 ```
 
 ## Prove they're actually loaded and scheduled (survives past a manual kick)

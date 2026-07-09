@@ -34,9 +34,15 @@
     <integer>0</integer>
   </dict>
 
+  <!-- Logs MUST live OUTSIDE ~/Documents. launchd (the daemon) opens these
+       StandardOut/Err paths itself at spawn time, and ~/Documents is TCC-protected,
+       so a log path there fails with EX_CONFIG (78) and "Bootstrap failed: 5:
+       Input/output error". The job, once running, can still read/write ~/Documents
+       fine (verified) — it's only launchd's own file-open at spawn that is blocked.
+       mkdir -p ~/Library/Logs/speed before first load. -->
   <key>StandardOutPath</key>
-  <string>/Users/namzysacc/Documents/Speed/sync.log</string>
+  <string>/Users/namzysacc/Library/Logs/speed/sync.log</string>
   <key>StandardErrorPath</key>
-  <string>/Users/namzysacc/Documents/Speed/sync.log</string>
+  <string>/Users/namzysacc/Library/Logs/speed/sync.log</string>
 </dict>
 </plist>
