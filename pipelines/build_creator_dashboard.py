@@ -69,11 +69,12 @@ def build_rows() -> list[dict]:
             "segment": str(r.get("segment_tag", "general")),
             "score": score,
             # deposit_relevance was removed from the composite (2026-07 audit).
-            # sponsorship is only real where it was measured — currently only the
-            # TikTok fetcher does so; YouTube/IG/X are "no data" and excluded from
-            # the composite (weight redistributed) rather than scored 0.
+            # sponsorship is only real where it was measured; that fact now lives in
+            # the per-creator sponsorship_data_available column (set by the fetchers),
+            # not a platform proxy. Where unavailable it's excluded from the composite
+            # (weight redistributed) rather than scored 0.
             "spons": round(float(r.get("sponsorship_score", 0) or 0), 1),
-            "spavail": str(r.get("platform", "")) == "TikTok",
+            "spavail": bool(r.get("sponsorship_data_available", False)),
             "infl": round(float(r.get("influencer_score", 0) or 0), 1),
             "is_influencer": is_infl,
             "source": _source(tags, is_infl),

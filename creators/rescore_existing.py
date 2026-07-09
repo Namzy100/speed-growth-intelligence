@@ -29,10 +29,6 @@ load_dotenv(_ROOT / ".env")
 
 from creators import database
 
-# Only the TikTok fetcher actually measured sponsorship in the current data.
-_MEASURED_SPONSORSHIP_PLATFORMS = {"TikTok"}
-
-
 def _f(r, k):
     return float(r.get(k) or 0)
 
@@ -40,7 +36,9 @@ def _f(r, k):
 def _recompute(r: dict) -> tuple[float, bool, list[str]]:
     af, eq, ca = _f(r, "audience_fit"), _f(r, "engagement_quality_score"), _f(r, "content_alignment")
     sp = _f(r, "sponsorship_score")
-    spons_avail = r.get("platform") in _MEASURED_SPONSORSHIP_PLATFORMS
+    # Single source of truth: the stored per-creator flag (set by the fetchers,
+    # backfilled for legacy rows). No longer derived from platform here.
+    spons_avail = bool(r.get("sponsorship_data_available", False))
     dims = [af, eq, ca]
     basis = ["audience_fit", "engagement", "content_alignment"]
     if spons_avail:
@@ -70,8 +68,9 @@ def main(write: bool) -> None:
         return sum(xs) / len(xs) if xs else 0.0
 
     print(f"{'DRY RUN — no writes' if not write else 'WRITING'} · {len(rows)} creators\n")
-    print(f"sponsorship data available (measured): {sum(1 for r in rows if r['_avail'])} "
-          f"(TikTok); excluded/renormalised: {sum(1 for r in rows if not r['_avail'])}\n")
+    print(f"sponsorship data available (measured, from stored flag): "
+          f"{sum(1 for r in rows if r['_avail'])}; "
+          f"excluded/renormalised: {sum(1 for r in rows if not r['_avail'])}\n")
     print("=== TOP 20 ===")
     print(f"  overlap: {len(top20_old & top20_new)}/20 · dropped out: {len(top20_old - top20_new)} · "
           f"new entrants: {len(top20_new - top20_old)}")

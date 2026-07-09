@@ -72,6 +72,16 @@ ADD_DEPOSIT_COLUMN_SQL = (
     "ADD COLUMN IF NOT EXISTS deposit_relevance_score FLOAT DEFAULT 0;"
 )
 
+# Migration for the real per-creator sponsorship-availability flag. Replaces the
+# old dashboard-time proxy (platform == 'TikTok'). The fetchers set this in their
+# return dict; _merge_record() persists it. DEFAULT false so any source that does
+# not measure sponsorship (IG/X, or a future fetcher) is safely "no data" and
+# excluded from the composite. Idempotent — safe to run repeatedly.
+ADD_SPONSORSHIP_AVAIL_COLUMN_SQL = (
+    "ALTER TABLE public.creators "
+    "ADD COLUMN IF NOT EXISTS sponsorship_data_available BOOLEAN DEFAULT false;"
+)
+
 # Migration for the influencer-pivot fields. Run in the Supabase SQL editor,
 # THEN uncomment the two lines in _merge_record() to persist them. Idempotent.
 ADD_INFLUENCER_COLUMNS_SQL = """
@@ -322,6 +332,12 @@ def _merge_record(creator_dict: dict, score_dict: dict) -> dict:
         "crypto_content_pct":   creator_dict.get("crypto_content_pct", 0.0),
         "fintech_content_pct":  creator_dict.get("fintech_content_pct", 0.0),
         "sponsorship_count":    creator_dict.get("sponsorship_count", 0),
+        # Real per-creator flag set by the fetchers: True only when sponsorship was
+        # actually measured (TikTok isSponsored/isAd; YouTube paidProductPlacement).
+        # False for any source that doesn't check (IG/X imports, future fetchers).
+        # This is the single source of truth read by the scorer and dashboard —
+        # replaces the old platform == 'TikTok' proxy.
+        "sponsorship_data_available": bool(creator_dict.get("sponsorship_data_available", False)),
         "niche_tags":           creator_dict.get("niche_tags", []),
         # Scoring fields
         "composite_score":          score_dict.get("composite_score", 0.0),
