@@ -68,7 +68,12 @@ def build_rows() -> list[dict]:
             "followers": int(r.get("followers", 0) or 0),
             "segment": str(r.get("segment_tag", "general")),
             "score": score,
-            "drs": round(float(r.get("deposit_relevance_score", 0) or 0), 1),
+            # deposit_relevance was removed from the composite (2026-07 audit).
+            # sponsorship is only real where it was measured — currently only the
+            # TikTok fetcher does so; YouTube/IG/X are "no data" and excluded from
+            # the composite (weight redistributed) rather than scored 0.
+            "spons": round(float(r.get("sponsorship_score", 0) or 0), 1),
+            "spavail": str(r.get("platform", "")) == "TikTok",
             "infl": round(float(r.get("influencer_score", 0) or 0), 1),
             "is_influencer": is_infl,
             "source": _source(tags, is_infl),
@@ -308,7 +313,10 @@ _TEMPLATE = r"""<!doctype html>
     <details class="crit">
       <summary>How creators are scored <span class="chev">›</span></summary>
       <div class="body">
-        Each creator is scored across five dimensions, each out of 20, for a composite out of 100.
+        Each creator is scored on the dimensions below that carry real signal, then
+        renormalised to a composite out of 100. Sponsorship is included only when it
+        was actually measured (currently TikTok); where it wasn't, it is excluded and
+        its weight redistributed rather than scored 0.
         Composite colour: <span class="score-pill s-good">green &gt;50</span>
         <span class="score-pill s-warn">yellow 30–50</span>
         <span class="score-pill s-bad">red &lt;30</span>.
@@ -317,8 +325,8 @@ _TEMPLATE = r"""<!doctype html>
           <div class="dim"><b>Audience fit</b><span>match to Speed's segments</span></div>
           <div class="dim"><b>Engagement quality</b><span>real vs inflated reach</span></div>
           <div class="dim"><b>Content alignment</b><span>crypto / fintech focus</span></div>
-          <div class="dim"><b>Acquisition potential</b><span>install-driving reach</span></div>
-          <div class="dim"><b>Deposit relevance</b><span>likelihood of USD deposits</span></div>
+          <div class="dim"><b>Sponsorship</b><span>measured brand-deal history (where available)</span></div>
+          <div class="dim"><b>Acquisition potential</b><span>reference-only reach proxy</span></div>
         </div>
         <div class="segline">
           Segments:
@@ -351,7 +359,7 @@ _TEMPLATE = r"""<!doctype html>
         <th data-k="name">Creator</th><th data-k="source">Source</th><th data-k="platform">Platform</th><th data-k="segment">Segment</th>
         <th class="num" data-k="followers">Followers</th><th class="num" data-k="score">Score</th>
         <th class="num" data-k="infl">Influencer</th>
-        <th class="num" data-k="drs">Deposit Rel.</th><th data-k="outreach">Outreach</th>
+        <th data-k="spavail">Sponsorship</th><th data-k="outreach">Outreach</th>
         <th data-k="brand_flag">Brand</th><th>Niche Tags</th>
       </tr></thead><tbody></tbody>
     </table></div>
@@ -376,17 +384,17 @@ const barColor = v => v >= 14 ? "#3fb950" : v >= 8 ? "#e3b341" : "#f85149";
 
 function breakdown(c){
   const dims = [
-    ["Audience Fit", c.af, false],
-    ["Engagement", c.eng, false],
-    ["Content Align.", c.con, false],
-    ["Acquisition", c.acq, true],
-    ["Deposit Rel.", c.drs, false],
+    ["Audience Fit", c.af, false, true],
+    ["Engagement", c.eng, false, true],
+    ["Content Align.", c.con, false, true],
+    ["Sponsorship", c.spons, false, c.spavail],   // only counts when measured
+    ["Acquisition", c.acq, true, false],
   ];
-  const rows = dims.map(([lab,v,ref]) => `
+  const rows = dims.map(([lab,v,ref,counts]) => `
     <div class="bd-row">
-      <span class="bd-lab">${lab}${ref?' <span class="ref">*</span>':''}</span>
-      <div class="bd-track"><div class="bd-fill" data-w="${Math.min(v/20*100,100).toFixed(1)}%" style="background:${barColor(v)}"></div></div>
-      <span class="bd-val">${v.toFixed(1)}</span>
+      <span class="bd-lab">${lab}${ref?' <span class="ref">*</span>':''}${(lab==="Sponsorship"&&!counts)?' <span class="ref">†</span>':''}</span>
+      <div class="bd-track"><div class="bd-fill" data-w="${counts?Math.min(v/20*100,100).toFixed(1):0}%" style="background:${counts?barColor(v):'#30363d'}"></div></div>
+      <span class="bd-val">${(lab==="Sponsorship"&&!counts)?'n/a':v.toFixed(1)}</span>
     </div>`).join("");
   let fit = "";
   if(c.source==="mimanshi" && c.fit_score>0){
@@ -398,7 +406,7 @@ function breakdown(c){
     <div class="bd-total"><span class="lab">Composite</span>
       <span class="val" style="color:${scoreColor(c.score)}">${c.score.toFixed(1)}<small>/100</small></span></div>
     ${fit}
-    <div class="bd-fit" style="color:var(--faint)"><span>* Acquisition is a reference reach proxy — not part of the composite.</span></div>
+    <div class="bd-fit" style="color:var(--faint)"><span>* Acquisition is a reference reach proxy — not part of the composite. † No sponsorship data available — excluded from the composite, weight redistributed.</span></div>
   </div></div>`;
 }
 
@@ -452,7 +460,7 @@ function renderCards(){
       </div>
       <div class="card-foot">
         <div><span class="k">Followers</span> <span class="v">${fmtFollow(c.followers)}</span></div>
-        <div><span class="k">Deposit rel.</span> <span class="v">${c.drs.toFixed(1)}</span></div>
+        <div><span class="k">Sponsorship</span> <span class="v">${c.spavail?c.spons.toFixed(1):'no data'}</span></div>
         <div><span class="card-hint">▾ breakdown</span></div>
       </div>
       ${breakdown(c)}
@@ -499,7 +507,7 @@ function renderTable(){
       <td class="num">${intFmt.format(c.followers)}</td>
       <td class="num"><span class="score-pill ${scoreCls(c.score)}">${c.score.toFixed(1)}</span></td>
       <td class="num">${c.infl.toFixed(1)}${c.is_influencer?' <span class="infl-dot" title="influencer">●</span>':''}</td>
-      <td class="num">${c.drs.toFixed(1)}</td>
+      <td>${c.spavail?`<span class="badge" style="background:rgba(63,185,80,.12);color:#3fb950;border:1px solid rgba(63,185,80,.3)">measured ${c.spons.toFixed(1)}</span>`:'<span class="muted" title="excluded from composite; weight redistributed">no data</span>'}</td>
       <td class="muted">${esc(c.outreach)}</td>
       <td>${flag}</td>
       <td class="tags">${tags}</td>

@@ -172,14 +172,20 @@ class CreatorScorer:
                 engagement_rate (float 0–1), engagement_quality (int 1–10),
                 crypto_content_pct (float 0–1), fintech_content_pct (float 0–1),
                 sponsorship_count (int), niche_tags (list[str]),
-                purchase_intent_signals (float 0–1, default 0.5).
+                sponsorship_data_available (bool): True only when real sponsorship
+                    data was measured for this creator. When False, sponsorship is
+                    excluded from the composite and its weight redistributed.
 
         Returns:
             Dict with:
                 scores               — dict of dimension scores, each float /20
-                deposit_relevance_score — float /20; likelihood of USD deposit completion
-                composite_score      — float /100 (audience_fit + engagement +
-                                       content_alignment + deposit_relevance + sponsorship)
+                deposit_relevance_score — None (dimension removed in 2026-07 audit)
+                composite_score      — float /100, renormalised over the dimensions
+                                       that carry real signal: audience_fit +
+                                       engagement + content_alignment (+ sponsorship
+                                       only when sponsorship_data_available)
+                composite_basis      — list of the dimensions that fed the score
+                sponsorship_data_available — bool echoed from input
                 segment_tag          — "remittance" | "iGaming" | "crypto-curious" | "general"
                 reasoning            — plain-English summary of the score
         """
@@ -198,14 +204,31 @@ class CreatorScorer:
         content, content_notes = self._score_content_alignment(creator)
         acquisition, acq_notes = self._score_acquisition_potential(creator, audience_fit)
         sponsorship, sponsor_notes = self._score_sponsorship_history(creator)
-        deposit_rel, deposit_notes = self._score_deposit_relevance(creator, audience_fit, content)
 
-        # acquisition_potential is retained in scores for reference but excluded from
-        # the composite; deposit_relevance_score fills that 20-point slot because
-        # USD deposits — not installs — are Speed's primary conversion goal.
-        composite = round(
-            audience_fit + engagement + content + deposit_rel + sponsorship, 1
-        )
+        # --- Composite (revised after the 2026-07 scoring audit) ---
+        # Each included dimension is /20. We score ONLY the dimensions that carry
+        # real signal for this creator, then renormalise the total back to /100 so
+        # a 3-dimension creator and a 4-dimension creator are comparable.
+        #
+        # sponsorship_history is included ONLY when real sponsorship data was
+        # measured for this creator (sponsorship_data_available). Where it wasn't,
+        # it is EXCLUDED and its weight redistributed proportionally — NOT scored
+        # 0, because a hardcoded 0 is indistinguishable from a verified-low value.
+        #
+        # deposit_relevance was REMOVED from the composite entirely: its 40% input
+        # (purchase_intent_signals) was a never-set 0.5 constant, and the other 60%
+        # just recycled audience_fit + content_alignment (already counted here). It
+        # carried no independent signal. Reintroduce only once a real deposit proxy
+        # (referral/CTA/app-promo language) is actually fetched.
+        #
+        # acquisition_potential remains reference-only (excluded from composite).
+        spons_available = bool(creator.get("sponsorship_data_available", False))
+        dims = [audience_fit, engagement, content]
+        basis = ["audience_fit", "engagement", "content_alignment"]
+        if spons_available:
+            dims.append(sponsorship)
+            basis.append("sponsorship")
+        composite = round(sum(dims) * 100.0 / (20.0 * len(dims)), 1)
 
         return {
             "name": creator["name"],
@@ -217,16 +240,20 @@ class CreatorScorer:
                 "acquisition_potential": round(acquisition, 1),
                 "sponsorship_history": round(sponsorship, 1),
             },
-            "deposit_relevance_score": round(deposit_rel, 1),
+            # deposit_relevance is no longer scored (removed from the composite,
+            # pending a real signal). Explicit None so it is never mistaken for a 0.
+            "deposit_relevance_score": None,
             "composite_score": composite,
+            "composite_basis": basis,               # which dims actually fed the score
+            "sponsorship_data_available": spons_available,
             "segment_tag": segment_tag,
             # Influencer signals — separate from the finance-weighted composite.
             "is_influencer": detect_influencer(creator),
             "influencer_score": influencer_score(creator),
             "reasoning": self._build_reasoning(
-                creator, composite, segment_tag,
+                creator, composite, segment_tag, spons_available,
                 audience_notes, engagement_notes,
-                content_notes, acq_notes, sponsor_notes, deposit_notes,
+                content_notes, acq_notes, sponsor_notes,
             ),
         }
 
@@ -414,28 +441,12 @@ class CreatorScorer:
         score = min(math.log2(count + 1) / math.log2(21) * 20, 20.0)
         return score, f"{count} brand deal(s)"
 
-    def _score_deposit_relevance(
-        self, creator: dict, audience_fit_score: float, content_score: float
-    ) -> tuple[float, str]:
-        """Likelihood that this creator's audience will complete a USD deposit (0–20).
-
-        Combines three signals:
-        - purchase_intent_signals (0–1): how often the creator's content discusses
-          actually buying/using crypto vs. just talking about it abstractly.
-          Defaults to 0.5 if not provided.
-        - content_alignment: understanding of crypto/fintech predicts KYC completion.
-        - audience_fit: segment match predicts deposit motivation.
-        """
-        intent = float(creator.get("purchase_intent_signals", 0.5))
-        intent = max(0.0, min(1.0, intent))  # clamp to valid range
-
-        fit_ratio = audience_fit_score / 20.0
-        content_ratio = content_score / 20.0
-
-        # Intent is the strongest deposit predictor (40%); content second (35%); fit third (25%).
-        raw = intent * 0.40 + content_ratio * 0.35 + fit_ratio * 0.25
-        score = round(raw * 20, 1)
-        return score, f"intent={intent:.0%}, content={content_ratio:.0%}, fit={fit_ratio:.0%}"
+    # NOTE: _score_deposit_relevance was removed in the 2026-07 scoring audit.
+    # It combined a never-set purchase_intent_signals=0.5 constant (40%) with
+    # recycled content_alignment/audience_fit (60%), so it added no independent
+    # signal. `purchase_intent_signals` is no longer read anywhere in the scorer.
+    # Reintroduce a real deposit dimension only when a genuine proxy (e.g.
+    # referral/CTA/app-download language in fetched captions/descriptions) exists.
 
     # ------------------------------------------------------------------
 
@@ -444,23 +455,27 @@ class CreatorScorer:
         creator: dict,
         composite: float,
         segment_tag: str,
+        spons_available: bool,
         audience_notes: str,
         engagement_notes: str,
         content_notes: str,
         acq_notes: str,
         sponsor_notes: str,
-        deposit_notes: str,
     ) -> str:
         tier = "strong" if composite >= 75 else "moderate" if composite >= 50 else "weak"
+        spons_line = (
+            f"Sponsorships: {sponsor_notes}."
+            if spons_available
+            else "Sponsorships: no data available (excluded from score, weight redistributed)."
+        )
         return (
             f"{creator['name']} is a {tier} Speed partner candidate ({composite}/100). "
             f"Segment: {segment_tag}. "
             f"Audience fit: {audience_notes}. "
             f"Engagement: {engagement_notes}. "
             f"Content: {content_notes}. "
-            f"Deposit relevance: {deposit_notes}. "
             f"Reach (ref): {acq_notes}. "
-            f"Sponsorships: {sponsor_notes}."
+            f"{spons_line}"
         )
 
 
@@ -480,7 +495,7 @@ if __name__ == "__main__":
             "fintech_content_pct": 0.15,
             "sponsorship_count": 8,
             "niche_tags": ["bitcoin", "crypto", "lightning", "personal finance", "investing"],
-            "purchase_intent_signals": 0.75,  # regularly covers buying/stacking BTC
+            "sponsorship_data_available": True,
         },
         {
             "name": "DiasporaDaily",
@@ -492,7 +507,7 @@ if __name__ == "__main__":
             "fintech_content_pct": 0.40,
             "sponsorship_count": 3,
             "niche_tags": ["remittance", "expats", "send money", "diaspora"],
-            "purchase_intent_signals": 0.60,  # audience already transacts; some crypto crossover
+            "sponsorship_data_available": True,
         },
         {
             "name": "BetKing247",
@@ -504,7 +519,21 @@ if __name__ == "__main__":
             "fintech_content_pct": 0.05,
             "sponsorship_count": 15,
             "niche_tags": ["igaming", "sports betting", "casino", "poker"],
-            "purchase_intent_signals": 0.35,  # gambling focus; low crypto buying intent
+            "sponsorship_data_available": True,
+        },
+        # A creator with NO measured sponsorship data — sponsorship is excluded
+        # from the composite and its weight redistributed across the other dims.
+        {
+            "name": "NoSponsData",
+            "platform": "YouTube",
+            "followers": 120_000,
+            "engagement_rate": 0.04,
+            "engagement_quality": 7,
+            "crypto_content_pct": 0.50,
+            "fintech_content_pct": 0.10,
+            "sponsorship_count": 0,
+            "niche_tags": ["bitcoin", "crypto", "investing"],
+            "sponsorship_data_available": False,
         },
     ]
 
@@ -515,8 +544,9 @@ if __name__ == "__main__":
         print(f"\n{'=' * 55}")
         print(f"Creator  : {result['name']} ({result['platform']})")
         print(f"Segment  : {result['segment_tag']}")
-        print(f"Composite: {result['composite_score']} / 100")
-        print(f"Deposit relevance: {result['deposit_relevance_score']} / 20")
+        print(f"Composite: {result['composite_score']} / 100  "
+              f"(basis: {', '.join(result['composite_basis'])})")
+        print(f"Sponsorship data available: {result['sponsorship_data_available']}")
         print("Breakdown (scores dict):")
         for dim, val in result["scores"].items():
             bar = "█" * int(val / 20 * 20)

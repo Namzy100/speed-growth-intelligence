@@ -193,13 +193,22 @@ class YouTubeCreatorFetcher:
         return [item["contentDetails"]["videoId"] for item in data.get("items", [])]
 
     def _fetch_video_stats(self, video_ids: list[str]) -> list[dict]:
+        """Fetch per-video statistics AND the paid-product-placement flag.
+
+        `paidProductPlacementDetails.hasPaidProductPlacement` is YouTube's own
+        creator-declared sponsorship flag — the direct analogue of TikTok's
+        isSponsored. It rides on the SAME videos.list call (no extra quota) and,
+        verified 2026-07, IS returned to third-party API keys. It is low-recall
+        (creators self-declare; many sponsored videos go unflagged), so treat it
+        as an undercount, not ground truth — but it is real, not fabricated.
+        """
         if not video_ids:
             return []
         data = self._get("videos", {
-            "part": "statistics",
+            "part": "statistics,paidProductPlacementDetails",
             "id": ",".join(video_ids),
         })
-        return [item.get("statistics", {}) for item in data.get("items", [])]
+        return data.get("items", [])
 
     # ------------------------------------------------------------------
     # Estimation helpers
@@ -302,13 +311,29 @@ class YouTubeCreatorFetcher:
 
         uploads_id = content_details.get("relatedPlaylists", {}).get("uploads", "")
         avg_views = avg_likes = avg_comments = 0.0
+        sampled = 0
+        sponsored_in_sample = 0
         if uploads_id:
             video_ids = self._fetch_recent_video_ids(uploads_id, count=10)
             if video_ids:
-                vstats = self._fetch_video_stats(video_ids)
+                vitems = self._fetch_video_stats(video_ids)
+                sampled = len(vitems)
+                vstats = [it.get("statistics", {}) for it in vitems]
                 avg_views = self._field_avg(vstats, "viewCount")
                 avg_likes = self._field_avg(vstats, "likeCount")
                 avg_comments = self._field_avg(vstats, "commentCount")
+                # Creator-declared paid-promotion flag (undercounts; see _fetch_video_stats).
+                sponsored_in_sample = sum(
+                    1 for it in vitems
+                    if (it.get("paidProductPlacementDetails") or {}).get("hasPaidProductPlacement")
+                )
+
+        # Extrapolate total sponsored videos from the flagged fraction in the sample,
+        # mirroring the TikTok fetcher. Real data (self-declared flag), so mark it
+        # available — a measured 0 is now distinguishable from "no data".
+        total_videos = int(stats.get("videoCount", 0) or 0)
+        sponsored_fraction = (sponsored_in_sample / sampled) if sampled else 0.0
+        sponsorship_count = round(sponsored_fraction * total_videos)
 
         # View-per-video relative to subscriber base is the best public reach proxy.
         # Capped at 1.0 — viral/evergreen content can push the raw ratio above 100%,
@@ -328,7 +353,8 @@ class YouTubeCreatorFetcher:
             "engagement_quality": self._engagement_quality(avg_views, avg_likes, avg_comments),
             "crypto_content_pct": crypto_pct,
             "fintech_content_pct": fintech_pct,
-            "sponsorship_count": 0,
+            "sponsorship_count": sponsorship_count,
+            "sponsorship_data_available": True,
             "niche_tags": self._derive_niche_tags(name, description, topic_categories),
             # Retained for the scorer's LLM fallback classifier (name/desc/tags).
             "description": description,

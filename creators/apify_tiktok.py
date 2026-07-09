@@ -236,6 +236,9 @@ class TikTokCreatorFetcher:
             "crypto_content_pct": crypto_pct,
             "fintech_content_pct": fintech_pct,
             "sponsorship_count": sponsorship_count,
+            # Measured from isSponsored/isAd flags above — real data, so the scorer
+            # includes sponsorship in the composite for TikTok creators.
+            "sponsorship_data_available": True,
             "niche_tags": niche_tags,
         }
 
