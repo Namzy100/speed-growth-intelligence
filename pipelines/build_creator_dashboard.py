@@ -10,6 +10,7 @@ Run from repo root:  python pipelines/build_creator_dashboard.py
 """
 
 import json
+import math
 import re
 import sys
 from datetime import datetime, timezone
@@ -95,6 +96,55 @@ def build_rows() -> list[dict]:
     return out
 
 
+# --- Composite-score colour bands -------------------------------------------
+# The green/yellow/red legend is PERCENTILE-BASED, recomputed on every build,
+# NOT fixed cutoffs. Rationale (2026-07): the scoring formula is actively
+# evolving — three changes in one night (deposit_relevance removed from the
+# composite, sponsorship gated to where it's measured, is_influencer corrected)
+# moved the mean from 31.4 to 37.8 and renormalise the composite over a variable
+# number of dimensions. Fixed cutoffs calibrated to one formula silently go stale
+# the next time the formula changes — which is exactly how the old >50 / 30–50 /
+# <30 legend broke (it was reading against a scale that no longer existed). The
+# distribution also has no natural mid-range breakpoint to anchor a fixed cutoff:
+# it's a smooth slope from a low-signal mass (~half the pool) up to the vetted
+# Mimanshi spike, so any fixed number in the middle would be arbitrary anyway.
+#
+# Bands: green = top 25% of the CURRENT pool, red = bottom 35%, yellow = the
+# middle 40%. This is a TRIAGE overlay for a prioritisation queue — "green =
+# top-quartile candidates to pursue now", "red = deprioritise". Accepted
+# trade-off: "green" is relative to the current pipeline (a mediocre creator can
+# read green in a weak pool), and a creator's colour can shift when the pool
+# around it changes even if its own score didn't. This is bounded because the
+# absolute score is always shown next to the colour — anyone who needs the true
+# number sees it. Tune _GREEN_PCT / _RED_PCT to resize the shortlist.
+_GREEN_PCT = 75   # scores at/above the 75th percentile -> green (top 25%)
+_RED_PCT = 35     # scores below the 35th percentile   -> red   (bottom 35%)
+
+
+def _percentile(sorted_vals: list, p: float) -> float:
+    """Linear-interpolation percentile of an already-sorted ascending list."""
+    if not sorted_vals:
+        return 0.0
+    if len(sorted_vals) == 1:
+        return float(sorted_vals[0])
+    k = (len(sorted_vals) - 1) * p / 100.0
+    f, c = math.floor(k), math.ceil(k)
+    if f == c:
+        return float(sorted_vals[int(k)])
+    return sorted_vals[f] + (sorted_vals[c] - sorted_vals[f]) * (k - f)
+
+
+def _score_bands(scores: list) -> dict:
+    """Percentile cutoffs for the colour legend, computed from the live pool."""
+    s = sorted(scores)
+    return {
+        "green": round(_percentile(s, _GREEN_PCT), 1),   # >= this -> green
+        "red": round(_percentile(s, _RED_PCT), 1),        # <  this -> red
+        "green_pct": 100 - _GREEN_PCT,                    # 25 (top 25%)
+        "red_pct": _RED_PCT,                              # 35 (bottom 35%)
+    }
+
+
 def main() -> None:
     print("Reading creators from Supabase...")
     creators = build_rows()
@@ -114,6 +164,9 @@ def main() -> None:
         "avg_score": round(sum(c["score"] for c in creators) / len(creators), 1) if creators else 0,
         "influencers": sum(1 for c in creators if c["is_influencer"]),
         "mimanshi": sum(1 for c in creators if c["source"] == "mimanshi"),
+        # Percentile colour cutoffs, recomputed from the current pool each build
+        # (see _score_bands). The JS legend + scoreCls/scoreColor read these.
+        "score_bands": _score_bands([c["score"] for c in creators]),
     }
 
     _OUT.parent.mkdir(parents=True, exist_ok=True)
@@ -319,9 +372,10 @@ _TEMPLATE = r"""<!doctype html>
         renormalised to a composite out of 100. Sponsorship is included only when it
         was actually measured (currently TikTok); where it wasn't, it is excluded and
         its weight redistributed rather than scored 0.
-        Composite colour: <span class="score-pill s-good">green &gt;50</span>
-        <span class="score-pill s-warn">yellow 30–50</span>
-        <span class="score-pill s-bad">red &lt;30</span>.
+        Composite colour (percentile-based, recomputed each build):
+        <span class="score-pill s-good">green</span> top <span id="lgGreenPct"></span>% (≥<span id="lgGreenCut"></span>),
+        <span class="score-pill s-warn">yellow</span> middle,
+        <span class="score-pill s-bad">red</span> bottom <span id="lgRedPct"></span>% (&lt;<span id="lgRedCut"></span>).
         A red brand flag means the creator's niche tags reference a competitor.
         <div class="dims">
           <div class="dim"><b>Audience fit</b><span>match to Speed's segments</span></div>
@@ -375,8 +429,13 @@ const DATA = /*__DATA__*/;
 const intFmt = new Intl.NumberFormat("en-US");
 const esc = s => { const d=document.createElement("div"); d.textContent=(s==null?"":s); return d.innerHTML; };
 const segClass = s => "seg-" + String(s).replace(/[^a-zA-Z-]/g,"");
-const scoreCls = v => v > 50 ? "s-good" : (v >= 30 ? "s-warn" : "s-bad");
-const scoreColor = v => v > 50 ? "#3fb950" : (v >= 30 ? "#e3b341" : "#f85149");
+// Percentile-based colour bands, recomputed each build (see _score_bands in the
+// builder). green = top 25% of the current pool, red = bottom 35%, yellow = mid.
+const BANDS = DATA.score_bands || {green:50, red:30, green_pct:25, red_pct:35};
+const scoreCls = v => v >= BANDS.green ? "s-good" : (v >= BANDS.red ? "s-warn" : "s-bad");
+const scoreColor = v => v >= BANDS.green ? "#3fb950" : (v >= BANDS.red ? "#e3b341" : "#f85149");
+[["lgGreenPct",BANDS.green_pct],["lgGreenCut",BANDS.green],["lgRedPct",BANDS.red_pct],["lgRedCut",BANDS.red]]
+  .forEach(([id,v])=>{const el=document.getElementById(id); if(el) el.textContent=v;});
 const segColor = s => getComputedStyle(document.documentElement).getPropertyValue("--seg-"+String(s).replace(/[^a-zA-Z-]/g,"")).trim() || "#6b7585";
 const fmtFollow = n => n >= 1e6 ? (n/1e6).toFixed(1)+"M" : n >= 1e3 ? (n/1e3).toFixed(n>=1e4?0:1)+"k" : String(n);
 const initials = n => (n.trim().split(/\s+/).map(w=>w[0]).join("").slice(0,2) || "?").toUpperCase();
