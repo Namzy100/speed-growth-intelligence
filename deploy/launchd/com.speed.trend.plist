@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.speed.trend</string>
+
+  <!-- Weekly trend refresh. TREND_DASHBOARD_REBUILD=1 is the gate consumed by
+       run_daily_sync._rebuild_trend_dashboard (that step is otherwise skipped).
+       With the flag set, this Monday run does a full sync AND rebuilds the trend
+       dashboard from a fresh YouTube+TikTok+Instagram scrape, then deploys it via
+       the same run (DASHBOARD_AUTODEPLOY=1). Running at 07:00 puts fresh trend
+       data live before the workweek. NOTE: this overlaps with the 08:00 daily
+       sync on Mondays (two syncs that day) — harmless/idempotent, but if you want
+       to avoid the double sync, drop this to a trend-only rebuild later. -->
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Users/namzysacc/Documents/Speed/venv/bin/python</string>
+    <string>/Users/namzysacc/Documents/Speed/pipelines/run_daily_sync.py</string>
+  </array>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>TREND_DASHBOARD_REBUILD</key>
+    <string>1</string>
+    <key>DASHBOARD_AUTODEPLOY</key>
+    <string>1</string>
+  </dict>
+
+  <key>WorkingDirectory</key>
+  <string>/Users/namzysacc/Documents/Speed</string>
+
+  <!-- 07:00 local, Mondays only (launchd Weekday: 1=Mon) -->
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Weekday</key>
+    <integer>1</integer>
+    <key>Hour</key>
+    <integer>7</integer>
+    <key>Minute</key>
+    <integer>0</integer>
+  </dict>
+
+  <key>StandardOutPath</key>
+  <string>/Users/namzysacc/Documents/Speed/trend_pipeline.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/namzysacc/Documents/Speed/trend_pipeline.log</string>
+</dict>
+</plist>

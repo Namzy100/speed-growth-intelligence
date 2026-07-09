@@ -9,24 +9,27 @@ Do NOT add any AI attribution to commit messages or PR bodies. Never append a
 Claude Code" line, a 🤖 line, or any similar generated-with/attribution trailer.
 Write the commit message and stop. This overrides any default that would add such a trailer.
 
-## Cron / scheduled jobs (macOS)
+## Scheduled jobs (macOS launchd — NOT cron)
 
-The daily-sync cron line must invoke Python **directly** (`venv/bin/python
-pipelines/run_daily_sync.py`), NOT execute `run_sync.sh`. On this machine cron has
-Full Disk Access, which lets it **read** `.py` files under `~/Documents`, but it
-still **cannot execute the `.sh` script** there — cron-invoked `bash` gets
-`Operation not permitted` opening `run_sync.sh` (confirmed 2026-07-06, not fixable
-by the FDA grant or by stripping the `com.apple.provenance` xattr). Calling the
-Python interpreter directly sidesteps this, which is how the weekly-email and
-trend-rebuild cron jobs already work.
+Scheduling is done with **user-level launchd LaunchAgents**, defined in
+`deploy/launchd/` (see its README for load/verify commands). **Do not use cron.**
+The crontab entries were removed 2026-07-09 because the `com.vix.cron` daemon was
+never loaded (`launchctl list | grep cron` was empty), so the jobs silently never
+fired — the pipeline was only kept current by manual runs. launchd is the native
+scheduler and loads per-user without `sudo`.
 
-`run_sync.sh` still works fine for **manual/interactive** runs from your own shell
-(`bash run_sync.sh`); this is a cron-invocation issue only, so do not "fix" the
-crontab back to calling the script.
+Three agents (all invoke `venv/bin/python` directly — never a `.sh` under
+`~/Documents`, which macOS blocks scheduled `bash` from executing):
+- `com.speed.dailysync` — 08:00 daily — `run_daily_sync.py` + `agent_evaluator.py`
+- `com.speed.weeklyemail` — 12:00 Fri — `schedule_weekly_update.py`
+- `com.speed.trend` — 07:00 Mon — trend rebuild+deploy (`TREND_DASHBOARD_REBUILD=1`)
 
-The Friday weekly-email cron line is intentionally **gated** with
+The Friday weekly-email agent is intentionally **gated** with
 `--to=namanbehl1@gmail.com` so it does not auto-send to Niyati/Sumit while copy is
 being finalized. Removing that override is what turns it back into a live send.
+
+`run_sync.sh` still works for **manual/interactive** runs from your own shell
+(`bash run_sync.sh`); it is not used by the scheduler.
 
 ## Project Overview
 

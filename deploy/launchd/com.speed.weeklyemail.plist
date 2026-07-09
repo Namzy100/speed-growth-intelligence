@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.speed.weeklyemail</string>
+
+  <!-- Weekly update email. The --to override is INTENTIONALLY kept so the job
+       sends only to namanbehl1@gmail.com (test recipient), NOT to Niyati/Sumit,
+       while copy is being finalised. Removing --to is what turns it into a live
+       send — see CLAUDE.md. -->
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Users/namzysacc/Documents/Speed/venv/bin/python</string>
+    <string>/Users/namzysacc/Documents/Speed/pipelines/schedule_weekly_update.py</string>
+    <string>--to=namanbehl1@gmail.com</string>
+  </array>
+
+  <key>WorkingDirectory</key>
+  <string>/Users/namzysacc/Documents/Speed</string>
+
+  <!-- 12:00 local, Fridays only (launchd Weekday: 0/7=Sun, 1=Mon ... 5=Fri) -->
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Weekday</key>
+    <integer>5</integer>
+    <key>Hour</key>
+    <integer>12</integer>
+    <key>Minute</key>
+    <integer>0</integer>
+  </dict>
+
+  <key>StandardOutPath</key>
+  <string>/Users/namzysacc/Documents/Speed/weekly_update.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/namzysacc/Documents/Speed/weekly_update.log</string>
+</dict>
+</plist>

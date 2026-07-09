@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.speed.dailysync</string>
+
+  <!-- Runs the daily data sync + dashboard rebuild/deploy, then the agent
+       evaluator — the two commands the old `0 8 * * *` crontab line chained.
+       /bin/sh -c runs an INLINE command string, so it never opens a .sh file
+       under ~/Documents (which cron could not execute; see CLAUDE.md). -->
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/sh</string>
+    <string>-c</string>
+    <string>/Users/namzysacc/Documents/Speed/venv/bin/python /Users/namzysacc/Documents/Speed/pipelines/run_daily_sync.py; /Users/namzysacc/Documents/Speed/venv/bin/python /Users/namzysacc/Documents/Speed/intelligence/agent_evaluator.py</string>
+  </array>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>DASHBOARD_AUTODEPLOY</key>
+    <string>1</string>
+  </dict>
+
+  <key>WorkingDirectory</key>
+  <string>/Users/namzysacc/Documents/Speed</string>
+
+  <!-- 08:00 local, every day -->
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key>
+    <integer>8</integer>
+    <key>Minute</key>
+    <integer>0</integer>
+  </dict>
+
+  <key>StandardOutPath</key>
+  <string>/Users/namzysacc/Documents/Speed/sync.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/namzysacc/Documents/Speed/sync.log</string>
+</dict>
+</plist>
