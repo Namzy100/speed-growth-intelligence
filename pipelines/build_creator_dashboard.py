@@ -76,13 +76,18 @@ def build_rows() -> list[dict]:
             # (weight redistributed) rather than scored 0.
             "spons": round(float(r.get("sponsorship_score", 0) or 0), 1),
             "spavail": bool(r.get("sponsorship_data_available", False)),
+            # Unscraped = Mimanshi creators still on spreadsheet placeholders (the
+            # Instagram/X set with no fetcher). Their engagement/audience_fit are
+            # fabricated and excluded from the composite (reach-only); flagged so
+            # their score isn't read as a full scored value.
+            "unscraped": (any(str(t).lower() == "mimanshi_list" for t in tags)
+                          and not bool(r.get("sponsorship_data_available", False))),
             "infl": round(float(r.get("influencer_score", 0) or 0), 1),
             "is_influencer": is_infl,
             "source": _source(tags, is_infl),
             # Sub-dimension scores (each /20) for the click-through breakdown modal.
             "af": round(float(r.get("audience_fit", 0) or 0), 1),
             "eng": round(float(r.get("engagement_quality_score", 0) or 0), 1),
-            "con": round(float(r.get("content_alignment", 0) or 0), 1),
             "acq": round(float(r.get("acquisition_potential", 0) or 0), 1),
             # Mimanshi's fit rating (1-5) lives in a 'fit_N' niche tag.
             "fit_score": _fit_score(tags),
@@ -90,9 +95,10 @@ def build_rows() -> list[dict]:
             "tags": [str(t) for t in tags[:6]],
             "brand_flag": _brand_flag(tags),
         })
-    # Tiebreak by followers desc: the Mimanshi set shares identical composites
-    # (uniform import assumptions), so without this they'd order arbitrarily.
-    out.sort(key=lambda c: (c["score"], c["followers"]), reverse=True)
+    # Sort: composite, then Mimanshi fit rating (curator vetting, tiebreaker),
+    # then followers. Fit surfaces Mimanshi's stronger picks among equal scores
+    # without being folded into the composite.
+    out.sort(key=lambda c: (c["score"], c["fit_score"], c["followers"]), reverse=True)
     return out
 
 
@@ -380,9 +386,8 @@ _TEMPLATE = r"""<!doctype html>
         <div class="dims">
           <div class="dim"><b>Audience fit</b><span>match to Speed's segments</span></div>
           <div class="dim"><b>Engagement quality</b><span>real vs inflated reach</span></div>
-          <div class="dim"><b>Content alignment</b><span>crypto / fintech focus</span></div>
+          <div class="dim"><b>Reach</b><span>follower size (diminishing returns)</span></div>
           <div class="dim"><b>Sponsorship</b><span>measured brand-deal history (where available)</span></div>
-          <div class="dim"><b>Acquisition potential</b><span>reference-only reach proxy</span></div>
         </div>
         <div class="segline">
           Segments:
@@ -444,31 +449,37 @@ const sourceLabel = c => c.source==="mimanshi" ? "Mimanshi ⭐" : c.source==="in
 const barColor = v => v >= 14 ? "#3fb950" : v >= 8 ? "#e3b341" : "#f85149";
 
 function breakdown(c){
+  // The 4 composite dimensions. A dim "counts" unless its data is unavailable:
+  // sponsorship only when measured; audience_fit + engagement are excluded for
+  // unscraped creators (Instagram/X placeholders) — reach stays (real followers).
   const dims = [
-    ["Audience Fit", c.af, false, true],
-    ["Engagement", c.eng, false, true],
-    ["Content Align.", c.con, false, true],
-    ["Sponsorship", c.spons, false, c.spavail],   // only counts when measured
-    ["Acquisition", c.acq, true, false],
+    ["Audience Fit", c.af, !c.unscraped],
+    ["Engagement", c.eng, !c.unscraped],
+    ["Reach", c.acq, true],
+    ["Sponsorship", c.spons, c.spavail],
   ];
-  const rows = dims.map(([lab,v,ref,counts]) => `
+  const rows = dims.map(([lab,v,counts]) => `
     <div class="bd-row">
-      <span class="bd-lab">${lab}${ref?' <span class="ref">*</span>':''}${(lab==="Sponsorship"&&!counts)?' <span class="ref">†</span>':''}</span>
+      <span class="bd-lab">${lab}${counts?'':' <span class="ref">†</span>'}</span>
       <div class="bd-track"><div class="bd-fill" data-w="${counts?Math.min(v/20*100,100).toFixed(1):0}%" style="background:${counts?barColor(v):'#30363d'}"></div></div>
-      <span class="bd-val">${(lab==="Sponsorship"&&!counts)?'n/a':v.toFixed(1)}</span>
+      <span class="bd-val">${counts?v.toFixed(1):'n/a'}</span>
     </div>`).join("");
   let fit = "";
   if(c.source==="mimanshi" && c.fit_score>0){
     const stars = "★".repeat(c.fit_score) + `<span class="empty">${"★".repeat(5-c.fit_score)}</span>`;
     fit = `<div class="bd-fit"><span>Mimanshi Fit Rating</span><span class="stars">${stars}</span><span>${c.fit_score}/5</span></div>`;
   }
+  const unscrapedNote = c.unscraped
+    ? `<div class="bd-fit" style="color:var(--warn)"><span>⚠ Unscraped — Instagram/X import on placeholder data; scored on reach + fit only (no engagement/content available).</span></div>`
+    : "";
   return `<div class="breakdown"><div class="breakdown-inner">
     ${rows}
     <div class="bd-total"><span class="lab">Composite</span>
       <span class="val" style="color:${scoreColor(c.score)}">${c.score.toFixed(1)}<small>/100</small></span></div>
     ${fit}
+    ${unscrapedNote}
     <div class="bd-fit"><span>Influencer signal ‡</span><span>${c.is_influencer?'Individual':'Brand/Media'}</span><span>${c.infl.toFixed(1)}/100</span></div>
-    <div class="bd-fit" style="color:var(--faint)"><span>* Acquisition is a reference reach proxy — not part of the composite. † No sponsorship data available — excluded from the composite, weight redistributed. ‡ Influencer signal is authentic-audience strength (engagement + reach), separate from Partner Score; the Individual/Brand-Media call is the is_influencer classifier.</span></div>
+    <div class="bd-fit" style="color:var(--faint)"><span>† Excluded from the composite (weight redistributed): sponsorship where not measured, and audience-fit / engagement for unscraped Instagram/X imports (reach + fit only). ‡ Influencer signal is authentic-audience strength (engagement + reach), separate from Partner Score; the Individual/Brand-Media call is the is_influencer classifier.</span></div>
   </div></div>`;
 }
 
@@ -500,7 +511,7 @@ function renderCards(){
   // follow in composite-score order (DATA.creators is already sorted desc).
   // Within each group, rank by composite then followers desc — the Mimanshi
   // set shares identical composites, so followers is the tiebreak.
-  const byScoreThenFollowers = (a,b) => (b.score - a.score) || (b.followers - a.followers);
+  const byScoreThenFollowers = (a,b) => (b.score - a.score) || (b.fit_score - a.fit_score) || (b.followers - a.followers);
   const isPriority = c => c.source==="mimanshi" && c.fit_score>=4;
   const priority = DATA.creators.filter(isPriority).sort(byScoreThenFollowers);
   const rest = DATA.creators.filter(c => !isPriority(c)).sort(byScoreThenFollowers);

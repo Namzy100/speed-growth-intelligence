@@ -192,29 +192,48 @@ class CreatorScorer:
 
         engagement, engagement_notes = self._score_engagement_quality(creator)
         content, content_notes = self._score_content_alignment(creator)
-        acquisition, acq_notes = self._score_acquisition_potential(creator, audience_fit)
+        reach, reach_notes = self._score_reach(creator)
         sponsorship, sponsor_notes = self._score_sponsorship_history(creator)
 
-        # --- Composite (revised after the 2026-07 scoring audit) ---
+        # --- Composite (revised again 2026-07: 4 real dimensions) ---
         # Each included dimension is /20. We score ONLY the dimensions that carry
         # real signal for this creator, then renormalise the total back to /100 so
-        # a 3-dimension creator and a 4-dimension creator are comparable.
+        # creators scored on a different number of dimensions stay comparable.
+        # Weighting is EQUAL across the included dimensions.
+        #
+        #   audience_fit · engagement · reach · sponsorship (where measured)
+        #
+        # reach (follower size, pure — see _score_reach) is NOW in the composite;
+        # it used to be reference-only. It is deliberately decoupled from ER/fit so
+        # it doesn't recycle the engagement / audience_fit dimensions.
+        #
+        # content_alignment was DROPPED from the composite: it reads the same
+        # crypto/fintech keyword signal off the same text as audience_fit, so it
+        # was double-counting. It is still computed + stored for reference, just
+        # not scored into the composite.
         #
         # sponsorship_history is included ONLY when real sponsorship data was
-        # measured for this creator (sponsorship_data_available). Where it wasn't,
-        # it is EXCLUDED and its weight redistributed proportionally — NOT scored
-        # 0, because a hardcoded 0 is indistinguishable from a verified-low value.
+        # measured (sponsorship_data_available); otherwise it is EXCLUDED and its
+        # weight redistributed — a hardcoded 0 is indistinguishable from a
+        # verified-low value.
         #
-        # deposit_relevance was REMOVED from the composite entirely: its 40% input
-        # (purchase_intent_signals) was a never-set 0.5 constant, and the other 60%
-        # just recycled audience_fit + content_alignment (already counted here). It
-        # carried no independent signal. Reintroduce only once a real deposit proxy
-        # (referral/CTA/app-promo language) is actually fetched.
-        #
-        # acquisition_potential remains reference-only (excluded from composite).
+        # deposit_relevance stays removed (no real proxy signal exists yet).
+        # scraped_data_available: False only for creators bulk-imported with
+        # placeholder engagement/content and that CANNOT be re-fetched (the
+        # Mimanshi Instagram/X set — no fetcher exists for those platforms). For
+        # them audience_fit + engagement are fabricated (engagement_quality=7,
+        # crypto_content_pct=0.8), so they are EXCLUDED; the composite is built
+        # from the dims backed by real data only — reach (from real follower
+        # counts) plus sponsorship where measured. Default True (normal scraped
+        # creators have real engagement/content). Fit rating carries their vetting
+        # separately (tiebreaker + visible badge), so it is not lost.
+        scraped_available = bool(creator.get("scraped_data_available", True))
         spons_available = bool(creator.get("sponsorship_data_available", False))
-        dims = [audience_fit, engagement, content]
-        basis = ["audience_fit", "engagement", "content_alignment"]
+        dims = [reach]
+        basis = ["reach"]
+        if scraped_available:
+            dims[:0] = [audience_fit, engagement]     # prepend to keep readable order
+            basis[:0] = ["audience_fit", "engagement"]
         if spons_available:
             dims.append(sponsorship)
             basis.append("sponsorship")
@@ -226,8 +245,12 @@ class CreatorScorer:
             "scores": {
                 "audience_fit": round(audience_fit, 1),
                 "engagement_quality": round(engagement, 1),
+                # Computed + stored for reference but NOT in the composite (dropped
+                # 2026-07 — redundant with audience_fit).
                 "content_alignment": round(content, 1),
-                "acquisition_potential": round(acquisition, 1),
+                # This column now holds the REACH dimension (pure follower size),
+                # which IS part of the composite. Name kept to avoid a migration.
+                "acquisition_potential": round(reach, 1),
                 "sponsorship_history": round(sponsorship, 1),
             },
             # deposit_relevance is no longer scored (removed from the composite,
@@ -236,6 +259,7 @@ class CreatorScorer:
             "composite_score": composite,
             "composite_basis": basis,               # which dims actually fed the score
             "sponsorship_data_available": spons_available,
+            "scraped_data_available": scraped_available,
             "segment_tag": segment_tag,
             # Influencer signals — separate from the finance-weighted composite.
             "is_influencer": self._detect_influencer(creator),
@@ -243,7 +267,7 @@ class CreatorScorer:
             "reasoning": self._build_reasoning(
                 creator, composite, segment_tag, spons_available,
                 audience_notes, engagement_notes,
-                content_notes, acq_notes, sponsor_notes,
+                reach_notes, sponsor_notes,
             ),
         }
 
@@ -467,23 +491,26 @@ class CreatorScorer:
         score = min(crypto + fintech * 0.5, 1.0) * 20
         return score, f"crypto={crypto:.0%}, fintech={fintech:.0%}"
 
-    def _score_acquisition_potential(
-        self, creator: dict, audience_fit_score: float
-    ) -> tuple[float, str]:
-        """Predicted install volume proxy: followers × ER × fit ratio (0–20)."""
-        followers = creator.get("followers", 0)
-        # Clamp view-gamed ER (e.g. 1.0) so it can't inflate the reach proxy.
-        er = min(creator.get("engagement_rate", 0), self._ARTIFACT_ER)
-        fit_ratio = audience_fit_score / 20.0
+    def _score_reach(self, creator: dict) -> tuple[float, str]:
+        """Audience reach as an INDEPENDENT signal — follower count alone, on a
+        diminishing-returns log curve (0–20).
 
-        raw = followers * er * fit_ratio
-        if raw <= 0:
-            return 0.0, "zero (no followers / ER / fit)"
+        Deliberately decoupled from engagement_rate and audience_fit: those are
+        their own composite dimensions, and multiplying them in here (as the old
+        'acquisition_potential' formula did) would double-count them — the same
+        recycling the 2026-07 audit removed from deposit_relevance. Engagement
+        quality is scored separately, so reach stays a pure size signal.
 
-        # Log scale anchored at 100K weighted engaged reach → 20/20
-        log_score = math.log10(raw) / math.log10(100_000) * 20
-        score = max(0.0, min(log_score, 20.0))
-        return score, f"~{raw:,.0f} weighted engaged reach"
+        Curve B (chosen 2026-07): (log10(followers) - 3) / 3 * 20 — a 1k floor maps
+        to 0 and 1M to a full 20, saturating beyond (a 3M and a 1M creator score
+        ~the same: real diminishing returns at the top). Net effect: a 3M creator
+        outranks an all-else-equal 30k creator by ~13–17 composite points, no more.
+        """
+        followers = int(creator.get("followers", 0) or 0)
+        if followers < 1_000:
+            return 0.0, f"{followers:,} followers (below 1k reach floor)"
+        score = max(0.0, min((math.log10(followers) - 3.0) / 3.0 * 20.0, 20.0))
+        return score, f"{followers:,} followers"
 
     # Above this count, the "sponsorships" are almost certainly a brand's own
     # ad-flagged product videos (self-promotion), not third-party brand deals.
@@ -526,8 +553,7 @@ class CreatorScorer:
         spons_available: bool,
         audience_notes: str,
         engagement_notes: str,
-        content_notes: str,
-        acq_notes: str,
+        reach_notes: str,
         sponsor_notes: str,
     ) -> str:
         tier = "strong" if composite >= 75 else "moderate" if composite >= 50 else "weak"
@@ -541,8 +567,7 @@ class CreatorScorer:
             f"Segment: {segment_tag}. "
             f"Audience fit: {audience_notes}. "
             f"Engagement: {engagement_notes}. "
-            f"Content: {content_notes}. "
-            f"Reach (ref): {acq_notes}. "
+            f"Reach: {reach_notes}. "
             f"{spons_line}"
         )
 
