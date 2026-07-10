@@ -98,8 +98,12 @@ def main(write: bool, limit: int | None) -> None:
             units += _UNITS_PER_CREATOR
             stats["searched"] += 1
         except QuotaExceededError:
+            # youtube._get retries transient per-100s burst limits with backoff;
+            # QuotaExceededError now means the DAILY quota is genuinely spent.
             stats["quota_stop"] = True
-            print("\n[quota] YouTube quota/rate limit hit — stopping, progress saved.")
+            print("\n[quota] YouTube DAILY quota exhausted — stopping, progress saved. "
+                  "Resume AFTER the midnight-Pacific reset (only ~one batch fits per "
+                  "Pacific day; running twice in the same PT day shares the same 10k).")
             break
 
         if not results:
@@ -138,8 +142,8 @@ def main(write: bool, limit: int | None) -> None:
           f"saved: {stats['saved']} · no-result: {stats['no_result']} · name-mismatch: {stats['mismatch']}")
     print(f"  YouTube quota units used this run: ~{units} of {_UNIT_BUDGET} budget "
           f"(10,000/day cap). Monetary cost: $0 (YouTube Data API is free within quota).")
-    remaining = len(targets) - stats["searched"] if not stats["quota_stop"] else "unknown (quota stop)"
-    print(f"  creators still needing re-fetch after this run: re-run to continue.")
+    print(f"  creators still needing re-fetch after this run: re-run on the NEXT "
+          f"Pacific day to continue (quota resets midnight PT). One batch (~90) per day.")
     if mismatches:
         print(f"\n  name mismatches skipped (stored -> top result), for manual review:")
         for s, f in mismatches[:20]:

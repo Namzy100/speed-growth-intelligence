@@ -3,6 +3,7 @@
 import os
 import re
 import sys
+import time
 from pathlib import Path
 from typing import Optional
 
@@ -123,36 +124,55 @@ class YouTubeCreatorFetcher:
     # API helpers
     # ------------------------------------------------------------------
 
-    # Reasons (case-insensitive) YouTube returns when the daily quota is spent
-    # or requests are coming too fast. quotaExceeded/dailyLimitExceeded arrive as
-    # 403; *RateLimitExceeded can be 403 or 429.
-    _QUOTA_REASONS = {
-        "quotaexceeded", "dailylimitexceeded",
-        "ratelimitexceeded", "userratelimitexceeded",
-    }
+    # Two DIFFERENT limits, handled differently:
+    #  * DAILY quota (10k units/day, resets midnight Pacific) — fatal for the day.
+    #    Reported as dailyLimitExceeded/quotaExceeded, OR as a 429 whose message
+    #    says "per day" (e.g. "Search Queries per day"). Caller stops + resumes
+    #    tomorrow.
+    #  * BURST rate limit (queries per 100 seconds) — TRANSIENT. Reported as
+    #    rateLimitExceeded/userRateLimitExceeded without a "per day" message. We
+    #    back off and retry the same request so one invocation keeps making
+    #    progress instead of aborting on a momentary spike.
+    _DAILY_REASONS = {"quotaexceeded", "dailylimitexceeded"}
+    _BURST_REASONS = {"ratelimitexceeded", "userratelimitexceeded"}
+    _BURST_BACKOFF_SECS = (5, 15, 45, 90)   # exponential-ish; ~155s total worst case
 
     def _get(self, endpoint: str, params: dict) -> dict:
-        resp = self._session.get(
-            f"{_BASE}/{endpoint}",
-            params={**params, "key": self._key},
-            timeout=10,
-        )
+        for attempt in range(len(self._BURST_BACKOFF_SECS) + 1):
+            resp = self._session.get(
+                f"{_BASE}/{endpoint}",
+                params={**params, "key": self._key},
+                timeout=10,
+            )
 
-        # Surface quota/rate-limit responses as QuotaExceededError so callers
-        # (e.g. run_batch) can stop gracefully and save partial progress instead
-        # of crashing on a raw HTTPError. A bare 429 is always rate/quota; a 403
-        # only counts when its error reason is a quota/rate-limit reason (other
-        # 403s — e.g. an invalid key — still raise normally below).
-        if resp.status_code in (403, 429):
-            reasons = {r.lower() for r in self._error_reasons(resp)}
-            if resp.status_code == 429 or (reasons & self._QUOTA_REASONS):
-                detail = ", ".join(sorted(reasons)) or f"HTTP {resp.status_code}"
-                print(f"  !! YouTube quota/rate limit hit ({detail}) — "
-                      f"stopping fetch and saving progress so far.")
-                raise QuotaExceededError(
-                    f"YouTube API quota/rate limit reached ({detail})."
+            if resp.status_code in (403, 429):
+                reasons = {r.lower() for r in self._error_reasons(resp)}
+                message = self._error_message(resp).lower()
+                is_daily = ("per day" in message) or bool(reasons & self._DAILY_REASONS)
+                is_burst = (not is_daily) and (
+                    resp.status_code == 429 or bool(reasons & self._BURST_REASONS)
                 )
 
+                if is_daily:
+                    detail = ", ".join(sorted(reasons)) or f"HTTP {resp.status_code}"
+                    print(f"  !! YouTube DAILY quota exhausted ({detail}) — stopping; "
+                          f"resume after the midnight-Pacific reset.")
+                    raise QuotaExceededError(
+                        f"YouTube API daily quota reached ({detail})."
+                    )
+                if is_burst and attempt < len(self._BURST_BACKOFF_SECS):
+                    wait = self._BURST_BACKOFF_SECS[attempt]
+                    print(f"  .. burst rate limit (per-100s); backing off {wait}s and "
+                          f"retrying ({attempt + 1}/{len(self._BURST_BACKOFF_SECS)})")
+                    time.sleep(wait)
+                    continue
+                # A burst limit that outlasted all retries, or any other 403/429 →
+                # fall through to raise_for_status below.
+
+            resp.raise_for_status()
+            return resp.json()
+
+        # Burst retries exhausted without a success: surface the last response.
         resp.raise_for_status()
         return resp.json()
 
@@ -164,6 +184,14 @@ class YouTubeCreatorFetcher:
         except ValueError:
             return []
         return [e.get("reason", "") for e in errors if e.get("reason")]
+
+    @staticmethod
+    def _error_message(resp) -> str:
+        """Extract the API error 'message' (distinguishes daily vs burst), tolerant."""
+        try:
+            return resp.json().get("error", {}).get("message", "") or ""
+        except ValueError:
+            return ""
 
     def _search_channels(self, query: str, max_results: int) -> list[str]:
         data = self._get("search", {
