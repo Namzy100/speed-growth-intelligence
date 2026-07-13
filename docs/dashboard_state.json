@@ -2,17 +2,17 @@
   "schema": 1,
   "updated_at": "2026-07-13",
   "items": {
-    "organic-instant-transfer-fees-are-a-scam-and-i-have-the-": {
-      "id": "organic-instant-transfer-fees-are-a-scam-and-i-have-the-",
+    "organic-instant-transfer-fees-are-a-scam-and-i-have-rece": {
+      "id": "organic-instant-transfer-fees-are-a-scam-and-i-have-rece",
       "type": "organic",
-      "hook": "Instant transfer fees are a SCAM \u2014 and I have the receipts \ud83e\uddfe",
+      "hook": "Instant transfer fees are a scam \u2014 and I have receipts",
       "segment": "remittance",
-      "estimate": "185000",
-      "estimate_num": 185000,
+      "estimate": "38000",
+      "estimate_num": 38000,
       "payload": {
         "platform": "TikTok",
-        "outline": "Beat 1 (0-8s): Creator on phone, visibly annoyed, shows a $14.99 wire fee notification \u2014 'They charged me THIS to send my own money?'. Beat 2 (9-25s): Screen-record of a competitor app showing fee breakdown vs. Speed Wallet showing $0 fee on same send amount. Beat 3 (26-45s): 'With Speed, I sent $200 to my mom in 11 seconds. Zero fees. She got every dollar.' Quick reaction shot of 'received' confirmation. Beat 4 (46-60s): CTA overlay \u2014 'Link in bio. First send is on us.' Creator points to camera.",
-        "production_notes": "Film in one take on iPhone. Use native TikTok caption burn-in for fee numbers. No green screen needed \u2014 authentic frustration is the production value. Post Tuesday 6-8 PM local time for diaspora commuter scroll window."
+        "outline": "Beat 1 (0\u201310s): Creator holds up phone showing a $22 wire fee on a $200 send \u2014 says 'look at this, that's 11% gone before my family sees a cent.' Beat 2 (11\u201325s): Quick screen-record of opening Speed Wallet, entering recipient's number, typing $200. Beat 3 (26\u201345s): Hits send \u2014 timer on screen, money arrives in under 3 seconds, fee shown as $0.00. Beat 4 (46\u201355s): Creator to camera: 'Zero fees. Instant. That's it. Link in bio.'",
+        "production_notes": "Film fee receipt in natural light for authenticity. Screen-record the app send in one uncut take \u2014 do NOT edit out any load time, real speed is the proof. No music needed, ambient room tone builds trust. Add text overlay on fee: 'YOU PAID THIS' vs '$0.00 with Speed.'"
       },
       "status": "suggested",
       "results": {
@@ -25,17 +25,17 @@
       "first_seen": "2026-07-13",
       "last_seen": "2026-07-13"
     },
-    "organic-pov-you-just-found-bitcoin-in-2009-except-the-ve": {
-      "id": "organic-pov-you-just-found-bitcoin-in-2009-except-the-ve",
+    "organic-what-if-you-had-found-bitcoin-in-2009-here-s-you": {
+      "id": "organic-what-if-you-had-found-bitcoin-in-2009-here-s-you",
       "type": "organic",
-      "hook": "POV: You just found Bitcoin in 2009 \ud83d\ude2d \u2014 except the version that actually WORKS right now",
+      "hook": "What if you had found Bitcoin in 2009\u2026 here's your second chance",
       "segment": "crypto-curious",
-      "estimate": "1200000",
-      "estimate_num": 1200000,
+      "estimate": "171000",
+      "estimate_num": 171000,
       "payload": {
         "platform": "TikTok",
-        "outline": "Beat 1 (0-7s): Text-on-screen over dark background: 'POV: It's 2009. 1 BTC = $0.001. You didn't buy.' Sad sound effect. Beat 2 (8-25s): 'But here's the version of Bitcoin most people still don't know exists' \u2014 cut to Lightning Network explainer with animated arrows showing instant send, $0 fees. Beat 3 (26-45s): Screen-record of Speed Wallet: download \u2192 create wallet \u2192 receive first sat in under 60 seconds. Creator voiceover: 'This is the easiest I've ever seen Bitcoin work.' Beat 4 (46-60s): 'You don't need to understand blockchain. You just need this app.' App name on screen, link in bio.",
-        "production_notes": "Hook leans into index-3's proven 1.9M-view nostalgia frame. Text-on-screen for beats 1-2, phone screen-record for beat 3. Use trending melancholic audio from TikTok library. Creator does NOT need to be on camera \u2014 voiceover only keeps production at $0."
+        "outline": "Beat 1 (0\u20138s): Creator stares into camera: 'In 2009, you could buy 1 Bitcoin for less than a penny. Most people scrolled past it.' Beat 2 (9\u201320s): Text-on-screen montage: $0.001 \u2192 $1 \u2192 $1,000 \u2192 $69,000 with year stamps. Beat 3 (21\u201340s): 'You can't go back. But you CAN start using it today \u2014 not buying, just using. Send $5 to a friend right now with Speed Wallet, no bank account needed.' Beat 4 (41\u201355s): Quick screen-record of a $5 send completing instantly. 'Start with $5. Build the habit.'",
+        "production_notes": "Use the index-6 nostalgia frame exactly. Keep price chart text-on-screen minimal \u2014 white text, black background, fast cuts matching the year jumps. Creator should look genuinely wistful in beat 1, not salesy. End frame: Speed Wallet logo + 'Free download' text overlay only."
       },
       "status": "suggested",
       "results": {
@@ -48,17 +48,17 @@
       "first_seen": "2026-07-13",
       "last_seen": "2026-07-13"
     },
-    "organic-vs-who-actually-wins-when-you-send-money-home": {
-      "id": "organic-vs-who-actually-wins-when-you-send-money-home",
+    "organic-every-year-africans-abroad-send-50b-home-banks-t": {
+      "id": "organic-every-year-africans-abroad-send-50b-home-banks-t",
       "type": "organic",
-      "hook": "\ud83c\uddfa\ud83c\uddf8 vs \ud83c\uddf2\ud83c\uddfd \u2014 who actually wins when you send money home?",
+      "hook": "Every year Africans abroad send $50B home \u2014 banks take $3B of it",
       "segment": "remittance",
-      "estimate": "192000",
-      "estimate_num": 192000,
+      "estimate": "24000",
+      "estimate_num": 24000,
       "payload": {
         "platform": "Instagram Reels",
-        "outline": "Beat 1 (0-8s): Split screen \u2014 left side: 'Sending $300 via bank wire to Mexico. Fees: $25. Arrival: 3 days.' Right side: 'Sending $300 via Speed Wallet. Fees: $0. Arrival: 11 seconds.' Beat 2 (9-28s): Creator (or UGC-style) reacts to the comparison: 'They've been charging us HOW MUCH for HOW LONG?' Shows cumulative annual fee loss calculation \u2014 '$25 x 12 sends = $300 stolen per year.' Beat 3 (29-48s): Live screen-record of Speed Wallet send completing to a Mexican Lightning address \u2014 timestamp visible. Beat 4 (49-60s): 'Keep your $300. Download Speed.' Flag emojis, link in bio.",
-        "production_notes": "Replicate index-6's flag debate format \u2014 the comment bait ('who won?') is intentional virality mechanics. Use CapCut split-screen template. Tag relevant diaspora community hashtags. Film screen-record portion separately and edit in. Total production time: 45 minutes."
+        "outline": "Beat 1 (0\u201310s): Stat card on screen: '$50 Billion sent home yearly. Banks & wire services keep ~6%.' Voice-over: 'That's $3 billion that never reaches your family.' Beat 2 (11\u201325s): Cut to creator (ideally someone from the diaspora community, authentic): 'I used to pay $18 every single time I sent money to my mom. Every. Time.' Beat 3 (26\u201345s): 'Speed Wallet runs on Bitcoin Lightning \u2014 it's a payment rail that doesn't need Western Union's middlemen. My mom gets the full amount in seconds.' Beat 4 (46\u201358s): Screen-record of a cross-border send: full amount received. 'Keep the $18. Link in bio.'",
+        "production_notes": "Stat sourcing: World Bank remittance data \u2014 cite it as text overlay for credibility. If a diaspora community creator is available, offer a product collab rather than scripted ad delivery. Instagram Reels audience skews slightly older for remittance \u2014 keep pacing slightly slower than TikTok cut. Captions mandatory."
       },
       "status": "suggested",
       "results": {
@@ -71,112 +71,112 @@
       "first_seen": "2026-07-13",
       "last_seen": "2026-07-13"
     },
-    "organic-it-s-not-as-hard-as-they-made-you-think-buying-b": {
-      "id": "organic-it-s-not-as-hard-as-they-made-you-think-buying-b",
+    "organic-crypto-isn-t-a-gamble-it-s-a-system-here-s-how-i": {
+      "id": "organic-crypto-isn-t-a-gamble-it-s-a-system-here-s-how-i",
       "type": "organic",
-      "hook": "It's not as hard as they made you think \u2014 buying Bitcoin in 60 seconds",
-      "segment": "crypto-curious",
-      "estimate": "149000",
-      "estimate_num": 149000,
-      "payload": {
-        "platform": "TikTok",
-        "outline": "Beat 1 (0-6s): Creator to camera, casual setting: 'Everyone told me crypto was complicated. I believed them for 3 years. Then I tried this.' Beat 2 (7-25s): Unboxing-style screen-record of Speed Wallet first-time user flow \u2014 download, no KYC friction callout, wallet created, QR code generated. Voiceover: 'No bank account needed. No ID scan. Just open it.' Beat 3 (26-45s): Receive a small amount of Bitcoin live on screen. 'That's it. You just got Bitcoin.' Show balance. Beat 4 (46-60s): 'First time took me under a minute. Link in bio if you want to try.' Creator shrugs \u2014 casual, non-salesy.",
-        "production_notes": "Directly mirrors index-1's myth-busting hook structure with 17.4% ER. Creator must feel genuinely surprised \u2014 authentic tone over polished delivery. Film screen-record with phone mirroring or built-in recorder. No music needed; voice carries the beat. Post Wednesday or Thursday for mid-week crypto curiosity traffic."
-      },
-      "status": "suggested",
-      "results": {
-        "views": null,
-        "er": null,
-        "saves": null
-      },
-      "results_source": null,
-      "ad_ref": null,
-      "first_seen": "2026-07-13",
-      "last_seen": "2026-07-13"
-    },
-    "organic-reply-to-a-comment-what-even-is-the-lightning-ne": {
-      "id": "organic-reply-to-a-comment-what-even-is-the-lightning-ne",
-      "type": "organic",
-      "hook": "Reply to a comment: 'What even IS the Lightning Network?' \u2014 I'll show you in 45 seconds",
-      "segment": "crypto-curious",
-      "estimate": "74000",
-      "estimate_num": 74000,
-      "payload": {
-        "platform": "TikTok",
-        "outline": "Beat 1 (0-5s): Show screenshot of the comment question on screen. Creator: 'Great question \u2014 most people have never heard of this.' Beat 2 (6-25s): Simple animation or whiteboard-style text: 'Bitcoin is slow and expensive. Lightning sits on top. It makes Bitcoin instant and free. Think Venmo speed, but global, no bank.' Beat 3 (26-45s): Live Speed Wallet demo \u2014 send $1 internationally, show 'delivered' in under 15 seconds. 'That just happened.' Beat 4 (46-60s): 'This is what Speed Wallet runs on. Try it free.' Comment CTA: 'Drop a \u2753 if you want me to explain more.'",
-        "production_notes": "Reply-to-comment format from index-20 is native TikTok behavior \u2014 use the built-in reply sticker for authenticity. Seed the 'comment question' yourself from a secondary account if needed. Animation can be drawn on a whiteboard or done in CapCut text overlays \u2014 $0 production. This post also builds an educational content moat via saves."
-      },
-      "status": "suggested",
-      "results": {
-        "views": null,
-        "er": null,
-        "saves": null
-      },
-      "results_source": null,
-      "ad_ref": null,
-      "first_seen": "2026-07-13",
-      "last_seen": "2026-07-13"
-    },
-    "paid-you-just-lost-25-again-0-3s-text-slams-onto-blac": {
-      "id": "paid-you-just-lost-25-again-0-3s-text-slams-onto-blac",
-      "type": "paid",
-      "hook": "You just lost $25. Again. (0-3s) \u2014 Text slams onto black screen: '$25 WIRE FEE' with a cash-burning visual. Voiceover: 'Every time you send money home, they take a cut.'",
-      "segment": "remittance",
-      "estimate": "$1.80-$2.50 (vs $3.17 benchmark \u2014 high-intent pain-point targeting with fear-of-loss hook historically beats fintech CPI benchmarks by 20-40%)",
-      "estimate_num": null,
-      "payload": {
-        "problem": "(4-8s) Split-screen: left = bank app showing $25 fee + 3-day wait notification. Right = empty hands. Voiceover: 'Banks charge you $25, $35, sometimes more \u2014 just to send YOUR money to YOUR family. And it takes DAYS.'",
-        "solution": "(9-15s) Speed Wallet UI screen-record: open app \u2192 enter $300 \u2192 tap send \u2192 'Delivered in 9 seconds. Fee: $0.00.' Voiceover: 'Speed Wallet uses Bitcoin Lightning. Zero fees. Lands in seconds. Anywhere in the world.' Green checkmark animation on $0 fee line.",
-        "cta": "(16-18s) Static card: 'Send your first $300 FREE. Download Speed Wallet.' App store badge. Voiceover: 'Keep every dollar.'",
-        "audience": "Meta: Lookalike 2% of remittance app installers + interest targeting: 'sending money internationally,' 'wire transfer,' 'Western Union,' Spanish-language households, Filipino-American, Nigerian-American, Latino 25-44 USA"
-      },
-      "status": "suggested",
-      "results": {
-        "views": null,
-        "er": null,
-        "saves": null
-      },
-      "results_source": null,
-      "ad_ref": null,
-      "first_seen": "2026-07-13",
-      "last_seen": "2026-07-13"
-    },
-    "paid-0-3s-creator-on-camera-genuinely-confused-face-w": {
-      "id": "paid-0-3s-creator-on-camera-genuinely-confused-face-w",
-      "type": "paid",
-      "hook": "(0-3s) Creator on camera, genuinely confused face: 'Wait \u2014 I can have Bitcoin... without understanding any of this?' Points to scrolling blockchain jargon on laptop screen behind them.",
-      "segment": "crypto-curious",
-      "estimate": "$2.20-$2.90 (vs $3.17 benchmark \u2014 UGC-authentic format consistently outperforms produced creative on TikTok for fintech; curiosity-gap hook reduces skip rate)",
-      "estimate_num": null,
-      "payload": {
-        "problem": "(4-8s) Montage of 3 quick cuts: confusing crypto exchange UI, lengthy KYC form, a 'transaction failed' error message. Voiceover: 'Crypto has always felt like it was built for insiders. Not for normal people trying to just... try it.'",
-        "solution": "(9-15s) Screen-record: Speed Wallet downloaded in App Store \u2192 account created with just an email \u2192 QR code appears \u2192 $5 in Bitcoin received live. Total elapsed time shown: 58 seconds. Creator voiceover: 'No ID. No 12-word seed phrase panic. No fees. I just... had Bitcoin.' Shows balance on screen.",
-        "cta": "(16-18s) Creator back on camera, smiling: 'Took me less than a minute. Link below.' Lower-third text: 'Download Speed. Your first Bitcoin is waiting.'",
-        "audience": "TikTok: Interest targeting \u2014 cryptocurrency, Bitcoin, personal finance, investing for beginners; behavioral: users who engaged with crypto content but have not installed a crypto app (TikTok pixel modeled audience); age 21-35 USA"
-      },
-      "status": "suggested",
-      "results": {
-        "views": null,
-        "er": null,
-        "saves": null
-      },
-      "results_source": null,
-      "ad_ref": null,
-      "first_seen": "2026-07-13",
-      "last_seen": "2026-07-13"
-    },
-    "paid-0-3s-sound-of-a-casino-chip-hitting-a-table-blac": {
-      "id": "paid-0-3s-sound-of-a-casino-chip-hitting-a-table-blac",
-      "type": "paid",
-      "hook": "(0-3s) Sound of a casino chip hitting a table. Black screen, then text: 'What if your casino withdrawal hit in 9 seconds?' Voiceover: 'Not tomorrow. Not 3-5 business days. Nine. Seconds.'",
+      "hook": "Crypto isn't a gamble \u2014 it's a system. Here's how I use it to win",
       "segment": "iGaming",
-      "estimate": "$2.60-$3.10 (vs $3.17 benchmark \u2014 iGaming audience has high LTV justifying near-benchmark CPI; instant-gratification hook aligns with segment psychology; limited creative competition in Lightning+iGaming niche may compress cost)",
+      "estimate": "16000",
+      "estimate_num": 16000,
+      "payload": {
+        "platform": "TikTok",
+        "outline": "Beat 1 (0\u20138s): Creator directly to camera: 'Everyone says crypto is gambling. They're wrong \u2014 and here's the difference.' Beat 2 (9\u201325s): 'Gambling: you put money in, the house controls the outcome. Bitcoin Lightning: I deposit to my gaming account in 4 seconds, I withdraw the same night \u2014 no 3-day bank hold, no declined card.' Beat 3 (26\u201342s): Screen-record of Speed Wallet \u2192 iGaming site deposit completing. Show withdrawal confirmation too. Beat 4 (43\u201358s): 'Speed Wallet. Instant in, instant out. Download free.'",
+        "production_notes": "Use the index-17 reframe verbatim in beat 1. Do NOT show gambling wins or losses \u2014 compliance risk. Focus 100% on the payment speed and control narrative. Screen-record must show both deposit AND withdrawal to double the proof points. Add captions \u2014 iGaming audience often watches on mute."
+      },
+      "status": "suggested",
+      "results": {
+        "views": null,
+        "er": null,
+        "saves": null
+      },
+      "results_source": null,
+      "ad_ref": null,
+      "first_seen": "2026-07-13",
+      "last_seen": "2026-07-13"
+    },
+    "organic-it-s-not-as-complicated-as-everyone-makes-it-out": {
+      "id": "organic-it-s-not-as-complicated-as-everyone-makes-it-out",
+      "type": "organic",
+      "hook": "It's not as complicated as everyone makes it out to be \u2014 I'll show you in 47 seconds",
+      "segment": "crypto-curious",
+      "estimate": "29000",
+      "estimate_num": 29000,
+      "payload": {
+        "platform": "TikTok",
+        "outline": "Beat 1 (0\u20136s): Creator: 'People act like using Bitcoin requires a PhD. Watch this.' Beat 2 (7\u201322s): Screen-record: download Speed Wallet from App Store, create account with just a phone number, no KYC friction shown. Beat 3 (23\u201338s): Request $5 from a friend on-screen \u2014 friend sends it via Lightning, money appears instantly. 'That's it. That's Bitcoin.' Beat 4 (39\u201352s): Creator back on camera: 'You've now used Bitcoin. Wasn't that scary? Download link in bio \u2014 it's free.'",
+        "production_notes": "Index-3 hook frame: demystification is the entire creative strategy here. The 47-second time call-out in the hook creates a completion-rate contract with the viewer \u2014 do NOT let the video run longer than 52s. Screen-record must be real, unedited, no speed-up \u2014 real ease is the message. Film the download on an iPhone for maximum relatability in US market."
+      },
+      "status": "suggested",
+      "results": {
+        "views": null,
+        "er": null,
+        "saves": null
+      },
+      "results_source": null,
+      "ad_ref": null,
+      "first_seen": "2026-07-13",
+      "last_seen": "2026-07-13"
+    },
+    "paid-you-just-paid-22-to-send-your-own-money": {
+      "id": "paid-you-just-paid-22-to-send-your-own-money",
+      "type": "paid",
+      "hook": "You just paid $22 to send your own money.",
+      "segment": "general",
+      "estimate": "$1.80\u2013$2.60 (below $3.17 benchmark \u2014 fee-rage creative has highest intent signal in remittance; problem is universally felt and solution is single-feature proof)",
       "estimate_num": null,
       "payload": {
-        "problem": "(4-8s) Animated mockup of a generic iGaming cashier screen showing: 'Withdrawal pending \u2014 estimated 3-5 business days.' A clock ticks frustratingly. Voiceover: 'You won. You should have your money NOW. Why are you waiting?'",
-        "solution": "(9-15s) Speed Wallet deposit + withdrawal screen-record on an iGaming platform that accepts Lightning. Deposit clears instantly \u2014 green confirmation. Withdrawal initiated \u2014 green confirmation in under 10 seconds on-screen timer. Voiceover: 'Speed Wallet connects to Lightning-enabled casinos. Deposit instantly. Cash out instantly. Zero waiting. Zero bank holds.'",
-        "cta": "(16-18s) Bold text card: 'Play faster. Cash out faster. Download Speed Wallet.' App store badge. Voiceover: 'Your money. Your speed.'",
-        "audience": "Meta: Interest targeting \u2014 online casino, sports betting, poker, DraftKings, FanDuel, Bitcoin gambling; behavioral: mobile gaming purchasers; age 25-45 USA male skew; exclude regulated gambling restriction states per Meta policy; retarget website visitors who reached cashier page"
+        "problem": "Every time you wire money home \u2014 to Mexico, Nigeria, the Philippines \u2014 banks and wire services take 6\u201311%. On a $300 send, that's $18\u2013$33 gone before your family sees a cent. That's not a fee. That's theft.",
+        "solution": "Speed Wallet uses Bitcoin Lightning \u2014 a payment rail that cuts out every middleman. Send $300, your family gets $300. In under 5 seconds. From your phone. Zero fees.",
+        "cta": "Download Speed Wallet free. Send your first payment today.",
+        "audience": "Meta (Facebook + Instagram): LAL audiences of Western Union / MoneyGram app users; interest targeting: international money transfer, remittances, diaspora communities (Mexico, Nigeria, Philippines, Guatemala, India); age 22\u201345; household income $30k\u2013$75k"
+      },
+      "status": "suggested",
+      "results": {
+        "views": null,
+        "er": null,
+        "saves": null
+      },
+      "results_source": null,
+      "ad_ref": null,
+      "first_seen": "2026-07-13",
+      "last_seen": "2026-07-13"
+    },
+    "paid-i-used-bitcoin-for-the-first-time-it-took-11-sec": {
+      "id": "paid-i-used-bitcoin-for-the-first-time-it-took-11-sec",
+      "type": "paid",
+      "hook": "I used Bitcoin for the first time. It took 11 seconds.",
+      "segment": "crypto-curious",
+      "estimate": "$2.40\u2013$3.00 (near benchmark \u2014 curiosity gap hook performs well on TikTok's discovery algorithm; 11-second specificity in hook increases thumb-stop rate, estimated +15% CTR vs generic crypto ads)",
+      "estimate_num": null,
+      "payload": {
+        "problem": "You've heard about Bitcoin for years. Maybe you bought some on Coinbase. But you've never actually used it \u2014 sent it, spent it, received it. It still feels abstract. Like Monopoly money.",
+        "solution": "Speed Wallet makes Bitcoin real. Send $5 to a friend right now. No bank account. No ID upload. No exchange fees. Just download, enter a number, send. You'll feel it click the moment the money lands.",
+        "cta": "Download Speed Wallet. Use Bitcoin in the next 60 seconds.",
+        "audience": "TikTok: interest targeting crypto, Bitcoin, personal finance, fintech; behavioral: has engaged with crypto content but has NOT purchased (curiosity without conversion); age 18\u201334; gender all; US only"
+      },
+      "status": "suggested",
+      "results": {
+        "views": null,
+        "er": null,
+        "saves": null
+      },
+      "results_source": null,
+      "ad_ref": null,
+      "first_seen": "2026-07-13",
+      "last_seen": "2026-07-13"
+    },
+    "paid-your-withdrawal-is-still-processing-it-s-been-3-": {
+      "id": "paid-your-withdrawal-is-still-processing-it-s-been-3-",
+      "type": "paid",
+      "hook": "Your withdrawal is still 'processing.' It's been 3 days.",
+      "segment": "general",
+      "estimate": "$3.00\u2013$4.20 (at or slightly above benchmark \u2014 iGaming segment has only 1 paid-track data point so CPM efficiency is unproven; creative is high-intent but audience is competitive and expensive on Meta; recommend TikTok split-test to find floor)",
+      "estimate_num": null,
+      "payload": {
+        "problem": "You won. You went to cash out. And now you're waiting \u2014 3 days, sometimes 5 \u2014 while your sportsbook or casino holds your money because their payment processor is slow, or your bank flagged it, or just because. You can't touch your own winnings.",
+        "solution": "Speed Wallet connects to Bitcoin Lightning-enabled gaming sites. Deposit in 4 seconds. Withdraw in 4 seconds. Any time, any day, including Sunday night. No holds. No declined cards. Your money moves when you decide.",
+        "cta": "Download Speed Wallet. Instant deposits. Instant withdrawals.",
+        "audience": "Meta (Instagram + Facebook): interest targeting online sports betting, casino games, DraftKings, FanDuel, online poker; behavioral: mobile gaming purchasers; age 21\u201340; male skew 70/30; US states where iGaming is legal (NJ, PA, MI, NV, CO, IL, IN, WV)"
       },
       "status": "suggested",
       "results": {
@@ -194,6 +194,18 @@
     "week": "2026-07-13",
     "hooks": [
       {
+        "key": "yousayyouwantitbutareyouwillingto",
+        "hook": "You say you want it but are you willing to",
+        "views": 524300,
+        "er": 0.2812
+      },
+      {
+        "key": "sendmemoneymonkeyikeamonkeyikeaforuvilim",
+        "hook": "Send me money. #monkey #ikeamonkey #ikea #foru #vili #money #send",
+        "views": 423900,
+        "er": 0.2301
+      },
+      {
         "key": "carsfilmcarsfilmcarsfilmeditcarsfilmscar",
         "hook": "#carsfilm #Carsfilm #carsfilmedit #carsfilms #carsfilme #carsfilming #carsfilm2006 #carsfilmsrd #carsfilm1 #carsfilmshort",
         "views": 84000,
@@ -202,8 +214,8 @@
       {
         "key": "itsnotasdifficultastheworldmakesitout",
         "hook": "It\u2019s not as difficult as the world makes it out",
-        "views": 149200,
-        "er": 0.1742
+        "views": 149300,
+        "er": 0.1741
       },
       {
         "key": "teachinggoodhabitsstartswithsmallconvers",
@@ -212,10 +224,16 @@
         "er": 0.161
       },
       {
+        "key": "thunderstormfyprainviralvideolightning",
+        "hook": "Thunderstorm \u26c8\ufe0f #fyp #rain #viralvideo #lightning",
+        "views": 539600,
+        "er": 0.1603
+      },
+      {
         "key": "thisisfindingbitcoinin2009",
         "hook": "this is finding bitcoin in 2009 \ud83d\ude2d",
         "views": 1900000,
-        "er": 0.1515
+        "er": 0.1518
       },
       {
         "key": "satoshisunriseisanewcryptoscifiepicprodu",
@@ -224,34 +242,16 @@
         "er": 0.1265
       },
       {
-        "key": "sendingmoneyhomejustgoteasierfastsimplea",
-        "hook": "Sending money home just got easier. Fast, simple, and reliable",
-        "views": 185400,
-        "er": 0.1094
+        "key": "icantbelieveicaughtthatoncamera",
+        "hook": "I can't believe I caught that on camera!",
+        "views": 17000000,
+        "er": 0.1169
       },
       {
-        "key": "whowonthisroundorsendingmoneyto",
-        "hook": "Who won this round...\ud83c\uddfa\ud83c\uddf8 or \ud83c\uddf3\ud83c\uddec ? Sending money to",
-        "views": 934200,
-        "er": 0.1089
-      },
-      {
-        "key": "instanttransferfeesareascambcthisismy",
-        "hook": "Instant transfer fees are a scam bc this is my",
-        "views": 73600,
-        "er": 0.1081
-      },
-      {
-        "key": "livedourdreamforamonthmalonelamcryptoedi",
-        "hook": "Lived our dream for a month#malonelam #crypto Edit",
-        "views": 5800000,
-        "er": 0.1076
-      },
-      {
-        "key": "everyyearafricansworkingabroadsendbillio",
-        "hook": "Every year, Africans working abroad send billions of dollars back",
-        "views": 216400,
-        "er": 0.1035
+        "key": "sendsendmoneyfypforyouforyoupagviral",
+        "hook": "Send send money \ud83d\ude02 #fyp #foryou #foryoupag\u0435 #viral \u200e#\u0627\u0643\u0633\u0628\u0644\u0648\u0631 #\u062a\u0631\u0646\u062f",
+        "views": 2700000,
+        "er": 0.1136
       }
     ]
   }
