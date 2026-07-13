@@ -16,6 +16,7 @@ Run from repo root:  python creators/x_batch.py [--write]
 """
 
 import os
+import re
 import sys
 from pathlib import Path
 from statistics import mean
@@ -38,6 +39,15 @@ from creators.youtube_batch import (
 load_dotenv()
 
 RESULTS_PER_QUERY = 20   # tweets per search term (author dedupe happens after)
+
+# Curator tags that must survive a re-save. If an X search rediscovers a creator
+# already in the DB (e.g. a Mimanshi X handle), save_creator overwrites niche_tags
+# with the X-derived tags — this preserves the curation tags. Mirrors refetch_youtube.py.
+_CURATION_TAG_RE = re.compile(r"^(mimanshi_list|fit_[1-5]|mexico|brazil)$", re.I)
+
+
+def _is_curation_tag(t: str) -> bool:
+    return bool(_CURATION_TAG_RE.match(str(t).strip()))
 
 
 def run_x_batch(write: bool, segments: list[str] | None = None) -> None:
@@ -87,6 +97,19 @@ def run_x_batch(write: bool, segments: list[str] | None = None) -> None:
         print("No creators left to save after exclusions.")
         return
 
+    # Preserve curator tags (mimanshi_list / fit_N / country) on any creator that
+    # already exists in the DB — otherwise save_creator would overwrite niche_tags
+    # with the X-derived tags and lose the vetting. Mirrors refetch_youtube.py.
+    existing_curation = {
+        (r.get("name"), r.get("platform")):
+            [t for t in (r.get("niche_tags") or []) if _is_curation_tag(t)]
+        for r in database.get_all_creators()
+    }
+    for c in creators:
+        preserved = existing_curation.get((c.get("name"), c.get("platform")), [])
+        if preserved:
+            c["niche_tags"] = list(dict.fromkeys(preserved + (c.get("niche_tags") or [])))
+
     # Score, then drop near-duplicate names (keep the higher-scored).
     scored = [(c, scorer.score(c)) for c in creators]
     dupes = find_name_subset_duplicates(
@@ -108,13 +131,20 @@ def run_x_batch(write: bool, segments: list[str] | None = None) -> None:
         print("\n(dry run — pass --write to save these X creators to Supabase.)")
         return
 
-    saved = []
+    saved, errors = [], 0
     for c, score in scored:
-        rec = database.save_creator(c, score)
-        saved.append((rec.get("name"), rec.get("platform")))
-    print(f"\nSaved {len(saved)} X creators to Supabase.")
-    comps = [s["composite_score"] for _, s in scored]
-    print(f"composite: min={min(comps):.1f} max={max(comps):.1f} avg={mean(comps):.1f}")
+        try:
+            rec = database.save_creator(c, score)
+            saved.append((rec.get("name"), rec.get("platform")))
+        except Exception as e:
+            # One bad save (Supabase error, etc.) skips that creator, not the batch.
+            errors += 1
+            print(f"  !! save failed for '{c.get('name')}': {e}")
+    print(f"\nSaved {len(saved)} X creators to Supabase."
+          + (f" ({errors} skipped on save errors)" if errors else ""))
+    if saved:
+        comps = [s["composite_score"] for _, s in scored]
+        print(f"composite: min={min(comps):.1f} max={max(comps):.1f} avg={mean(comps):.1f}")
 
 
 if __name__ == "__main__":

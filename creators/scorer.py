@@ -172,8 +172,8 @@ class CreatorScorer:
                 deposit_relevance_score — None (dimension removed in 2026-07 audit)
                 composite_score      — float /100, renormalised over the dimensions
                                        that carry real signal: audience_fit +
-                                       engagement + content_alignment (+ sponsorship
-                                       only when sponsorship_data_available)
+                                       engagement + reach (+ sponsorship only when
+                                       sponsorship_data_available)
                 composite_basis      — list of the dimensions that fed the score
                 sponsorship_data_available — bool echoed from input
                 segment_tag          — "remittance" | "iGaming" | "crypto-curious" | "general"

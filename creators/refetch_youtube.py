@@ -84,7 +84,8 @@ def main(write: bool, limit: int | None) -> None:
     scorer = CreatorScorer(use_llm_fallback=False)
 
     units = 0
-    stats = {"searched": 0, "matched": 0, "saved": 0, "no_result": 0, "mismatch": 0, "quota_stop": False}
+    stats = {"searched": 0, "matched": 0, "saved": 0, "no_result": 0,
+             "mismatch": 0, "errors": 0, "quota_stop": False}
     mismatches = []
 
     for r in targets:
@@ -105,6 +106,12 @@ def main(write: bool, limit: int | None) -> None:
                   "Resume AFTER the midnight-Pacific reset (only ~one batch fits per "
                   "Pacific day; running twice in the same PT day shares the same 10k).")
             break
+        except Exception as e:
+            # Any non-quota failure (HTTP 5xx, keyInvalid, network) — skip this one
+            # creator and keep the batch going. API key redacted from the message.
+            stats["errors"] += 1
+            print(f"  !! skipped '{stored_name}' — fetch error: {str(e).replace(api_key, '***')}")
+            continue
 
         if not results:
             stats["no_result"] += 1
@@ -127,19 +134,26 @@ def main(write: bool, limit: int | None) -> None:
         print(f"  {stored_name[:34]:34}{tag} eq/crypto/er {old} -> {new}  spons_count={fetched.get('sponsorship_count')}")
 
         if write:
-            score = scorer.score(fetched)
-            # Preserve the LLM-classified is_influencer. This scorer runs with
-            # use_llm_fallback=False (deterministic bulk), so its _detect_influencer
-            # would fall back to the keyword rule and REGRESS the LLM classification.
-            # Re-fetching doesn't change identity, so the prior LLM verdict holds.
-            if r.get("is_influencer") is not None:
-                score["is_influencer"] = bool(r.get("is_influencer"))
-            database.save_creator(fetched, score)
-            stats["saved"] += 1
+            try:
+                score = scorer.score(fetched)
+                # Preserve the LLM-classified is_influencer. This scorer runs with
+                # use_llm_fallback=False (deterministic bulk), so its _detect_influencer
+                # would fall back to the keyword rule and REGRESS the LLM classification.
+                # Re-fetching doesn't change identity, so the prior LLM verdict holds.
+                if r.get("is_influencer") is not None:
+                    score["is_influencer"] = bool(r.get("is_influencer"))
+                database.save_creator(fetched, score)
+                stats["saved"] += 1
+            except Exception as e:
+                # A bad save (Supabase error, etc.) skips this creator, not the batch.
+                stats["errors"] += 1
+                print(f"  !! save failed for '{stored_name}' — {str(e).replace(api_key, '***')}")
+                continue
 
     print(f"\n=== batch summary ===")
     print(f"  searched: {stats['searched']} · matched: {stats['matched']} · "
-          f"saved: {stats['saved']} · no-result: {stats['no_result']} · name-mismatch: {stats['mismatch']}")
+          f"saved: {stats['saved']} · no-result: {stats['no_result']} · "
+          f"name-mismatch: {stats['mismatch']} · errors-skipped: {stats['errors']}")
     print(f"  YouTube quota units used this run: ~{units} of {_UNIT_BUDGET} budget "
           f"(10,000/day cap). Monetary cost: $0 (YouTube Data API is free within quota).")
     print(f"  creators still needing re-fetch after this run: re-run on the NEXT "

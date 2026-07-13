@@ -291,17 +291,11 @@ def report_readback(saved, calls, units, quota_hit) -> None:
     print(f"\nComposite score distribution:")
     print(f"  min={min(scores):.1f}  max={max(scores):.1f}  avg={mean(scores):.1f}")
 
-    # deposit_relevance_score persisted?
-    drs = [r.get("deposit_relevance_score") for r in mine]
-    populated = sum(1 for v in drs if v is not None)
-    nonzero = sum(1 for v in drs if v)
-    print(f"\ndeposit_relevance_score: {populated}/{len(mine)} populated, "
-          f"{nonzero} non-zero  (min={min(drs):.1f} max={max(drs):.1f})")
-
-    # Top 10 for eyeballing
+    # Top 10 for eyeballing. (deposit_relevance_score was retired in the 2026-07
+    # audit — it is None for every row now, so it is no longer reported here.)
     print("\nTop 10 by composite:")
     for r in sorted(mine, key=lambda r: r["composite_score"], reverse=True)[:10]:
-        print(f"  {r['composite_score']:>5.1f}  drs={r.get('deposit_relevance_score'):>4}  "
+        print(f"  {r['composite_score']:>5.1f}  "
               f"[{r['segment_tag']:<14}] {r['name']}  ({r['followers']:,} subs)")
 
     # --- Anomaly flags ---
