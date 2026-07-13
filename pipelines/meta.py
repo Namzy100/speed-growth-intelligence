@@ -166,9 +166,26 @@ class MetaPipeline:
                 time.sleep(backoff)
                 continue
 
-            # Non-retryable 4xx — raise with the access_token stripped from the
-            # URL (raise_for_status would leak it in the HTTPError message).
+            # Non-retryable 4xx. Surface auth/permission failures explicitly: the
+            # most likely handover-era breakage is an expired or mis-scoped token
+            # (a user token lapses; a System User token can be missing ads_read on
+            # the account). Meta returns these as an OAuthException, so map the
+            # common codes to a clear, actionable message instead of a raw 400.
             if resp.status_code >= 400:
+                code, msg = self._meta_error(resp)
+                if code in (190, 102):
+                    raise RuntimeError(
+                        f"Meta token invalid or EXPIRED (OAuthException {code}). "
+                        f"Regenerate META_ACCESS_TOKEN (System User token, ads_read, "
+                        f"never-expiring) and update .env + the GitHub secret. "
+                        f"Meta says: {_redact_token(msg)}"
+                    )
+                if code in (10, 200):
+                    raise RuntimeError(
+                        f"Meta token lacks permission (code {code}) — confirm the "
+                        f"System User has ads_read on {self._account_id}. "
+                        f"Meta says: {_redact_token(msg)}"
+                    )
                 raise RuntimeError(
                     f"Meta API error {resp.status_code}: {_redact_token(resp.url)} "
                     f"— {_redact_token(resp.text[:300])}"
@@ -176,6 +193,18 @@ class MetaPipeline:
 
             return resp.json()
         return {}
+
+    @staticmethod
+    def _meta_error(resp) -> tuple[int | None, str]:
+        """Extract (error code, message) from a Meta error response body, tolerant
+        of a non-JSON body. See https://developers.facebook.com/docs/graph-api/
+        guides/error-handling — code 190/102 = token expired/invalid,
+        10/200 = permission/scope denied."""
+        try:
+            err = resp.json().get("error", {}) or {}
+            return err.get("code"), err.get("message", "") or ""
+        except ValueError:
+            return None, resp.text[:300]
 
     @staticmethod
     def _to_df(rows: list[dict]) -> pd.DataFrame:
