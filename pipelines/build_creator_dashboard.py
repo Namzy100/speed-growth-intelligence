@@ -69,6 +69,12 @@ def build_rows() -> list[dict]:
             "followers": int(r.get("followers", 0) or 0),
             "segment": str(r.get("segment_tag", "general")),
             "score": score,
+            # Creator's STATED country (real signal: YouTube snippet.country /
+            # Mimanshi tag), or "unknown". NOT audience geography.
+            "country": str(r.get("creator_country") or "unknown"),
+            # Audience geography — manual, outreach-collected only. None = not yet
+            # collected (never inferred). Read-only here (see the modal note).
+            "audience_loc": (r.get("audience_location_data") or None),
             # deposit_relevance was removed from the composite (2026-07 audit).
             # sponsorship is only real where it was measured; that fact now lives in
             # the per-creator sponsorship_data_available column (set by the fetchers),
@@ -407,6 +413,8 @@ _TEMPLATE = r"""<!doctype html>
         <select id="fSeg"><option value="all">All segments</option><option>remittance</option><option>iGaming</option><option>crypto-curious</option><option>general</option></select></div>
       <div><label>Platform</label>
         <select id="fPlat"><option value="all">All platforms</option><option>YouTube</option><option>TikTok</option><option>Instagram</option><option>X</option></select></div>
+      <div><label>Creator country</label>
+        <select id="fCountry"><option value="all">All countries</option></select></div>
       <div><label>Source</label>
         <select id="fSource"><option value="all">All sources</option><option value="mimanshi">Mimanshi picks</option><option value="influencer">Influencers</option><option value="scraped">Scraped</option></select></div>
       <div><label>Min score: <span class="rangeval" id="minVal">0</span></label>
@@ -418,6 +426,7 @@ _TEMPLATE = r"""<!doctype html>
     <div class="table-wrap"><table id="tbl">
       <thead><tr>
         <th data-k="name">Creator</th><th data-k="source">Source</th><th data-k="platform">Platform</th><th data-k="segment">Segment</th>
+        <th data-k="country" title="Creator's stated country (self-declared / Mimanshi tag). NOT audience geography.">Creator country</th>
         <th class="num" data-k="followers">Followers</th><th class="num" data-k="score">Partner Score</th>
         <th data-k="is_influencer">Type</th>
         <th data-k="spavail">Sponsorship</th><th data-k="outreach">Outreach</th>
@@ -478,8 +487,10 @@ function breakdown(c){
       <span class="val" style="color:${scoreColor(c.score)}">${c.score.toFixed(1)}<small>/100</small></span></div>
     ${fit}
     ${unscrapedNote}
+    <div class="bd-fit"><span>Creator country ◆</span><span>${c.country==='unknown'?'unknown':esc(c.country)}</span></div>
+    <div class="bd-fit"><span>Audience location ◇</span><span>${c.audience_loc?esc(c.audience_loc):'not yet collected'}</span></div>
     <div class="bd-fit"><span>Influencer signal ‡</span><span>${c.is_influencer?'Individual':'Brand/Media'}</span><span>${c.infl.toFixed(1)}/100</span></div>
-    <div class="bd-fit" style="color:var(--faint)"><span>† Excluded from the composite (weight redistributed): sponsorship where not measured, and audience-fit / engagement for unscraped Instagram/X imports (reach + fit only). ‡ Influencer signal is authentic-audience strength (engagement + reach), separate from Partner Score; the Individual/Brand-Media call is the is_influencer classifier.</span></div>
+    <div class="bd-fit" style="color:var(--faint)"><span>† Excluded from the composite (weight redistributed): sponsorship where not measured, and audience-fit / engagement for unscraped Instagram/X imports (reach + fit only). ‡ Influencer signal is authentic-audience strength (engagement + reach), separate from Partner Score; the Individual/Brand-Media call is the is_influencer classifier. ◆ Creator's stated country (self-declared / Mimanshi tag), NOT audience geography. ◇ Audience location is creator-provided, collected during outreach — 'not yet collected' means not yet asked for, never inferred.</span></div>
   </div></div>`;
 }
 
@@ -556,9 +567,11 @@ document.getElementById("cards").addEventListener("click", e => {
 let sortKey="score", sortDir=-1;
 function rows(){
   const seg=fSeg.value, plat=fPlat.value, src=fSource.value, min=+fMin.value, q=fSearch.value.trim().toLowerCase();
+  const country=document.getElementById("fCountry").value;
   const inflOnly = document.getElementById("fInfl").checked;
   let r = DATA.creators.filter(c =>
     (seg==="all"||c.segment===seg) && (plat==="all"||c.platform===plat) &&
+    (country==="all"||c.country===country) &&
     (src==="all"||c.source===src) && c.score>=min &&
     (!inflOnly||c.is_influencer) && (!q||c.name.toLowerCase().includes(q)));
   r.sort((a,b)=>{let x=a[sortKey],y=b[sortKey]; if(typeof x==="string"){x=x.toLowerCase();y=y.toLowerCase();} return (x<y?-1:x>y?1:0)*sortDir;});
@@ -574,6 +587,7 @@ function renderTable(){
       <td><span class="src-${esc(c.source)}">${esc(sourceLabel(c))}</span></td>
       <td><span class="badge plat">${esc(c.platform)}</span></td>
       <td><span class="badge seg ${segClass(c.segment)}">${esc(c.segment)}</span></td>
+      <td>${c.country==='unknown' ? '<span class="muted">unknown</span>' : esc(c.country)}</td>
       <td class="num">${intFmt.format(c.followers)}</td>
       <td class="num"><span class="score-pill ${scoreCls(c.score)}">${c.score.toFixed(1)}</span></td>
       <td>${c.is_influencer
@@ -587,7 +601,18 @@ function renderTable(){
   }).join("");
   document.getElementById("count").textContent = `${r.length} of ${DATA.total} shown`;
 }
-["fSeg","fPlat","fSource","fSearch"].forEach(id=>document.getElementById(id).addEventListener("input",renderTable));
+// Populate the Creator-country filter from the distinct real countries present
+// (plus 'unknown'), sorted with real codes first.
+(function(){
+  const sel=document.getElementById("fCountry");
+  const counts={};
+  DATA.creators.forEach(c=>{counts[c.country]=(counts[c.country]||0)+1;});
+  Object.keys(counts).filter(k=>k!=="unknown").sort()
+    .concat(counts["unknown"]?["unknown"]:[])
+    .forEach(k=>{const o=document.createElement("option"); o.value=k;
+      o.textContent=`${k} (${counts[k]})`; sel.appendChild(o);});
+})();
+["fSeg","fPlat","fCountry","fSource","fSearch"].forEach(id=>document.getElementById(id).addEventListener("input",renderTable));
 document.getElementById("fInfl").addEventListener("change",renderTable);
 fMin.addEventListener("input",e=>{document.getElementById("minVal").textContent=e.target.value; renderTable();});
 document.querySelectorAll("#tbl th[data-k]").forEach(th=>th.addEventListener("click",()=>{

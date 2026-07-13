@@ -386,6 +386,10 @@ class YouTubeCreatorFetcher:
             "niche_tags": self._derive_niche_tags(name, description, topic_categories),
             # Retained for the scorer's LLM fallback classifier (name/desc/tags).
             "description": description,
+            # Creator's self-declared channel country (ISO code), or None if the
+            # owner never set it (~25% are null). Already in the snippet we fetch,
+            # so no extra quota. Consumed by database.derive_creator_country.
+            "channel_country": snippet.get("country") or None,
         }
 
 

@@ -82,6 +82,26 @@ ADD_SPONSORSHIP_AVAIL_COLUMN_SQL = (
     "ADD COLUMN IF NOT EXISTS sponsorship_data_available BOOLEAN DEFAULT false;"
 )
 
+# Migration for CREATOR-location (the creator's own stated country, NOT audience
+# geography). Populated by _merge_record from real signals only: YouTube
+# snippet.country, or the Mimanshi MX/BR manual tag (preferred). DEFAULT 'unknown'
+# so absence is explicit and never guessed. Idempotent.
+ADD_CREATOR_COUNTRY_COLUMN_SQL = (
+    "ALTER TABLE public.creators "
+    "ADD COLUMN IF NOT EXISTS creator_country TEXT DEFAULT 'unknown';"
+)
+
+# Migration for AUDIENCE-location, which CANNOT be scraped or inferred (it needs
+# the creator's own analytics, only they can grant it). This column is filled ONLY
+# by hand, during outreach, when a creator actually shares real audience-demographic
+# data. It is nullable and DEFAULTs NULL: NULL means "not yet collected", never a
+# data gap to be filled by inference. _merge_record deliberately does NOT write it,
+# so re-scoring/re-fetching can never overwrite a manually-entered value. Idempotent.
+ADD_AUDIENCE_LOCATION_COLUMN_SQL = (
+    "ALTER TABLE public.creators "
+    "ADD COLUMN IF NOT EXISTS audience_location_data TEXT;"
+)
+
 # Migration for the influencer-pivot fields. Run in the Supabase SQL editor,
 # THEN uncomment the two lines in _merge_record() to persist them. Idempotent.
 ADD_INFLUENCER_COLUMNS_SQL = """
@@ -319,8 +339,33 @@ def get_creators_by_status(outreach_status: OutreachStatus) -> list[dict]:
 # Internal helpers
 # ------------------------------------------------------------------
 
+# Mimanshi hand-tagged creators by market. Map those tags to ISO-ish country codes;
+# they take precedence over the API field (human vetting > self-declared setting).
+_MIMANSHI_COUNTRY_TAGS = {"mexico": "MX", "brazil": "BR"}
+
+
+def derive_creator_country(niche_tags: list | None, channel_country: str | None) -> str:
+    """Creator's stated country from REAL signals only, else 'unknown'.
+
+    Precedence: Mimanshi manual market tag > platform-declared country (YouTube
+    snippet.country) > 'unknown'. Never inferred from content/language/anything else.
+    """
+    for t in (niche_tags or []):
+        code = _MIMANSHI_COUNTRY_TAGS.get(str(t).strip().lower())
+        if code:
+            return code
+    if channel_country and str(channel_country).strip():
+        return str(channel_country).strip().upper()
+    return "unknown"
+
+
 def _merge_record(creator_dict: dict, score_dict: dict) -> dict:
-    """Flatten creator dict + score dict into a single DB-ready record."""
+    """Flatten creator dict + score dict into a single DB-ready record.
+
+    NOTE: audience_location_data is intentionally absent here — it is a manual,
+    outreach-only field, so it must never be written (and thus never overwritten)
+    by an automated re-save.
+    """
     scores = score_dict.get("scores", {})
     return {
         # Raw creator fields
@@ -339,6 +384,11 @@ def _merge_record(creator_dict: dict, score_dict: dict) -> dict:
         # replaces the old platform == 'TikTok' proxy.
         "sponsorship_data_available": bool(creator_dict.get("sponsorship_data_available", False)),
         "niche_tags":           creator_dict.get("niche_tags", []),
+        # Creator's STATED country (real signal only; 'unknown' when absent). Not
+        # audience geography. Mimanshi market tag wins over YouTube snippet.country.
+        "creator_country":      derive_creator_country(
+                                    creator_dict.get("niche_tags"),
+                                    creator_dict.get("channel_country")),
         # Scoring fields
         "composite_score":          score_dict.get("composite_score", 0.0),
         "deposit_relevance_score":  score_dict.get("deposit_relevance_score", 0.0),
