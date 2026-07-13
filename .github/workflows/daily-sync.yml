@@ -71,7 +71,12 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
           META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
-          META_AD_ACCOUNT_ID: ${{ secrets.META_AD_ACCOUNT_ID }}
+          # OPTIONAL. meta.py already defaults to act_1771013173838856 (meta.py:33),
+          # which is what runs locally since .env has no account-id var. The `||`
+          # fallback avoids setting an EMPTY override when the secret is absent
+          # (an empty env var would beat the code default and break Meta sync).
+          # Add the secret only to point at a different ad account.
+          META_AD_ACCOUNT_ID: ${{ secrets.META_AD_ACCOUNT_ID || 'act_1771013173838856' }}
           ADJUST_API_KEY: ${{ secrets.ADJUST_API_KEY }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: python pipelines/run_daily_sync.py

@@ -25,7 +25,7 @@ Secret values are NEVER committed. Add each from the corresponding `.env` value:
 | `SUPABASE_URL` | `SUPABASE_URL` |
 | `SUPABASE_KEY` | `SUPABASE_KEY` |
 | `META_ACCESS_TOKEN` | `META_ACCESS_TOKEN` |
-| `META_AD_ACCOUNT_ID` | `META_AD_ACCOUNT_ID` |
+| `META_AD_ACCOUNT_ID` | **Optional.** Not in `.env`; `meta.py` defaults to `act_1771013173838856`. Add a secret only to target a different ad account. |
 | `ADJUST_API_KEY` | `ADJUST_API_KEY` |
 | `SLACK_WEBHOOK_URL` | `SLACK_WEBHOOK_URL` (optional; alerts) |
 
