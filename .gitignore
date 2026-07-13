@@ -14,3 +14,9 @@ creators/.DS_Store
 **/.DS_Store
 data/processed/meta_sync_status.json
 data/processed/trend_raw_cache.json
+
+# Stray root-level logs, orphaned when scheduled-job logging moved to
+# ~/Library/Logs/speed (frozen at 2026-07-06). Real logs live there now.
+/sync.log
+/trend_pipeline.log
+/weekly_update.log
