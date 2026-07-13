@@ -1,0 +1,77 @@
+name: daily-sync
+
+# Cloud replacement for the Mac-based launchd daily sync. Runs on GitHub's
+# infrastructure, so it does NOT depend on the laptop being awake. This fixes the
+# root cause found 2026-07-13: the launchd agent never fired unattended because
+# the pmset 7:58 wake only produced a DarkWake (no active GUI session), and a
+# hung run with no timeout blocked all future fires for ~2.5 days.
+#
+# Scope: this workflow runs pipelines/run_daily_sync.py, which syncs Adjust/Meta,
+# rebuilds the dashboards, and (DASHBOARD_AUTODEPLOY=1) commits + pushes them.
+# TREND_DASHBOARD_REBUILD=1 is set every run but the pipeline gates the trend
+# rebuild to Mondays internally, so the weekly trend refresh rides along on the
+# Monday run. The weekly EMAIL is intentionally NOT here yet (its rebuild, "Part
+# 2", isn't built; it moves here once it is).
+
+on:
+  schedule:
+    # 04:00 UTC = 08:00 in the machine's +04 tz. GitHub cron is UTC only (no DST).
+    - cron: '0 4 * * *'
+  workflow_dispatch: {}   # manual trigger, used to fire-test and for ad-hoc runs
+
+permissions:
+  contents: write         # lets run_daily_sync's auto-deploy commit + push the dashboards
+
+concurrency:
+  group: daily-sync       # never overlap two syncs (avoids a git-push race)
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30    # hard stop: a hung network call can never again block future runs
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true   # so the auto-deploy git push authenticates via GITHUB_TOKEN
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Write Google service-account credentials to a file
+        # GOOGLE_SHEETS_CREDS is read as a FILE PATH by pipelines/sheets.py, so the
+        # JSON secret is materialised to a temp file the run then points at.
+        run: printf '%s' "$GSHEETS_JSON" > "$RUNNER_TEMP/gsheets.json"
+        env:
+          GSHEETS_JSON: ${{ secrets.GOOGLE_SHEETS_CREDS_JSON }}
+
+      - name: Configure git + attach to main
+        # actions/checkout leaves a detached HEAD; run_daily_sync does a plain
+        # `git push`, which needs to be on a branch.
+        run: |
+          git config user.name "speed-sync-bot"
+          git config user.email "speed-sync-bot@users.noreply.github.com"
+          git checkout -B main
+
+      - name: Run daily sync (+ Monday trend rebuild) and auto-deploy
+        env:
+          DASHBOARD_AUTODEPLOY: '1'
+          TREND_DASHBOARD_REBUILD: '1'
+          GOOGLE_SHEETS_CREDS: ${{ runner.temp }}/gsheets.json
+          GOOGLE_SHEETS_ID: ${{ secrets.GOOGLE_SHEETS_ID }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          APIFY_API_KEY: ${{ secrets.APIFY_API_KEY }}
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+          META_AD_ACCOUNT_ID: ${{ secrets.META_AD_ACCOUNT_ID }}
+          ADJUST_API_KEY: ${{ secrets.ADJUST_API_KEY }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: python pipelines/run_daily_sync.py
