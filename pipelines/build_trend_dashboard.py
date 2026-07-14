@@ -192,6 +192,10 @@ def merge_state(prev: dict, recs: list[dict], week: str) -> dict:
             # Preserve auto-import provenance + the Meta match key across rebuilds.
             "results_source": old.get("results_source"),
             "ad_ref": old.get("ad_ref"),
+            # Real live URL of the published post, pasted by hand when the card is
+            # moved to "posted" (Tier 0 of posted-content tracking — automatic
+            # brief->post detection isn't reliable, so we capture the real link).
+            "posted_url": old.get("posted_url"),
             "first_seen": old.get("first_seen", week), "last_seen": week,
         }
     for iid, old in prev_items.items():
@@ -292,8 +296,14 @@ def _results_block(item: dict) -> str:
         return "" if r.get(k) in (None, "") else _e(r.get(k))
     # Manual inputs are always available (unchanged). An auto-import readout +
     # source badge appear on top when the importer has filled real numbers.
+    posted_url = item.get("posted_url") or ""
     return f"""
         <div class="results" data-role="results">
+          <div class="posted-url">
+            <label>Posted URL <input type="url" data-f="posted_url" value="{_e(posted_url)}"
+              placeholder="Paste the live post link (marks this as really shipped)"></label>
+            <a class="posted-link" data-role="postedlink" target="_blank" rel="noopener"></a>
+          </div>
           <div class="res-auto" data-role="autoread"></div>
           <div class="res-inputs">
             <label>Views <input type="number" data-f="views" value="{val('views')}" placeholder="—"></label>
@@ -678,6 +688,35 @@ _TEMPLATE = r"""<!doctype html>
   .sig-fill{height:100%;} .sig-fill.yt{background:var(--yt);} .sig-fill.tt{background:var(--tt);} .sig-fill.ig{background:linear-gradient(90deg,#dd2a7b,#8134af);}
   .sig-val{font-size:11px; font-variant-numeric:tabular-nums; color:var(--muted); width:44px; text-align:right;} .sig-win{font-size:12px; font-weight:700; color:var(--accent-2); text-align:right;}
 
+  /* pipeline board (kanban) */
+  .board{display:grid; grid-template-columns:repeat(5,1fr); gap:12px; align-items:start;}
+  @media (max-width:1000px){ .board{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:560px){ .board{grid-template-columns:1fr;} }
+  .bcol{background:var(--panel); border:1px solid var(--hairline); border-radius:var(--r-md); padding:10px; min-height:96px; transition:background .12s,border-color .12s;}
+  .bcol.dragover{background:var(--panel-2); border-color:var(--accent);}
+  .bcol-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:9px; padding:0 2px;}
+  .bcol-title{font-size:11.5px; font-weight:700; letter-spacing:.03em; text-transform:uppercase; color:var(--muted);}
+  .bcol-n{font-size:11px; font-weight:700; color:var(--faint); background:var(--panel-2); border-radius:999px; padding:1px 8px;}
+  .bcol[data-status="posted"] .bcol-title{color:var(--blue);}
+  .bcol[data-status="results_in"] .bcol-title{color:var(--good);}
+  .bcard{background:var(--panel-2); border:1px solid var(--hairline); border-left:3px solid var(--faint); border-radius:var(--r-sm); padding:9px 10px; margin-bottom:8px; cursor:grab; box-shadow:0 2px 8px -6px rgba(0,0,0,.6);}
+  .bcard:last-child{margin-bottom:0;}
+  .bcard.dragging{opacity:.45;}
+  .bcard[data-type="paid"]{border-left-color:var(--warn);}
+  .bcard[data-type="organic"]{border-left-color:var(--accent-2);}
+  .bcard-hook{font-size:12.5px; line-height:1.35; color:var(--text); margin-bottom:7px;}
+  .bcard-meta{display:flex; align-items:center; gap:6px; flex-wrap:wrap;}
+  .bcard .st{cursor:pointer; font-size:9.5px; padding:1px 7px;}
+  .bcard-type{font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--faint);}
+  .bcard-link{display:inline-flex; align-items:center; gap:3px; font-size:10.5px; color:var(--accent-2); text-decoration:none; margin-top:6px; word-break:break-all;}
+  .bcard-link:hover{text-decoration:underline;}
+  .bcol-empty{font-size:11px; color:var(--faint); font-style:italic; padding:6px 2px;}
+  /* posted-url capture on detail cards */
+  .posted-url{margin-bottom:8px;}
+  .posted-url label{display:block; font-size:11px; color:var(--muted); font-weight:600;}
+  .posted-url input{width:100%; margin-top:3px; background:var(--bg); border:1px solid var(--hairline-strong); color:var(--text); border-radius:7px; padding:6px 8px; font-size:12px;}
+  .posted-link{display:inline-block; margin-top:5px; font-size:11px; color:var(--accent-2); text-decoration:none; word-break:break-all;}
+  .posted-link:hover{text-decoration:underline;}
   .savebar{position:fixed; right:20px; bottom:20px; display:flex; gap:10px; z-index:20;}
   .savebar button{background:var(--accent); color:#fff; border:none; border-radius:10px; padding:11px 16px; font-size:13px; font-weight:700; cursor:pointer; box-shadow:var(--shadow);}
   .savebar button.ghost{background:var(--panel); border:1px solid var(--hairline-strong); color:var(--muted);}
@@ -699,6 +738,11 @@ _TEMPLATE = r"""<!doctype html>
   <section>
     <div class="sec-head"><h2>This Week's Actions</h2><span class="sec-note">What needs a decision · what's live · click a status to advance it</span></div>
     <div class="actions">/*__ACTIONS__*/</div>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>Pipeline Board</h2><span class="sec-note">Drag a card between columns to update its status · or click the status pill to advance · edits persist like everything else (Download state → commit)</span></div>
+    <div class="board" id="board"></div>
   </section>
 
   <section>
@@ -741,8 +785,10 @@ _TEMPLATE = r"""<!doctype html>
 
   <footer>
     Data: YouTube Data API (US, last 7d) + TikTok &amp; Instagram via Apify · enrichment by Claude.<br>
-    Status &amp; results persist in dashboard_state.json. Results logging is manual for now —
-    enter views/ER/saves on posted cards, then Download state and commit the JSON so the next rebuild keeps it.
+    Status, posted URLs &amp; results persist in dashboard_state.json. Drag cards on the Pipeline Board to change status.
+    Posted-content detection is manual by design: when a card goes live, paste its real URL on the card — automatic
+    brief-to-post matching isn't reliable across TikTok/IG/YouTube, so we capture the true link rather than guess.
+    Results logging is manual too — enter views/ER/saves on posted cards, then Download state and commit the JSON so the next rebuild keeps it.
   </footer>
 </div>
 
@@ -767,6 +813,7 @@ function eff(id){ // effective item = baked merged with local override
   const o = overrides[id] || {};
   return {status: o.status || base.status,
           ad_ref: (o.ad_ref !== undefined ? o.ad_ref : (base.ad_ref || "")),
+          posted_url: (o.posted_url !== undefined ? o.posted_url : (base.posted_url || "")),
           results_source: base.results_source || null,
           results: Object.assign({}, base.results||{}, o.results||{})};
 }
@@ -792,6 +839,14 @@ function applyCard(card){
   // ad_ref input (paid cards)
   const ar = card.querySelector('input[data-f="ad_ref"]');
   if(ar && document.activeElement !== ar) ar.value = e.ad_ref || "";
+  // posted URL input + live link (Tier 0 posted-content capture)
+  const pu = card.querySelector('input[data-f="posted_url"]');
+  if(pu && document.activeElement !== pu) pu.value = e.posted_url || "";
+  const pl = card.querySelector('[data-role="postedlink"]');
+  if(pl){
+    if(e.posted_url){ pl.href = e.posted_url; pl.textContent = "↗ open live post"; pl.style.display = "inline-block"; }
+    else { pl.removeAttribute("href"); pl.textContent = ""; pl.style.display = "none"; }
+  }
   // source badge (AUTO / MANUAL)
   const sb = card.querySelector('[data-role="source"]');
   if(sb){
@@ -826,17 +881,26 @@ function compare(card, id, e){
   box.innerHTML = `<span class="${cls}">Actual ${views.toLocaleString()} vs est ${est.toLocaleString()} — ${pct>=0?"+":""}${pct}% (${word})</span>`;
 }
 
-// status cycle
+// single source of truth for a status change — used by click-to-advance AND drag
+function setStatus(id, status){
+  if(!id || FLOW.indexOf(status) < 0) return;
+  overrides[id] = overrides[id] || {}; overrides[id].status = status; save();
+  refreshAll();
+}
+function advanceStatus(id){
+  const cur = eff(id).status;
+  setStatus(id, FLOW[(FLOW.indexOf(cur)+1) % FLOW.length]);
+}
+// re-sync every view (detail cards + the live board) from current effective state
+function refreshAll(){
+  document.querySelectorAll(".rec-card").forEach(applyCard);
+  renderBoard();
+}
+
+// status cycle (rec-card tags and board pills share the .st[data-act="cycle"] hook)
 document.body.addEventListener("click", ev=>{
   const t = ev.target;
-  if(t.matches('.st[data-act="cycle"]')){
-    const id = t.dataset.id; const cur = eff(id).status;
-    const next = FLOW[(FLOW.indexOf(cur)+1) % FLOW.length];
-    overrides[id] = overrides[id] || {}; overrides[id].status = next; save();
-    applyCard(t.closest(".rec-card") || document.body);
-    // Actions summary reflects statuses too — simplest is a light refresh of tags there
-    document.querySelectorAll('.a-col .st').forEach(()=>{});
-  }
+  if(t.matches('.st[data-act="cycle"]')){ advanceStatus(t.dataset.id); return; }
   if(t.matches('.expand')){
     const d = t.parentElement.querySelector(".rec-detail");
     if(d){ const open = d.hasAttribute("hidden"); if(open){ d.removeAttribute("hidden"); t.textContent = t.textContent.replace("▾","▴"); }
@@ -853,6 +917,10 @@ document.body.addEventListener("input", ev=>{
     if(inp.dataset.f === "ad_ref"){          // item-level match key, not a result
       overrides[id].ad_ref = inp.value; save(); return;
     }
+    if(inp.dataset.f === "posted_url"){      // real live link, item-level string
+      overrides[id].posted_url = inp.value; save();
+      applyCard(card); renderBoard(); return;
+    }
     overrides[id].results = overrides[id].results || {};
     overrides[id].results[inp.dataset.f] = inp.value === "" ? null : Number(inp.value);
     save(); compare(card, id, eff(id));
@@ -865,6 +933,7 @@ document.getElementById("download").addEventListener("click", ()=>{
     if(!out.items[id]) continue;
     if(overrides[id].status) out.items[id].status = overrides[id].status;
     if(overrides[id].ad_ref !== undefined) out.items[id].ad_ref = overrides[id].ad_ref;
+    if(overrides[id].posted_url !== undefined) out.items[id].posted_url = overrides[id].posted_url;
     if(overrides[id].results) out.items[id].results = Object.assign(out.items[id].results||{}, overrides[id].results);
   }
   out.updated_at = new Date().toISOString().slice(0,10);
@@ -879,7 +948,72 @@ document.getElementById("reset").addEventListener("click", ()=>{
   }
 });
 
+// ---- Pipeline Board (kanban): rendered live from BAKED.items + overrides ----
+function escg(s){ return String(s==null?"":s).replace(/[&<>"]/g,
+  c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+function renderBoard(){
+  const board = document.getElementById("board"); if(!board) return;
+  const items = BAKED.items || {};
+  const cols = {}; FLOW.forEach(s=>cols[s]=[]);
+  Object.keys(items).forEach(id=>{ (cols[eff(id).status] || (cols[eff(id).status]=[])).push(id); });
+  board.innerHTML = FLOW.map(status=>{
+    const ids = cols[status] || [];
+    const cards = ids.map(id=>{
+      const base = items[id] || {}; const e = eff(id);
+      const hook = base.hook || "";
+      const link = e.posted_url
+        ? `<a class="bcard-link" href="${escg(e.posted_url)}" target="_blank" rel="noopener">↗ live post</a>` : "";
+      return `<div class="bcard" draggable="true" data-id="${escg(id)}" data-type="${escg(base.type||'')}">
+        <div class="bcard-hook">“${escg(hook.slice(0,90))}${hook.length>90?"…":""}”</div>
+        <div class="bcard-meta">
+          <span class="bcard-type">${escg(base.type||"")}</span>
+          <button class="st st-${status}" data-act="cycle" data-id="${escg(id)}" title="Click to advance status">${LABEL[status]}</button>
+        </div>${link}
+      </div>`;
+    }).join("") || `<div class="bcol-empty">nothing here</div>`;
+    return `<div class="bcol" data-status="${status}">
+      <div class="bcol-head"><span class="bcol-title">${LABEL[status]}</span><span class="bcol-n">${ids.length}</span></div>
+      ${cards}</div>`;
+  }).join("");
+}
+
+// Drag-and-drop (listeners live on #board, which survives innerHTML swaps)
+(function(){
+  const board = document.getElementById("board"); if(!board) return;
+  let dragId = null;
+  board.addEventListener("dragstart", e=>{
+    const c = e.target.closest(".bcard"); if(!c) return;
+    dragId = c.dataset.id; c.classList.add("dragging");
+    e.dataTransfer.effectAllowed = "move";
+    try{ e.dataTransfer.setData("text/plain", dragId); }catch(_){}
+  });
+  board.addEventListener("dragend", e=>{
+    const c = e.target.closest(".bcard"); if(c) c.classList.remove("dragging");
+    board.querySelectorAll(".bcol.dragover").forEach(x=>x.classList.remove("dragover"));
+    dragId = null;
+  });
+  board.addEventListener("dragover", e=>{
+    if(e.target.closest(".bcol")){ e.preventDefault(); e.dataTransfer.dropEffect = "move"; }
+  });
+  board.addEventListener("dragenter", e=>{
+    const col = e.target.closest(".bcol"); if(col) col.classList.add("dragover");
+  });
+  board.addEventListener("dragleave", e=>{
+    const col = e.target.closest(".bcol");
+    if(col && !col.contains(e.relatedTarget)) col.classList.remove("dragover");
+  });
+  board.addEventListener("drop", e=>{
+    e.preventDefault();
+    const col = e.target.closest(".bcol"); if(!col) return;
+    col.classList.remove("dragover");
+    const id = dragId || (e.dataTransfer && e.dataTransfer.getData("text/plain"));
+    if(id) setStatus(id, col.dataset.status);   // setStatus -> refreshAll -> renderBoard
+  });
+})();
+
 document.querySelectorAll(".rec-card").forEach(applyCard);
+renderBoard();
 save();
 </script>
 </body>
