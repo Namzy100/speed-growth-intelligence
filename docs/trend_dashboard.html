@@ -130,6 +130,35 @@
   .sig-fill{height:100%;} .sig-fill.yt{background:var(--yt);} .sig-fill.tt{background:var(--tt);} .sig-fill.ig{background:linear-gradient(90deg,#dd2a7b,#8134af);}
   .sig-val{font-size:11px; font-variant-numeric:tabular-nums; color:var(--muted); width:44px; text-align:right;} .sig-win{font-size:12px; font-weight:700; color:var(--accent-2); text-align:right;}
 
+  /* pipeline board (kanban) */
+  .board{display:grid; grid-template-columns:repeat(5,1fr); gap:12px; align-items:start;}
+  @media (max-width:1000px){ .board{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:560px){ .board{grid-template-columns:1fr;} }
+  .bcol{background:var(--panel); border:1px solid var(--hairline); border-radius:var(--r-md); padding:10px; min-height:96px; transition:background .12s,border-color .12s;}
+  .bcol.dragover{background:var(--panel-2); border-color:var(--accent);}
+  .bcol-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:9px; padding:0 2px;}
+  .bcol-title{font-size:11.5px; font-weight:700; letter-spacing:.03em; text-transform:uppercase; color:var(--muted);}
+  .bcol-n{font-size:11px; font-weight:700; color:var(--faint); background:var(--panel-2); border-radius:999px; padding:1px 8px;}
+  .bcol[data-status="posted"] .bcol-title{color:var(--blue);}
+  .bcol[data-status="results_in"] .bcol-title{color:var(--good);}
+  .bcard{background:var(--panel-2); border:1px solid var(--hairline); border-left:3px solid var(--faint); border-radius:var(--r-sm); padding:9px 10px; margin-bottom:8px; cursor:grab; box-shadow:0 2px 8px -6px rgba(0,0,0,.6);}
+  .bcard:last-child{margin-bottom:0;}
+  .bcard.dragging{opacity:.45;}
+  .bcard[data-type="paid"]{border-left-color:var(--warn);}
+  .bcard[data-type="organic"]{border-left-color:var(--accent-2);}
+  .bcard-hook{font-size:12.5px; line-height:1.35; color:var(--text); margin-bottom:7px;}
+  .bcard-meta{display:flex; align-items:center; gap:6px; flex-wrap:wrap;}
+  .bcard .st{cursor:pointer; font-size:9.5px; padding:1px 7px;}
+  .bcard-type{font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--faint);}
+  .bcard-link{display:inline-flex; align-items:center; gap:3px; font-size:10.5px; color:var(--accent-2); text-decoration:none; margin-top:6px; word-break:break-all;}
+  .bcard-link:hover{text-decoration:underline;}
+  .bcol-empty{font-size:11px; color:var(--faint); font-style:italic; padding:6px 2px;}
+  /* posted-url capture on detail cards */
+  .posted-url{margin-bottom:8px;}
+  .posted-url label{display:block; font-size:11px; color:var(--muted); font-weight:600;}
+  .posted-url input{width:100%; margin-top:3px; background:var(--bg); border:1px solid var(--hairline-strong); color:var(--text); border-radius:7px; padding:6px 8px; font-size:12px;}
+  .posted-link{display:inline-block; margin-top:5px; font-size:11px; color:var(--accent-2); text-decoration:none; word-break:break-all;}
+  .posted-link:hover{text-decoration:underline;}
   .savebar{position:fixed; right:20px; bottom:20px; display:flex; gap:10px; z-index:20;}
   .savebar button{background:var(--accent); color:#fff; border:none; border-radius:10px; padding:11px 16px; font-size:13px; font-weight:700; cursor:pointer; box-shadow:var(--shadow);}
   .savebar button.ghost{background:var(--panel); border:1px solid var(--hairline-strong); color:var(--muted);}
@@ -141,7 +170,7 @@
 <div class="wrap">
   <div class="brandbar">
     <div class="brand"><span class="bolt">⚡</span>Speed Wallet</div>
-    <div class="sync">Synced: <b>2026-07-13 12:06 UTC</b></div>
+    <div class="sync">Synced: <b>2026-07-14 05:12 UTC</b></div>
   </div>
   <div class="title-block">
     <h1>Trend Intelligence — US</h1>
@@ -150,27 +179,37 @@
 
   <section>
     <div class="sec-head"><h2>This Week's Actions</h2><span class="sec-note">What needs a decision · what's live · click a status to advance it</span></div>
-    <div class="actions"><div class="actions-grid"><div class="a-col"><div class="a-title">Needs a decision <span class="a-count">8</span></div><div class="a-hint">Suggested / briefed — approve or brief out</div><ul><li><span class="a-hook">“The remittance company took $47. I sent it back in 4 seconds for”</span><span class="st st-suggested">Suggested</span></li><li><span class="a-hook">“POV: you just found Bitcoin in 2025 — but this time you actually”</span><span class="st st-suggested">Suggested</span></li><li><span class="a-hook">“They charged my family $2.5 BILLION in remittance fees last year”</span><span class="st st-suggested">Suggested</span></li><li><span class="a-hook">“I let a stranger send me $5 on the Bitcoin Lightning Network to ”</span><span class="st st-suggested">Suggested</span></li><li><span class="a-hook">“Why do iGaming sites take 3 days to pay you out? Speed Wallet do”</span><span class="st st-suggested">Suggested</span></li><li><span class="a-hook">“Your family never got the full $200 you sent. Here&#x27;s where it we”</span><span class="st st-suggested">Suggested</span></li></ul></div><div class="a-col"><div class="a-title">In production <span class="a-count">0</span></div><div class="a-hint">Being made now</div><ul><li class="a-empty">Nothing here yet.</li></ul></div><div class="a-col"><div class="a-title">Posted · awaiting results <span class="a-count">0</span></div><div class="a-hint">Live — log performance when it's in</div><ul><li class="a-empty">Nothing here yet.</li></ul></div><div class="a-col"><div class="a-title">Results in <span class="a-count">0</span></div><div class="a-hint">Measured vs estimate</div><ul><li class="a-empty">Nothing here yet.</li></ul></div></div></div>
+    <div class="actions"><div class="actions-grid"><div class="a-col"><div class="a-title">Needs a decision <span class="a-count">8</span></div><div class="a-hint">Suggested / briefed — approve or brief out</div><ul><li><span class="a-hook">“The bank kept $47 of my mom&#x27;s birthday money. Never again. 😤”</span><span class="st st-suggested">Suggested</span></li><li><span class="a-hook">“POV: you just found Bitcoin in 2009 — except it&#x27;s 2025 and Light”</span><span class="st st-suggested">Suggested</span></li><li><span class="a-hook">“They charged Filipinos $2.4B in remittance fees last year. Here&#x27;”</span><span class="st st-suggested">Suggested</span></li><li><span class="a-hook">“I sent Bitcoin to my friend in Nigeria. It arrived before I fini”</span><span class="st st-suggested">Suggested</span></li><li><span class="a-hook">“Your first Bitcoin doesn&#x27;t have to be complicated. It&#x27;s literall”</span><span class="st st-suggested">Suggested</span></li><li><span class="a-hook">“Your family&#x27;s money is being stolen legally. Every. Single. Send”</span><span class="st st-suggested">Suggested</span></li></ul></div><div class="a-col"><div class="a-title">In production <span class="a-count">0</span></div><div class="a-hint">Being made now</div><ul><li class="a-empty">Nothing here yet.</li></ul></div><div class="a-col"><div class="a-title">Posted · awaiting results <span class="a-count">0</span></div><div class="a-hint">Live — log performance when it's in</div><ul><li class="a-empty">Nothing here yet.</li></ul></div><div class="a-col"><div class="a-title">Results in <span class="a-count">0</span></div><div class="a-hint">Measured vs estimate</div><ul><li class="a-empty">Nothing here yet.</li></ul></div></div></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>Pipeline Board</h2><span class="sec-note">Drag a card between columns to update its status · or click the status pill to advance · edits persist like everything else (Download state → commit)</span></div>
+    <div class="board" id="board"></div>
   </section>
 
   <section>
     <div class="sec-head"><h2>Organic Content Calendar</h2><span class="sec-note">Hook · estimate · status visible; expand for the full script</span></div>
     <div class="rec-grid">
-      <div class="rec-card" data-id="organic-i-let-a-stranger-send-me-5-on-the-bitcoin-lightn" data-est="74000">
+      <div class="rec-card" data-id="organic-i-sent-bitcoin-to-my-friend-in-nigeria-it-arrive" data-est="28000">
         <div class="rec-top">
-          <span class="badge seg cryptocurious">crypto-curious</span>
-          <span class="badge plat">TikTok</span>
-          <button class="st st-suggested" data-act="cycle" data-id="organic-i-let-a-stranger-send-me-5-on-the-bitcoin-lightn" title="Click to advance status">Suggested</button><span class="src-badge" data-role="source"></span>
+          <span class="badge seg remittance">remittance</span>
+          <span class="badge plat">Instagram Reels</span>
+          <button class="st st-suggested" data-act="cycle" data-id="organic-i-sent-bitcoin-to-my-friend-in-nigeria-it-arrive" title="Click to advance status">Suggested</button><span class="src-badge" data-role="source"></span>
         </div>
-        <div class="rec-hook">“I let a stranger send me $5 on the Bitcoin Lightning Network to prove it&#x27;s real.”</div>
-        <div class="rec-line"><span class="rec-est">Est. reach ~74000</span></div>
+        <div class="rec-hook">“I sent Bitcoin to my friend in Nigeria. It arrived before I finished this sentence. ⚡”</div>
+        <div class="rec-line"><span class="rec-est">Est. reach ~28000</span></div>
         <button class="expand" data-act="expand">▾ script &amp; notes</button>
         <div class="rec-detail" hidden>
-          <div class="rec-beats">Beat 1 (0-8s): Creator shows QR code on screen — &#x27;First person to scan this sends me $5 in Bitcoin. Watch how fast it hits.&#x27; Beat 2 (9-22s): Real-time screen capture — someone scans, payment sent, Speed Wallet buzzes with confirmation — elapsed time shown: &#x27;2 seconds.&#x27; Beat 3 (23-42s): Creator reacts authentically — &#x27;That&#x27;s it? No bank. No app store wallet. No 3-day hold. DONE.&#x27; Beat 4 (43-58s): &#x27;This is Speed Wallet. Try it. Link in bio.&#x27;</div>
-          <div class="rec-notes">🎬 Real transaction builds maximum trust — coordinate with a teammate to be the &#x27;stranger&#x27;; keep the QR code visible for at least 4 seconds; do NOT script the reaction, let it be genuine; post Thursday evening for maximum engagement window</div>
+          <div class="rec-beats">Beat 1 (0-6s): Creator presses send on Speed Wallet, starts speaking mid-sentence — recipient&#x27;s push notification appears on second phone before sentence ends. Real-time proof. Beat 2 (7-22s): &#x27;Traditional wire: 3-5 days, $25-45 in fees. Speed on Lightning: 2 seconds, zero fees. Both of us just needed a phone.&#x27; Beat 3 (23-42s): Show both sides — sender&#x27;s Speed balance deducted, receiver&#x27;s balance credited. Both give thumbs up to camera. Beat 4 (43-58s): &#x27;Download Speed Wallet free. Your first send is on us.&#x27;</div>
+          <div class="rec-notes">🎬 Coordinate with an actual friend or creator in Nigeria/Ghana/Philippines for authentic dual-phone footage. Film both phones simultaneously using a tripod or second person. The real-time arrival is the entire product demo — protect that moment, do not cut away.</div>
         </div>
         
         <div class="results" data-role="results">
+          <div class="posted-url">
+            <label>Posted URL <input type="url" data-f="posted_url" value=""
+              placeholder="Paste the live post link (marks this as really shipped)"></label>
+            <a class="posted-link" data-role="postedlink" target="_blank" rel="noopener"></a>
+          </div>
           <div class="res-auto" data-role="autoread"></div>
           <div class="res-inputs">
             <label>Views <input type="number" data-f="views" value="" placeholder="—"></label>
@@ -180,21 +219,26 @@
           <div class="res-compare" data-role="compare"></div>
         </div>
       </div>
-      <div class="rec-card" data-id="organic-pov-you-just-found-bitcoin-in-2025-but-this-time" data-est="95000">
+      <div class="rec-card" data-id="organic-pov-you-just-found-bitcoin-in-2009-except-it-s-2" data-est="95000">
         <div class="rec-top">
           <span class="badge seg cryptocurious">crypto-curious</span>
           <span class="badge plat">TikTok</span>
-          <button class="st st-suggested" data-act="cycle" data-id="organic-pov-you-just-found-bitcoin-in-2025-but-this-time" title="Click to advance status">Suggested</button><span class="src-badge" data-role="source"></span>
+          <button class="st st-suggested" data-act="cycle" data-id="organic-pov-you-just-found-bitcoin-in-2009-except-it-s-2" title="Click to advance status">Suggested</button><span class="src-badge" data-role="source"></span>
         </div>
-        <div class="rec-hook">“POV: you just found Bitcoin in 2025 — but this time you actually know what to do with it.”</div>
+        <div class="rec-hook">“POV: you just found Bitcoin in 2009 — except it&#x27;s 2025 and Lightning is the unlock 🔓”</div>
         <div class="rec-line"><span class="rec-est">Est. reach ~95000</span></div>
         <button class="expand" data-act="expand">▾ script &amp; notes</button>
         <div class="rec-detail" hidden>
-          <div class="rec-beats">Beat 1 (0-7s): Text-on-screen over creator&#x27;s surprised face: &#x27;Everyone says they wish they found Bitcoin early. Here&#x27;s the closest thing left.&#x27; Beat 2 (8-25s): Explain Lightning Network in one sentence — &#x27;Bitcoin, but instant and free to send&#x27; — show Speed Wallet home screen. Beat 3 (26-45s): Creator receives a &#x27;tip&#x27; of 1,000 sats from a friend live on camera — phone buzzes, balance updates instantly. Beat 4 (46-58s): &#x27;Download Speed. Your first Bitcoin is waiting.&#x27; Text overlay + bio link callout.</div>
-          <div class="rec-notes">🎬 Stitch or duet format off hook index 1&#x27;s viral audio if available; keep font large for mobile; use green lightning bolt emoji throughout; post Monday or Thursday when crypto content peaks on FYP</div>
+          <div class="rec-beats">Beat 1 (0-7s): Text-on-screen over retro Bitcoin price chart: &#x27;$0.001 in 2009 → $60K today. You missed it. Or did you?&#x27; Beat 2 (8-25s): Pivot — &#x27;Lightning Network is Bitcoin payments finally working: instant, global, nearly free. This is the 2009 moment for spending BTC.&#x27; Beat 3 (26-45s): Speed Wallet screen-record: receive sats, pay a Lightning invoice, whole flow under 10 seconds. Beat 4 (46-58s): &#x27;Download Speed. Send $1 anywhere on earth right now. This is your early-adopter window.&#x27;</div>
+          <div class="rec-notes">🎬 Use free CapCut retro-glitch transition between chart and app demo. Source public-domain BTC price chart imagery. Trending lo-fi nostalgia audio underneath. Hook text must appear within first 0.5s to stop the scroll.</div>
         </div>
         
         <div class="results" data-role="results">
+          <div class="posted-url">
+            <label>Posted URL <input type="url" data-f="posted_url" value=""
+              placeholder="Paste the live post link (marks this as really shipped)"></label>
+            <a class="posted-link" data-role="postedlink" target="_blank" rel="noopener"></a>
+          </div>
           <div class="res-auto" data-role="autoread"></div>
           <div class="res-inputs">
             <label>Views <input type="number" data-f="views" value="" placeholder="—"></label>
@@ -204,21 +248,26 @@
           <div class="res-compare" data-role="compare"></div>
         </div>
       </div>
-      <div class="rec-card" data-id="organic-the-remittance-company-took-47-i-sent-it-back-in" data-est="38000">
+      <div class="rec-card" data-id="organic-the-bank-kept-47-of-my-mom-s-birthday-money-neve" data-est="38000">
         <div class="rec-top">
           <span class="badge seg remittance">remittance</span>
           <span class="badge plat">TikTok</span>
-          <button class="st st-suggested" data-act="cycle" data-id="organic-the-remittance-company-took-47-i-sent-it-back-in" title="Click to advance status">Suggested</button><span class="src-badge" data-role="source"></span>
+          <button class="st st-suggested" data-act="cycle" data-id="organic-the-bank-kept-47-of-my-mom-s-birthday-money-neve" title="Click to advance status">Suggested</button><span class="src-badge" data-role="source"></span>
         </div>
-        <div class="rec-hook">“The remittance company took $47. I sent it back in 4 seconds for $0.”</div>
+        <div class="rec-hook">“The bank kept $47 of my mom&#x27;s birthday money. Never again. 😤”</div>
         <div class="rec-line"><span class="rec-est">Est. reach ~38000</span></div>
         <button class="expand" data-act="expand">▾ script &amp; notes</button>
         <div class="rec-detail" hidden>
-          <div class="rec-beats">Beat 1 (0-8s): Creator holds up a Western Union receipt showing a $47 fee on a $200 send — says &#x27;this was my mom&#x27;s grocery money.&#x27; Beat 2 (9-25s): Screen-record of opening Speed Wallet, typing $200, hitting send — timestamp shows 4-second confirmation ping on receiver&#x27;s phone. Beat 3 (26-45s): Split-screen text overlay: &#x27;$47 fee vs $0 fee. Same money. Different rails.&#x27; Beat 4 (46-58s): CTA — &#x27;Link in bio. First send free. Tag someone sending money home.&#x27;</div>
-          <div class="rec-notes">🎬 Film receipt close-up in natural light; use native TikTok screen-record for app demo; add trending Latin/Filipino diaspora audio underneath; post Tuesday 6-8 PM EST when remittance audience peaks</div>
+          <div class="rec-beats">Beat 1 (0-8s): Creator holds up phone showing a bank wire receipt with fees circled in red — emotional, personal. Beat 2 (9-25s): Screen-record of opening Speed Wallet, entering the same dollar amount to send internationally, fee line reads $0.00. Beat 3 (26-45s): Recipient&#x27;s phone buzzes — show notification arriving in under 5 seconds, both parties react on split screen. Beat 4 (46-58s): Creator to camera: &#x27;Zero fees, instant, on Bitcoin Lightning. Link in bio to send your first $5 free.&#x27;</div>
+          <div class="rec-notes">🎬 Film fee receipt close-up in natural light. Use phone mirror trick for split-screen reaction. No caption cards needed — spoken audio carries the narrative. Post Tuesday 6-8 PM EST when diaspora engagement peaks.</div>
         </div>
         
         <div class="results" data-role="results">
+          <div class="posted-url">
+            <label>Posted URL <input type="url" data-f="posted_url" value=""
+              placeholder="Paste the live post link (marks this as really shipped)"></label>
+            <a class="posted-link" data-role="postedlink" target="_blank" rel="noopener"></a>
+          </div>
           <div class="res-auto" data-role="autoread"></div>
           <div class="res-inputs">
             <label>Views <input type="number" data-f="views" value="" placeholder="—"></label>
@@ -228,21 +277,26 @@
           <div class="res-compare" data-role="compare"></div>
         </div>
       </div>
-      <div class="rec-card" data-id="organic-they-charged-my-family-2-5-billion-in-remittance" data-est="52000">
+      <div class="rec-card" data-id="organic-they-charged-filipinos-2-4b-in-remittance-fees-l" data-est="52000">
         <div class="rec-top">
           <span class="badge seg remittance">remittance</span>
-          <span class="badge plat">Instagram Reels</span>
-          <button class="st st-suggested" data-act="cycle" data-id="organic-they-charged-my-family-2-5-billion-in-remittance" title="Click to advance status">Suggested</button><span class="src-badge" data-role="source"></span>
+          <span class="badge plat">TikTok</span>
+          <button class="st st-suggested" data-act="cycle" data-id="organic-they-charged-filipinos-2-4b-in-remittance-fees-l" title="Click to advance status">Suggested</button><span class="src-badge" data-role="source"></span>
         </div>
-        <div class="rec-hook">“They charged my family $2.5 BILLION in remittance fees last year. Never again.”</div>
+        <div class="rec-hook">“They charged Filipinos $2.4B in remittance fees last year. Here&#x27;s the receipts. 🧾”</div>
         <div class="rec-line"><span class="rec-est">Est. reach ~52000</span></div>
         <button class="expand" data-act="expand">▾ script &amp; notes</button>
         <div class="rec-detail" hidden>
-          <div class="rec-beats">Beat 1 (0-9s): Stat card text-on-screen — &#x27;African diaspora sent $100B home in 2023. Banks and wire services kept $2.5B in fees.&#x27; Creator reacts with genuine frustration. Beat 2 (10-28s): Quick explainer: &#x27;Bitcoin Lightning = money moves like a text message, zero fees, arrives in seconds anywhere on Earth.&#x27; Beat 3 (29-45s): Show Speed Wallet send flow — enter amount, enter Lightning address, confirm — done. Beat 4 (46-58s): &#x27;Share this with anyone sending money home. The fee era is over.&#x27;</div>
-          <div class="rec-notes">🎬 Lean into diaspora identity — creator should speak directly to their own community (Nigerian, Ghanaian, Ugandan); add bold captions for silent viewing; stat card can be made free in Canva; post Wednesday or Friday</div>
+          <div class="rec-beats">Beat 1 (0-10s): Talking head — creator visibly frustrated, cites the OFW fee stat from hook #4 energy, references real World Bank data on-screen as text overlay. Beat 2 (11-28s): &#x27;Western Union, MoneyGram, your bank — all taking 5-10% off every send. That&#x27;s money that should feed families.&#x27; Beat 3 (29-48s): &#x27;Speed Wallet uses Bitcoin Lightning. $0 fees. Arrives in seconds. I&#x27;m going to show you exactly how.&#x27; Screen-record demo. Beat 4 (49-58s): &#x27;Share this with every OFW you know. Comment your country and I&#x27;ll show the fee math for your corridor.&#x27;</div>
+          <div class="rec-notes">🎬 Tag #OFW #Philippines #remittance #pinoy in caption for algorithmic targeting. Creator should speak directly and sincerely — no heavy production. World Bank 2024 remittance cost data is publicly available. Engagement bait in Beat 4 drives comment velocity.</div>
         </div>
         
         <div class="results" data-role="results">
+          <div class="posted-url">
+            <label>Posted URL <input type="url" data-f="posted_url" value=""
+              placeholder="Paste the live post link (marks this as really shipped)"></label>
+            <a class="posted-link" data-role="postedlink" target="_blank" rel="noopener"></a>
+          </div>
           <div class="res-auto" data-role="autoread"></div>
           <div class="res-inputs">
             <label>Views <input type="number" data-f="views" value="" placeholder="—"></label>
@@ -252,21 +306,26 @@
           <div class="res-compare" data-role="compare"></div>
         </div>
       </div>
-      <div class="rec-card" data-id="organic-why-do-igaming-sites-take-3-days-to-pay-you-out-" data-est="29000">
+      <div class="rec-card" data-id="organic-your-first-bitcoin-doesn-t-have-to-be-complicate" data-est="21000">
         <div class="rec-top">
-          <span class="badge seg iGaming">iGaming</span>
+          <span class="badge seg cryptocurious">crypto-curious</span>
           <span class="badge plat">Instagram Reels</span>
-          <button class="st st-suggested" data-act="cycle" data-id="organic-why-do-igaming-sites-take-3-days-to-pay-you-out-" title="Click to advance status">Suggested</button><span class="src-badge" data-role="source"></span>
+          <button class="st st-suggested" data-act="cycle" data-id="organic-your-first-bitcoin-doesn-t-have-to-be-complicate" title="Click to advance status">Suggested</button><span class="src-badge" data-role="source"></span>
         </div>
-        <div class="rec-hook">“Why do iGaming sites take 3 days to pay you out? Speed Wallet doesn&#x27;t.”</div>
-        <div class="rec-line"><span class="rec-est">Est. reach ~29000</span></div>
+        <div class="rec-hook">“Your first Bitcoin doesn&#x27;t have to be complicated. It&#x27;s literally just this. 👇”</div>
+        <div class="rec-line"><span class="rec-est">Est. reach ~21000</span></div>
         <button class="expand" data-act="expand">▾ script &amp; notes</button>
         <div class="rec-detail" hidden>
-          <div class="rec-beats">Beat 1 (0-8s): Text-on-screen: &#x27;You won. Congrats. Now wait 72 hours for your money.&#x27; Creator makes &#x27;seriously?&#x27; face. Beat 2 (9-24s): Contrast cut — &#x27;With Speed Wallet you deposit and withdraw via Bitcoin Lightning. Instant. Zero fees. No bank needed.&#x27; Beat 3 (25-44s): Screen-record of a withdrawal landing in Speed Wallet — timestamp visible, 3-second arrival. Beat 4 (45-58s): &#x27;Stop waiting for your own money. Download Speed.&#x27; Bold CTA text on screen.</div>
-          <div class="rec-notes">🎬 Keep branding subtle — focus pain on the wait, not gambling itself; use screen-record of a generic wallet receive screen if a live casino withdrawal is not filmable; post Friday or Saturday when iGaming intent spikes; add captions in white bold with black outline for clarity</div>
+          <div class="rec-beats">Beat 1 (0-8s): Creator admits on camera: &#x27;I was scared of crypto for 3 years because it looked too technical. Then someone showed me Speed Wallet and I got it in 60 seconds.&#x27; Beat 2 (9-28s): Screen-record: download app, create wallet, tap &#x27;Receive,&#x27; share QR code. Friend sends $2 in sats. Whole flow shown unedited. Beat 3 (29-46s): &#x27;That&#x27;s it. You now own Bitcoin. No exchange account, no KYC drama, no fees. Just a phone.&#x27; Beat 4 (47-58s): &#x27;Comment SATS and I&#x27;ll send you $1 in Bitcoin to your new Speed wallet right now.&#x27;</div>
+          <div class="rec-notes">🎬 The comment-to-receive mechanic in Beat 4 is a proven engagement multiplier — budget $20-50 to actually follow through and send sats to commenters, driving authentic social proof replies. Screen-record at 2x speed for the setup, then slow to real-time for the sats arriving.</div>
         </div>
         
         <div class="results" data-role="results">
+          <div class="posted-url">
+            <label>Posted URL <input type="url" data-f="posted_url" value=""
+              placeholder="Paste the live post link (marks this as really shipped)"></label>
+            <a class="posted-link" data-role="postedlink" target="_blank" rel="noopener"></a>
+          </div>
           <div class="res-auto" data-role="autoread"></div>
           <div class="res-inputs">
             <label>Views <input type="number" data-f="views" value="" placeholder="—"></label>
@@ -281,51 +340,29 @@
   <section>
     <div class="sec-head"><h2>Paid Ad Creative Briefs</h2><span class="sec-note">Expand for the 15s beat breakdown</span></div>
     <div class="rec-grid">
-      <div class="rec-card" data-id="paid-this-is-what-buying-bitcoin-for-the-first-time-a" data-est="">
-        <div class="rec-top">
-          <span class="badge seg cryptocurious">crypto-curious</span>
-          <button class="st st-suggested" data-act="cycle" data-id="paid-this-is-what-buying-bitcoin-for-the-first-time-a" title="Click to advance status">Suggested</button><span class="src-badge" data-role="source"></span>
-        </div>
-        <div class="rec-hook">“This is what buying Bitcoin for the first time actually looks like.”</div>
-        <div class="rec-line"><span class="rec-est cpi">Est. CPI $2.20–$2.90 (8–31% below $3.17 — strong curiosity-gap creative on TikTok&#x27;s crypto-curious cohort; test 3:4 and 9:16 aspect ratios simultaneously)</span></div>
-        <label class="adref">Meta ad / campaign name (for auto-import)
-          <input type="text" data-f="ad_ref" value="" placeholder="e.g. Payday - Android - Broad+"></label>
-        <button class="expand" data-act="expand">▾ full 15s script</button>
-        <div class="rec-detail" hidden>
-          <div class="paid-row"><span class="k">Problem · 4-8s</span> Montage of failed first-timer moments: Coinbase KYC rejected, Binance withdrawal limits, gas fees eating a $20 purchase. Voiceover: &#x27;You wanted to try Bitcoin. Every app made it feel like you needed a finance degree and $500 minimum.&#x27;</div>
-          <div class="paid-row"><span class="k">Speed · 9-15s</span> Speed Wallet screen-record: download → create account in 30 seconds → receive 1,000 sats from a friend instantly → send 500 sats back. Voiceover: &#x27;Speed Wallet is Bitcoin Lightning. No jargon. No minimums. No waiting. Just tap, send, done.&#x27; End card shows app icon with 4.8-star rating.</div>
-          <div class="paid-row"><span class="k">CTA · final 3s</span> Get Speed Wallet free. Your first Bitcoin takes 60 seconds.</div>
-          <div class="paid-row"><span class="k">Audience</span> TikTok Ads: Interest clusters — cryptocurrency beginner, personal finance, investing for beginners, fintech apps; behavioral — recently searched &#x27;how to buy Bitcoin,&#x27; &#x27;crypto for beginners&#x27;; ages 18-34; US; lookalike from Speed&#x27;s existing crypto-curious user list</div>
-        </div>
-        
-        <div class="results" data-role="results">
-          <div class="res-auto" data-role="autoread"></div>
-          <div class="res-inputs">
-            <label>Views <input type="number" data-f="views" value="" placeholder="—"></label>
-            <label>ER % <input type="number" step="0.1" data-f="er" value="" placeholder="—"></label>
-            <label>Saves <input type="number" data-f="saves" value="" placeholder="—"></label>
-          </div>
-          <div class="res-compare" data-role="compare"></div>
-        </div>
-      </div>
-      <div class="rec-card" data-id="paid-you-won-why-is-your-casino-holding-your-money-fo" data-est="">
+      <div class="rec-card" data-id="paid-casino-cashout-in-2-seconds-not-2-days" data-est="">
         <div class="rec-top">
           <span class="badge seg iGaming">iGaming</span>
-          <button class="st st-suggested" data-act="cycle" data-id="paid-you-won-why-is-your-casino-holding-your-money-fo" title="Click to advance status">Suggested</button><span class="src-badge" data-role="source"></span>
+          <button class="st st-suggested" data-act="cycle" data-id="paid-casino-cashout-in-2-seconds-not-2-days" title="Click to advance status">Suggested</button><span class="src-badge" data-role="source"></span>
         </div>
-        <div class="rec-hook">“You won. Why is your casino holding your money for 3 days?”</div>
-        <div class="rec-line"><span class="rec-est cpi">Est. CPI $2.60–$3.10 (2–18% below $3.17 benchmark — iGaming audience has high intent and strong pain-point match; smaller TAM may narrow efficiency gains vs. remittance brief)</span></div>
+        <div class="rec-hook">“Casino cashout in 2 seconds. Not 2 days.”</div>
+        <div class="rec-line"><span class="rec-est cpi">Est. CPI $3.00-$4.20 (iGaming audience CPMs run higher due to regulatory pressure on targeting; strong utility hook should hold near benchmark — test $3.17 cap with autobid and expand if ROAS supports; expect efficiency gains as pixel trains on depositor LTV)</span></div>
         <label class="adref">Meta ad / campaign name (for auto-import)
           <input type="text" data-f="ad_ref" value="" placeholder="e.g. Payday - Android - Broad+"></label>
         <button class="expand" data-act="expand">▾ full 15s script</button>
         <div class="rec-detail" hidden>
-          <div class="paid-row"><span class="k">Problem · 4-8s</span> Split screen: left side shows a withdrawal-pending screen with &#x27;72-hour processing&#x27; timer ticking. Right side shows a frustrated player checking their bank account repeatedly. Voiceover: &#x27;You beat the odds. Then your platform made you wait — ACH holds, bank review, fees on withdrawal. Your win isn&#x27;t really yours yet.&#x27;</div>
-          <div class="paid-row"><span class="k">Speed · 9-15s</span> Speed Wallet deposit/withdrawal flow on a partner iGaming site: funds arrive in Speed wallet in 4 seconds, no fee, no hold. Voiceover: &#x27;Speed Wallet uses Bitcoin Lightning — deposits and withdrawals hit instantly, 24/7, with zero fees. The only wallet built for players who actually win.&#x27; Show balance update in real time.</div>
-          <div class="paid-row"><span class="k">CTA · final 3s</span> Download Speed Wallet. Instant deposits. Instant payouts. Always.</div>
-          <div class="paid-row"><span class="k">Audience</span> Meta (Facebook + Instagram): Interest targeting — online casino, sports betting, poker, DraftKings, FanDuel, iGaming; behavioral — mobile gaming purchasers, high-value app spenders; ages 25-45; US states where online gaming is legal (NJ, PA, MI, CO, NV, IL); exclude problem gambling sensitivity flags per Meta policy</div>
+          <div class="paid-row"><span class="k">Problem · 4-8s</span> Screen-record of a generic sportsbook/casino withdrawal page showing &#x27;3-5 business days processing&#x27; — VO: &#x27;You won. Congrats. Now wait 5 days for your money while they hold it. ACH delays, card reversals, random &#x27;verification holds&#x27; — it&#x27;s your money and they act like it&#x27;s theirs.&#x27;</div>
+          <div class="paid-row"><span class="k">Speed · 9-15s</span> Speed Wallet Lightning deposit/withdrawal flow — VO: &#x27;Speed Wallet on Bitcoin Lightning. Deposit to any Lightning-enabled casino instantly. Cash out and see your balance update in under 3 seconds. No holds. No reversals. No waiting. Provably instant.&#x27; Show timestamp on withdrawal vs balance update — same second.</div>
+          <div class="paid-row"><span class="k">CTA · final 3s</span> Download Speed. Your winnings, instantly.</div>
+          <div class="paid-row"><span class="k">Audience</span> Meta (Facebook + Instagram): ages 21-45, interests = online sports betting, DraftKings, FanDuel, online poker, casino games, cryptocurrency payments; male skew 70/30; US states where iGaming is legal (NJ, PA, MI, CO, NV, IL); exclude problem-gambling sensitive audiences per Meta policy</div>
         </div>
         
         <div class="results" data-role="results">
+          <div class="posted-url">
+            <label>Posted URL <input type="url" data-f="posted_url" value=""
+              placeholder="Paste the live post link (marks this as really shipped)"></label>
+            <a class="posted-link" data-role="postedlink" target="_blank" rel="noopener"></a>
+          </div>
           <div class="res-auto" data-role="autoread"></div>
           <div class="res-inputs">
             <label>Views <input type="number" data-f="views" value="" placeholder="—"></label>
@@ -335,24 +372,61 @@
           <div class="res-compare" data-role="compare"></div>
         </div>
       </div>
-      <div class="rec-card" data-id="paid-your-family-never-got-the-full-200-you-sent-here" data-est="">
+      <div class="rec-card" data-id="paid-what-if-your-first-bitcoin-took-30-seconds" data-est="">
         <div class="rec-top">
-          <span class="badge seg general">general</span>
-          <button class="st st-suggested" data-act="cycle" data-id="paid-your-family-never-got-the-full-200-you-sent-here" title="Click to advance status">Suggested</button><span class="src-badge" data-role="source"></span>
+          <span class="badge seg cryptocurious">crypto-curious</span>
+          <button class="st st-suggested" data-act="cycle" data-id="paid-what-if-your-first-bitcoin-took-30-seconds" title="Click to advance status">Suggested</button><span class="src-badge" data-role="source"></span>
         </div>
-        <div class="rec-hook">“Your family never got the full $200 you sent. Here&#x27;s where it went.”</div>
-        <div class="rec-line"><span class="rec-est cpi">Est. CPI $1.80–$2.50 (40–43% below $3.17 benchmark — high personal relevance and clear fee-pain creative should compress CPI)</span></div>
+        <div class="rec-hook">“What if your first Bitcoin took 30 seconds?”</div>
+        <div class="rec-line"><span class="rec-est cpi">Est. CPI $2.40-$3.10 (curiosity-gap hook with low-friction CTA should approach benchmark; TikTok&#x27;s auction efficiency for fintech has improved; test UGC vs produced versions to find floor)</span></div>
         <label class="adref">Meta ad / campaign name (for auto-import)
           <input type="text" data-f="ad_ref" value="" placeholder="e.g. Payday - Android - Broad+"></label>
         <button class="expand" data-act="expand">▾ full 15s script</button>
         <div class="rec-detail" hidden>
-          <div class="paid-row"><span class="k">Problem · 4-8s</span> Show a receipt animation: $200 sent → $47 in fees → $153 delivered. Voiceover: &#x27;Western Union, MoneyGram, your bank — they all take a cut. Every single time. That&#x27;s rent money. Grocery money. Gone.&#x27;</div>
-          <div class="paid-row"><span class="k">Speed · 9-15s</span> Cut to Speed Wallet screen-record: $200 entered, Lightning address pasted, sent — recipient phone buzzes in under 5 seconds. Text overlay: &#x27;$0 in fees. Full $200 delivered. Powered by Bitcoin Lightning.&#x27; Creator voiceover: &#x27;Speed Wallet sends money across borders instantly — and keeps every dollar yours.&#x27;</div>
-          <div class="paid-row"><span class="k">CTA · final 3s</span> Download Speed Wallet. Send your first $200 free. Link below.</div>
-          <div class="paid-row"><span class="k">Audience</span> Meta (Facebook + Instagram): Interest targeting — international money transfer, remittance, Western Union, MoneyGram, OFW, Filipino diaspora, Nigerian diaspora, Latin American diaspora; ages 22-45; US-based with frequent international call/message activity signal</div>
+          <div class="paid-row"><span class="k">Problem · 4-8s</span> Talking head of relatable 25-35yo — &#x27;I wanted to try Bitcoin for years but every app felt like filing taxes. Coinbase wanted my passport. Binance had 14 screens. I gave up three times.&#x27; Cut to confused face scrolling complex exchange UI.</div>
+          <div class="paid-row"><span class="k">Speed · 9-15s</span> Speed Wallet screen-record with upbeat audio: download → create wallet → receive QR code → $2 in sats arrives. VO: &#x27;Speed Wallet. No exchange. No ID verification for small amounts. Just download, get your wallet address, and your first sats can arrive in the next 60 seconds. Bitcoin, finally simple.&#x27;</div>
+          <div class="paid-row"><span class="k">CTA · final 3s</span> Get Speed. Own Bitcoin today.</div>
+          <div class="paid-row"><span class="k">Audience</span> TikTok Ads: ages 21-35, interest clusters = cryptocurrency beginner, personal finance, fintech apps, Cash App users, PayPal users; lookalike from crypto-curious content engagers; US + Canada</div>
         </div>
         
         <div class="results" data-role="results">
+          <div class="posted-url">
+            <label>Posted URL <input type="url" data-f="posted_url" value=""
+              placeholder="Paste the live post link (marks this as really shipped)"></label>
+            <a class="posted-link" data-role="postedlink" target="_blank" rel="noopener"></a>
+          </div>
+          <div class="res-auto" data-role="autoread"></div>
+          <div class="res-inputs">
+            <label>Views <input type="number" data-f="views" value="" placeholder="—"></label>
+            <label>ER % <input type="number" step="0.1" data-f="er" value="" placeholder="—"></label>
+            <label>Saves <input type="number" data-f="saves" value="" placeholder="—"></label>
+          </div>
+          <div class="res-compare" data-role="compare"></div>
+        </div>
+      </div>
+      <div class="rec-card" data-id="paid-your-family-s-money-is-being-stolen-legally-ever" data-est="">
+        <div class="rec-top">
+          <span class="badge seg general">general</span>
+          <button class="st st-suggested" data-act="cycle" data-id="paid-your-family-s-money-is-being-stolen-legally-ever" title="Click to advance status">Suggested</button><span class="src-badge" data-role="source"></span>
+        </div>
+        <div class="rec-hook">“Your family&#x27;s money is being stolen legally. Every. Single. Send.”</div>
+        <div class="rec-line"><span class="rec-est cpi">Est. CPI $1.80-$2.60 (fear-of-loss + diaspora identity targeting typically beats benchmark by 15-40%; strong problem/solution narrative should compress CPI below $3.17)</span></div>
+        <label class="adref">Meta ad / campaign name (for auto-import)
+          <input type="text" data-f="ad_ref" value="" placeholder="e.g. Payday - Android - Broad+"></label>
+        <button class="expand" data-act="expand">▾ full 15s script</button>
+        <div class="rec-detail" hidden>
+          <div class="paid-row"><span class="k">Problem · 4-8s</span> B-roll of a wire transfer receipt with fees highlighted — VO: &#x27;The average remittance corridor charges 6.2%. On a $300 send, that&#x27;s $18.60 gone. Every month. That&#x27;s $223 a year your family never sees. Western Union keeps it. Your bank keeps it. Nobody tells you there&#x27;s a zero-fee option.&#x27;</div>
+          <div class="paid-row"><span class="k">Speed · 9-15s</span> Speed Wallet screen-record — VO: &#x27;Speed uses Bitcoin Lightning Network. Send $300 to the Philippines, Mexico, Nigeria — zero fees, arrives in under 5 seconds. Your family gets every dollar.&#x27; Show push notification arriving. Show $0.00 fee line clearly.</div>
+          <div class="paid-row"><span class="k">CTA · final 3s</span> Download Speed. Send free today.</div>
+          <div class="paid-row"><span class="k">Audience</span> Meta (Facebook + Instagram): ages 25-45, interests = international money transfer, remittances, Filipino diaspora, Nigerian diaspora, Latino immigrant communities, Western Union, MoneyGram; household income under $75K; US only</div>
+        </div>
+        
+        <div class="results" data-role="results">
+          <div class="posted-url">
+            <label>Posted URL <input type="url" data-f="posted_url" value=""
+              placeholder="Paste the live post link (marks this as really shipped)"></label>
+            <a class="posted-link" data-role="postedlink" target="_blank" rel="noopener"></a>
+          </div>
           <div class="res-auto" data-role="autoread"></div>
           <div class="res-inputs">
             <label>Views <input type="number" data-f="views" value="" placeholder="—"></label>
@@ -380,7 +454,7 @@
             <span class="m er">15.7% ER</span>
             <span class="m fmt">text-on-screen</span>
           </div>
-          <div class="hook-why">Curiosity gap — nostalgia + FOMO mashup makes viewers stop to imagine &#x27;what if I found Bitcoin early,&#x27; directly priming Speed as the easy on-ramp today</div>
+          <div class="hook-why">curiosity gap — nostalgic regret framing (&#x27;finding Bitcoin in 2009&#x27;) triggers FOMO and mass shareability for crypto-curious audiences</div>
         </div>
         <div class="hook-repl"><div class="repl-lab">Replication</div><span class="repl"><span class="repl-fill" style="width:90%"></span></span><span class="repl-n">9/10</span></div>
       </div>
@@ -391,12 +465,12 @@
           <div class="hook-meta">
             <span class="badge tt">TikTok</span>
             <span class="badge seg cryptocurious">Crypto-Curious</span>
-            <span class="traj traj-new">new</span>
+            <span class="traj traj-stable">stable</span>
             <span class="m">1.3M views</span>
             <span class="m er">10.0% ER</span>
             <span class="m fmt">talking-head</span>
           </div>
-          <div class="hook-why">Identity signal — &#x27;crypto is the way out&#x27; locks-in narrative of crypto as financial liberation, maps cleanly onto Speed&#x27;s remittance and crypto-curious messaging</div>
+          <div class="hook-why">identity signal — &#x27;way out&#x27; aspiration + lock-in commitment cue resonates with crypto-curious strivers seeking financial escape</div>
         </div>
         <div class="hook-repl"><div class="repl-lab">Replication</div><span class="repl"><span class="repl-fill" style="width:80%"></span></span><span class="repl-n">8/10</span></div>
       </div>
@@ -407,14 +481,14 @@
           <div class="hook-meta">
             <span class="badge tt">TikTok</span>
             <span class="badge seg remittance">Remittance</span>
-            <span class="traj traj-new">new</span>
+            <span class="traj traj-stable">stable</span>
             <span class="m">791k views</span>
             <span class="m er">9.3% ER</span>
-            <span class="m fmt">reaction</span>
+            <span class="m fmt">ugc</span>
           </div>
-          <div class="hook-why">Social proof at scale — $2.5B remittance stat triggers awe and loss aversion (&#x27;how much of that was eaten by fees?&#x27;), perfect setup for Speed&#x27;s zero-fee angle</div>
+          <div class="hook-why">social proof — massive view count on a raw remittance stat hook proves diaspora audiences engage hard with real money-flow facts</div>
         </div>
-        <div class="hook-repl"><div class="repl-lab">Replication</div><span class="repl"><span class="repl-fill" style="width:80%"></span></span><span class="repl-n">8/10</span></div>
+        <div class="hook-repl"><div class="repl-lab">Replication</div><span class="repl"><span class="repl-fill" style="width:90%"></span></span><span class="repl-n">9/10</span></div>
       </div>
       <div class="hook-card">
         <div class="hook-rank">4</div>
@@ -423,12 +497,12 @@
           <div class="hook-meta">
             <span class="badge tt">TikTok</span>
             <span class="badge seg cryptocurious">Crypto-Curious</span>
-            <span class="traj traj-new">new</span>
+            <span class="traj traj-stable">stable</span>
             <span class="m">1.1M views</span>
             <span class="m er">10.1% ER</span>
             <span class="m fmt">text-on-screen</span>
           </div>
-          <div class="hook-why">Curiosity gap — ranked-list format drives completion rate; Speed can own the &#x27;payments layer&#x27; slot and contrast Lightning&#x27;s instant settlement vs. slow chains</div>
+          <div class="hook-why">curiosity gap — ranked-list format on crypto utility drives saves and replays from audiences comparing options</div>
         </div>
         <div class="hook-repl"><div class="repl-lab">Replication</div><span class="repl"><span class="repl-fill" style="width:70%"></span></span><span class="repl-n">7/10</span></div>
       </div>
@@ -444,9 +518,9 @@
             <span class="m er">11.3% ER</span>
             <span class="m fmt">talking-head</span>
           </div>
-          <div class="hook-why">Fear of loss — exposing hidden OFW remittance fees triggers rage-share behaviour; 1.4% save rate confirms high-intent audience actively researching the problem</div>
+          <div class="hook-why">fear of loss — &#x27;hidden truth&#x27; framing on remittance fees triggers anger and reshares among OFW/diaspora communities paying excessive charges</div>
         </div>
-        <div class="hook-repl"><div class="repl-lab">Replication</div><span class="repl"><span class="repl-fill" style="width:90%"></span></span><span class="repl-n">9/10</span></div>
+        <div class="hook-repl"><div class="repl-lab">Replication</div><span class="repl"><span class="repl-fill" style="width:80%"></span></span><span class="repl-n">8/10</span></div>
       </div>
       <div class="hook-card">
         <div class="hook-rank">6</div>
@@ -460,28 +534,12 @@
             <span class="m er">6.2% ER</span>
             <span class="m fmt">text-on-screen</span>
           </div>
-          <div class="hook-why">Identity signal — diaspora pride + remittance data in one frame; Speed can ride the community-comparison hook to position itself as the tool that keeps more money home</div>
+          <div class="hook-why">identity signal — diaspora pride angle on remittance data sparks community debate and broad organic reach among African diaspora segment</div>
         </div>
         <div class="hook-repl"><div class="repl-lab">Replication</div><span class="repl"><span class="repl-fill" style="width:70%"></span></span><span class="repl-n">7/10</span></div>
       </div>
       <div class="hook-card">
         <div class="hook-rank">7</div>
-        <div class="hook-main">
-          <a class="hook-text" href="https://www.tiktok.com/@joshterryplays/video/6977477374975724806" target="_blank" rel="noopener">“Reply to @7doughnuts the #lightningnetwork #bitcoin #investing”</a>
-          <div class="hook-meta">
-            <span class="badge tt">TikTok</span>
-            <span class="badge seg cryptocurious">Crypto-Curious</span>
-            
-            <span class="m">28k views</span>
-            <span class="m er">7.3% ER</span>
-            <span class="m fmt">screen-record</span>
-          </div>
-          <div class="hook-why">Curiosity gap — Lightning Network reply-thread format signals insider knowledge, letting Speed demo the actual app flow as the &#x27;answer&#x27; to a viewer question</div>
-        </div>
-        <div class="hook-repl"><div class="repl-lab">Replication</div><span class="repl"><span class="repl-fill" style="width:90%"></span></span><span class="repl-n">9/10</span></div>
-      </div>
-      <div class="hook-card">
-        <div class="hook-rank">8</div>
         <div class="hook-main">
           <a class="hook-text" href="https://www.youtube.com/watch?v=h16OpJbINDQ" target="_blank" rel="noopener">“Where did BITCOIN come from??”</a>
           <div class="hook-meta">
@@ -492,12 +550,44 @@
             <span class="m er">7.9% ER</span>
             <span class="m fmt">animation</span>
           </div>
-          <div class="hook-why">Curiosity gap — origin-story framing builds credibility and trust; YouTube long-form structure suits crypto-curious segment doing pre-download research</div>
+          <div class="hook-why">curiosity gap — origin-story framing on Bitcoin earns high completion rates and positions brand as an authoritative crypto educator</div>
         </div>
         <div class="hook-repl"><div class="repl-lab">Replication</div><span class="repl"><span class="repl-fill" style="width:60%"></span></span><span class="repl-n">6/10</span></div>
       </div>
       <div class="hook-card">
+        <div class="hook-rank">8</div>
+        <div class="hook-main">
+          <a class="hook-text" href="https://www.tiktok.com/@joshterryplays/video/6977477374975724806" target="_blank" rel="noopener">“Reply to @7doughnuts the #lightningnetwork #bitcoin #investing”</a>
+          <div class="hook-meta">
+            <span class="badge tt">TikTok</span>
+            <span class="badge seg cryptocurious">Crypto-Curious</span>
+            
+            <span class="m">28k views</span>
+            <span class="m er">7.3% ER</span>
+            <span class="m fmt">screen-record</span>
+          </div>
+          <div class="hook-why">curiosity gap — direct Lightning Network mention with reply-thread format makes it immediately replicable and hyper-relevant to Speed&#x27;s core tech</div>
+        </div>
+        <div class="hook-repl"><div class="repl-lab">Replication</div><span class="repl"><span class="repl-fill" style="width:90%"></span></span><span class="repl-n">9/10</span></div>
+      </div>
+      <div class="hook-card">
         <div class="hook-rank">9</div>
+        <div class="hook-main">
+          <a class="hook-text" href="https://www.tiktok.com/@kohjoosee/video/7547734234299976978" target="_blank" rel="noopener">“transfer money to my bank account”</a>
+          <div class="hook-meta">
+            <span class="badge tt">TikTok</span>
+            <span class="badge seg remittance">Remittance</span>
+            <span class="traj traj-stable">stable</span>
+            <span class="m">102k views</span>
+            <span class="m er">9.0% ER</span>
+            <span class="m fmt">screen-record</span>
+          </div>
+          <div class="hook-why">social proof — watching a live transfer land in real time is the single most convincing proof-of-product moment for remittance skeptics</div>
+        </div>
+        <div class="hook-repl"><div class="repl-lab">Replication</div><span class="repl"><span class="repl-fill" style="width:80%"></span></span><span class="repl-n">8/10</span></div>
+      </div>
+      <div class="hook-card">
+        <div class="hook-rank">10</div>
         <div class="hook-main">
           <a class="hook-text" href="https://www.tiktok.com/@wfla8/video/7607987905260260638" target="_blank" rel="noopener">“&quot;FELT LIKE A NIGHTMARE&quot;: Crooks are sweeping the nation with”</a>
           <div class="hook-meta">
@@ -508,25 +598,9 @@
             <span class="m er">6.4% ER</span>
             <span class="m fmt">reaction</span>
           </div>
-          <div class="hook-why">Fear of loss — crypto theft/scam horror hooks trigger protective instinct; Speed can pivot to &#x27;self-custody Lightning wallet = no middleman to hack&#x27;</div>
+          <div class="hook-why">fear of loss — crypto-theft/scam news hook primes viewers to seek a safer, self-custodied Lightning alternative like Speed</div>
         </div>
-        <div class="hook-repl"><div class="repl-lab">Replication</div><span class="repl"><span class="repl-fill" style="width:80%"></span></span><span class="repl-n">8/10</span></div>
-      </div>
-      <div class="hook-card">
-        <div class="hook-rank">10</div>
-        <div class="hook-main">
-          <a class="hook-text" href="https://www.tiktok.com/@kohjoosee/video/7547734234299976978" target="_blank" rel="noopener">“transfer money to my bank account”</a>
-          <div class="hook-meta">
-            <span class="badge tt">TikTok</span>
-            <span class="badge seg remittance">Remittance</span>
-            <span class="traj traj-new">new</span>
-            <span class="m">102k views</span>
-            <span class="m er">9.0% ER</span>
-            <span class="m fmt">screen-record</span>
-          </div>
-          <div class="hook-why">Social proof — live transfer-to-bank-account screen-record is the most credible proof-of-concept format; Speed replicates with its own Lightning-to-bank flow</div>
-        </div>
-        <div class="hook-repl"><div class="repl-lab">Replication</div><span class="repl"><span class="repl-fill" style="width:90%"></span></span><span class="repl-n">9/10</span></div>
+        <div class="hook-repl"><div class="repl-lab">Replication</div><span class="repl"><span class="repl-fill" style="width:70%"></span></span><span class="repl-n">7/10</span></div>
       </div></div>
     </details>
   </section>
@@ -534,7 +608,7 @@
   <section>
     <details class="support">
       <summary>Previous Week's Hooks — trajectory history</summary>
-      <div style="margin-top:14px;"><div class="prev-week"><div class="prev-lab">Week of 2026-07-13</div><ul><li>“You say you want it but are you willing to” <span class="m">527k views · 28.1% ER</span></li><li>“understanding what crypto is will build your financial literacy 📈📈📈” <span class="m">227k views · 17.8% ER</span></li><li>“Teaching good habits starts with small conversations. 💚 I love” <span class="m">122k views · 16.1% ER</span></li><li>“this is finding bitcoin in 2009 😭” <span class="m">1.9M views · 15.6% ER</span></li><li>“Thanks to those who trusted me and made a x2” <span class="m">13k views · 13.7% ER</span></li><li>“Satoshi Sunrise is a new crypto sci-fi epic produced by” <span class="m">192k views · 12.7% ER</span></li><li>“Trade digital assets with a reliable outlet like @atechcoins and” <span class="m">14k views · 12.1% ER</span></li><li>“Sure bro | #foryou #zyxcba #relatable #crypto #100xchronicles #bitcoin #relatabl” <span class="m">245k views · 11.5% ER</span></li><li>“The Hidden Truth Behind OFW Remittance Fees#philippines #history #pinoycomics #h” <span class="m">18k views · 11.3% ER</span></li><li>“With a population of over 51 million people, onl 5million” <span class="m">79k views · 10.9% ER</span></li></ul></div></div>
+      <div style="margin-top:14px;"><div class="prev-week"><div class="prev-lab">Week of 2026-07-13</div><ul><li>“Teaching good habits starts with small conversations. 💚 I love” <span class="m">122k views · 16.1% ER</span></li><li>“this is finding bitcoin in 2009 😭” <span class="m">2.0M views · 15.7% ER</span></li><li>“Satoshi Sunrise is a new crypto sci-fi epic produced by” <span class="m">192k views · 12.7% ER</span></li><li>“Bakhter Money Transfer is best way to send money from” <span class="m">30k views · 12.6% ER</span></li><li>“The Hidden Truth Behind OFW Remittance Fees#philippines #history #pinoycomics #h” <span class="m">18k views · 11.3% ER</span></li><li>“Primary Function Of Top 10 Cryptocurrencies! #cryptotrading #crypto #cryptok” <span class="m">1.1M views · 10.1% ER</span></li><li>“Crypto is the way out, just stay 🔒 in, crypto” <span class="m">1.3M views · 10.0% ER</span></li><li>“Sending a random guy money” <span class="m">3.0M views · 9.9% ER</span></li><li>“Guys this is crazy! Last year Uganda receivers about $2.5B” <span class="m">791k views · 9.3% ER</span></li><li>“transfer money to my bank account” <span class="m">102k views · 9.0% ER</span></li></ul></div></div>
     </details>
   </section>
 
@@ -581,8 +655,10 @@
 
   <footer>
     Data: YouTube Data API (US, last 7d) + TikTok &amp; Instagram via Apify · enrichment by Claude.<br>
-    Status &amp; results persist in dashboard_state.json. Results logging is manual for now —
-    enter views/ER/saves on posted cards, then Download state and commit the JSON so the next rebuild keeps it.
+    Status, posted URLs &amp; results persist in dashboard_state.json. Drag cards on the Pipeline Board to change status.
+    Posted-content detection is manual by design: when a card goes live, paste its real URL on the card — automatic
+    brief-to-post matching isn't reliable across TikTok/IG/YouTube, so we capture the true link rather than guess.
+    Results logging is manual too — enter views/ER/saves on posted cards, then Download state and commit the JSON so the next rebuild keeps it.
   </footer>
 </div>
 
@@ -593,7 +669,7 @@
 </div>
 
 <script>
-const BAKED = {"schema": 1, "updated_at": "2026-07-13", "items": {"organic-the-remittance-company-took-47-i-sent-it-back-in": {"id": "organic-the-remittance-company-took-47-i-sent-it-back-in", "type": "organic", "hook": "The remittance company took $47. I sent it back in 4 seconds for $0.", "segment": "remittance", "estimate": "38000", "estimate_num": 38000, "payload": {"platform": "TikTok", "outline": "Beat 1 (0-8s): Creator holds up a Western Union receipt showing a $47 fee on a $200 send \u2014 says 'this was my mom's grocery money.' Beat 2 (9-25s): Screen-record of opening Speed Wallet, typing $200, hitting send \u2014 timestamp shows 4-second confirmation ping on receiver's phone. Beat 3 (26-45s): Split-screen text overlay: '$47 fee vs $0 fee. Same money. Different rails.' Beat 4 (46-58s): CTA \u2014 'Link in bio. First send free. Tag someone sending money home.'", "production_notes": "Film receipt close-up in natural light; use native TikTok screen-record for app demo; add trending Latin/Filipino diaspora audio underneath; post Tuesday 6-8 PM EST when remittance audience peaks"}, "status": "suggested", "results": {"views": null, "er": null, "saves": null}, "results_source": null, "ad_ref": null, "first_seen": "2026-07-13", "last_seen": "2026-07-13"}, "organic-pov-you-just-found-bitcoin-in-2025-but-this-time": {"id": "organic-pov-you-just-found-bitcoin-in-2025-but-this-time", "type": "organic", "hook": "POV: you just found Bitcoin in 2025 \u2014 but this time you actually know what to do with it.", "segment": "crypto-curious", "estimate": "95000", "estimate_num": 95000, "payload": {"platform": "TikTok", "outline": "Beat 1 (0-7s): Text-on-screen over creator's surprised face: 'Everyone says they wish they found Bitcoin early. Here's the closest thing left.' Beat 2 (8-25s): Explain Lightning Network in one sentence \u2014 'Bitcoin, but instant and free to send' \u2014 show Speed Wallet home screen. Beat 3 (26-45s): Creator receives a 'tip' of 1,000 sats from a friend live on camera \u2014 phone buzzes, balance updates instantly. Beat 4 (46-58s): 'Download Speed. Your first Bitcoin is waiting.' Text overlay + bio link callout.", "production_notes": "Stitch or duet format off hook index 1's viral audio if available; keep font large for mobile; use green lightning bolt emoji throughout; post Monday or Thursday when crypto content peaks on FYP"}, "status": "suggested", "results": {"views": null, "er": null, "saves": null}, "results_source": null, "ad_ref": null, "first_seen": "2026-07-13", "last_seen": "2026-07-13"}, "organic-they-charged-my-family-2-5-billion-in-remittance": {"id": "organic-they-charged-my-family-2-5-billion-in-remittance", "type": "organic", "hook": "They charged my family $2.5 BILLION in remittance fees last year. Never again.", "segment": "remittance", "estimate": "52000", "estimate_num": 52000, "payload": {"platform": "Instagram Reels", "outline": "Beat 1 (0-9s): Stat card text-on-screen \u2014 'African diaspora sent $100B home in 2023. Banks and wire services kept $2.5B in fees.' Creator reacts with genuine frustration. Beat 2 (10-28s): Quick explainer: 'Bitcoin Lightning = money moves like a text message, zero fees, arrives in seconds anywhere on Earth.' Beat 3 (29-45s): Show Speed Wallet send flow \u2014 enter amount, enter Lightning address, confirm \u2014 done. Beat 4 (46-58s): 'Share this with anyone sending money home. The fee era is over.'", "production_notes": "Lean into diaspora identity \u2014 creator should speak directly to their own community (Nigerian, Ghanaian, Ugandan); add bold captions for silent viewing; stat card can be made free in Canva; post Wednesday or Friday"}, "status": "suggested", "results": {"views": null, "er": null, "saves": null}, "results_source": null, "ad_ref": null, "first_seen": "2026-07-13", "last_seen": "2026-07-13"}, "organic-i-let-a-stranger-send-me-5-on-the-bitcoin-lightn": {"id": "organic-i-let-a-stranger-send-me-5-on-the-bitcoin-lightn", "type": "organic", "hook": "I let a stranger send me $5 on the Bitcoin Lightning Network to prove it's real.", "segment": "crypto-curious", "estimate": "74000", "estimate_num": 74000, "payload": {"platform": "TikTok", "outline": "Beat 1 (0-8s): Creator shows QR code on screen \u2014 'First person to scan this sends me $5 in Bitcoin. Watch how fast it hits.' Beat 2 (9-22s): Real-time screen capture \u2014 someone scans, payment sent, Speed Wallet buzzes with confirmation \u2014 elapsed time shown: '2 seconds.' Beat 3 (23-42s): Creator reacts authentically \u2014 'That's it? No bank. No app store wallet. No 3-day hold. DONE.' Beat 4 (43-58s): 'This is Speed Wallet. Try it. Link in bio.'", "production_notes": "Real transaction builds maximum trust \u2014 coordinate with a teammate to be the 'stranger'; keep the QR code visible for at least 4 seconds; do NOT script the reaction, let it be genuine; post Thursday evening for maximum engagement window"}, "status": "suggested", "results": {"views": null, "er": null, "saves": null}, "results_source": null, "ad_ref": null, "first_seen": "2026-07-13", "last_seen": "2026-07-13"}, "organic-why-do-igaming-sites-take-3-days-to-pay-you-out-": {"id": "organic-why-do-igaming-sites-take-3-days-to-pay-you-out-", "type": "organic", "hook": "Why do iGaming sites take 3 days to pay you out? Speed Wallet doesn't.", "segment": "iGaming", "estimate": "29000", "estimate_num": 29000, "payload": {"platform": "Instagram Reels", "outline": "Beat 1 (0-8s): Text-on-screen: 'You won. Congrats. Now wait 72 hours for your money.' Creator makes 'seriously?' face. Beat 2 (9-24s): Contrast cut \u2014 'With Speed Wallet you deposit and withdraw via Bitcoin Lightning. Instant. Zero fees. No bank needed.' Beat 3 (25-44s): Screen-record of a withdrawal landing in Speed Wallet \u2014 timestamp visible, 3-second arrival. Beat 4 (45-58s): 'Stop waiting for your own money. Download Speed.' Bold CTA text on screen.", "production_notes": "Keep branding subtle \u2014 focus pain on the wait, not gambling itself; use screen-record of a generic wallet receive screen if a live casino withdrawal is not filmable; post Friday or Saturday when iGaming intent spikes; add captions in white bold with black outline for clarity"}, "status": "suggested", "results": {"views": null, "er": null, "saves": null}, "results_source": null, "ad_ref": null, "first_seen": "2026-07-13", "last_seen": "2026-07-13"}, "paid-your-family-never-got-the-full-200-you-sent-here": {"id": "paid-your-family-never-got-the-full-200-you-sent-here", "type": "paid", "hook": "Your family never got the full $200 you sent. Here's where it went.", "segment": "general", "estimate": "$1.80\u2013$2.50 (40\u201343% below $3.17 benchmark \u2014 high personal relevance and clear fee-pain creative should compress CPI)", "estimate_num": null, "payload": {"problem": "Show a receipt animation: $200 sent \u2192 $47 in fees \u2192 $153 delivered. Voiceover: 'Western Union, MoneyGram, your bank \u2014 they all take a cut. Every single time. That's rent money. Grocery money. Gone.'", "solution": "Cut to Speed Wallet screen-record: $200 entered, Lightning address pasted, sent \u2014 recipient phone buzzes in under 5 seconds. Text overlay: '$0 in fees. Full $200 delivered. Powered by Bitcoin Lightning.' Creator voiceover: 'Speed Wallet sends money across borders instantly \u2014 and keeps every dollar yours.'", "cta": "Download Speed Wallet. Send your first $200 free. Link below.", "audience": "Meta (Facebook + Instagram): Interest targeting \u2014 international money transfer, remittance, Western Union, MoneyGram, OFW, Filipino diaspora, Nigerian diaspora, Latin American diaspora; ages 22-45; US-based with frequent international call/message activity signal"}, "status": "suggested", "results": {"views": null, "er": null, "saves": null}, "results_source": null, "ad_ref": null, "first_seen": "2026-07-13", "last_seen": "2026-07-13"}, "paid-this-is-what-buying-bitcoin-for-the-first-time-a": {"id": "paid-this-is-what-buying-bitcoin-for-the-first-time-a", "type": "paid", "hook": "This is what buying Bitcoin for the first time actually looks like.", "segment": "crypto-curious", "estimate": "$2.20\u2013$2.90 (8\u201331% below $3.17 \u2014 strong curiosity-gap creative on TikTok's crypto-curious cohort; test 3:4 and 9:16 aspect ratios simultaneously)", "estimate_num": null, "payload": {"problem": "Montage of failed first-timer moments: Coinbase KYC rejected, Binance withdrawal limits, gas fees eating a $20 purchase. Voiceover: 'You wanted to try Bitcoin. Every app made it feel like you needed a finance degree and $500 minimum.'", "solution": "Speed Wallet screen-record: download \u2192 create account in 30 seconds \u2192 receive 1,000 sats from a friend instantly \u2192 send 500 sats back. Voiceover: 'Speed Wallet is Bitcoin Lightning. No jargon. No minimums. No waiting. Just tap, send, done.' End card shows app icon with 4.8-star rating.", "cta": "Get Speed Wallet free. Your first Bitcoin takes 60 seconds.", "audience": "TikTok Ads: Interest clusters \u2014 cryptocurrency beginner, personal finance, investing for beginners, fintech apps; behavioral \u2014 recently searched 'how to buy Bitcoin,' 'crypto for beginners'; ages 18-34; US; lookalike from Speed's existing crypto-curious user list"}, "status": "suggested", "results": {"views": null, "er": null, "saves": null}, "results_source": null, "ad_ref": null, "first_seen": "2026-07-13", "last_seen": "2026-07-13"}, "paid-you-won-why-is-your-casino-holding-your-money-fo": {"id": "paid-you-won-why-is-your-casino-holding-your-money-fo", "type": "paid", "hook": "You won. Why is your casino holding your money for 3 days?", "segment": "iGaming", "estimate": "$2.60\u2013$3.10 (2\u201318% below $3.17 benchmark \u2014 iGaming audience has high intent and strong pain-point match; smaller TAM may narrow efficiency gains vs. remittance brief)", "estimate_num": null, "payload": {"problem": "Split screen: left side shows a withdrawal-pending screen with '72-hour processing' timer ticking. Right side shows a frustrated player checking their bank account repeatedly. Voiceover: 'You beat the odds. Then your platform made you wait \u2014 ACH holds, bank review, fees on withdrawal. Your win isn't really yours yet.'", "solution": "Speed Wallet deposit/withdrawal flow on a partner iGaming site: funds arrive in Speed wallet in 4 seconds, no fee, no hold. Voiceover: 'Speed Wallet uses Bitcoin Lightning \u2014 deposits and withdrawals hit instantly, 24/7, with zero fees. The only wallet built for players who actually win.' Show balance update in real time.", "cta": "Download Speed Wallet. Instant deposits. Instant payouts. Always.", "audience": "Meta (Facebook + Instagram): Interest targeting \u2014 online casino, sports betting, poker, DraftKings, FanDuel, iGaming; behavioral \u2014 mobile gaming purchasers, high-value app spenders; ages 25-45; US states where online gaming is legal (NJ, PA, MI, CO, NV, IL); exclude problem gambling sensitivity flags per Meta policy"}, "status": "suggested", "results": {"views": null, "er": null, "saves": null}, "results_source": null, "ad_ref": null, "first_seen": "2026-07-13", "last_seen": "2026-07-13"}}, "hook_history": {"week": "2026-07-13", "hooks": [{"key": "teachinggoodhabitsstartswithsmallconvers", "hook": "Teaching good habits starts with small conversations. \ud83d\udc9a I love", "views": 121619, "er": 0.161}, {"key": "thisisfindingbitcoinin2009", "hook": "this is finding bitcoin in 2009 \ud83d\ude2d", "views": 2000000, "er": 0.1568}, {"key": "satoshisunriseisanewcryptoscifiepicprodu", "hook": "Satoshi Sunrise is a new crypto sci-fi epic produced by", "views": 192208, "er": 0.1265}, {"key": "bakhtermoneytransferisbestwaytosendmoney", "hook": "Bakhter Money Transfer is best way to send money from", "views": 30000, "er": 0.1258}, {"key": "thehiddentruthbehindofwremittancefeesphi", "hook": "The Hidden Truth Behind OFW Remittance Fees#philippines #history #pinoycomics #history", "views": 17900, "er": 0.1132}, {"key": "primaryfunctionoftop10cryptocurrenciescr", "hook": "Primary Function Of Top 10 Cryptocurrencies! #cryptotrading #crypto #cryptok", "views": 1100000, "er": 0.1012}, {"key": "cryptoisthewayoutjuststayincrypto", "hook": "Crypto is the way out, just stay \ud83d\udd12 in, crypto", "views": 1300000, "er": 0.0998}, {"key": "sendingarandomguymoney", "hook": "Sending a random guy money", "views": 3000000, "er": 0.0989}, {"key": "guysthisiscrazylastyearugandareceiversab", "hook": "Guys this is crazy! Last year Uganda receivers about $2.5B", "views": 791100, "er": 0.0934}, {"key": "transfermoneytomybankaccount", "hook": "transfer money to my bank account", "views": 102000, "er": 0.0905}]}};
+const BAKED = {"schema": 1, "updated_at": "2026-07-14", "items": {"organic-the-bank-kept-47-of-my-mom-s-birthday-money-neve": {"id": "organic-the-bank-kept-47-of-my-mom-s-birthday-money-neve", "type": "organic", "hook": "The bank kept $47 of my mom's birthday money. Never again. \ud83d\ude24", "segment": "remittance", "estimate": "38000", "estimate_num": 38000, "payload": {"platform": "TikTok", "outline": "Beat 1 (0-8s): Creator holds up phone showing a bank wire receipt with fees circled in red \u2014 emotional, personal. Beat 2 (9-25s): Screen-record of opening Speed Wallet, entering the same dollar amount to send internationally, fee line reads $0.00. Beat 3 (26-45s): Recipient's phone buzzes \u2014 show notification arriving in under 5 seconds, both parties react on split screen. Beat 4 (46-58s): Creator to camera: 'Zero fees, instant, on Bitcoin Lightning. Link in bio to send your first $5 free.'", "production_notes": "Film fee receipt close-up in natural light. Use phone mirror trick for split-screen reaction. No caption cards needed \u2014 spoken audio carries the narrative. Post Tuesday 6-8 PM EST when diaspora engagement peaks."}, "status": "suggested", "results": {"views": null, "er": null, "saves": null}, "results_source": null, "ad_ref": null, "posted_url": null, "first_seen": "2026-07-14", "last_seen": "2026-07-14"}, "organic-pov-you-just-found-bitcoin-in-2009-except-it-s-2": {"id": "organic-pov-you-just-found-bitcoin-in-2009-except-it-s-2", "type": "organic", "hook": "POV: you just found Bitcoin in 2009 \u2014 except it's 2025 and Lightning is the unlock \ud83d\udd13", "segment": "crypto-curious", "estimate": "95000", "estimate_num": 95000, "payload": {"platform": "TikTok", "outline": "Beat 1 (0-7s): Text-on-screen over retro Bitcoin price chart: '$0.001 in 2009 \u2192 $60K today. You missed it. Or did you?' Beat 2 (8-25s): Pivot \u2014 'Lightning Network is Bitcoin payments finally working: instant, global, nearly free. This is the 2009 moment for spending BTC.' Beat 3 (26-45s): Speed Wallet screen-record: receive sats, pay a Lightning invoice, whole flow under 10 seconds. Beat 4 (46-58s): 'Download Speed. Send $1 anywhere on earth right now. This is your early-adopter window.'", "production_notes": "Use free CapCut retro-glitch transition between chart and app demo. Source public-domain BTC price chart imagery. Trending lo-fi nostalgia audio underneath. Hook text must appear within first 0.5s to stop the scroll."}, "status": "suggested", "results": {"views": null, "er": null, "saves": null}, "results_source": null, "ad_ref": null, "posted_url": null, "first_seen": "2026-07-14", "last_seen": "2026-07-14"}, "organic-they-charged-filipinos-2-4b-in-remittance-fees-l": {"id": "organic-they-charged-filipinos-2-4b-in-remittance-fees-l", "type": "organic", "hook": "They charged Filipinos $2.4B in remittance fees last year. Here's the receipts. \ud83e\uddfe", "segment": "remittance", "estimate": "52000", "estimate_num": 52000, "payload": {"platform": "TikTok", "outline": "Beat 1 (0-10s): Talking head \u2014 creator visibly frustrated, cites the OFW fee stat from hook #4 energy, references real World Bank data on-screen as text overlay. Beat 2 (11-28s): 'Western Union, MoneyGram, your bank \u2014 all taking 5-10% off every send. That's money that should feed families.' Beat 3 (29-48s): 'Speed Wallet uses Bitcoin Lightning. $0 fees. Arrives in seconds. I'm going to show you exactly how.' Screen-record demo. Beat 4 (49-58s): 'Share this with every OFW you know. Comment your country and I'll show the fee math for your corridor.'", "production_notes": "Tag #OFW #Philippines #remittance #pinoy in caption for algorithmic targeting. Creator should speak directly and sincerely \u2014 no heavy production. World Bank 2024 remittance cost data is publicly available. Engagement bait in Beat 4 drives comment velocity."}, "status": "suggested", "results": {"views": null, "er": null, "saves": null}, "results_source": null, "ad_ref": null, "posted_url": null, "first_seen": "2026-07-14", "last_seen": "2026-07-14"}, "organic-i-sent-bitcoin-to-my-friend-in-nigeria-it-arrive": {"id": "organic-i-sent-bitcoin-to-my-friend-in-nigeria-it-arrive", "type": "organic", "hook": "I sent Bitcoin to my friend in Nigeria. It arrived before I finished this sentence. \u26a1", "segment": "remittance", "estimate": "28000", "estimate_num": 28000, "payload": {"platform": "Instagram Reels", "outline": "Beat 1 (0-6s): Creator presses send on Speed Wallet, starts speaking mid-sentence \u2014 recipient's push notification appears on second phone before sentence ends. Real-time proof. Beat 2 (7-22s): 'Traditional wire: 3-5 days, $25-45 in fees. Speed on Lightning: 2 seconds, zero fees. Both of us just needed a phone.' Beat 3 (23-42s): Show both sides \u2014 sender's Speed balance deducted, receiver's balance credited. Both give thumbs up to camera. Beat 4 (43-58s): 'Download Speed Wallet free. Your first send is on us.'", "production_notes": "Coordinate with an actual friend or creator in Nigeria/Ghana/Philippines for authentic dual-phone footage. Film both phones simultaneously using a tripod or second person. The real-time arrival is the entire product demo \u2014 protect that moment, do not cut away."}, "status": "suggested", "results": {"views": null, "er": null, "saves": null}, "results_source": null, "ad_ref": null, "posted_url": null, "first_seen": "2026-07-14", "last_seen": "2026-07-14"}, "organic-your-first-bitcoin-doesn-t-have-to-be-complicate": {"id": "organic-your-first-bitcoin-doesn-t-have-to-be-complicate", "type": "organic", "hook": "Your first Bitcoin doesn't have to be complicated. It's literally just this. \ud83d\udc47", "segment": "crypto-curious", "estimate": "21000", "estimate_num": 21000, "payload": {"platform": "Instagram Reels", "outline": "Beat 1 (0-8s): Creator admits on camera: 'I was scared of crypto for 3 years because it looked too technical. Then someone showed me Speed Wallet and I got it in 60 seconds.' Beat 2 (9-28s): Screen-record: download app, create wallet, tap 'Receive,' share QR code. Friend sends $2 in sats. Whole flow shown unedited. Beat 3 (29-46s): 'That's it. You now own Bitcoin. No exchange account, no KYC drama, no fees. Just a phone.' Beat 4 (47-58s): 'Comment SATS and I'll send you $1 in Bitcoin to your new Speed wallet right now.'", "production_notes": "The comment-to-receive mechanic in Beat 4 is a proven engagement multiplier \u2014 budget $20-50 to actually follow through and send sats to commenters, driving authentic social proof replies. Screen-record at 2x speed for the setup, then slow to real-time for the sats arriving."}, "status": "suggested", "results": {"views": null, "er": null, "saves": null}, "results_source": null, "ad_ref": null, "posted_url": null, "first_seen": "2026-07-14", "last_seen": "2026-07-14"}, "paid-your-family-s-money-is-being-stolen-legally-ever": {"id": "paid-your-family-s-money-is-being-stolen-legally-ever", "type": "paid", "hook": "Your family's money is being stolen legally. Every. Single. Send.", "segment": "general", "estimate": "$1.80-$2.60 (fear-of-loss + diaspora identity targeting typically beats benchmark by 15-40%; strong problem/solution narrative should compress CPI below $3.17)", "estimate_num": null, "payload": {"problem": "B-roll of a wire transfer receipt with fees highlighted \u2014 VO: 'The average remittance corridor charges 6.2%. On a $300 send, that's $18.60 gone. Every month. That's $223 a year your family never sees. Western Union keeps it. Your bank keeps it. Nobody tells you there's a zero-fee option.'", "solution": "Speed Wallet screen-record \u2014 VO: 'Speed uses Bitcoin Lightning Network. Send $300 to the Philippines, Mexico, Nigeria \u2014 zero fees, arrives in under 5 seconds. Your family gets every dollar.' Show push notification arriving. Show $0.00 fee line clearly.", "cta": "Download Speed. Send free today.", "audience": "Meta (Facebook + Instagram): ages 25-45, interests = international money transfer, remittances, Filipino diaspora, Nigerian diaspora, Latino immigrant communities, Western Union, MoneyGram; household income under $75K; US only"}, "status": "suggested", "results": {"views": null, "er": null, "saves": null}, "results_source": null, "ad_ref": null, "posted_url": null, "first_seen": "2026-07-14", "last_seen": "2026-07-14"}, "paid-what-if-your-first-bitcoin-took-30-seconds": {"id": "paid-what-if-your-first-bitcoin-took-30-seconds", "type": "paid", "hook": "What if your first Bitcoin took 30 seconds?", "segment": "crypto-curious", "estimate": "$2.40-$3.10 (curiosity-gap hook with low-friction CTA should approach benchmark; TikTok's auction efficiency for fintech has improved; test UGC vs produced versions to find floor)", "estimate_num": null, "payload": {"problem": "Talking head of relatable 25-35yo \u2014 'I wanted to try Bitcoin for years but every app felt like filing taxes. Coinbase wanted my passport. Binance had 14 screens. I gave up three times.' Cut to confused face scrolling complex exchange UI.", "solution": "Speed Wallet screen-record with upbeat audio: download \u2192 create wallet \u2192 receive QR code \u2192 $2 in sats arrives. VO: 'Speed Wallet. No exchange. No ID verification for small amounts. Just download, get your wallet address, and your first sats can arrive in the next 60 seconds. Bitcoin, finally simple.'", "cta": "Get Speed. Own Bitcoin today.", "audience": "TikTok Ads: ages 21-35, interest clusters = cryptocurrency beginner, personal finance, fintech apps, Cash App users, PayPal users; lookalike from crypto-curious content engagers; US + Canada"}, "status": "suggested", "results": {"views": null, "er": null, "saves": null}, "results_source": null, "ad_ref": null, "posted_url": null, "first_seen": "2026-07-14", "last_seen": "2026-07-14"}, "paid-casino-cashout-in-2-seconds-not-2-days": {"id": "paid-casino-cashout-in-2-seconds-not-2-days", "type": "paid", "hook": "Casino cashout in 2 seconds. Not 2 days.", "segment": "iGaming", "estimate": "$3.00-$4.20 (iGaming audience CPMs run higher due to regulatory pressure on targeting; strong utility hook should hold near benchmark \u2014 test $3.17 cap with autobid and expand if ROAS supports; expect efficiency gains as pixel trains on depositor LTV)", "estimate_num": null, "payload": {"problem": "Screen-record of a generic sportsbook/casino withdrawal page showing '3-5 business days processing' \u2014 VO: 'You won. Congrats. Now wait 5 days for your money while they hold it. ACH delays, card reversals, random 'verification holds' \u2014 it's your money and they act like it's theirs.'", "solution": "Speed Wallet Lightning deposit/withdrawal flow \u2014 VO: 'Speed Wallet on Bitcoin Lightning. Deposit to any Lightning-enabled casino instantly. Cash out and see your balance update in under 3 seconds. No holds. No reversals. No waiting. Provably instant.' Show timestamp on withdrawal vs balance update \u2014 same second.", "cta": "Download Speed. Your winnings, instantly.", "audience": "Meta (Facebook + Instagram): ages 21-45, interests = online sports betting, DraftKings, FanDuel, online poker, casino games, cryptocurrency payments; male skew 70/30; US states where iGaming is legal (NJ, PA, MI, CO, NV, IL); exclude problem-gambling sensitive audiences per Meta policy"}, "status": "suggested", "results": {"views": null, "er": null, "saves": null}, "results_source": null, "ad_ref": null, "posted_url": null, "first_seen": "2026-07-14", "last_seen": "2026-07-14"}}, "hook_history": {"week": "2026-07-14", "hooks": [{"key": "teachinggoodhabitsstartswithsmallconvers", "hook": "Teaching good habits starts with small conversations. \ud83d\udc9a I love", "views": 121619, "er": 0.161}, {"key": "thisisfindingbitcoinin2009", "hook": "this is finding bitcoin in 2009 \ud83d\ude2d", "views": 2000000, "er": 0.1568}, {"key": "satoshisunriseisanewcryptoscifiepicprodu", "hook": "Satoshi Sunrise is a new crypto sci-fi epic produced by", "views": 192208, "er": 0.1265}, {"key": "bakhtermoneytransferisbestwaytosendmoney", "hook": "Bakhter Money Transfer is best way to send money from", "views": 30000, "er": 0.1258}, {"key": "thehiddentruthbehindofwremittancefeesphi", "hook": "The Hidden Truth Behind OFW Remittance Fees#philippines #history #pinoycomics #history", "views": 17900, "er": 0.1132}, {"key": "primaryfunctionoftop10cryptocurrenciescr", "hook": "Primary Function Of Top 10 Cryptocurrencies! #cryptotrading #crypto #cryptok", "views": 1100000, "er": 0.1012}, {"key": "cryptoisthewayoutjuststayincrypto", "hook": "Crypto is the way out, just stay \ud83d\udd12 in, crypto", "views": 1300000, "er": 0.0998}, {"key": "sendingarandomguymoney", "hook": "Sending a random guy money", "views": 3000000, "er": 0.0989}, {"key": "guysthisiscrazylastyearugandareceiversab", "hook": "Guys this is crazy! Last year Uganda receivers about $2.5B", "views": 791100, "er": 0.0934}, {"key": "transfermoneytomybankaccount", "hook": "transfer money to my bank account", "views": 102000, "er": 0.0905}]}};
 const FLOW = ["suggested","briefed","in_production","posted","results_in"];
 const LABEL = {suggested:"Suggested",briefed:"Briefed",in_production:"In Production",posted:"Posted",results_in:"Results In"};
 const LS_KEY = "speed_trend_overrides_v1";
@@ -607,6 +683,7 @@ function eff(id){ // effective item = baked merged with local override
   const o = overrides[id] || {};
   return {status: o.status || base.status,
           ad_ref: (o.ad_ref !== undefined ? o.ad_ref : (base.ad_ref || "")),
+          posted_url: (o.posted_url !== undefined ? o.posted_url : (base.posted_url || "")),
           results_source: base.results_source || null,
           results: Object.assign({}, base.results||{}, o.results||{})};
 }
@@ -632,6 +709,14 @@ function applyCard(card){
   // ad_ref input (paid cards)
   const ar = card.querySelector('input[data-f="ad_ref"]');
   if(ar && document.activeElement !== ar) ar.value = e.ad_ref || "";
+  // posted URL input + live link (Tier 0 posted-content capture)
+  const pu = card.querySelector('input[data-f="posted_url"]');
+  if(pu && document.activeElement !== pu) pu.value = e.posted_url || "";
+  const pl = card.querySelector('[data-role="postedlink"]');
+  if(pl){
+    if(e.posted_url){ pl.href = e.posted_url; pl.textContent = "↗ open live post"; pl.style.display = "inline-block"; }
+    else { pl.removeAttribute("href"); pl.textContent = ""; pl.style.display = "none"; }
+  }
   // source badge (AUTO / MANUAL)
   const sb = card.querySelector('[data-role="source"]');
   if(sb){
@@ -666,17 +751,26 @@ function compare(card, id, e){
   box.innerHTML = `<span class="${cls}">Actual ${views.toLocaleString()} vs est ${est.toLocaleString()} — ${pct>=0?"+":""}${pct}% (${word})</span>`;
 }
 
-// status cycle
+// single source of truth for a status change — used by click-to-advance AND drag
+function setStatus(id, status){
+  if(!id || FLOW.indexOf(status) < 0) return;
+  overrides[id] = overrides[id] || {}; overrides[id].status = status; save();
+  refreshAll();
+}
+function advanceStatus(id){
+  const cur = eff(id).status;
+  setStatus(id, FLOW[(FLOW.indexOf(cur)+1) % FLOW.length]);
+}
+// re-sync every view (detail cards + the live board) from current effective state
+function refreshAll(){
+  document.querySelectorAll(".rec-card").forEach(applyCard);
+  renderBoard();
+}
+
+// status cycle (rec-card tags and board pills share the .st[data-act="cycle"] hook)
 document.body.addEventListener("click", ev=>{
   const t = ev.target;
-  if(t.matches('.st[data-act="cycle"]')){
-    const id = t.dataset.id; const cur = eff(id).status;
-    const next = FLOW[(FLOW.indexOf(cur)+1) % FLOW.length];
-    overrides[id] = overrides[id] || {}; overrides[id].status = next; save();
-    applyCard(t.closest(".rec-card") || document.body);
-    // Actions summary reflects statuses too — simplest is a light refresh of tags there
-    document.querySelectorAll('.a-col .st').forEach(()=>{});
-  }
+  if(t.matches('.st[data-act="cycle"]')){ advanceStatus(t.dataset.id); return; }
   if(t.matches('.expand')){
     const d = t.parentElement.querySelector(".rec-detail");
     if(d){ const open = d.hasAttribute("hidden"); if(open){ d.removeAttribute("hidden"); t.textContent = t.textContent.replace("▾","▴"); }
@@ -693,6 +787,10 @@ document.body.addEventListener("input", ev=>{
     if(inp.dataset.f === "ad_ref"){          // item-level match key, not a result
       overrides[id].ad_ref = inp.value; save(); return;
     }
+    if(inp.dataset.f === "posted_url"){      // real live link, item-level string
+      overrides[id].posted_url = inp.value; save();
+      applyCard(card); renderBoard(); return;
+    }
     overrides[id].results = overrides[id].results || {};
     overrides[id].results[inp.dataset.f] = inp.value === "" ? null : Number(inp.value);
     save(); compare(card, id, eff(id));
@@ -705,6 +803,7 @@ document.getElementById("download").addEventListener("click", ()=>{
     if(!out.items[id]) continue;
     if(overrides[id].status) out.items[id].status = overrides[id].status;
     if(overrides[id].ad_ref !== undefined) out.items[id].ad_ref = overrides[id].ad_ref;
+    if(overrides[id].posted_url !== undefined) out.items[id].posted_url = overrides[id].posted_url;
     if(overrides[id].results) out.items[id].results = Object.assign(out.items[id].results||{}, overrides[id].results);
   }
   out.updated_at = new Date().toISOString().slice(0,10);
@@ -719,7 +818,72 @@ document.getElementById("reset").addEventListener("click", ()=>{
   }
 });
 
+// ---- Pipeline Board (kanban): rendered live from BAKED.items + overrides ----
+function escg(s){ return String(s==null?"":s).replace(/[&<>"]/g,
+  c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+function renderBoard(){
+  const board = document.getElementById("board"); if(!board) return;
+  const items = BAKED.items || {};
+  const cols = {}; FLOW.forEach(s=>cols[s]=[]);
+  Object.keys(items).forEach(id=>{ (cols[eff(id).status] || (cols[eff(id).status]=[])).push(id); });
+  board.innerHTML = FLOW.map(status=>{
+    const ids = cols[status] || [];
+    const cards = ids.map(id=>{
+      const base = items[id] || {}; const e = eff(id);
+      const hook = base.hook || "";
+      const link = e.posted_url
+        ? `<a class="bcard-link" href="${escg(e.posted_url)}" target="_blank" rel="noopener">↗ live post</a>` : "";
+      return `<div class="bcard" draggable="true" data-id="${escg(id)}" data-type="${escg(base.type||'')}">
+        <div class="bcard-hook">“${escg(hook.slice(0,90))}${hook.length>90?"…":""}”</div>
+        <div class="bcard-meta">
+          <span class="bcard-type">${escg(base.type||"")}</span>
+          <button class="st st-${status}" data-act="cycle" data-id="${escg(id)}" title="Click to advance status">${LABEL[status]}</button>
+        </div>${link}
+      </div>`;
+    }).join("") || `<div class="bcol-empty">nothing here</div>`;
+    return `<div class="bcol" data-status="${status}">
+      <div class="bcol-head"><span class="bcol-title">${LABEL[status]}</span><span class="bcol-n">${ids.length}</span></div>
+      ${cards}</div>`;
+  }).join("");
+}
+
+// Drag-and-drop (listeners live on #board, which survives innerHTML swaps)
+(function(){
+  const board = document.getElementById("board"); if(!board) return;
+  let dragId = null;
+  board.addEventListener("dragstart", e=>{
+    const c = e.target.closest(".bcard"); if(!c) return;
+    dragId = c.dataset.id; c.classList.add("dragging");
+    e.dataTransfer.effectAllowed = "move";
+    try{ e.dataTransfer.setData("text/plain", dragId); }catch(_){}
+  });
+  board.addEventListener("dragend", e=>{
+    const c = e.target.closest(".bcard"); if(c) c.classList.remove("dragging");
+    board.querySelectorAll(".bcol.dragover").forEach(x=>x.classList.remove("dragover"));
+    dragId = null;
+  });
+  board.addEventListener("dragover", e=>{
+    if(e.target.closest(".bcol")){ e.preventDefault(); e.dataTransfer.dropEffect = "move"; }
+  });
+  board.addEventListener("dragenter", e=>{
+    const col = e.target.closest(".bcol"); if(col) col.classList.add("dragover");
+  });
+  board.addEventListener("dragleave", e=>{
+    const col = e.target.closest(".bcol");
+    if(col && !col.contains(e.relatedTarget)) col.classList.remove("dragover");
+  });
+  board.addEventListener("drop", e=>{
+    e.preventDefault();
+    const col = e.target.closest(".bcol"); if(!col) return;
+    col.classList.remove("dragover");
+    const id = dragId || (e.dataTransfer && e.dataTransfer.getData("text/plain"));
+    if(id) setStatus(id, col.dataset.status);   // setStatus -> refreshAll -> renderBoard
+  });
+})();
+
 document.querySelectorAll(".rec-card").forEach(applyCard);
+renderBoard();
 save();
 </script>
 </body>
