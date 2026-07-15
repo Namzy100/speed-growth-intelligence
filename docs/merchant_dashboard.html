@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Speed Wallet — Merchant Discovery</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel-2:#1b2230;
+    --hairline:rgba(255,255,255,0.09); --hairline-strong:rgba(255,255,255,0.16);
+    --text:#edf1f7; --muted:#9aa4b2; --faint:#6b7585;
+    --accent:#2f5dfb; --accent-2:#6f9dff; --good:#3fb950; --warn:#e3b341; --bad:#f85149;
+    --r-lg:16px; --r-md:12px; --r-sm:9px; --shadow:0 10px 30px -14px rgba(0,0,0,0.7);
+  }
+  *{box-sizing:border-box;} body{margin:0; background:var(--bg); color:var(--text);
+    font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}
+  .wrap{max-width:1180px; margin:0 auto; padding:26px 20px 60px;}
+  .brandbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;}
+  .brand{font-weight:800; letter-spacing:.02em;} .brand .bolt{color:var(--warn); margin-right:6px;}
+  .sync{font-size:12px; color:var(--faint);}
+  h1{font-size:23px; margin:0 0 4px;} .sub{color:var(--muted); font-size:13px; margin-bottom:18px;}
+  .stats{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px;}
+  .stat{background:var(--panel); border:1px solid var(--hairline); border-radius:var(--r-md); padding:10px 14px; min-width:96px;}
+  .stat b{display:block; font-size:20px;} .stat span{font-size:11px; color:var(--faint);}
+  .note{background:var(--panel-2); border:1px solid var(--hairline); border-left:3px solid var(--warn);
+    border-radius:var(--r-sm); padding:11px 13px; font-size:12px; color:var(--muted); line-height:1.7; margin-bottom:18px;}
+  .note b{color:var(--text);}
+  .filters{display:flex; gap:12px; flex-wrap:wrap; align-items:end; margin-bottom:14px;}
+  .filters label{display:block; font-size:11px; color:var(--faint); margin-bottom:3px;}
+  select,input[type=range]{background:var(--panel); border:1px solid var(--hairline-strong); color:var(--text);
+    border-radius:8px; padding:7px 9px; font-size:13px;}
+  .count{margin-left:auto; color:var(--muted); font-size:12px; align-self:center;}
+  table{width:100%; border-collapse:collapse;} thead th{position:sticky; top:0; background:var(--bg);
+    text-align:left; font-size:11px; color:var(--faint); text-transform:uppercase; letter-spacing:.04em;
+    padding:9px 8px; border-bottom:1px solid var(--hairline-strong); cursor:pointer; white-space:nowrap;}
+  tbody td{padding:10px 8px; border-bottom:1px solid var(--hairline); vertical-align:top;}
+  tbody tr:hover{background:var(--panel);}
+  .num{text-align:right; font-variant-numeric:tabular-nums;}
+  a.vname{color:var(--text); font-weight:600; text-decoration:none;} a.vname:hover{color:var(--accent-2);}
+  .pending{color:var(--faint); font-size:11px;}
+  .badge{display:inline-flex; align-items:center; font-size:10px; font-weight:800; padding:2px 8px; border-radius:6px; letter-spacing:.02em;}
+  .ch-forum{background:#243b55; color:#cfe3ff;} .ch-publication{background:#2b2350; color:#d7ccff;}
+  .ch-association_event{background:#12402a; color:#b6f0cf;} .ch-directory{background:#402a12; color:#f0d6b6;}
+  .ch-unclassified{background:var(--panel-2); color:var(--faint);}
+  .tier{background:var(--panel-2); color:var(--muted); border:1px solid var(--hairline-strong);}
+  .tier-T1{color:var(--good); border-color:var(--good);} .tier-T2{color:var(--warn);}
+  .src-manual-seed{background:var(--good); color:#08240f;} .src-llm{background:var(--accent); color:#fff;}
+  .src-fallback{background:#6b7585; color:#e9edf3;}
+  .pill{display:inline-block; min-width:34px; text-align:center; font-weight:800; padding:2px 8px; border-radius:999px; font-size:12px;}
+  .pill.hi{background:var(--good); color:#08240f;} .pill.mid{background:var(--warn); color:#3a2c05;} .pill.lo{background:#3a4150; color:#c3ccd8;}
+  .chip{display:inline-block; font-size:10px; background:var(--panel-2); border:1px solid var(--hairline);
+    color:var(--muted); border-radius:5px; padding:1px 6px; margin:1px 2px 1px 0;}
+  .detail{color:var(--muted); font-size:12px;} .off{opacity:.5;}
+  footer{margin-top:30px; padding-top:16px; border-top:1px solid var(--hairline); font-size:11.5px; color:var(--faint); line-height:1.7;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brandbar">
+    <div class="brand"><span class="bolt">⚡</span>Speed Wallet</div>
+    <div class="sync" id="sync"></div>
+  </div>
+  <h1>Merchant Discovery</h1>
+  <div class="sub">Outbound discovery of public venues to reach decision-makers at potential merchant businesses. Not tracking — marketing has no merchant activity data (that's the dev backend).</div>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="note">
+    <b>Fit</b> = 0.5 vertical+decision-maker relevance + 0.3 payments/outreach access + 0.2 audience; a fit of 0 means gated as off-topic (player/consumer or off-vertical).
+    <b>Audience tier</b> (T1/T2/T3) is a <b>reputation / cross-listing tier, NOT real traffic</b> — exact traffic needs a paid API this project doesn't use.
+    <b>Source</b>: <span class="badge src-manual-seed">manual-seed</span> = human-verified investigation; <span class="badge src-llm">llm</span> = Claude-judged; <span class="badge src-fallback">fallback</span> = provisional keyword guess (upgraded to llm once Anthropic credits are back).
+    <b>LinkedIn communities are excluded and shown here as manual-only</b> — LinkedIn's ToS/API make community discovery non-automatable, so it's never scraped or faked.
+  </div>
+
+  <div class="filters">
+    <div><label>Vertical</label><select id="fVert"><option value="all">All</option></select></div>
+    <div><label>Channel type</label><select id="fChan"><option value="all">All</option>
+      <option>forum</option><option>publication</option><option>association_event</option><option>directory</option><option>unclassified</option></select></div>
+    <div><label>Outreach mode</label><select id="fOut"><option value="all">All</option>
+      <option>post content</option><option>advertise</option><option>get listed</option><option>sponsor</option></select></div>
+    <div><label>Source</label><select id="fSrc"><option value="all">All</option>
+      <option>manual-seed</option><option>llm</option><option>fallback</option></select></div>
+    <div><label>Min fit: <span id="minv">0</span></label><input type="range" id="fMin" min="0" max="10" step="0.5" value="0"></div>
+    <label style="font-size:12px;color:var(--muted)"><input type="checkbox" id="fOn"> on-topic only</label>
+    <span class="count" id="count"></span>
+  </div>
+
+  <table id="tbl"><thead><tr>
+    <th data-k="venue">Venue</th><th data-k="channel_type">Channel</th><th data-k="vertical">Vertical</th>
+    <th class="num" data-k="fit">Fit</th><th data-k="tier">Audience</th><th data-k="outreach">Outreach</th>
+    <th data-k="judge_source">Source</th>
+  </tr></thead><tbody id="body"></tbody></table>
+
+  <footer id="foot"></footer>
+</div>
+
+<script>
+const DATA = {"generated_at": "2026-07-15 08:31 UTC", "verticals": ["iGaming"], "excluded": {"linkedin": "manual only \u2014 LinkedIn ToS/API make community discovery non-automatable"}, "venues": [{"venue": "iGaming Business", "url": "https://igamingbusiness.com/", "url_verified": true, "channel_type": "publication", "vertical": "iGaming", "fit": 9.2, "relevance": 10.0, "payments": 8.0, "tier": "T1", "outreach": ["advertise", "post content"], "judge_source": "manual-seed", "on_topic": true, "cross_listing": 1, "reason": "B2B trade press; C-suite ('iGB Executive'), Finance + Tech sections, covers payments.", "source": "investigation-2026-07-15"}, {"venue": "HIPTHER Prague Summit", "url": "", "url_verified": false, "channel_type": "association_event", "vertical": "iGaming", "fit": 9.0, "relevance": 9.0, "payments": 9.0, "tier": "T1", "outreach": ["sponsor", "advertise"], "judge_source": "manual-seed", "on_topic": true, "cross_listing": 0, "reason": "C-level; explicitly iGaming + fintech + blockchain + regulatory. Top payments fit. URL pending verification.", "source": "investigation-2026-07-15"}, {"venue": "SBC Summit (Payment Expert Summit track)", "url": "", "url_verified": false, "channel_type": "association_event", "vertical": "iGaming", "fit": 9.0, "relevance": 9.0, "payments": 9.0, "tier": "T1", "outreach": ["sponsor", "advertise"], "judge_source": "manual-seed", "on_topic": true, "cross_listing": 0, "reason": "Major operator event with a payments track. URL pending verification.", "source": "investigation-2026-07-15"}, {"venue": "SBC News / iGaming Expert", "url": "https://igamingexpert.com/", "url_verified": true, "channel_type": "publication", "vertical": "iGaming", "fit": 8.7, "relevance": 9.0, "payments": 8.0, "tier": "T1", "outreach": ["advertise", "post content", "sponsor"], "judge_source": "manual-seed", "on_topic": true, "cross_listing": 0, "reason": "Major B2B network (SBC); SBC also runs operator events with a payments track.", "source": "investigation-2026-07-15"}, {"venue": "iGaming 3Tech (Amsterdam)", "url": "", "url_verified": false, "channel_type": "association_event", "vertical": "iGaming", "fit": 8.5, "relevance": 8.0, "payments": 9.0, "tier": "T1", "outreach": ["sponsor"], "judge_source": "manual-seed", "on_topic": true, "cross_listing": 0, "reason": "Dedicated iGaming FinTech track. URL pending verification.", "source": "investigation-2026-07-15"}, {"venue": "Gambling Insider", "url": "https://www.gamblinginsider.com/", "url_verified": true, "channel_type": "publication", "vertical": "iGaming", "fit": 8.4, "relevance": 9.0, "payments": 7.0, "tier": "T1", "outreach": ["advertise", "post content", "sponsor"], "judge_source": "manual-seed", "on_topic": true, "cross_listing": 0, "reason": "B2B execs; large industry events calendar.", "source": "investigation-2026-07-15"}, {"venue": "iGB L!VE London", "url": "https://www.igblive.com/", "url_verified": true, "channel_type": "association_event", "vertical": "iGaming", "fit": 8.4, "relevance": 9.0, "payments": 7.0, "tier": "T1", "outreach": ["sponsor", "advertise"], "judge_source": "manual-seed", "on_topic": true, "cross_listing": 0, "reason": "Operators / affiliates / vendors networking event.", "source": "investigation-2026-07-15"}, {"venue": "AffPapa", "url": "https://affpapa.com/", "url_verified": true, "channel_type": "directory", "vertical": "iGaming", "fit": 8.2, "relevance": 8.0, "payments": 8.0, "tier": "T1", "outreach": ["get listed", "advertise", "post content"], "judge_source": "manual-seed", "on_topic": true, "cross_listing": 1, "reason": "Affiliate+operator community + B2B provider directory (payments listing) + events.", "source": "investigation-2026-07-15"}, {"venue": "GPWA (Gambling Portal Webmasters Assoc.)", "url": "https://www.gpwa.org/forum/forum.php", "url_verified": true, "channel_type": "forum", "vertical": "iGaming", "fit": 7.6, "relevance": 8.0, "payments": 6.0, "tier": "T1", "outreach": ["post content", "get listed"], "judge_source": "manual-seed", "on_topic": true, "cross_listing": 1, "reason": "~35k members, 150 forums; affiliates + operators discuss programs, compliance, payments.", "source": "investigation-2026-07-15"}, {"venue": "TheGamblest B2B Directory", "url": "https://www.thegamblest.com/igaming-b2b-directory/", "url_verified": true, "channel_type": "directory", "vertical": "iGaming", "fit": 7.1, "relevance": 7.0, "payments": 8.0, "tier": "T2", "outreach": ["get listed"], "judge_source": "manual-seed", "on_topic": true, "cross_listing": 1, "reason": "B2B provider directory \u2014 visibility to operators seeking providers.", "source": "investigation-2026-07-15"}, {"venue": "GamblersConnect iHub", "url": "https://gamblersconnect.com/ihub/b2b-providers/", "url_verified": true, "channel_type": "directory", "vertical": "iGaming", "fit": 7.1, "relevance": 7.0, "payments": 8.0, "tier": "T2", "outreach": ["get listed"], "judge_source": "manual-seed", "on_topic": true, "cross_listing": 0, "reason": "B2B providers directory.", "source": "investigation-2026-07-15"}, {"venue": "InterGame", "url": "https://www.intergameonline.com/publications", "url_verified": true, "channel_type": "publication", "vertical": "iGaming", "fit": 7.0, "relevance": 8.0, "payments": 6.0, "tier": "T2", "outreach": ["advertise", "post content"], "judge_source": "manual-seed", "on_topic": true, "cross_listing": 0, "reason": "Leading igaming trade magazine; industry-leader interviews.", "source": "investigation-2026-07-15"}, {"venue": "Global Gaming Business (GGB)", "url": "", "url_verified": false, "channel_type": "publication", "vertical": "iGaming", "fit": 7.0, "relevance": 8.0, "payments": 6.0, "tier": "T2", "outreach": ["advertise", "post content"], "judge_source": "manual-seed", "on_topic": true, "cross_listing": 0, "reason": "Casino management/tech/exec coverage. URL pending verification.", "source": "investigation-2026-07-15"}, {"venue": "iGaming Future", "url": "https://igamingfuture.com/", "url_verified": true, "channel_type": "publication", "vertical": "iGaming", "fit": 6.5, "relevance": 7.0, "payments": 6.0, "tier": "T2", "outreach": ["advertise", "post content"], "judge_source": "manual-seed", "on_topic": true, "cross_listing": 1, "reason": "B2B magazine series on industry trends.", "source": "investigation-2026-07-15"}, {"venue": "iGaming News", "url": "https://www.igamingnews.com/", "url_verified": true, "channel_type": "publication", "vertical": "iGaming", "fit": 6.2, "relevance": 7.0, "payments": 5.0, "tier": "T2", "outreach": ["post content"], "judge_source": "manual-seed", "on_topic": true, "cross_listing": 0, "reason": "Exec appointments / company news since 1996.", "source": "investigation-2026-07-15"}, {"venue": "AffRoom", "url": "", "url_verified": false, "channel_type": "forum", "vertical": "iGaming", "fit": 5.1, "relevance": 6.0, "payments": 5.0, "tier": "T3", "outreach": ["post content", "get listed"], "judge_source": "manual-seed", "on_topic": true, "cross_listing": 0, "reason": "Modern affiliate community. URL pending verification.", "source": "investigation-2026-07-15"}, {"venue": "igaming.club", "url": "https://igaming.club", "url_verified": true, "channel_type": "unclassified", "vertical": "iGaming", "fit": 4.9, "relevance": 5.0, "payments": 4.0, "tier": "T2", "outreach": [], "judge_source": "fallback", "on_topic": true, "cross_listing": 2, "reason": "keyword fallback (no LLM judgment yet)", "source": "aggregator"}, {"venue": "slotlandaffiliates.com", "url": "https://slotlandaffiliates.com", "url_verified": true, "channel_type": "unclassified", "vertical": "iGaming", "fit": 4.3, "relevance": 5.0, "payments": 4.0, "tier": "T3", "outreach": [], "judge_source": "fallback", "on_topic": true, "cross_listing": 1, "reason": "keyword fallback (no LLM judgment yet)", "source": "aggregator"}, {"venue": "ncpgambling.org", "url": "https://ncpgambling.org", "url_verified": true, "channel_type": "unclassified", "vertical": "iGaming", "fit": 4.3, "relevance": 5.0, "payments": 4.0, "tier": "T3", "outreach": [], "judge_source": "fallback", "on_topic": true, "cross_listing": 1, "reason": "keyword fallback (no LLM judgment yet)", "source": "aggregator"}, {"venue": "eventactions.com", "url": "https://eventactions.com", "url_verified": true, "channel_type": "unclassified", "vertical": "iGaming", "fit": 0.0, "relevance": 1.0, "payments": 0.0, "tier": "T3", "outreach": [], "judge_source": "fallback", "on_topic": false, "cross_listing": 1, "reason": "keyword fallback (no LLM judgment yet)", "source": "aggregator"}, {"venue": "bit.ly", "url": "https://bit.ly", "url_verified": true, "channel_type": "unclassified", "vertical": "iGaming", "fit": 0.0, "relevance": 1.0, "payments": 0.0, "tier": "T3", "outreach": [], "judge_source": "fallback", "on_topic": false, "cross_listing": 1, "reason": "keyword fallback (no LLM judgment yet)", "source": "aggregator"}, {"venue": "igacademy.com", "url": "https://igacademy.com", "url_verified": true, "channel_type": "unclassified", "vertical": "iGaming", "fit": 0.0, "relevance": 1.0, "payments": 0.0, "tier": "T3", "outreach": [], "judge_source": "fallback", "on_topic": false, "cross_listing": 1, "reason": "keyword fallback (no LLM judgment yet)", "source": "aggregator"}, {"venue": "habanerosystems.com", "url": "https://habanerosystems.com", "url_verified": true, "channel_type": "unclassified", "vertical": "iGaming", "fit": 0.0, "relevance": 1.0, "payments": 0.0, "tier": "T3", "outreach": [], "judge_source": "fallback", "on_topic": false, "cross_listing": 1, "reason": "keyword fallback (no LLM judgment yet)", "source": "aggregator"}, {"venue": "softswiss.com", "url": "https://softswiss.com", "url_verified": true, "channel_type": "unclassified", "vertical": "iGaming", "fit": 0.0, "relevance": 1.0, "payments": 0.0, "tier": "T3", "outreach": [], "judge_source": "fallback", "on_topic": false, "cross_listing": 1, "reason": "keyword fallback (no LLM judgment yet)", "source": "aggregator"}, {"venue": "vegaskings.com", "url": "https://vegaskings.com", "url_verified": true, "channel_type": "unclassified", "vertical": "iGaming", "fit": 0.0, "relevance": 1.0, "payments": 0.0, "tier": "T3", "outreach": [], "judge_source": "fallback", "on_topic": false, "cross_listing": 1, "reason": "keyword fallback (no LLM judgment yet)", "source": "aggregator"}, {"venue": "sigma.world", "url": "https://sigma.world", "url_verified": true, "channel_type": "unclassified", "vertical": "iGaming", "fit": 0.0, "relevance": 1.0, "payments": 0.0, "tier": "T3", "outreach": [], "judge_source": "fallback", "on_topic": false, "cross_listing": 1, "reason": "keyword fallback (no LLM judgment yet)", "source": "aggregator"}, {"venue": "hipther.com", "url": "https://hipther.com", "url_verified": true, "channel_type": "unclassified", "vertical": "iGaming", "fit": 0.0, "relevance": 1.0, "payments": 0.0, "tier": "T3", "outreach": [], "judge_source": "fallback", "on_topic": false, "cross_listing": 1, "reason": "keyword fallback (no LLM judgment yet)", "source": "aggregator"}, {"venue": "AffPapa Conference Cancun 2026", "url": "https://affpapaconf.com", "url_verified": true, "channel_type": "unclassified", "vertical": "iGaming", "fit": 0.0, "relevance": 1.0, "payments": 0.0, "tier": "T2", "outreach": [], "judge_source": "fallback", "on_topic": false, "cross_listing": 2, "reason": "keyword fallback (no LLM judgment yet)", "source": "aggregator"}, {"venue": "venturepapa.com", "url": "https://venturepapa.com", "url_verified": true, "channel_type": "unclassified", "vertical": "iGaming", "fit": 0.0, "relevance": 1.0, "payments": 0.0, "tier": "T3", "outreach": [], "judge_source": "fallback", "on_topic": false, "cross_listing": 1, "reason": "keyword fallback (no LLM judgment yet)", "source": "aggregator"}, {"venue": "gammasweep.com", "url": "https://gammasweep.com", "url_verified": true, "channel_type": "unclassified", "vertical": "iGaming", "fit": 0.0, "relevance": 1.0, "payments": 0.0, "tier": "T3", "outreach": [], "judge_source": "fallback", "on_topic": false, "cross_listing": 1, "reason": "keyword fallback (no LLM judgment yet)", "source": "aggregator"}, {"venue": "org.mt", "url": "https://org.mt", "url_verified": true, "channel_type": "unclassified", "vertical": "iGaming", "fit": 0.0, "relevance": 1.0, "payments": 0.0, "tier": "T3", "outreach": [], "judge_source": "fallback", "on_topic": false, "cross_listing": 1, "reason": "keyword fallback (no LLM judgment yet)", "source": "aggregator"}, {"venue": "begambleaware.org", "url": "https://begambleaware.org", "url_verified": true, "channel_type": "unclassified", "vertical": "iGaming", "fit": 0.0, "relevance": 1.0, "payments": 0.0, "tier": "T3", "outreach": [], "judge_source": "fallback", "on_topic": false, "cross_listing": 1, "reason": "keyword fallback (no LLM judgment yet)", "source": "aggregator"}, {"venue": "gaminglabs.com", "url": "https://gaminglabs.com", "url_verified": true, "channel_type": "unclassified", "vertical": "iGaming", "fit": 0.0, "relevance": 1.0, "payments": 0.0, "tier": "T3", "outreach": [], "judge_source": "fallback", "on_topic": false, "cross_listing": 1, "reason": "keyword fallback (no LLM judgment yet)", "source": "aggregator"}, {"venue": "org.uk", "url": "https://org.uk", "url_verified": true, "channel_type": "unclassified", "vertical": "iGaming", "fit": 0.0, "relevance": 1.0, "payments": 0.0, "tier": "T3", "outreach": [], "judge_source": "fallback", "on_topic": false, "cross_listing": 1, "reason": "keyword fallback (no LLM judgment yet)", "source": "aggregator"}, {"venue": "ecogra.org", "url": "https://ecogra.org", "url_verified": true, "channel_type": "unclassified", "vertical": "iGaming", "fit": 0.0, "relevance": 1.0, "payments": 0.0, "tier": "T3", "outreach": [], "judge_source": "fallback", "on_topic": false, "cross_listing": 1, "reason": "keyword fallback (no LLM judgment yet)", "source": "aggregator"}, {"venue": "betblocker.org", "url": "https://betblocker.org", "url_verified": true, "channel_type": "unclassified", "vertical": "iGaming", "fit": 0.0, "relevance": 1.0, "payments": 0.0, "tier": "T3", "outreach": [], "judge_source": "fallback", "on_topic": false, "cross_listing": 1, "reason": "keyword fallback (no LLM judgment yet)", "source": "aggregator"}, {"venue": "dmca.com", "url": "https://dmca.com", "url_verified": true, "channel_type": "unclassified", "vertical": "iGaming", "fit": 0.0, "relevance": 1.0, "payments": 0.0, "tier": "T3", "outreach": [], "judge_source": "fallback", "on_topic": false, "cross_listing": 1, "reason": "keyword fallback (no LLM judgment yet)", "source": "aggregator"}, {"venue": "wordfence.com", "url": "https://wordfence.com", "url_verified": true, "channel_type": "unclassified", "vertical": "iGaming", "fit": 0.0, "relevance": 1.0, "payments": 0.0, "tier": "T3", "outreach": [], "judge_source": "fallback", "on_topic": false, "cross_listing": 1, "reason": "keyword fallback (no LLM judgment yet)", "source": "aggregator"}, {"venue": "norton.com", "url": "https://norton.com", "url_verified": true, "channel_type": "unclassified", "vertical": "iGaming", "fit": 0.0, "relevance": 1.0, "payments": 0.0, "tier": "T3", "outreach": [], "judge_source": "fallback", "on_topic": false, "cross_listing": 1, "reason": "keyword fallback (no LLM judgment yet)", "source": "aggregator"}, {"venue": "linkdatamedia.com", "url": "https://linkdatamedia.com", "url_verified": true, "channel_type": "unclassified", "vertical": "iGaming", "fit": 0.0, "relevance": 1.0, "payments": 0.0, "tier": "T3", "outreach": [], "judge_source": "fallback", "on_topic": false, "cross_listing": 1, "reason": "keyword fallback (no LLM judgment yet)", "source": "aggregator"}, {"venue": "Read more about these purposes", "url": "https://cookiedatabase.org", "url_verified": true, "channel_type": "unclassified", "vertical": "iGaming", "fit": 0.0, "relevance": 1.0, "payments": 0.0, "tier": "T3", "outreach": [], "judge_source": "fallback", "on_topic": false, "cross_listing": 1, "reason": "keyword fallback (no LLM judgment yet)", "source": "aggregator"}], "total": 41, "on_topic": 19, "verified": 36, "by_channel": {"publication": 7, "association_event": 4, "directory": 3, "forum": 2, "unclassified": 25}, "by_source": {"manual-seed": 16, "fallback": 25}};
+const esc = s => String(s==null?"":s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+document.getElementById("sync").textContent = "Generated: " + DATA.generated_at;
+
+// stats
+const st = [
+  [DATA.total, "venues"], [DATA.on_topic, "on-topic"], [DATA.verified, "verified URL"],
+  [DATA.by_source["manual-seed"]||0, "human-verified"], [DATA.by_source["llm"]||0, "llm-judged"],
+];
+document.getElementById("stats").innerHTML = st.map(([n,l])=>`<div class="stat"><b>${n}</b><span>${l}</span></div>`).join("");
+
+// vertical filter options
+const verts=[...new Set(DATA.venues.map(v=>v.vertical).filter(Boolean))].sort();
+const fVert=document.getElementById("fVert");
+verts.forEach(v=>{const o=document.createElement("option");o.textContent=v;fVert.appendChild(o);});
+
+function fitCls(f){return f>=7?"hi":f>=4?"mid":"lo";}
+function chanLabel(c){return c.replace("association_event","assoc/event");}
+
+let sortKey="fit", sortDir=-1;
+function rows(){
+  const vert=fVert.value, chan=fChan.value, out=fOut.value, src=fSrc.value,
+        min=+fMin.value, on=document.getElementById("fOn").checked;
+  let r=DATA.venues.filter(v=>
+    (vert==="all"||v.vertical===vert) && (chan==="all"||v.channel_type===chan) &&
+    (out==="all"||(v.outreach||[]).includes(out)) && (src==="all"||v.judge_source===src) &&
+    v.fit>=min && (!on||v.on_topic));
+  r.sort((a,b)=>{let x=a[sortKey],y=b[sortKey];
+    if(sortKey==="outreach"){x=(x||[]).length;y=(y||[]).length;}
+    if(typeof x==="string"){x=x.toLowerCase();y=y.toLowerCase();}
+    return (x<y?-1:x>y?1:0)*sortDir;});
+  return r;
+}
+function render(){
+  const r=rows();
+  document.getElementById("body").innerHTML = r.map(v=>{
+    const name = v.url_verified && v.url
+      ? `<a class="vname" href="${esc(v.url)}" target="_blank" rel="noopener">${esc(v.venue)}</a>`
+      : `<span class="vname">${esc(v.venue)}</span> <span class="pending">(URL to verify)</span>`;
+    const chips=(v.outreach||[]).map(o=>`<span class="chip">${esc(o)}</span>`).join("")||'<span class="pending">—</span>';
+    return `<tr class="${v.on_topic?'':'off'}">
+      <td>${name}<div class="detail">${esc(v.reason)}</div></td>
+      <td><span class="badge ch-${esc(v.channel_type)}">${esc(chanLabel(v.channel_type))}</span></td>
+      <td>${esc(v.vertical)}</td>
+      <td class="num"><span class="pill ${fitCls(v.fit)}">${v.fit.toFixed(1)}</span>
+        <div class="detail">rel ${v.relevance.toFixed(0)} · pay ${v.payments.toFixed(0)}</div></td>
+      <td><span class="badge tier tier-${esc(v.tier)}">${esc(v.tier)}</span></td>
+      <td>${chips}</td>
+      <td><span class="badge src-${esc(v.judge_source)}">${esc(v.judge_source)}</span>
+        ${v.cross_listing?`<div class="detail">×${v.cross_listing} listed</div>`:""}</td>
+    </tr>`;
+  }).join("");
+  document.getElementById("count").textContent = `${r.length} of ${DATA.total} shown`;
+}
+["fVert","fChan","fOut","fSrc"].forEach(id=>document.getElementById(id).addEventListener("change",render));
+document.getElementById("fOn").addEventListener("change",render);
+document.getElementById("fMin").addEventListener("input",e=>{document.getElementById("minv").textContent=e.target.value;render();});
+document.querySelectorAll("#tbl th[data-k]").forEach(th=>th.addEventListener("click",()=>{
+  const k=th.dataset.k; if(sortKey===k)sortDir*=-1; else{sortKey=k;sortDir=(k==="venue"||k==="channel_type"||k==="vertical")?1:-1;}
+  render();
+}));
+
+const excl=Object.entries(DATA.excluded||{}).map(([k,v])=>`<b>${esc(k)}</b>: ${esc(v)}`).join("; ");
+document.getElementById("foot").innerHTML =
+  `Verticals: ${(DATA.verticals||[]).map(esc).join(", ")||"—"}. Channel mix: `+
+  Object.entries(DATA.by_channel).map(([k,n])=>`${esc(k)} ${n}`).join(" · ")+
+  `.<br>Excluded (manual only): ${excl}.<br>`+
+  `Data: merchants/discovery.py (aggregator harvest + verified seed; web_search discovery + Claude relevance judging pending Anthropic credits).`;
+render();
+</script>
+</body>
+</html>
