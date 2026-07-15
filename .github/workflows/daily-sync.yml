@@ -32,12 +32,17 @@ jobs:
     timeout-minutes: 30    # hard stop: a hung network call can never again block future runs
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        # v5 runs on Node 24 (v4 was Node 20, now deprecated by GitHub). Pinned to
+        # v5 rather than v6/v7 on purpose: checkout v6 changed credential handling
+        # ("persist creds to a separate file"), and this job relies on
+        # persist-credentials + a later plain `git push` in run_daily_sync for the
+        # auto-deploy. v5 keeps that behavior unchanged while getting off Node 20.
+        uses: actions/checkout@v5
         with:
           persist-credentials: true   # so the auto-deploy git push authenticates via GITHUB_TOKEN
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6   # v6 runs on Node 24 (v5 was Node 20, deprecated)
         with:
           python-version: '3.13'
 
