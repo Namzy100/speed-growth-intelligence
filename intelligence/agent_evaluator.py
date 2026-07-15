@@ -139,13 +139,18 @@ def check_creator_db() -> tuple[float, str, int]:
     zero_score = sum(1 for r in rows if float(r.get("composite_score", 0) or 0) == 0)
     zero_foll = sum(1 for r in rows if (r.get("followers", 0) or 0) == 0
                     and "mimanshi_list" not in (r.get("niche_tags") or []))
-    names = [str(r.get("name", "")).strip().lower() for r in rows]
-    dupes = sum(c - 1 for c in __import__("collections").Counter(names).values() if c > 1)
+    # A creator legitimately gets ONE ROW PER PLATFORM — save_creator dedups on
+    # (name, platform), so e.g. MMCrypto on X (1.78M) and MMCrypto on YouTube
+    # (620k) are two real cross-platform presences, NOT a duplicate. Count a true
+    # duplicate only when (name, platform) repeats, matching the DB's real key;
+    # keying on name alone wrongly flagged legitimate multi-platform creators.
+    keys = [(str(r.get("name", "")).strip().lower(), r.get("platform")) for r in rows]
+    dupes = sum(c - 1 for c in __import__("collections").Counter(keys).values() if c > 1)
     brand_hits = sum(1 for r in rows
                      if any(b in str(r.get("name", "")).lower() for b in brands))
     total = zero_score + zero_foll + dupes + brand_hits
     detail = (f"{total} issue(s): {zero_score} zero-score, {zero_foll} zero-followers(non-Mimanshi), "
-              f"{dupes} duplicate-name, {brand_hits} brand-name hits (of {len(rows)} creators).")
+              f"{dupes} duplicate (name+platform), {brand_hits} brand-name hits (of {len(rows)} creators).")
     score = 10.0 if total == 0 else 8.0 if total <= 3 else 6.0 if total <= 15 else 3.0
     return score, detail, total
 
