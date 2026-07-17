@@ -179,6 +179,47 @@ Why the model looks this way (so a cold reader understands the shape, not just t
   retire it only after several successful scheduled Actions runs confirm the new
   token holds. `meta.py` needs only `ads_read`.
 
+## Trend relevance/fit quality checker (Claude Managed Agents, Outcomes)
+
+`intelligence/trend_checker.py` grades the trend pipeline's relevance/fit
+judgments. **The pipeline runs unwrapped as always — the checker only grades its
+output.** Two deliberately-separated checks:
+
+1. **Deterministic invariants** (`trend_pipeline.verify_fit_invariants`): fit ==
+   `0.4*fintech + 0.3*replicability + 0.3*reach`, and off-topic ⇒ fit 0. Pure
+   Python. A violation is a **code bug** (weighting/gate drift), so it HARD-FAILS
+   and is never fed into revision.
+2. **Relevance defensibility** (the real judgment call): graded by a **Claude
+   Managed Agents** Outcomes session (`user.define_outcome`, beta
+   `managed-agents-2026-04-01`). On `needs_revision`, the in-session agent calls a
+   host-side custom tool `rejudge_items(ids, feedback)` →
+   `trend_pipeline.rejudge_items` re-runs the judgment on ONLY those items with the
+   feedback appended (no re-scrape, cache override). Capped at `max_iterations=3`.
+
+- **MCP was deliberately NOT used.** MCP tunnels are research-preview/gated, and
+  our tools are Python, not MCP servers. The custom-tool pattern keeps keys
+  host-side and the tested pipeline as the source of truth. See the 2026-07-14
+  investigation.
+- **Grounding:** the grader is instructed to judge from the `rejudge_items` tool
+  results + item content, NOT the agent's prose (an earlier version trusted an
+  agent-authored file and could be papered over — fixed).
+- **Schedule:** rides the **existing Monday** trend rebuild in
+  `run_daily_sync._rebuild_trend_dashboard` (gated by `TREND_DASHBOARD_REBUILD` +
+  Monday). No second scheduler. It is **best-effort — never blocks/fails the
+  sync**. Adds ~5-12 min of wall clock on Mondays; confirm the Actions job's
+  30-min timeout has headroom.
+- **Agent/env are persisted** in `data/processed/checker_agent.json` (create-once,
+  reuse-by-id — not recreated per run).
+- **Logs:** every grade, revision cycle, and final verdict is written to a plain
+  text file under `docs/trend_checker_log/<date>.log`, readable without any agent
+  framework knowledge.
+- **Cost:** standard token rates + $0.08/session-hour, billed only while the
+  session is `running` (idle host-side re-judgment isn't billed). A weekly run is
+  a few cents of session time plus the judge/grader tokens.
+- Manual runs: `python intelligence/trend_checker.py` (grade latest real output),
+  `--judged PATH` (grade a specific judged.json), `--rejudge-stub` (cap test with a
+  non-converging revision).
+
 ## Deliverables
 
 Canonical host is **GitHub Pages**. All live links are also in `docs/live_links.txt`.

@@ -364,7 +364,7 @@ def render_hooks(candidates: list[dict], enrich: dict, tags: dict) -> str:
         rank += 1
         if rank > _TOP_HOOKS:
             break
-        plat_cls = {"YouTube": "yt", "TikTok": "tt", "Instagram": "ig"}.get(v["platform"], "tt")
+        plat_cls = {"YouTube": "yt", "TikTok": "tt", "Instagram": "ig", "X": "x"}.get(v["platform"], "tt")
         rows.append(f"""
       <div class="hook-card">
         <div class="hook-rank">{rank}</div>
@@ -373,6 +373,9 @@ def render_hooks(candidates: list[dict], enrich: dict, tags: dict) -> str:
           <div class="hook-meta">
             <span class="badge {plat_cls}">{_e(v['platform'])}</span>
             <span class="badge seg {v['segment'].replace('-','')}">{_e(_SEG_LABEL.get(v['segment'], v['segment']))}</span>
+            {_fit_badge(v.get('fit_score'))}
+            {_ctype_badge(v.get('content_type'))}
+            {_risk_badge(v)}
             {_traj_tag(tags.get(_hook_key(v['hook'])))}
             <span class="m">{_fmt_n(v['views'])} views</span>
             <span class="m er">{v['er']:.1%} ER</span>
@@ -380,9 +383,55 @@ def render_hooks(candidates: list[dict], enrich: dict, tags: dict) -> str:
           </div>
           <div class="hook-why">{_e(e.get('why_it_works',''))}</div>
         </div>
-        <div class="hook-repl"><div class="repl-lab">Replication</div>{_repl_dots(e.get('replication_score'))}</div>
+        <div class="hook-repl"><div class="repl-lab">Speed-fit</div>{_fit_meter(v.get('fit_score'))}</div>
       </div>""")
     return "".join(rows) or '<div class="empty">No qualifying hooks this week.</div>'
+
+
+# Content-type labels — only what the pipeline can actually detect. Stories and
+# AI-generated content are shown as "not yet detectable" in the legend (never faked).
+_CTYPE_LABEL = {
+    "short_video": ("Short-form video", "cv"),
+    "long_video": ("Long-form video", "cl"),
+    "slideshow": ("Slideshow", "cs"),
+    "static_image": ("Static image", "ci"),
+    "text_post": ("Text post", "ct"),
+}
+
+
+def _fit_badge(fit) -> str:
+    """The Speed-fit score (0.4 fintech / 0.3 low-cost / 0.3 reach). 0 == gated off-topic."""
+    try:
+        f = float(fit)
+    except (TypeError, ValueError):
+        return ""
+    cls = "fit-hi" if f >= 7 else "fit-mid" if f >= 4 else "fit-lo"
+    return f'<span class="badge fit {cls}" title="Speed-fit (0.4 fintech / 0.3 low-cost / 0.3 reach); 0 = off-topic, gated">fit {f:.1f}</span>'
+
+
+def _ctype_badge(ctype) -> str:
+    label, cls = _CTYPE_LABEL.get(str(ctype or ""), (None, None))
+    if not label:
+        return ""
+    return f'<span class="badge ctype {cls}">{label}</span>'
+
+
+def _risk_badge(v: dict) -> str:
+    """Surfaced (never hidden) warning for topically-relevant but off-brand trends."""
+    if v.get("off_brand") or v.get("reputational_risk") == "high":
+        return ('<span class="badge risk" title="Topically relevant but flagged high '
+                'reputational risk — surfaced for a human call, not hidden">⚠ off-brand</span>')
+    return ""
+
+
+def _fit_meter(fit) -> str:
+    try:
+        f = max(0.0, min(10.0, float(fit)))
+    except (TypeError, ValueError):
+        f = 0.0
+    cls = "fit-hi" if f >= 7 else "fit-mid" if f >= 4 else "fit-lo"
+    return (f'<span class="repl"><span class="repl-fill {cls}" style="width:{f*10:.0f}%"></span></span>'
+            f'<span class="repl-n">{f:.1f}/10</span>')
 
 
 def _repl_dots(score) -> str:
@@ -470,8 +519,9 @@ def render_signal(data: dict) -> str:
     for seg in _SEGMENTS:
         s = sig.get(seg, {})
         yt, tt, ig = s.get("youtube_er", 0), s.get("tiktok_er", 0), s.get("instagram_er", 0)
-        mx = max(yt, tt, ig, 0.0001)
-        ranked = {"YouTube": yt, "TikTok": tt, "Instagram": ig}
+        x = s.get("x_er", 0)   # X joined collect_signals() — show it alongside the rest
+        mx = max(yt, tt, ig, x, 0.0001)
+        ranked = {"YouTube": yt, "TikTok": tt, "Instagram": ig, "X": x}
         top = max(ranked, key=ranked.get)
         winner = f"{top} stronger" if ranked[top] > 0 else "no data"
         rows.append(f"""
@@ -481,6 +531,7 @@ def render_signal(data: dict) -> str:
           <div class="sig-bar"><span class="sig-lab">YT</span><div class="sig-track"><div class="sig-fill yt" style="width:{yt/mx*100:.0f}%"></div></div><span class="sig-val">{yt:.1%}</span></div>
           <div class="sig-bar"><span class="sig-lab">TT</span><div class="sig-track"><div class="sig-fill tt" style="width:{tt/mx*100:.0f}%"></div></div><span class="sig-val">{tt:.1%}</span></div>
           <div class="sig-bar"><span class="sig-lab">IG</span><div class="sig-track"><div class="sig-fill ig" style="width:{ig/mx*100:.0f}%"></div></div><span class="sig-val">{ig:.1%}</span></div>
+          <div class="sig-bar"><span class="sig-lab">X</span><div class="sig-track"><div class="sig-fill x" style="width:{x/mx*100:.0f}%"></div></div><span class="sig-val">{x:.1%}</span></div>
         </div>
         <div class="sig-win">{winner}</div>
       </div>""")
@@ -600,7 +651,14 @@ _TEMPLATE = r"""<!doctype html>
   .badge{display:inline-flex; align-items:center; font-size:10px; font-weight:800; padding:2px 8px; border-radius:6px; letter-spacing:0.03em;}
   .badge.yt{background:var(--yt); color:#fff;} .badge.tt{background:var(--tt); color:#04201f;}
   .badge.ig{background:linear-gradient(120deg,#f58529,#dd2a7b,#8134af); color:#fff;}
+  .badge.x{background:#000; color:#fff; border:1px solid var(--hairline-strong);}
   .badge.plat{background:var(--panel-2); color:var(--muted);}
+  /* Speed-fit score badge + content-type + off-brand warning (Prompt 57 layer) */
+  .badge.fit{color:#0d1117;} .badge.fit.fit-hi{background:var(--good);} .badge.fit.fit-mid{background:var(--warn);} .badge.fit.fit-lo{background:#6b7585; color:#e9edf3;}
+  .badge.ctype{background:var(--panel-2); color:var(--accent-2); border:1px solid var(--hairline-strong);}
+  .badge.risk{background:var(--bad); color:#fff;}
+  .legend-note{font-size:11.5px; color:var(--muted); line-height:1.7; background:var(--panel-2); border:1px solid var(--hairline); border-radius:var(--r-sm); padding:10px 12px;} .legend-note b{color:var(--text);}
+  .repl-fill.fit-hi{background:linear-gradient(90deg,#2c8c3c,var(--good));} .repl-fill.fit-mid{background:linear-gradient(90deg,#b9862a,var(--warn));} .repl-fill.fit-lo{background:linear-gradient(90deg,#4b5563,#6b7585);}
   .badge.seg{color:#0d1117;} .badge.seg.remittance{background:var(--seg-remittance);} .badge.seg.cryptocurious{background:var(--seg-cryptocurious);} .badge.seg.iGaming{background:var(--seg-iGaming);}
   .empty{color:var(--faint); font-size:13px; padding:10px 0;}
 
@@ -685,7 +743,7 @@ _TEMPLATE = r"""<!doctype html>
   .sig-row:first-child{border-top:none;} .sig-seg{font-weight:700; font-size:14px;}
   .sig-bar{display:flex; align-items:center; gap:8px; margin:4px 0;} .sig-lab{font-size:10px; color:var(--faint); font-weight:700; width:20px;}
   .sig-track{flex:1; height:8px; background:rgba(255,255,255,0.06); border-radius:5px; overflow:hidden;}
-  .sig-fill{height:100%;} .sig-fill.yt{background:var(--yt);} .sig-fill.tt{background:var(--tt);} .sig-fill.ig{background:linear-gradient(90deg,#dd2a7b,#8134af);}
+  .sig-fill{height:100%;} .sig-fill.yt{background:var(--yt);} .sig-fill.tt{background:var(--tt);} .sig-fill.ig{background:linear-gradient(90deg,#dd2a7b,#8134af);} .sig-fill.x{background:#e9edf3;}
   .sig-val{font-size:11px; font-variant-numeric:tabular-nums; color:var(--muted); width:44px; text-align:right;} .sig-win{font-size:12px; font-weight:700; color:var(--accent-2); text-align:right;}
 
   /* pipeline board (kanban) */
@@ -758,6 +816,11 @@ _TEMPLATE = r"""<!doctype html>
   <section>
     <details class="support" open>
       <summary>Top Hooks This Week — supporting evidence</summary>
+      <div class="legend-note">
+        <b>Speed-fit</b> = 0.4 fintech relevance + 0.3 low-cost/replicability + 0.3 reach; a fit of 0 means the item was gated as off-topic (metaphor/homonym/throwaway) and never surfaces on reach alone.
+        <b>Content type</b> is labelled only where actually detectable: short-form video, long-form video, slideshow, static image, text post. <b>Stories and AI-generated content are not yet detectable</b> via current tooling, so they are never labelled or guessed.
+        A <span class="badge risk">⚠ off-brand</span> badge marks a topically-relevant trend flagged high reputational risk — surfaced for a human call, never hidden.
+      </div>
       <div style="margin-top:14px;">/*__HOOKS__*/</div>
     </details>
   </section>
