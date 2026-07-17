@@ -79,12 +79,19 @@ class YouTubeCreatorFetcher:
         self._key = api_key
         self._session = requests.Session()
 
-    def search(self, query: str, max_results: int = 10) -> list[dict]:
+    def search(self, query: str, max_results: int = 10,
+               region_code: str | None = None,
+               relevance_language: str = "en") -> list[dict]:
         """Search YouTube channels and return CreatorScorer-ready dicts.
 
         Args:
             query: Search string (e.g. "bitcoin lightning wallet").
             max_results: Number of channels to return (1–50).
+            region_code: Optional ISO 3166-1 alpha-2 country (e.g. "DE", "GB",
+                "PT") to bias results toward that market — the same regionCode
+                lever the trend live-search uses. None = no region bias (default).
+            relevance_language: ISO 639-1 language to bias toward (e.g. "de",
+                "pt"); defaults to "en" to preserve existing callers' behavior.
 
         Returns:
             List of creator dicts compatible with CreatorScorer.score().
@@ -93,7 +100,9 @@ class YouTubeCreatorFetcher:
             QuotaExceededError: Daily API quota exhausted.
             requests.HTTPError: Any other non-recoverable API error.
         """
-        channel_ids = self._search_channels(query, max_results)
+        channel_ids = self._search_channels(query, max_results,
+                                             region_code=region_code,
+                                             relevance_language=relevance_language)
         if not channel_ids:
             return []
 
@@ -193,14 +202,19 @@ class YouTubeCreatorFetcher:
         except ValueError:
             return ""
 
-    def _search_channels(self, query: str, max_results: int) -> list[str]:
-        data = self._get("search", {
+    def _search_channels(self, query: str, max_results: int,
+                         region_code: str | None = None,
+                         relevance_language: str = "en") -> list[str]:
+        params = {
             "part": "id",
             "q": query,
             "type": "channel",
             "maxResults": min(max_results, 50),
-            "relevanceLanguage": "en",
-        })
+            "relevanceLanguage": relevance_language,
+        }
+        if region_code:
+            params["regionCode"] = region_code   # bias to a market (DE/GB/PT/...)
+        data = self._get("search", params)
         return [item["id"]["channelId"] for item in data.get("items", [])]
 
     def _fetch_channel_details(self, channel_ids: list[str]) -> list[dict]:
