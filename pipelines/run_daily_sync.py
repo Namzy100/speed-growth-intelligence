@@ -242,10 +242,24 @@ def _rebuild_trend_dashboard() -> bool:
     try:
         build_trend_dashboard.main()
         _log("Trend dashboard: rebuilt successfully")
-        return True
+        ok = True
     except Exception as e:
         _log(f"Trend dashboard: rebuild FAILED — {e}")
-        return False
+        ok = False
+
+    # Outcomes-graded quality check of the relevance/fit judgments — rides this
+    # same Monday cadence (no separate scheduler). Best-effort: it runs a Managed
+    # Agent session (~5-12 min) and NEVER blocks or fails the sync. Verdict + full
+    # revision trace are logged under docs/trend_checker_log/.
+    try:
+        from intelligence import trend_checker
+        _log("Trend checker: grading relevance/fit judgments via Outcomes...")
+        v = trend_checker.check_pipeline_output()
+        _log(f"Trend checker: verdict={v.get('verdict')} "
+             f"(grader iterations={v.get('iterations')}) — see docs/trend_checker_log/")
+    except Exception as e:  # never block the sync on the checker
+        _log(f"Trend checker: skipped ({e})")
+    return ok
 
 
 def _deploy_dashboard() -> bool:
