@@ -35,11 +35,12 @@ jobs:
         # v5 runs on Node 24 (v4 was Node 20, now deprecated by GitHub). Pinned to
         # v5 rather than v6/v7 on purpose: checkout v6 changed credential handling
         # ("persist creds to a separate file"), and this job relies on
-        # persist-credentials + a later plain `git push` in run_daily_sync for the
+        # persist-credentials + a later git push in run_daily_sync for the
         # auto-deploy. v5 keeps that behavior unchanged while getting off Node 20.
         uses: actions/checkout@v5
         with:
           persist-credentials: true   # so the auto-deploy git push authenticates via GITHUB_TOKEN
+          fetch-depth: 0              # full history: the gh-pages worktree deploy fetches/creates that branch
 
       - name: Set up Python
         uses: actions/setup-python@v6   # v6 runs on Node 24 (v5 was Node 20, deprecated)
@@ -56,13 +57,14 @@ jobs:
         env:
           GSHEETS_JSON: ${{ secrets.GOOGLE_SHEETS_CREDS_JSON }}
 
-      - name: Configure git + attach to main
-        # actions/checkout leaves a detached HEAD; run_daily_sync does a plain
-        # `git push`, which needs to be on a branch.
+      - name: Configure git identity
+        # The auto-deploy publishes to the gh-pages branch via a throwaway git
+        # worktree (see run_daily_sync._deploy_dashboard) — it never pushes to
+        # main, so no branch attach is needed here, just a commit identity. main
+        # stays governed by the org's require-linked-issue ruleset.
         run: |
           git config user.name "speed-sync-bot"
           git config user.email "speed-sync-bot@users.noreply.github.com"
-          git checkout -B main
 
       - name: Run daily sync (+ Monday trend rebuild) and auto-deploy
         env:

@@ -59,6 +59,48 @@ def _log(msg: str) -> None:
 
 
 # ------------------------------------------------------------------
+# GitHub Pages deploy target
+# ------------------------------------------------------------------
+# Dashboards publish to a dedicated Pages branch (default 'gh-pages'), NOT to
+# main. Reason: the TrySpeed org enforces a `require-linked-issue` ruleset on
+# main/development/master, so a bot pushing generated output straight to main is
+# rejected. gh-pages sits outside that ruleset, needs no policy exception, and
+# keeps generated dashboard output out of main's history. The branch mirrors the
+# docs/ directory at its ROOT (so Pages serves gh-pages / root == today's URLs).
+_PAGES_BRANCH = os.getenv("PAGES_BRANCH", "gh-pages")
+
+
+def _trend_rebuild_active() -> bool:
+    """True only when the weekly trend rebuild actually runs this cycle (flag set
+    AND Monday). Gates both the rebuild itself and whether the regenerated
+    dashboard_state.json is pushed to the Pages branch — on any other day the
+    working-tree copy is a stale CI checkout and must NOT overwrite the Pages one."""
+    return bool(os.getenv("TREND_DASHBOARD_REBUILD")) and \
+        datetime.now(timezone.utc).weekday() == 0  # 0 = Monday
+
+
+def _hydrate_pages_state() -> None:
+    """Pull the authoritative dashboard_state.json from the Pages branch into the
+    working tree before the trend rebuild reads it. Since that state now lives on
+    gh-pages (not main), a fresh CI checkout of main would otherwise read a stale
+    copy and reset the trend kanban/results. Best-effort: on the very first run
+    (no Pages branch yet) it leaves the working-tree copy untouched."""
+    try:
+        if subprocess.run(["git", "fetch", "origin", _PAGES_BRANCH],
+                          cwd=_ROOT, capture_output=True).returncode != 0:
+            _log("Trend state: no Pages branch yet — using working-tree state.")
+            return
+        # gh-pages mirrors docs/ at root, so the file is at '<branch>:dashboard_state.json'.
+        blob = subprocess.run(["git", "show", f"origin/{_PAGES_BRANCH}:dashboard_state.json"],
+                              cwd=_ROOT, capture_output=True, text=True)
+        if blob.returncode == 0 and blob.stdout.strip():
+            (_ROOT / "docs" / "dashboard_state.json").write_text(blob.stdout, encoding="utf-8")
+            _log("Trend state: hydrated dashboard_state.json from the Pages branch.")
+    except Exception as e:  # never block the rebuild on hydration
+        _log(f"Trend state: hydrate skipped ({e})")
+
+
+# ------------------------------------------------------------------
 # Pipeline steps
 # ------------------------------------------------------------------
 
@@ -229,6 +271,10 @@ def _rebuild_trend_dashboard() -> bool:
     if datetime.now(timezone.utc).weekday() != 0:  # 0 = Monday
         _log("Trend dashboard: skipped (only rebuilds on Mondays).")
         return True
+    # Trend state (dashboard_state.json) now persists on the Pages branch, not
+    # main. Hydrate the latest copy BEFORE the rebuild reads it, so a fresh CI
+    # checkout of main doesn't merge onto stale state.
+    _hydrate_pages_state()
     # Auto-fill posted paid-brief results from Meta/Adjust BEFORE the rebuild, so
     # the imported numbers are already in dashboard_state.json when it bakes.
     try:
@@ -263,42 +309,72 @@ def _rebuild_trend_dashboard() -> bool:
 
 
 def _deploy_dashboard() -> bool:
-    """Push the rebuilt dashboard HTML to GitHub so Vercel auto-deploys it.
+    """Publish the rebuilt dashboards to the GitHub Pages branch (gh-pages).
 
-    Gated behind DASHBOARD_AUTODEPLOY (set it to a truthy value in the scheduled
-    environment to enable). Commits ONLY the dashboard HTML files, and only if
-    they actually changed, then pushes. Best-effort: a git/push failure is logged
-    but never aborts the sync. Requires git push credentials in the environment.
+    Gated behind DASHBOARD_AUTODEPLOY. Pushes to _PAGES_BRANCH (not main), via a
+    throwaway git worktree so main's checkout is never touched. On the FIRST run
+    the branch doesn't exist yet, so it's seeded (orphan) from the FULL docs/ tree
+    — every routing index.html + asset the site needs, not just the dashboards.
+    On later runs only the freshly rebuilt files are updated. dashboard_state.json
+    is pushed ONLY on a real weekly trend rebuild (see _trend_rebuild_active),
+    otherwise the stale CI copy would clobber the persisted state on the branch.
+    Best-effort: any git/push failure is logged but never aborts the data sync.
     """
     if not os.getenv("DASHBOARD_AUTODEPLOY"):
-        _log("Auto-deploy: skipped (set DASHBOARD_AUTODEPLOY=1 to push dashboards "
-             "to GitHub for Vercel).")
+        _log("Auto-deploy: skipped (set DASHBOARD_AUTODEPLOY=1 to publish dashboards).")
         return True
 
-    files = [
-        "docs/creative_dashboard.html",
-        "docs/creator_dashboard.html",
-        "docs/strategy_dashboard.html",
-        "docs/trend_dashboard.html",
-        "docs/dashboard_state.json",  # trend dashboard status/results — persist across rebuilds
-    ]
+    import shutil
+    import tempfile
+
+    branch = _PAGES_BRANCH
+    docs = _ROOT / "docs"
+    built = ["creative_dashboard.html", "creator_dashboard.html",
+             "strategy_dashboard.html", "trend_dashboard.html"]
+    if _trend_rebuild_active():
+        built.append("dashboard_state.json")  # regenerated this cycle → safe to publish
+
+    worktree = Path(tempfile.mkdtemp(prefix="pages-deploy-"))
     try:
-        subprocess.run(["git", "add", *files], cwd=_ROOT, check=True)
-        # Nothing staged → no change to deploy.
-        if subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=_ROOT).returncode == 0:
-            _log("Auto-deploy: no dashboard changes to push.")
+        subprocess.run(["git", "fetch", "origin", branch], cwd=_ROOT, capture_output=True)
+        exists = subprocess.run(["git", "rev-parse", "--verify", f"origin/{branch}"],
+                                cwd=_ROOT, capture_output=True).returncode == 0
+        if exists:
+            subprocess.run(["git", "worktree", "add", "--force", str(worktree),
+                            "-B", branch, f"origin/{branch}"], cwd=_ROOT, check=True)
+            for f in built:  # update only the freshly built files
+                if (docs / f).exists():
+                    shutil.copy2(docs / f, worktree / f)
+        else:
+            # First publish: orphan branch seeded with the whole site scaffolding.
+            subprocess.run(["git", "worktree", "add", "--force", "--detach", str(worktree)],
+                           cwd=_ROOT, check=True)
+            subprocess.run(["git", "checkout", "--orphan", branch], cwd=worktree, check=True)
+            subprocess.run(["git", "rm", "-rf", "."], cwd=worktree, capture_output=True)
+            for item in docs.iterdir():
+                dest = worktree / item.name
+                if item.is_dir():
+                    shutil.copytree(item, dest, dirs_exist_ok=True)
+                else:
+                    shutil.copy2(item, dest)
+            _log(f"Auto-deploy: seeding new '{branch}' from the full docs/ tree.")
+
+        subprocess.run(["git", "add", "-A"], cwd=worktree, check=True)
+        if subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=worktree).returncode == 0:
+            _log("Auto-deploy: no dashboard changes to publish.")
             return True
         stamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
-        subprocess.run(
-            ["git", "commit", "-m", f"chore: auto-deploy dashboard refresh {stamp}"],
-            cwd=_ROOT, check=True,
-        )
-        subprocess.run(["git", "push"], cwd=_ROOT, check=True)
-        _log("Auto-deploy: pushed dashboard update — Vercel will redeploy.")
+        subprocess.run(["git", "commit", "-m", f"chore: auto-deploy dashboard refresh {stamp}"],
+                       cwd=worktree, check=True)
+        subprocess.run(["git", "push", "origin", f"HEAD:{branch}"], cwd=worktree, check=True)
+        _log(f"Auto-deploy: published dashboards to '{branch}' — GitHub Pages will redeploy.")
         return True
     except Exception as e:  # noqa: BLE001 — deploy must never break the data sync
         _log(f"Auto-deploy: FAILED (non-fatal) — {e}")
         return False
+    finally:
+        subprocess.run(["git", "worktree", "remove", "--force", str(worktree)],
+                       cwd=_ROOT, capture_output=True)
 
 
 # ------------------------------------------------------------------
@@ -348,7 +424,7 @@ def run() -> None:
     # Trend dashboard — weekly (Mondays), gated behind TREND_DASHBOARD_REBUILD.
     results["Trend Dashboard"] = _rebuild_trend_dashboard()
 
-    # Auto-deploy: push the refreshed dashboards to GitHub → Vercel (opt-in).
+    # Auto-deploy: publish the refreshed dashboards to the GitHub Pages branch (opt-in).
     results["Deploy"] = _deploy_dashboard()
 
     # Summary
