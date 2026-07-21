@@ -1,0 +1,87 @@
+name: Require Linked Issue
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  issue-gate:
+    name: "issue-gate / issue-gate"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Validate references
+        uses: actions/github-script@v7
+        env:
+          ISSUE_ORG: TrySpeed
+          ISSUE_REPO: project-management
+          ALLOW_CLOSED: "true"
+        with:
+          github-token: ${{ secrets.ISSUE_GATE_TOKEN }}
+          script: |
+            const org = process.env.ISSUE_ORG;
+            const repo = process.env.ISSUE_REPO;
+            const allowClosed = process.env.ALLOW_CLOSED === 'true';
+
+            const pr = context.payload.pull_request;
+            if (!pr) {
+              return;
+            }
+
+            const title = (pr.title || '').trim();
+            const body = pr.body || '';
+            const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const o = esc(org);
+            const r = esc(repo);
+
+            const titleMatch = title.match(/#(\d+)\s*$/);
+            const urlPattern = new RegExp(`github\\.com/${o}/${r}/issues/(\\d+)`, 'gi');
+            const shortPattern = new RegExp(`(?<![\\w/-])${o}/${r}#(\\d+)`, 'gi');
+
+            const bodyNumbers = new Set([
+              ...[...body.matchAll(urlPattern)].map((m) => parseInt(m[1], 10)),
+              ...[...body.matchAll(shortPattern)].map((m) => parseInt(m[1], 10)),
+            ]);
+
+            const problems = [];
+            if (!titleMatch) {
+              problems.push('PR title must end with the issue number, e.g. "Add account toggle #1105"');
+            }
+            if (bodyNumbers.size === 0) {
+              problems.push(`PR description must include the issue link, e.g. "Refs: ${org}/${repo}#1105"`);
+            }
+
+            const toVerify = new Set(bodyNumbers);
+            if (titleMatch) {
+              toVerify.add(parseInt(titleMatch[1], 10));
+            }
+
+            for (const number of toVerify) {
+              try {
+                const { data } = await github.rest.issues.get({
+                  owner: org,
+                  repo: repo,
+                  issue_number: number,
+                });
+                if (data.pull_request) {
+                  problems.push(`#${number} is a pull request, not an issue.`);
+                } else if (!allowClosed && data.state === 'closed') {
+                  problems.push(`#${number} ("${data.title}") is closed.`);
+                }
+              } catch (error) {
+                if (error.status === 404) {
+                  problems.push(`#${number} does not exist in ${org}/${repo}.`);
+                } else {
+                  problems.push(`Could not verify #${number} (API ${error.status || '?'}).`);
+                }
+              }
+            }
+
+            if (problems.length === 0) {
+              core.info('PR valid.');
+              return;
+            }
+
+            core.setFailed('Linked issue check failed:\n- ' + problems.join('\n- '));
