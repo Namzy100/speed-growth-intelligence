@@ -91,35 +91,92 @@ _TEMPLATE = r"""<!doctype html>
     --hairline:rgba(255,255,255,0.09); --hairline-strong:rgba(255,255,255,0.16);
     --text:#edf1f7; --muted:#9aa4b2; --faint:#6b7585;
     --accent:#2f5dfb; --accent-2:#6f9dff; --good:#3fb950; --warn:#e3b341; --bad:#f85149;
-    --r-lg:16px; --r-md:12px; --r-sm:9px; --shadow:0 10px 30px -14px rgba(0,0,0,0.7);
+    --grad:linear-gradient(120deg,#2f5dfb,#6f9dff);
+    --shadow:0 10px 30px -14px rgba(0,0,0,0.7); --shadow-lift:0 18px 44px -16px rgba(0,0,0,0.8);
+    --r-lg:16px; --r-md:12px; --r-sm:9px;
   }
-  *{box-sizing:border-box;} body{margin:0; background:var(--bg); color:var(--text);
-    font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}
-  .wrap{max-width:1180px; margin:0 auto; padding:26px 20px 60px;}
-  .brandbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;}
-  .brand{font-weight:800; letter-spacing:.02em;} .brand .bolt{color:var(--warn); margin-right:6px;}
-  .sync{font-size:12px; color:var(--faint);}
-  h1{font-size:23px; margin:0 0 4px;} .sub{color:var(--muted); font-size:13px; margin-bottom:18px;}
-  .stats{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px;}
-  .stat{background:var(--panel); border:1px solid var(--hairline); border-radius:var(--r-md); padding:10px 14px; min-width:96px;}
-  .stat b{display:block; font-size:20px;} .stat span{font-size:11px; color:var(--faint);}
-  .note{background:var(--panel-2); border:1px solid var(--hairline); border-left:3px solid var(--warn);
-    border-radius:var(--r-sm); padding:11px 13px; font-size:12px; color:var(--muted); line-height:1.7; margin-bottom:18px;}
-  .note b{color:var(--text);}
-  .filters{display:flex; gap:12px; flex-wrap:wrap; align-items:end; margin-bottom:14px;}
-  .filters label{display:block; font-size:11px; color:var(--faint); margin-bottom:3px;}
-  select,input[type=range]{background:var(--panel); border:1px solid var(--hairline-strong); color:var(--text);
-    border-radius:8px; padding:7px 9px; font-size:13px;}
-  .count{margin-left:auto; color:var(--muted); font-size:12px; align-self:center;}
-  table{width:100%; border-collapse:collapse;} thead th{position:sticky; top:0; background:var(--bg);
-    text-align:left; font-size:11px; color:var(--faint); text-transform:uppercase; letter-spacing:.04em;
-    padding:9px 8px; border-bottom:1px solid var(--hairline-strong); cursor:pointer; white-space:nowrap;}
-  tbody td{padding:10px 8px; border-bottom:1px solid var(--hairline); vertical-align:top;}
-  tbody tr:hover{background:var(--panel);}
-  .num{text-align:right; font-variant-numeric:tabular-nums;}
-  a.vname{color:var(--text); font-weight:600; text-decoration:none;} a.vname:hover{color:var(--accent-2);}
+  *{box-sizing:border-box}
+  body{
+    margin:0; color:var(--text); min-height:100vh; letter-spacing:-0.005em;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.5; -webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(1100px 600px at 50% -10%, rgba(47,93,251,0.20), transparent 58%),
+      radial-gradient(820px 520px at 100% 0%, rgba(111,157,255,0.09), transparent 52%),
+      radial-gradient(720px 480px at 0% 8%, rgba(63,185,80,0.045), transparent 50%),
+      var(--bg);
+    background-attachment:fixed;
+  }
+  body::before{ content:""; position:fixed; inset:0; z-index:0; pointer-events:none; opacity:0.035;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  .wrap{position:relative; z-index:1; max-width:1180px; margin:0 auto; padding:0 24px 90px;}
+
+  /* Brand bar */
+  .brandbar{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; padding:20px 0; border-bottom:1px solid var(--hairline);}
+  .brand-left{display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+  .hub-link{font-size:12.5px; font-weight:650; color:var(--accent-2); text-decoration:none;
+    background:rgba(47,93,251,0.10); border:1px solid var(--hairline-strong); padding:5px 12px; border-radius:999px; transition:border-color .15s, transform .15s;}
+  .hub-link:hover{border-color:var(--accent); transform:translateX(-2px);}
+  .brand{font-weight:760; font-size:16px; letter-spacing:-0.02em; display:flex; align-items:center;}
+  .brand .bolt{margin-right:8px; font-size:17px; background:linear-gradient(180deg,#f5c400,#f0a02a);
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 0 6px rgba(240,160,42,0.45));}
+  .brandbar .sync{font-size:12px; color:var(--muted);} .brandbar .sync b{color:var(--text); font-weight:600;}
+
+  /* Title */
+  .title-block{margin:34px 0 22px;}
+  h1{font-size:28px; margin:0 0 5px; font-weight:780; letter-spacing:-0.03em;
+    background:linear-gradient(180deg,#ffffff,#c9c3e8); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
+  .title-block .sub{color:var(--muted); font-size:13px; max-width:760px;}
+
+  /* KPI strip */
+  .kpi-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:14px; margin-bottom:8px;}
+  @media(max-width:880px){.kpi-grid{grid-template-columns:repeat(2,1fr);}}
+  .kpi{padding:16px 18px; background:linear-gradient(180deg,var(--panel),rgba(22,27,34,0.6));
+    border:1px solid var(--hairline); border-radius:var(--r-md); box-shadow:var(--shadow);
+    animation:rise .5s cubic-bezier(.2,.7,.2,1) both;}
+  .kpi .val{font-size:24px; font-weight:760; letter-spacing:-0.02em; font-variant-numeric:tabular-nums;
+    background:linear-gradient(180deg,#fff,#cfd6e4); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
+  .kpi .lab{font-size:10px; text-transform:uppercase; letter-spacing:0.09em; color:var(--faint); margin-top:7px; font-weight:700;}
+
+  section{margin:40px 0; animation:rise .55s cubic-bezier(.2,.7,.2,1) both;}
+  .sec-head{display:flex; align-items:center; gap:11px; margin-bottom:18px; flex-wrap:wrap;}
+  h2{font-size:12.5px; text-transform:uppercase; letter-spacing:0.11em; color:var(--muted); margin:0; font-weight:700; display:flex; align-items:center; gap:10px;}
+  h2::before{content:""; width:3px; height:13px; border-radius:2px; background:var(--grad);}
+  .sec-note{font-size:12px; color:var(--faint);}
+
+  /* Collapsible "how to read this" legend */
+  details.crit{background:var(--panel); border:1px solid var(--hairline); border-radius:var(--r-md); padding:0 18px; box-shadow:var(--shadow);}
+  details.crit summary{cursor:pointer; list-style:none; padding:15px 0; font-size:12.5px; font-weight:700; color:var(--text); display:flex; align-items:center; gap:9px;}
+  details.crit summary::-webkit-details-marker{display:none;}
+  details.crit summary .chev{margin-left:auto; color:var(--faint); transition:transform .2s ease;}
+  details.crit[open] summary .chev{transform:rotate(90deg);}
+  details.crit .body{padding:2px 0 18px; color:var(--muted); font-size:12.5px; line-height:1.75; border-top:1px solid var(--hairline); padding-top:14px;}
+  details.crit .body p{margin:0 0 10px;} details.crit .body p:last-child{margin-bottom:0;}
+  details.crit .body b{color:var(--text);}
+
+  /* Filters */
+  .filters{display:flex; flex-wrap:wrap; gap:16px; align-items:flex-end; background:var(--panel); border:1px solid var(--hairline); border-radius:var(--r-md); padding:16px 18px; box-shadow:var(--shadow); margin-bottom:16px;}
+  .filters label{display:block; font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:var(--faint); margin-bottom:5px; font-weight:700;}
+  select{background:#0e1117; color:var(--text); border:1px solid var(--hairline); border-radius:8px; padding:8px 11px; font-size:13px; min-width:150px; font-family:inherit;}
+  select:focus,input:focus{outline:none; border-color:var(--accent);}
+  input[type=range]{vertical-align:middle; width:150px; accent-color:var(--accent);}
+  .rangeval{color:var(--text); font-weight:700; font-variant-numeric:tabular-nums;}
+  .toggle{display:flex; align-items:center; gap:7px; font-size:13px; color:var(--text); font-weight:500; cursor:pointer;}
+  .toggle input{accent-color:var(--accent); width:15px; height:15px;}
+  .count{margin-left:auto; color:var(--muted); font-size:13px; align-self:center;}
+
+  /* Table */
+  .table-wrap{overflow-x:auto; border:1px solid var(--hairline); border-radius:var(--r-md); background:var(--panel); box-shadow:var(--shadow);}
+  table{width:100%; border-collapse:collapse; font-size:13px; min-width:900px;}
+  th,td{text-align:left; padding:12px 14px; border-bottom:1px solid var(--hairline); vertical-align:top;}
+  th{position:sticky; top:0; background:#10151d; color:var(--faint); font-size:10px; text-transform:uppercase; letter-spacing:0.06em; cursor:pointer; user-select:none; white-space:nowrap; z-index:1;}
+  th.num,td.num{text-align:right; font-variant-numeric:tabular-nums;}
+  tbody tr{transition:background .14s ease;} tbody tr:hover{background:rgba(255,255,255,0.03);} tbody tr:last-child td{border-bottom:none;}
+  a.vname{color:var(--text); font-weight:650; text-decoration:none;} a.vname:hover{color:var(--accent-2);}
   .pending{color:var(--faint); font-size:11px;}
-  .badge{display:inline-flex; align-items:center; font-size:10px; font-weight:800; padding:2px 8px; border-radius:6px; letter-spacing:.02em;}
+  .detail{color:var(--faint); font-size:11.5px; line-height:1.5; margin-top:4px; max-width:420px;
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}
+  .badge{display:inline-flex; align-items:center; font-size:10px; font-weight:800; padding:2px 8px; border-radius:6px; letter-spacing:.02em; white-space:nowrap;}
   .ch-forum{background:#243b55; color:#cfe3ff;} .ch-publication{background:#2b2350; color:#d7ccff;}
   .ch-association_event{background:#12402a; color:#b6f0cf;} .ch-directory{background:#402a12; color:#f0d6b6;}
   .ch-unclassified{background:var(--panel-2); color:var(--faint);}
@@ -127,50 +184,71 @@ _TEMPLATE = r"""<!doctype html>
   .tier-T1{color:var(--good); border-color:var(--good);} .tier-T2{color:var(--warn);}
   .src-manual-seed{background:var(--good); color:#08240f;} .src-llm{background:var(--accent); color:#fff;}
   .src-fallback{background:#6b7585; color:#e9edf3;}
-  .pill{display:inline-block; min-width:34px; text-align:center; font-weight:800; padding:2px 8px; border-radius:999px; font-size:12px;}
-  .pill.hi{background:var(--good); color:#08240f;} .pill.mid{background:var(--warn); color:#3a2c05;} .pill.lo{background:#3a4150; color:#c3ccd8;}
+  .pill{display:inline-block; min-width:34px; text-align:center; font-weight:800; padding:2px 9px; border-radius:20px; font-size:12px;}
+  .pill.hi{background:rgba(63,185,80,0.15); color:var(--good);} .pill.mid{background:rgba(227,179,65,0.15); color:var(--warn);} .pill.lo{background:#3a4150; color:#c3ccd8;}
   .chip{display:inline-block; font-size:10px; background:var(--panel-2); border:1px solid var(--hairline);
-    color:var(--muted); border-radius:5px; padding:1px 6px; margin:1px 2px 1px 0;}
-  .detail{color:var(--muted); font-size:12px;} .off{opacity:.5;}
-  footer{margin-top:30px; padding-top:16px; border-top:1px solid var(--hairline); font-size:11.5px; color:var(--faint); line-height:1.7;}
+    color:var(--muted); border-radius:5px; padding:1px 6px; margin:1px 2px 1px 0; white-space:nowrap;}
+  tr.off{opacity:.5;}
+  footer{margin-top:40px; padding-top:18px; border-top:1px solid var(--hairline); font-size:11.5px; color:var(--faint); line-height:1.7;}
+
+  @keyframes rise{from{opacity:0; transform:translateY(12px);} to{opacity:1; transform:none;}}
+  .kpi:nth-child(1){animation-delay:.04s}.kpi:nth-child(2){animation-delay:.09s}.kpi:nth-child(3){animation-delay:.14s}.kpi:nth-child(4){animation-delay:.19s}.kpi:nth-child(5){animation-delay:.24s}
+  @media (prefers-reduced-motion: reduce){*{animation:none!important; transition:none!important;}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="brandbar">
-    <div class="brand"><span class="bolt">⚡</span>Speed Wallet</div>
-    <div class="sync" id="sync"></div>
-  </div>
-  <h1>Merchant Discovery</h1>
-  <div class="sub">Outbound discovery of public venues to reach decision-makers at potential merchant businesses. Not tracking — marketing has no merchant activity data (that's the dev backend).</div>
-
-  <div class="stats" id="stats"></div>
-
-  <div class="note">
-    <b>Fit</b> = 0.5 vertical+decision-maker relevance + 0.3 payments/outreach access + 0.2 audience; a fit of 0 means gated as off-topic (player/consumer or off-vertical).
-    <b>Audience tier</b> (T1/T2/T3) is a <b>reputation / cross-listing tier, NOT real traffic</b> — exact traffic needs a paid API this project doesn't use.
-    <b>Source</b>: <span class="badge src-manual-seed">manual-seed</span> = human-verified investigation; <span class="badge src-llm">llm</span> = Claude-judged; <span class="badge src-fallback">fallback</span> = provisional keyword guess (upgraded to llm once Anthropic credits are back).
-    <b>LinkedIn communities are excluded and shown here as manual-only</b> — LinkedIn's ToS/API make community discovery non-automatable, so it's never scraped or faked.
+    <div class="brand-left">
+      <a class="hub-link" href="index.html">← Dashboards</a>
+      <div class="brand"><span class="bolt">⚡</span>Speed Wallet</div>
+    </div>
+    <div class="sync">Synced: <b id="sync">—</b></div>
   </div>
 
-  <div class="filters">
-    <div><label>Vertical</label><select id="fVert"><option value="all">All</option></select></div>
-    <div><label>Channel type</label><select id="fChan"><option value="all">All</option>
-      <option>forum</option><option>publication</option><option>association_event</option><option>directory</option><option>unclassified</option></select></div>
-    <div><label>Outreach mode</label><select id="fOut"><option value="all">All</option>
-      <option>post content</option><option>advertise</option><option>get listed</option><option>sponsor</option></select></div>
-    <div><label>Source</label><select id="fSrc"><option value="all">All</option>
-      <option>manual-seed</option><option>llm</option><option>fallback</option></select></div>
-    <div><label>Min fit: <span id="minv">0</span></label><input type="range" id="fMin" min="0" max="10" step="0.5" value="0"></div>
-    <label style="font-size:12px;color:var(--muted)"><input type="checkbox" id="fOn"> on-topic only</label>
-    <span class="count" id="count"></span>
+  <div class="title-block">
+    <h1>Merchant Discovery</h1>
+    <div class="sub">Outbound discovery of public venues to reach decision-makers at potential merchant businesses. Not tracking — marketing has no merchant activity data (that's the dev backend).</div>
   </div>
 
-  <table id="tbl"><thead><tr>
-    <th data-k="venue">Venue</th><th data-k="channel_type">Channel</th><th data-k="vertical">Vertical</th>
-    <th class="num" data-k="fit">Fit</th><th data-k="tier">Audience</th><th data-k="outreach">Outreach</th>
-    <th data-k="judge_source">Source</th>
-  </tr></thead><tbody id="body"></tbody></table>
+  <div class="kpi-grid" id="stats"></div>
+
+  <section>
+    <div class="sec-head"><h2>How to read this</h2><span class="sec-note">Scoring, tiers &amp; exclusions</span></div>
+    <details class="crit">
+      <summary>Fit score, audience tier, sources &amp; the LinkedIn exclusion <span class="chev">›</span></summary>
+      <div class="body">
+        <p><b>Fit</b> = 0.5 vertical + decision-maker relevance + 0.3 payments/outreach access + 0.2 audience. A fit of 0 means the venue is gated as off-topic (player/consumer-facing or off-vertical).</p>
+        <p><b>Audience tier</b> (T1/T2/T3) is a <b>reputation / cross-listing tier, NOT real traffic</b> — exact traffic would need a paid API this project doesn't use.</p>
+        <p><b>Source</b>: <span class="badge src-manual-seed">manual-seed</span> human-verified investigation · <span class="badge src-llm">llm</span> Claude-judged · <span class="badge src-fallback">fallback</span> provisional keyword guess (upgraded to llm once Anthropic credits are back).</p>
+        <p><b>LinkedIn communities are excluded</b> and shown here as manual-only — LinkedIn's ToS/API make community discovery non-automatable, so it is never scraped or faked.</p>
+      </div>
+    </details>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>Discovered Venues</h2><span class="sec-note" id="count"></span></div>
+
+    <div class="filters">
+      <div><label>Vertical</label><select id="fVert"><option value="all">All</option></select></div>
+      <div><label>Channel type</label><select id="fChan"><option value="all">All</option>
+        <option>forum</option><option>publication</option><option>association_event</option><option>directory</option><option>unclassified</option></select></div>
+      <div><label>Outreach mode</label><select id="fOut"><option value="all">All</option>
+        <option>post content</option><option>advertise</option><option>get listed</option><option>sponsor</option></select></div>
+      <div><label>Source</label><select id="fSrc"><option value="all">All</option>
+        <option>manual-seed</option><option>llm</option><option>fallback</option></select></div>
+      <div><label>Min fit: <span class="rangeval" id="minv">0</span></label><input type="range" id="fMin" min="0" max="10" step="0.5" value="0"></div>
+      <label class="toggle"><input type="checkbox" id="fOn"> on-topic only</label>
+    </div>
+
+    <div class="table-wrap">
+      <table id="tbl"><thead><tr>
+        <th data-k="venue">Venue</th><th data-k="channel_type">Channel</th><th data-k="vertical">Vertical</th>
+        <th class="num" data-k="fit">Fit</th><th data-k="tier">Audience</th><th data-k="outreach">Outreach</th>
+        <th data-k="judge_source">Source</th>
+      </tr></thead><tbody id="body"></tbody></table>
+    </div>
+  </section>
 
   <footer id="foot"></footer>
 </div>
@@ -178,14 +256,14 @@ _TEMPLATE = r"""<!doctype html>
 <script>
 const DATA = /*__DATA__*/;
 const esc = s => String(s==null?"":s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-document.getElementById("sync").textContent = "Generated: " + DATA.generated_at;
+document.getElementById("sync").textContent = DATA.generated_at;
 
-// stats
+// KPI strip
 const st = [
   [DATA.total, "venues"], [DATA.on_topic, "on-topic"], [DATA.verified, "verified URL"],
   [DATA.by_source["manual-seed"]||0, "human-verified"], [DATA.by_source["llm"]||0, "llm-judged"],
 ];
-document.getElementById("stats").innerHTML = st.map(([n,l])=>`<div class="stat"><b>${n}</b><span>${l}</span></div>`).join("");
+document.getElementById("stats").innerHTML = st.map(([n,l])=>`<div class="kpi"><div class="val">${n}</div><div class="lab">${l}</div></div>`).join("");
 
 // vertical filter options
 const verts=[...new Set(DATA.venues.map(v=>v.vertical).filter(Boolean))].sort();
@@ -217,7 +295,7 @@ function render(){
       : `<span class="vname">${esc(v.venue)}</span> <span class="pending">(URL to verify)</span>`;
     const chips=(v.outreach||[]).map(o=>`<span class="chip">${esc(o)}</span>`).join("")||'<span class="pending">—</span>';
     return `<tr class="${v.on_topic?'':'off'}">
-      <td>${name}<div class="detail">${esc(v.reason)}</div></td>
+      <td>${name}<div class="detail" title="${esc(v.reason)}">${esc(v.reason)}</div></td>
       <td><span class="badge ch-${esc(v.channel_type)}">${esc(chanLabel(v.channel_type))}</span></td>
       <td>${esc(v.vertical)}</td>
       <td class="num"><span class="pill ${fitCls(v.fit)}">${v.fit.toFixed(1)}</span>
