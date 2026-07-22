@@ -1,12 +1,159 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="refresh" content="0; url=creative_dashboard.html">
-  <title>Speed — Creative Dashboard</title>
-  <link rel="canonical" href="creative_dashboard.html">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Naman's Dashboards — Speed Growth Intelligence</title>
+<meta name="description" content="A hub for the five growth-intelligence dashboards built for Speed Wallet — what each one does and why it exists.">
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel-2:#1b2230;
+    --hairline:rgba(255,255,255,0.09); --hairline-strong:rgba(255,255,255,0.16);
+    --text:#edf1f7; --muted:#9aa4b2; --faint:#6b7585;
+    --accent:#2f5dfb; --accent-2:#6f9dff;
+    --good:#3fb950; --warn:#e3b341; --gold:#f5c400;
+    --grad:linear-gradient(120deg,#2f5dfb,#6f9dff);
+    --r-lg:18px; --r-md:13px; --r-sm:9px;
+    --shadow:0 12px 34px -16px rgba(0,0,0,0.7);
+    --shadow-lift:0 22px 50px -18px rgba(0,0,0,0.85);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.5; -webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(1100px 520px at 82% -8%, rgba(47,93,251,0.16), transparent 60%),
+                     radial-gradient(760px 420px at 8% 4%, rgba(111,157,255,0.09), transparent 55%);
+    background-attachment:fixed;}
+  .wrap{max-width:1080px; margin:0 auto; padding:64px 24px 80px;}
+
+  .brand{display:inline-flex; align-items:center; gap:9px; font-size:12.5px; font-weight:700;
+    letter-spacing:.14em; text-transform:uppercase; color:var(--accent-2);
+    background:rgba(47,93,251,0.10); border:1px solid var(--hairline-strong);
+    padding:6px 13px; border-radius:999px;}
+  .brand .dot{width:8px; height:8px; border-radius:50%; background:var(--grad); box-shadow:0 0 12px 1px rgba(47,93,251,.7);}
+  h1{font-size:clamp(34px,6vw,54px); line-height:1.06; margin:22px 0 0; letter-spacing:-0.02em; font-weight:820;}
+  h1 .g{background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent;}
+  .lede{max-width:640px; margin:18px 0 0; font-size:17px; color:var(--muted);}
+  .lede b{color:var(--text); font-weight:650;}
+  .meta-row{display:flex; flex-wrap:wrap; gap:10px; margin-top:26px;}
+  .chip{font-size:12px; color:var(--muted); background:var(--panel); border:1px solid var(--hairline);
+    padding:6px 12px; border-radius:999px;}
+  .chip b{color:var(--text);}
+
+  .grid{display:grid; grid-template-columns:repeat(2,1fr); gap:18px; margin-top:44px;}
+  @media(max-width:720px){.grid{grid-template-columns:1fr;}}
+  .card{display:flex; flex-direction:column; background:linear-gradient(180deg,var(--panel),rgba(22,27,34,0.6));
+    border:1px solid var(--hairline); border-radius:var(--r-lg); padding:24px 24px 20px;
+    text-decoration:none; color:inherit; position:relative; overflow:hidden;
+    box-shadow:var(--shadow); transition:transform .16s ease, border-color .16s ease, box-shadow .16s ease;}
+  .card::before{content:""; position:absolute; inset:0 0 auto 0; height:3px; background:var(--grad); opacity:0; transition:opacity .16s;}
+  .card:hover{transform:translateY(-4px); border-color:var(--hairline-strong); box-shadow:var(--shadow-lift);}
+  .card:hover::before{opacity:1;}
+  .card-top{display:flex; align-items:center; gap:12px;}
+  .ic{width:42px; height:42px; flex:none; border-radius:11px; display:grid; place-items:center;
+    font-size:21px; background:rgba(47,93,251,0.12); border:1px solid var(--hairline-strong);}
+  .card h2{font-size:19px; margin:0; letter-spacing:-0.01em; font-weight:740;}
+  .card .tag{font-size:11px; color:var(--faint); font-weight:600; text-transform:uppercase; letter-spacing:.06em; margin-top:2px;}
+  .what{font-size:14.5px; color:var(--text); margin:16px 0 0;}
+  .why{font-size:13px; color:var(--muted); margin:9px 0 0; padding-left:12px; border-left:2px solid var(--hairline-strong);}
+  .why b{color:var(--accent-2); font-weight:650;}
+  .go{margin-top:18px; display:inline-flex; align-items:center; gap:7px; font-size:13.5px; font-weight:650; color:var(--accent-2);}
+  .go .arw{transition:transform .16s;}
+  .card:hover .go .arw{transform:translateX(4px);}
+
+  .foot{margin-top:52px; padding-top:26px; border-top:1px solid var(--hairline);
+    display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px;}
+  .credit{font-size:13.5px; color:var(--muted);}
+  .credit .by{background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent; font-weight:750;}
+  .note{font-size:12px; color:var(--faint); max-width:440px;}
+</style>
 </head>
 <body>
-  <p>Redirecting to the <a href="creative_dashboard.html">Speed creative dashboard</a>&hellip;</p>
+<div class="wrap">
+
+  <span class="brand"><span class="dot"></span>Speed Wallet · Growth Intelligence</span>
+  <h1>Naman's <span class="g">Dashboards</span></h1>
+  <p class="lede">Five dashboards I built to answer five real growth questions for Speed Wallet, a
+    Bitcoin + stablecoin payments app: <b>which creators to partner with, what creative is working,
+    where to expand, what's trending now, and which merchants to reach.</b> Each is live, rebuilt from
+    real data, and honest about what it can and can't measure. Pick one below.</p>
+  <div class="meta-row">
+    <span class="chip"><b>5</b> live dashboards</span>
+    <span class="chip">Real data · <b>no mocks</b></span>
+    <span class="chip">Rebuilt <b>daily</b></span>
+    <span class="chip">Markets: <b>US · EU · MX/BR</b></span>
+  </div>
+
+  <div class="grid">
+
+    <a class="card" href="creators/">
+      <div class="card-top"><div class="ic">🧭</div>
+        <div><h2>Creator Dashboard</h2><div class="tag">Partner scouting</div></div></div>
+      <p class="what">Every discovered creator, scored 0–100 as a potential Speed partner across four real
+        dimensions — audience fit, engagement quality, reach, and sponsorship history.</p>
+      <p class="why"><b>Why it's here:</b> influencer marketing is a core Speed channel, but a big following
+        isn't the same as a good partner. This ranks real signal over vanity reach — filterable by segment,
+        platform and country.</p>
+      <span class="go">Open dashboard <span class="arw">→</span></span>
+    </a>
+
+    <a class="card" href="creative_dashboard.html">
+      <div class="card-top"><div class="ic">📊</div>
+        <div><h2>Creative Dashboard</h2><div class="tag">Ad performance</div></div></div>
+      <p class="what">Meta + Adjust campaign performance — spend, installs, retention — with Claude-generated
+        insight cards calling out what's actually working and what to reallocate.</p>
+      <p class="why"><b>Why it's here:</b> paid spend needs a fast read on what's converting. This turns raw
+        campaign data into decisions, not just charts.</p>
+      <span class="go">Open dashboard <span class="arw">→</span></span>
+    </a>
+
+    <a class="card" href="trend/">
+      <div class="card-top"><div class="ic">📈</div>
+        <div><h2>Trend Dashboard</h2><div class="tag">Weekly trend scan</div></div></div>
+      <p class="what">A weekly scan across YouTube, TikTok, X and Instagram, scored for real topical relevance
+        and Speed-fit, turned into ready-to-shoot hooks — plus a drag-and-drop pipeline board from idea to results.</p>
+      <p class="why"><b>Why it's here:</b> organic content moves fast. This surfaces what's trending in Speed's
+        segments and tracks each hook predict → ship → measure, in one place.</p>
+      <span class="go">Open dashboard <span class="arw">→</span></span>
+    </a>
+
+    <a class="card" href="strategy/">
+      <div class="card-top"><div class="ic">🗺️</div>
+        <div><h2>Strategy Dashboard</h2><div class="tag">Market intelligence</div></div></div>
+      <p class="what">EU market-entry intelligence — per-market channel strategy, competitive white space, and
+        the highest-leverage tactics, distilled from the research docs.</p>
+      <p class="why"><b>Why it's here:</b> expansion decisions (Germany, UK, Portugal) need the strategy in one
+        readable view, not scattered across memos.</p>
+      <span class="go">Open dashboard <span class="arw">→</span></span>
+    </a>
+
+    <a class="card" href="merchants/">
+      <div class="card-top"><div class="ic">🤝</div>
+        <div><h2>Merchant Dashboard</h2><div class="tag">Outbound discovery</div></div></div>
+      <p class="what">Real venues — trade publications, associations, events, B2B directories — across iGaming,
+        fintech, PSPs and streaming, ranked by how well they put Speed in front of decision-makers.</p>
+      <p class="why"><b>Why it's here:</b> merchant adoption needs outbound targets. This finds where the
+        decision-makers actually are, honestly labelled by how each was scored.</p>
+      <span class="go">Open dashboard <span class="arw">→</span></span>
+    </a>
+
+    <div class="card" style="justify-content:center; border-style:dashed; background:transparent; box-shadow:none;">
+      <div class="card-top"><div class="ic" style="background:rgba(245,196,0,0.10);">✨</div>
+        <div><h2>One rule, everywhere</h2><div class="tag">Built the same way</div></div></div>
+      <p class="what">Every dashboard follows one principle: <b>real signal or an honest gap</b> — never a
+        mocked number to fill a chart. If a metric isn't trustworthy yet, the dashboard says so.</p>
+      <p class="why">Ship what's real, flag what isn't, and keep the reasoning legible.</p>
+    </div>
+
+  </div>
+
+  <div class="foot">
+    <div class="credit">Designed &amp; built by <span class="by">Naman Behl</span> — Speed Wallet growth internship.</div>
+    <div class="note">Dashboards are self-contained HTML rebuilt from live data (Supabase, Adjust, Meta,
+      YouTube/TikTok/X/Instagram) and auto-deployed. Read-only views.</div>
+  </div>
+
+</div>
 </body>
 </html>
