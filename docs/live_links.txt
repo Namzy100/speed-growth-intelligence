@@ -1,9 +1,12 @@
 Speed Wallet — Live Links
 
-Creative dashboard (GitHub Pages): https://namzy100.github.io/speed-growth-intelligence
-Creator dashboard (GitHub Pages):  https://namzy100.github.io/speed-growth-intelligence/creators
-Strategy dashboard (GitHub Pages): https://namzy100.github.io/speed-growth-intelligence/strategy
-Looker Studio dashboard:           https://datastudio.google.com/reporting/e15d81ef-6872-46e9-bca9-1624f0a61319
+Landing page ("Naman's Dashboards"): https://namzy100.github.io/speed-growth-intelligence   (root — hub linking to all 5)
+Creative dashboard (GitHub Pages):   https://namzy100.github.io/speed-growth-intelligence/creative
+Creator dashboard (GitHub Pages):    https://namzy100.github.io/speed-growth-intelligence/creators
+Strategy dashboard (GitHub Pages):   https://namzy100.github.io/speed-growth-intelligence/strategy
+Trend dashboard (GitHub Pages):      https://namzy100.github.io/speed-growth-intelligence/trend
+Merchant dashboard (GitHub Pages):   https://namzy100.github.io/speed-growth-intelligence/merchants
+Looker Studio dashboard:             https://datastudio.google.com/reporting/e15d81ef-6872-46e9-bca9-1624f0a61319
 
 The GitHub Pages dashboards are self-contained HTML rebuilt daily by run_daily_sync.py
 and auto-deployed via GitHub push (DASHBOARD_AUTODEPLOY=1). Looker Studio reads
