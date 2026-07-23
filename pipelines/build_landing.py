@@ -1,4 +1,135 @@
-<!doctype html>
+"""Build the landing page (docs/index.html) — the dashboards hub.
+
+Previously a hand-written static file that went stale like the dashboards used to.
+Now GENERATED so its two live sections never drift:
+
+  * "What's new today"  — real, dated entries from recent git commits on the live
+    branch (bot `chore: auto-deploy` noise dropped, `Deploy:` prefix stripped).
+  * "Next moves"        — the [BLOCKED] / [WATCH] lines already maintained by hand
+    in data/processed/blockers.md (the real open-items source of truth).
+
+The dashboard hub design is ported verbatim from the original hand-written page —
+nothing visual is lost. Wired into pipelines/run_daily_sync.py so it rebuilds and
+deploys daily like every other dashboard.
+
+Run from repo root:  python pipelines/build_landing.py
+"""
+
+import html
+import re
+import subprocess
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+
+_ROOT = Path(__file__).resolve().parent.parent
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))
+
+_OUT = _ROOT / "docs" / "index.html"
+_BLOCKERS = _ROOT / "data" / "processed" / "blockers.md"
+
+_BOT_NOISE = re.compile(r"^chore:\s*auto-deploy", re.I)
+_DEPLOY_PREFIX = re.compile(r"^Deploy(?::|\b)\s*", re.I)
+
+
+def _e(s) -> str:
+    return html.escape(str(s if s is not None else ""))
+
+
+def _whats_new(max_items: int = 6) -> list[dict]:
+    """Recent shipped changes from git — real, dated, deduped. Drops auto-deploy
+    bot commits and merges; strips the `Deploy:` prefix so entries read as what
+    actually shipped. Falls back to the most recent real commits if the last few
+    days were quiet, so the section is dated-honest but never empty."""
+    try:
+        out = subprocess.run(
+            ["git", "log", "--no-merges", "-n", "60",
+             "--pretty=format:%cd\x1f%s", "--date=format:%Y-%m-%d"],
+            cwd=_ROOT, capture_output=True, text=True, timeout=15)
+        if out.returncode != 0:
+            return []
+    except Exception:
+        return []
+
+    items, seen = [], set()
+    for line in out.stdout.splitlines():
+        if "\x1f" not in line:
+            continue
+        date, subj = line.split("\x1f", 1)
+        subj = subj.strip()
+        if _BOT_NOISE.match(subj):
+            continue
+        subj = _DEPLOY_PREFIX.sub("", subj).strip()
+        key = subj.lower()
+        if not subj or key in seen:
+            continue
+        seen.add(key)
+        items.append({"date": date, "text": subj})
+        if len(items) >= max_items:
+            break
+    return items
+
+
+def _summarize(text: str, limit: int = 155) -> str:
+    """Trim a long blocker line to a readable lead: strip markdown, cut at the
+    first sentence boundary, else hard-truncate with an ellipsis."""
+    t = text.replace("**", "").replace("`", "").strip()
+    # prefer the first full sentence if it's a reasonable length
+    m = re.search(r"^(.{40,}?[.;])\s", t)
+    if m and len(m.group(1)) <= limit + 20:
+        return m.group(1)
+    return t if len(t) <= limit else t[:limit].rsplit(" ", 1)[0] + "…"
+
+
+def _next_moves() -> list[dict]:
+    """Open items straight from blockers.md — [BLOCKED] → alert, [WATCH] → watch."""
+    if not _BLOCKERS.exists():
+        return []
+    moves = []
+    for raw in _BLOCKERS.read_text(encoding="utf-8").splitlines():
+        m = re.match(r"^\s*-\s*\[(BLOCKED|WATCH)\]\s*(.+)$", raw)
+        if not m:
+            continue
+        moves.append({"kind": m.group(1).lower(), "text": _summarize(m.group(2))})
+    # blocked first (they're the urgent ones), watch after
+    moves.sort(key=lambda x: 0 if x["kind"] == "blocked" else 1)
+    return moves
+
+
+def _render_updates(items: list[dict]) -> str:
+    if not items:
+        return '<li class="empty">No shipped changes recorded in git yet.</li>'
+    return "".join(
+        f'<li><span class="date">{_e(it["date"])}</span>'
+        f'<span class="txt">{_e(it["text"])}</span></li>' for it in items)
+
+
+def _render_moves(moves: list[dict]) -> str:
+    if not moves:
+        return '<li class="empty">No open blockers or watch items — all clear.</li>'
+    out = []
+    for m in moves:
+        label = "BLOCKED" if m["kind"] == "blocked" else "WATCH"
+        out.append(
+            f'<li class="{_e(m["kind"])}"><span class="badge">{label}</span>'
+            f'<span class="txt">{_e(m["text"])}</span></li>')
+    return "".join(out)
+
+
+def main() -> None:
+    generated = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    page = (_TEMPLATE
+            .replace("<!--__UPDATES__-->", _render_updates(_whats_new()))
+            .replace("<!--__MOVES__-->", _render_moves(_next_moves()))
+            .replace("__GENERATED__", _e(generated)))
+    _OUT.parent.mkdir(parents=True, exist_ok=True)
+    _OUT.write_text(page, encoding="utf-8")
+    print(f"Wrote {_OUT.relative_to(_ROOT)} ({_OUT.stat().st_size:,} bytes)")
+    print(f"  what's-new items={len(_whats_new())} · next-moves items={len(_next_moves())} · {generated}")
+
+
+_TEMPLATE = r"""<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -173,11 +304,11 @@
   <div class="live-grid">
     <section class="panel">
       <div class="panel-h"><span class="pt">🆕 What's new today</span><span class="pt-sub">recent shipped changes</span></div>
-      <ul class="feed"><li><span class="date">2026-07-22</span><span class="txt">creator dashboard dedup fix (LZ Academy / Luiz Fernando merge)</span></li><li><span class="date">2026-07-22</span><span class="txt">merchant dashboard UI refresh + creator rebuild (X sweep + YouTube refetch)</span></li><li><span class="date">2026-07-22</span><span class="txt">creator dashboard: segmentation held-back close-out (35 description-backed corrections)</span></li><li><span class="date">2026-07-22</span><span class="txt">&#x27;← Dashboards&#x27; hub link on all 5 dashboards (+ strategy rank-card hover)</span></li><li><span class="date">2026-07-22</span><span class="txt">landing page (&#x27;Naman&#x27;s Dashboards&#x27;) + /creative route</span></li><li><span class="date">2026-07-22</span><span class="txt">Add /merchants pretty route (redirect to merchant_dashboard.html)</span></li></ul>
+      <ul class="feed"><!--__UPDATES__--></ul>
     </section>
     <section class="panel">
       <div class="panel-h"><span class="pt">🎯 Next moves</span><span class="pt-sub">from blockers.md</span></div>
-      <ul class="moves"><li class="watch"><span class="badge">WATCH</span><span class="txt">Handover batch on feat/handover-batch (gh-pages deploy + morning brief + merchant vertical expansion + segment rebuild + strategy rebuild + Pipeline-Board…</span></li><li class="watch"><span class="badge">WATCH</span><span class="txt">Segmentation: rebuild DONE + live (2026-07-22);</span></li><li class="watch"><span class="badge">WATCH</span><span class="txt">Instagram description gap (honest, likely permanent for the legacy set): the 11 IG creators are Mimanshi spreadsheet imports — display names (not…</span></li></ul>
+      <ul class="moves"><!--__MOVES__--></ul>
     </section>
   </div>
 
@@ -185,9 +316,14 @@
     <div class="credit">Designed &amp; built by <span class="by">Naman Behl</span> — Speed Wallet growth internship.</div>
     <div class="note">Dashboards are self-contained HTML rebuilt from live data (Supabase, Adjust, Meta,
       YouTube/TikTok/X/Instagram) and auto-deployed. "What's new" and "Next moves" are generated from real
-      git history and the blockers tracker on each build. Read-only views. · Generated 2026-07-23 09:09 UTC</div>
+      git history and the blockers tracker on each build. Read-only views. · Generated __GENERATED__</div>
   </div>
 
 </div>
 </body>
 </html>
+"""
+
+
+if __name__ == "__main__":
+    main()
