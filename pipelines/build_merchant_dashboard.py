@@ -14,6 +14,7 @@ Run from repo root:  python pipelines/build_merchant_dashboard.py
 
 import html
 import json
+import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -28,6 +29,33 @@ _OUT = _ROOT / "docs" / "merchant_dashboard.html"
 
 def _e(s) -> str:
     return html.escape(str(s if s is not None else ""))
+
+
+def _discovered_at(data: dict) -> str:
+    """Honest 'venues last discovered' date — the page rebuilds daily, but the
+    underlying venue data only changes when merchants/discovery.py is run by hand.
+
+    Order of truth: (1) an explicit `discovered_at` stamped into the JSON by a
+    future discovery run; (2) the git commit date of merchant_candidates.json
+    (CI-safe — reflects when the venue data actually last changed, unlike file
+    mtime which is just the checkout time in a fresh CI clone); (3) file mtime as
+    a last resort. Same 'real signal or an honest gap' standard as creator_country
+    / audience_location labels elsewhere."""
+    stamped = str(data.get("discovered_at", "")).strip()
+    if stamped:
+        return stamped[:10]
+    try:
+        out = subprocess.run(
+            ["git", "log", "-1", "--format=%cd", "--date=format:%Y-%m-%d", "--", str(_IN)],
+            cwd=_ROOT, capture_output=True, text=True, timeout=10)
+        if out.returncode == 0 and out.stdout.strip():
+            return out.stdout.strip()
+    except Exception:
+        pass
+    try:
+        return datetime.fromtimestamp(_IN.stat().st_mtime, timezone.utc).strftime("%Y-%m-%d")
+    except Exception:
+        return "unknown"
 
 
 def build_rows(data: dict) -> list[dict]:
@@ -63,6 +91,7 @@ def main() -> None:
     from collections import Counter
     payload = {
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
+        "discovered_at": _discovered_at(data),
         "verticals": data.get("vertical_focus", []),
         "excluded": data.get("excluded_channels", {}),
         "venues": rows,
@@ -127,6 +156,10 @@ _TEMPLATE = r"""<!doctype html>
   h1{font-size:28px; margin:0 0 5px; font-weight:780; letter-spacing:-0.03em;
     background:linear-gradient(180deg,#ffffff,#c9c3e8); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
   .title-block .sub{color:var(--muted); font-size:13px; max-width:760px;}
+  .freshness{margin-top:12px; font-size:12px; color:var(--faint); display:inline-flex; align-items:center; gap:8px;
+    background:var(--panel-2); border:1px solid var(--hairline); border-radius:999px; padding:5px 13px;}
+  .freshness .dot{width:7px; height:7px; border-radius:50%; background:var(--warn); box-shadow:0 0 7px rgba(227,179,65,.5);}
+  .freshness b{color:var(--muted); font-weight:650;}
 
   /* KPI strip */
   .kpi-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:14px; margin-bottom:8px;}
@@ -209,6 +242,7 @@ _TEMPLATE = r"""<!doctype html>
   <div class="title-block">
     <h1>Merchant Discovery</h1>
     <div class="sub">Outbound discovery of public venues to reach decision-makers at potential merchant businesses. Not tracking — marketing has no merchant activity data (that's the dev backend).</div>
+    <div class="freshness" id="freshness"></div>
   </div>
 
   <div class="kpi-grid" id="stats"></div>
@@ -257,6 +291,9 @@ _TEMPLATE = r"""<!doctype html>
 const DATA = /*__DATA__*/;
 const esc = s => String(s==null?"":s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 document.getElementById("sync").textContent = DATA.generated_at;
+document.getElementById("freshness").innerHTML =
+  '<span class="dot"></span>Page rebuilt daily · <b>venues last discovered ' + esc(DATA.discovered_at) +
+  '</b> — the venue set only changes when discovery is re-run by hand';
 
 // KPI strip
 const st = [

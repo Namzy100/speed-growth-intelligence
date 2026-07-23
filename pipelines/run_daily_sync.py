@@ -37,6 +37,8 @@ from pipelines import build_creative_dashboard
 from pipelines import build_creator_dashboard
 from pipelines import build_strategy_dashboard
 from pipelines import build_trend_dashboard
+from pipelines import build_merchant_dashboard
+from pipelines import build_landing
 from pipelines.adjust import AdjustPipeline
 from pipelines.meta import MetaPipeline
 from pipelines.sheets import (
@@ -216,6 +218,43 @@ def _rebuild_strategy_dashboard() -> bool:
         return False
 
 
+def _rebuild_merchant_dashboard() -> bool:
+    """Rebuild the merchant discovery dashboard every day.
+
+    Rebuilt daily like creative/creator/strategy so the page stays deployed and
+    its 'generated' timestamp is fresh. NOTE: the underlying venue set only changes
+    when merchants/discovery.py is run by hand (a manual step, like the creator
+    fetchers) — the dashboard surfaces a separate 'venues last discovered' date so
+    the daily rebuild is never mistaken for a daily re-discovery.
+    A failure is logged but never aborts the sync.
+    """
+    _log("Merchant dashboard: rebuilding docs/merchant_dashboard.html...")
+    try:
+        build_merchant_dashboard.main()
+        _log("Merchant dashboard: rebuilt successfully")
+        return True
+    except Exception as e:
+        _log(f"Merchant dashboard: rebuild FAILED — {e}")
+        return False
+
+
+def _rebuild_landing() -> bool:
+    """Rebuild the landing hub (docs/index.html) every day.
+
+    Generated (not hand-written) so its two live sections never go stale:
+    'What's new today' from recent git commits and 'Next moves' from
+    data/processed/blockers.md. A failure is logged but never aborts the sync.
+    """
+    _log("Landing page: rebuilding docs/index.html (what's-new + next-moves)...")
+    try:
+        build_landing.main()
+        _log("Landing page: rebuilt successfully")
+        return True
+    except Exception as e:
+        _log(f"Landing page: rebuild FAILED — {e}")
+        return False
+
+
 def _rebuild_trend_dashboard() -> bool:
     """Rebuild the trend-intelligence dashboard — weekly (Mondays only).
 
@@ -280,6 +319,8 @@ def _deploy_dashboard() -> bool:
         "docs/creator_dashboard.html",
         "docs/strategy_dashboard.html",
         "docs/trend_dashboard.html",
+        "docs/merchant_dashboard.html",
+        "docs/index.html",
         "docs/dashboard_state.json",  # trend dashboard status/results — persist across rebuilds
     ]
     try:
@@ -344,6 +385,14 @@ def run() -> None:
     # Strategy dashboard — rebuilt daily (~21s, 4 Claude calls) so its timestamp
     # stays fresh and new/updated source docs are picked up automatically.
     results["Strategy Dashboard"] = _rebuild_strategy_dashboard()
+
+    # Merchant dashboard — rebuilt daily so it stays deployed + timestamp-fresh
+    # (venue data itself only changes on a manual discovery run; page says so).
+    results["Merchant Dashboard"] = _rebuild_merchant_dashboard()
+
+    # Landing hub — regenerated daily so 'What's new' (git) + 'Next moves'
+    # (blockers.md) never go stale the way the dashboards used to.
+    results["Landing Page"] = _rebuild_landing()
 
     # Trend dashboard — weekly (Mondays), gated behind TREND_DASHBOARD_REBUILD.
     results["Trend Dashboard"] = _rebuild_trend_dashboard()

@@ -27,6 +27,7 @@ import json
 import os
 import re
 import sys
+from datetime import datetime, timezone
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urlparse
@@ -310,6 +311,7 @@ def run(verticals=None, use_web_search=False, use_judge=False, log=print) -> dic
     ranked = sorted(by_domain.values(), key=lambda r: r["fit_score"], reverse=True)
     from collections import Counter
     data = {
+        "discovered_at": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
         "vertical_focus": verticals,
         "excluded_channels": config.EXCLUDED_CHANNELS,
         "counts": {"total": len(ranked),
