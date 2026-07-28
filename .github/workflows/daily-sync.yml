@@ -17,7 +17,12 @@ on:
   schedule:
     # 04:00 UTC = 08:00 in the machine's +04 tz. GitHub cron is UTC only (no DST).
     - cron: '0 4 * * *'
-  workflow_dispatch: {}   # manual trigger, used to fire-test and for ad-hoc runs
+  workflow_dispatch:      # manual trigger, used to fire-test and for ad-hoc runs
+    inputs:
+      force_trend:
+        description: 'Force the weekly trend rebuild + checker on a non-Monday'
+        type: boolean
+        default: false
 
 permissions:
   contents: write         # lets run_daily_sync's auto-deploy commit + push the dashboards
@@ -29,7 +34,11 @@ concurrency:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    timeout-minutes: 30    # hard stop: a hung network call can never again block future runs
+    # Hard stop: a hung network call can never again block future runs. Raised
+    # 30 -> 45 on 2026-07-28. The Monday path is ~1.5 min sync + ~11 min trend
+    # rebuild + up to 10 min checker (now wall-clock-bounded), and 30 left only
+    # ~7 min of headroom — the 2026-07-27 run blew straight through it.
+    timeout-minutes: 45
     steps:
       - name: Checkout
         # v5 runs on Node 24 (v4 was Node 20, now deprecated by GitHub). Pinned to
@@ -66,8 +75,12 @@ jobs:
 
       - name: Run daily sync (+ Monday trend rebuild) and auto-deploy
         env:
+          PYTHONUNBUFFERED: '1'   # so a killed run's progress lines still reach the log
           DASHBOARD_AUTODEPLOY: '1'
           TREND_DASHBOARD_REBUILD: '1'
+          # Empty on a scheduled run, so the Monday-only gate still applies. Set only
+          # by a manual dispatch with force_trend=true (see _trend_rebuild_active).
+          TREND_FORCE_REBUILD: ${{ inputs.force_trend && '1' || '' }}
           GOOGLE_SHEETS_CREDS: ${{ runner.temp }}/gsheets.json
           GOOGLE_SHEETS_ID: ${{ secrets.GOOGLE_SHEETS_ID }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
