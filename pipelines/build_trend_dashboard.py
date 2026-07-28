@@ -46,6 +46,8 @@ _ROOT = Path(__file__).resolve().parent.parent
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
+from pipelines.json_embed import dumps_for_script
+
 load_dotenv(_ROOT / ".env")
 
 from intelligence import trend_pipeline
@@ -545,7 +547,9 @@ def render(data: dict, enrich: dict, candidates: list[dict], state: dict,
     counts = (f"{len(data['youtube'])} YouTube · {len(data['tiktok'])} TikTok · "
               f"{len(data.get('instagram', []))} Instagram (US + English)")
     # Bake the FULL state so the browser can download a complete, valid state file.
-    state_js = json.dumps(state)
+    # dumps_for_script, not json.dumps: this lands inside a <script> block and
+    # state['items'][*]['hook'] is scraped third-party caption text.
+    state_js = dumps_for_script(state)
     repl = {
         "/*__SYNC__*/": now, "/*__COUNTS__*/": counts,
         "/*__ACTIONS__*/": render_actions(state["items"]),
