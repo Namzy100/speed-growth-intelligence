@@ -255,6 +255,21 @@ def _rebuild_landing() -> bool:
         return False
 
 
+def _trend_rebuild_active() -> bool:
+    """True only when the weekly trend rebuild actually runs this cycle (flag set
+    AND Monday, or an explicit force).
+
+    TREND_FORCE_REBUILD=1 overrides the Monday-only gate. Needed because the weekly
+    path is otherwise only exercisable one day in seven: when the 2026-07-27 Monday
+    run died on the job timeout, the next chance to verify a fix was 2026-08-03.
+    Off by default — the trend data really is a weekly window.
+    """
+    if not os.getenv("TREND_DASHBOARD_REBUILD"):
+        return False
+    return bool(os.getenv("TREND_FORCE_REBUILD")) or \
+        datetime.now(timezone.utc).weekday() == 0  # 0 = Monday
+
+
 def _rebuild_trend_dashboard() -> bool:
     """Rebuild the trend-intelligence dashboard — weekly (Mondays only).
 
@@ -265,8 +280,9 @@ def _rebuild_trend_dashboard() -> bool:
     if not os.getenv("TREND_DASHBOARD_REBUILD"):
         _log("Trend dashboard: skipped (set TREND_DASHBOARD_REBUILD=1 to enable).")
         return True
-    if datetime.now(timezone.utc).weekday() != 0:  # 0 = Monday
-        _log("Trend dashboard: skipped (only rebuilds on Mondays).")
+    if not _trend_rebuild_active():
+        _log("Trend dashboard: skipped (only rebuilds on Mondays; "
+             "set TREND_FORCE_REBUILD=1 to override).")
         return True
     # Auto-fill posted paid-brief results from Meta/Adjust BEFORE the rebuild, so
     # the imported numbers are already in dashboard_state.json when it bakes.
@@ -301,7 +317,7 @@ def _rebuild_trend_dashboard() -> bool:
     return ok
 
 
-def _deploy_dashboard() -> bool:
+def _deploy_dashboard(include_trend: bool = True) -> bool:
     """Push the rebuilt dashboard HTML to GitHub so Vercel auto-deploys it.
 
     Gated behind DASHBOARD_AUTODEPLOY (set it to a truthy value in the scheduled
@@ -314,20 +330,26 @@ def _deploy_dashboard() -> bool:
              "to GitHub for Vercel).")
         return True
 
+    # Called TWICE per run (see run()): first with include_trend=False, before the
+    # weekly trend work, so the four daily dashboards publish even if the trend step
+    # later overruns; then again with include_trend=True for the fresh trend page.
+    phase = "with trend" if include_trend else "pre-trend"
     files = [
         "docs/creative_dashboard.html",
         "docs/creator_dashboard.html",
         "docs/strategy_dashboard.html",
-        "docs/trend_dashboard.html",
         "docs/merchant_dashboard.html",
         "docs/index.html",
-        "docs/dashboard_state.json",  # trend dashboard status/results — persist across rebuilds
     ]
+    if include_trend:
+        files.append("docs/trend_dashboard.html")
+        # trend dashboard status/results — persist across rebuilds
+        files.append("docs/dashboard_state.json")
     try:
         subprocess.run(["git", "add", *files], cwd=_ROOT, check=True)
         # Nothing staged → no change to deploy.
         if subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=_ROOT).returncode == 0:
-            _log("Auto-deploy: no dashboard changes to push.")
+            _log(f"Auto-deploy ({phase}): no dashboard changes to push.")
             return True
         stamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
         subprocess.run(
@@ -335,10 +357,10 @@ def _deploy_dashboard() -> bool:
             cwd=_ROOT, check=True,
         )
         subprocess.run(["git", "push"], cwd=_ROOT, check=True)
-        _log("Auto-deploy: pushed dashboard update — Vercel will redeploy.")
+        _log(f"Auto-deploy ({phase}): pushed {len(files)} dashboard files.")
         return True
     except Exception as e:  # noqa: BLE001 — deploy must never break the data sync
-        _log(f"Auto-deploy: FAILED (non-fatal) — {e}")
+        _log(f"Auto-deploy ({phase}): FAILED (non-fatal) — {e}")
         return False
 
 
@@ -394,11 +416,20 @@ def run() -> None:
     # (blockers.md) never go stale the way the dashboards used to.
     results["Landing Page"] = _rebuild_landing()
 
+    # Auto-deploy PASS 1 — publish the four daily dashboards + landing hub BEFORE
+    # the weekly trend work. Ordering is deliberate and was paid for: on 2026-07-27
+    # all five dashboards were built and ready at 06:54:38, then the Monday trend
+    # checker ran 17m24s, hit the job timeout at 07:22:58, and the deploy step (last
+    # in the old order) never ran — so four dashboards with nothing to do with trends
+    # went stale for a day.
+    results["Deploy (pre-trend)"] = _deploy_dashboard(include_trend=False)
+
     # Trend dashboard — weekly (Mondays), gated behind TREND_DASHBOARD_REBUILD.
     results["Trend Dashboard"] = _rebuild_trend_dashboard()
 
-    # Auto-deploy: push the refreshed dashboards to GitHub → Vercel (opt-in).
-    results["Deploy"] = _deploy_dashboard()
+    # Auto-deploy PASS 2 — the freshly rebuilt trend page + dashboard_state.
+    # Idempotent: no-ops with "no dashboard changes to push" off-Monday.
+    results["Deploy (trend)"] = _deploy_dashboard()
 
     # Summary
     succeeded = sum(results.values())

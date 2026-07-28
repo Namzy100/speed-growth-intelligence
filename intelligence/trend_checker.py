@@ -20,17 +20,28 @@ Outcomes primitive (`user.define_outcome`). Two kinds of check, deliberately spl
 Schedule: invoked by the Monday trend rebuild (see run_daily_sync); NO second
 scheduler. Every grade, revision cycle, and the final verdict are written to a
 plain-text log under docs/trend_checker_log/ that a successor can read without
-knowing anything about the agent framework.
+knowing anything about the agent framework. The log is written line-by-line as it
+happens, so a run killed mid-flight still leaves a readable partial trace.
+
+TIME BOUND: the session is capped at TREND_CHECKER_BUDGET_SECONDS (default 600).
+max_iterations bounds grader iterations, NOT duration — on 2026-07-27 an unbounded
+session ran 17m24s and was SIGKILLed by the CI job timeout, taking the deploy step
+with it. Over budget is now a logged TIMEOUT verdict, never a silent kill.
 
 Run manually:
   python intelligence/trend_checker.py                 # grade the real pipeline output
   python intelligence/trend_checker.py --judged PATH    # grade a specific judged.json
   python intelligence/trend_checker.py --rejudge-stub    # cap test: non-converging revision
+  python intelligence/trend_checker.py --budget 60       # override the wall-clock budget
 """
 
 import json
 import os
+import signal
 import sys
+import threading
+import time
+from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -49,6 +60,15 @@ _LOG_DIR = _ROOT / "docs" / "trend_checker_log"
 _MAX_ITERATIONS = 3
 _AGENT_MODEL = "claude-opus-4-8"
 _CANDIDATE_CAP = 30          # items graded per run (surfaced + a sample of gated)
+
+# Hard wall-clock budget for the whole grading session. _MAX_ITERATIONS caps grader
+# ITERATIONS, not duration: one iteration is unbounded (agent thinking + host-side
+# rejudge_items, which makes its own Claude calls), and `for event in stream` blocks
+# indefinitely if the session goes quiet. On 2026-07-27 that ate 17m24s of the CI
+# job's 30-minute timeout and killed the deploy step. 600s fits the Monday budget
+# (~1.5 min sync + ~11 min trend rebuild + 10 min checker) inside timeout-minutes: 45.
+_CHECKER_BUDGET_SECONDS = int(os.getenv("TREND_CHECKER_BUDGET_SECONDS", "600"))
+_SDK_TIMEOUT_SECONDS = 120   # per-request cap so a single hung HTTP call can't stall us
 
 _REJUDGE_TOOL = {
     "type": "custom",
@@ -105,19 +125,133 @@ def _rubric() -> str:
 # ------------------------------------------------------------------
 
 class _Log:
+    """Plain-text log that writes every line to disk AS IT HAPPENS.
+
+    Incremental on purpose. The previous version buffered in memory and wrote the
+    file once at the end, so when the 2026-07-27 CI job was SIGKILLed at the
+    30-minute timeout it left NO log file at all — the only trace of a 17-minute
+    hang was the Actions runner log. Same reason print() is flushed: on CI stdout
+    is a pipe, so it is block-buffered and unflushed lines die with the process.
+    """
+
     def __init__(self, path: Path):
         self.path = path
-        self.lines: list[str] = []
+        path.parent.mkdir(parents=True, exist_ok=True)
+        self._fh = path.open("a", encoding="utf-8")
 
     def __call__(self, msg: str):
         stamp = datetime.now(timezone.utc).strftime("%H:%M:%S")
         line = f"[{stamp}] {msg}"
-        print(line)
-        self.lines.append(line)
+        print(line, flush=True)
+        self._fh.write(line + "\n")
+        self._fh.flush()
 
     def flush(self):
-        self.path.parent.mkdir(parents=True, exist_ok=True)
-        self.path.write_text("\n".join(self.lines) + "\n", encoding="utf-8")
+        self._fh.flush()
+
+
+# ------------------------------------------------------------------
+# Wall-clock budget
+# ------------------------------------------------------------------
+
+class CheckerTimeout(BaseException):
+    """Raised when the grading session exceeds its wall-clock budget.
+
+    Inherits BaseException, NOT Exception/TimeoutError, and that is load-bearing.
+    The alarm usually fires while blocked inside httpx's stream read, and the
+    network stack catches broadly: as a TimeoutError subclass this was swallowed by
+    httpcore and re-raised as `httpx.ReadTimeout`, so the `except CheckerTimeout`
+    handlers never saw it and the run reported ERROR instead of TIMEOUT (observed
+    2026-07-28). BaseException passes straight through `except Exception` while
+    still running `finally` blocks and context-manager __exit__.
+    """
+
+
+@contextmanager
+def _wall_clock_budget(seconds: int, log):
+    """Hard wall-clock bound on the grading session, via SIGALRM.
+
+    A signal is the only thing that interrupts a blocked socket read, which is
+    what `for event in stream` is doing when a session goes quiet. The in-loop
+    deadline in run_check cannot do it alone: that check only runs when an event
+    actually arrives. Degrades to the in-loop deadline where SIGALRM is
+    unavailable (non-main thread, or a platform without it).
+    """
+    if seconds <= 0 or not hasattr(signal, "SIGALRM") \
+            or threading.current_thread() is not threading.main_thread():
+        log(f"Wall-clock budget: soft only (in-loop deadline, {seconds}s) — "
+            "SIGALRM unavailable here.")
+        yield
+        return
+
+    def _fire(_signum, _frame):
+        raise CheckerTimeout(f"wall-clock budget of {seconds}s exceeded")
+
+    previous = signal.signal(signal.SIGALRM, _fire)
+    signal.alarm(seconds)
+    log(f"Wall-clock budget armed: {seconds}s (hard, SIGALRM).")
+    try:
+        yield
+    finally:
+        signal.alarm(0)
+        signal.signal(signal.SIGALRM, previous)
+
+
+def _stop_session(client, session_id: str, log, settle_seconds: float = 60.0) -> None:
+    """Stop a session we are abandoning, so we stop paying $0.08/session-hour.
+
+    Best-effort throughout: we are already on the failure path and must not raise.
+
+    Getting this right needed the real API's behaviour (learned 2026-07-28):
+      * `user.interrupt` is ASYNCHRONOUS. The session stays "running" after the
+        interrupt is accepted.
+      * BOTH archive and delete are REJECTED while the status is "running"
+        ("cannot be archived while its status is running" / "Cannot delete session
+        while it is running"). So there is no way to force-stop it — the only
+        route is to interrupt, wait for it to leave "running", then archive.
+      * One interrupt is not always enough, so it is re-sent while we wait.
+    Archiving is the definitive stop; the host-side log file is the post-mortem
+    record, so nothing diagnostic is lost by archiving. Safe to sleep here: the
+    one-shot alarm has already fired by the time this is called.
+
+    How long the wait actually is (measured 2026-07-28): a session interrupted on
+    the normal timeout path went idle in ~5s, well inside this window. A session
+    ABANDONED mid-tool-call (host process died without answering rejudge_items)
+    kept working and took ~13 minutes to go idle — far past any window worth
+    blocking a CI job for. It does eventually stop on its own, so the failure mode
+    is a few cents of session time, not a permanent leak; we log and move on.
+    """
+    give_up_at = time.monotonic() + settle_seconds
+    status, last_error, next_interrupt = "?", None, 0.0
+    while True:
+        now = time.monotonic()
+        if now >= next_interrupt:
+            try:
+                client.beta.sessions.events.send(
+                    session_id=session_id, events=[{"type": "user.interrupt"}])
+                log(f"  session {session_id}: interrupt sent (agent pausing).")
+            except Exception as e:  # noqa: BLE001
+                log(f"  session {session_id}: interrupt failed — {type(e).__name__}: {e}")
+            next_interrupt = now + 10.0
+        try:
+            status = getattr(client.beta.sessions.retrieve(session_id=session_id),
+                             "status", "?")
+        except Exception:  # noqa: BLE001
+            status = "?"
+        if status != "running":
+            try:
+                client.beta.sessions.archive(session_id=session_id)
+                log(f"  session {session_id}: archived from '{status}' (billing stopped).")
+                return
+            except Exception as e:  # noqa: BLE001
+                last_error = e
+        if time.monotonic() >= give_up_at:
+            break
+        time.sleep(3.0)
+    tail = f", last error {type(last_error).__name__}" if last_error else ""
+    log(f"  session {session_id}: NOT stopped after {settle_seconds:.0f}s "
+        f"(status={status}{tail}) — it may still be billing at $0.08/session-hour; "
+        "check the Managed Agents console.")
 
 
 # ------------------------------------------------------------------
@@ -197,9 +331,14 @@ def _ensure_agent(client, log) -> tuple[str, str]:
 # Run the Outcomes-graded check
 # ------------------------------------------------------------------
 
-def run_check(items: list[dict], log, rejudge_stub: bool = False) -> dict:
+def run_check(items: list[dict], log, rejudge_stub: bool = False,
+              deadline: float | None = None) -> dict:
     """Grade `items` via an Outcomes session. Returns a verdict dict. Mutates
-    `items` in place when rejudge corrects them (host-side source of truth)."""
+    `items` in place when rejudge corrects them (host-side source of truth).
+
+    `deadline` is a `time.monotonic()` timestamp. Past it, the grading loop stops
+    and the verdict is TIMEOUT — never a silent kill (see _wall_clock_budget).
+    """
     by_id = {v["id"]: v for v in items}
 
     # --- 1. Deterministic invariants (hard fail, never revised) ---
@@ -213,7 +352,8 @@ def run_check(items: list[dict], log, rejudge_stub: bool = False) -> dict:
     log(f"Deterministic invariants OK for all {len(items)} items (fit=0.4/0.3/0.3, gate enforced).")
 
     # --- 2. Relevance defensibility via Outcomes ---
-    client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+    client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"),
+                                 timeout=_SDK_TIMEOUT_SECONDS)
     agent_id, env_id = _ensure_agent(client, log)
     session = client.beta.sessions.create(
         agent=agent_id, environment_id=env_id,
@@ -231,93 +371,142 @@ def run_check(items: list[dict], log, rejudge_stub: bool = False) -> dict:
         "the grader reads the rejudge_items tool results directly, not your prose.\n\n"
         + json.dumps(_compact(items), ensure_ascii=False))
 
-    verdict = {"verdict": "UNKNOWN", "iterations": 0, "evaluations": [], "rejudge_calls": 0}
+    verdict = {"verdict": "UNKNOWN", "iterations": 0, "evaluations": [],
+               "rejudge_calls": 0, "timed_out": False, "session_id": session.id}
 
-    with client.beta.sessions.events.stream(session_id=session.id) as stream:
-        client.beta.sessions.events.send(session_id=session.id, events=[{
-            "type": "user.define_outcome",
-            "description": description,
-            "rubric": {"type": "text", "content": _rubric()},
-            "max_iterations": _MAX_ITERATIONS,
-        }])
-        log(f"Outcome defined (max_iterations={_MAX_ITERATIONS}); grading {len(items)} items.")
+    try:
+        with client.beta.sessions.events.stream(session_id=session.id) as stream:
+            client.beta.sessions.events.send(session_id=session.id, events=[{
+                "type": "user.define_outcome",
+                "description": description,
+                "rubric": {"type": "text", "content": _rubric()},
+                "max_iterations": _MAX_ITERATIONS,
+            }])
+            log(f"Outcome defined (max_iterations={_MAX_ITERATIONS}); grading {len(items)} items.")
 
-        for event in stream:
-            et = getattr(event, "type", "")
-            if et == "agent.custom_tool_use" and getattr(event, "name", "") == "rejudge_items":
-                inp = getattr(event, "input", {}) or {}
-                ids, fb = inp.get("ids", []), inp.get("feedback", "")
-                verdict["rejudge_calls"] += 1
-                log(f"  rejudge_items called: ids={ids} feedback={fb[:100]!r}")
-                if rejudge_stub:
-                    # CAP TEST: return the SAME (still-bad) judgment -> non-converging.
-                    result = [{"id": i, "on_topic": by_id.get(i, {}).get("on_topic"),
-                               "fintech_involvement": by_id.get(i, {}).get("fintech_involvement"),
-                               "note": "stub: unchanged"} for i in ids]
-                    log("    [stub] returning unchanged judgments (forcing non-convergence)")
-                else:
-                    corrected = tp.rejudge_items(items, ids, fb)
-                    result = [{"id": c["id"], "on_topic": c["on_topic"],
-                               "fintech_involvement": c["fintech_involvement"],
-                               "reason": c.get("relevance_reason", "")[:160]} for c in corrected]
-                    for c in corrected:
-                        log(f"    -> {c['id']} re-judged: on_topic={c['on_topic']} "
-                            f"fintech={c['fintech_involvement']} fit={c['fit_score']}")
-                client.beta.sessions.events.send(session_id=session.id, events=[{
-                    "type": "user.custom_tool_result",
-                    "custom_tool_use_id": event.id,
-                    "content": [{"type": "text", "text": json.dumps(result, ensure_ascii=False)}],
-                }])
-            elif et == "span.outcome_evaluation_end":
-                res = getattr(event, "result", None)
-                expl = getattr(event, "explanation", "") or ""
-                it = getattr(event, "iteration", None)
-                verdict["iterations"] = (it + 1) if isinstance(it, int) else verdict["iterations"] + 1
-                verdict["evaluations"].append({"iteration": it, "result": res, "explanation": expl})
-                log(f"  GRADER iteration {it}: {res} — {expl[:200]}")
-            elif et == "session.status_idle":
-                sr = getattr(event, "stop_reason", None)
-                srt = getattr(sr, "type", None)
-                if srt != "requires_action":
-                    log(f"  session idle (stop_reason={srt}) — done.")
+            for event in stream:
+                # Soft deadline: handles a session that is still talking but too
+                # slow. A silent session is caught by the SIGALRM guard instead.
+                if deadline is not None and time.monotonic() >= deadline:
+                    log("  BUDGET EXPIRED (soft, in-loop) — stopping the grading loop.")
+                    verdict["timed_out"] = True
                     break
-            elif et == "session.status_terminated":
-                log("  session terminated.")
-                break
-            elif et == "session.error":
-                log(f"  session.error: {getattr(event,'error',None)}")
+                et = getattr(event, "type", "")
+                if et == "agent.custom_tool_use" and getattr(event, "name", "") == "rejudge_items":
+                    inp = getattr(event, "input", {}) or {}
+                    ids, fb = inp.get("ids", []), inp.get("feedback", "")
+                    verdict["rejudge_calls"] += 1
+                    log(f"  rejudge_items called: ids={ids} feedback={fb[:100]!r}")
+                    if rejudge_stub:
+                        # CAP TEST: return the SAME (still-bad) judgment -> non-converging.
+                        result = [{"id": i, "on_topic": by_id.get(i, {}).get("on_topic"),
+                                   "fintech_involvement": by_id.get(i, {}).get("fintech_involvement"),
+                                   "note": "stub: unchanged"} for i in ids]
+                        log("    [stub] returning unchanged judgments (forcing non-convergence)")
+                    else:
+                        corrected = tp.rejudge_items(items, ids, fb)
+                        result = [{"id": c["id"], "on_topic": c["on_topic"],
+                                   "fintech_involvement": c["fintech_involvement"],
+                                   "reason": c.get("relevance_reason", "")[:160]} for c in corrected]
+                        for c in corrected:
+                            log(f"    -> {c['id']} re-judged: on_topic={c['on_topic']} "
+                                f"fintech={c['fintech_involvement']} fit={c['fit_score']}")
+                    client.beta.sessions.events.send(session_id=session.id, events=[{
+                        "type": "user.custom_tool_result",
+                        "custom_tool_use_id": event.id,
+                        "content": [{"type": "text", "text": json.dumps(result, ensure_ascii=False)}],
+                    }])
+                elif et == "span.outcome_evaluation_end":
+                    res = getattr(event, "result", None)
+                    expl = getattr(event, "explanation", "") or ""
+                    it = getattr(event, "iteration", None)
+                    verdict["iterations"] = (it + 1) if isinstance(it, int) else verdict["iterations"] + 1
+                    verdict["evaluations"].append({"iteration": it, "result": res, "explanation": expl})
+                    log(f"  GRADER iteration {it}: {res} — {expl[:200]}")
+                elif et == "session.status_idle":
+                    sr = getattr(event, "stop_reason", None)
+                    srt = getattr(sr, "type", None)
+                    if srt != "requires_action":
+                        log(f"  session idle (stop_reason={srt}) — done.")
+                        break
+                elif et == "session.status_terminated":
+                    log("  session terminated.")
+                    break
+                elif et == "session.error":
+                    log(f"  session.error: {getattr(event,'error',None)}")
+    except CheckerTimeout as e:
+        # Hard bound fired mid-stream. Report it, don't re-raise: a timed-out
+        # checker is a logged TIMEOUT verdict, never a silent kill.
+        log(f"  BUDGET EXPIRED (hard, SIGALRM): {e}")
+        verdict["timed_out"] = True
+    except Exception as e:  # noqa: BLE001
+        # Safety net for a library that swallows the alarm and re-wraps it anyway
+        # (httpx did exactly that while CheckerTimeout was a TimeoutError). Past
+        # the deadline, the clock is the ground truth, not the exception type.
+        if deadline is not None and time.monotonic() >= deadline:
+            log(f"  BUDGET EXPIRED (detected via deadline; surfaced as "
+                f"{type(e).__name__}: {e})")
+            verdict["timed_out"] = True
+        else:
+            raise
 
-    # Final verdict from the last grader evaluation
+    if verdict["timed_out"]:
+        _stop_session(client, session.id, log)
+
+    # Final verdict from the last grader evaluation. A timeout wins outright: a
+    # partial grade is not a verdict, so we say TIMEOUT and keep `evaluations`
+    # so the log still shows how far it got.
     last = verdict["evaluations"][-1] if verdict["evaluations"] else {}
     final = last.get("result")
-    verdict["verdict"] = {
+    verdict["verdict"] = "TIMEOUT" if verdict["timed_out"] else {
         "satisfied": "PASS", "needs_revision": "INCOMPLETE",
         "max_iterations_reached": "FAIL_MAX_ITERATIONS", "failed": "FAIL",
         "interrupted": "INTERRUPTED",
     }.get(final, "UNKNOWN")
-    verdict["session_id"] = session.id
+    if verdict["timed_out"] and final:
+        log(f"  (last grader result before the timeout: {final})")
     return verdict
 
 
-def check_pipeline_output() -> dict:
+def check_pipeline_output(budget_seconds: int | None = None) -> dict:
     """Scheduled entry point (called by the Monday trend rebuild). Grades the
     latest real pipeline output, writes a plain-text log, returns the verdict.
-    Best-effort: never raises, so it can't block the daily sync."""
+
+    Best-effort: never raises, so it can't block the daily sync — and now also
+    time-bounded, so it can't eat the CI job's timeout either. Worst case is a
+    logged TIMEOUT verdict after `budget_seconds`.
+    """
+    budget = _CHECKER_BUDGET_SECONDS if budget_seconds is None else budget_seconds
     stamp = datetime.now(timezone.utc).strftime("%Y-%m-%d_%H%M%S")
     log = _Log(_LOG_DIR / f"{stamp}.log")
     log("=== Speed trend relevance checker (scheduled, Monday cron) ===")
+    started = time.monotonic()
     try:
-        items = load_real_judged()
-        log(f"Grading {len(items)} candidate items from the latest pipeline output.")
-        verdict = run_check(items, log)
+        # The budget covers load_real_judged too: it re-judges cached items via
+        # Claude, so it is a network path that can hang like any other.
+        with _wall_clock_budget(budget, log):
+            items = load_real_judged()
+            log(f"Grading {len(items)} candidate items from the latest pipeline output.")
+            verdict = run_check(items, log, deadline=started + budget)
+    except CheckerTimeout as e:
+        # Fired outside the stream loop (e.g. during load_real_judged or session
+        # setup), so run_check never got to record it.
+        log(f"CHECKER TIMEOUT: {e}")
+        verdict = {"verdict": "TIMEOUT", "iterations": 0, "timed_out": True}
     except Exception as e:
         import traceback
-        log(f"CHECKER ERROR: {type(e).__name__}: {e}")
-        log(traceback.format_exc())
-        verdict = {"verdict": "ERROR", "iterations": 0}
+        elapsed = time.monotonic() - started
+        if elapsed >= budget:   # a re-wrapped timeout, not a genuine error
+            log(f"CHECKER TIMEOUT (surfaced as {type(e).__name__}: {e})")
+            verdict = {"verdict": "TIMEOUT", "iterations": 0, "timed_out": True}
+        else:
+            log(f"CHECKER ERROR: {type(e).__name__}: {e}")
+            log(traceback.format_exc())
+            verdict = {"verdict": "ERROR", "iterations": 0}
     log("")
     log(f"=== VERDICT: {verdict.get('verdict')} (iterations={verdict.get('iterations')}, "
-        f"rejudge_calls={verdict.get('rejudge_calls')}) ===")
+        f"rejudge_calls={verdict.get('rejudge_calls')}, "
+        f"elapsed={time.monotonic() - started:.0f}s of {budget}s budget) ===")
     log.flush()
     return verdict
 
@@ -329,6 +518,9 @@ def main(argv: list[str]) -> int:
     judged_path = None
     if "--judged" in argv:
         judged_path = argv[argv.index("--judged") + 1]
+    budget = _CHECKER_BUDGET_SECONDS
+    if "--budget" in argv:
+        budget = int(argv[argv.index("--budget") + 1])
 
     log("=== Speed trend relevance checker (Outcomes-graded) ===")
     if judged_path:
@@ -343,20 +535,31 @@ def main(argv: list[str]) -> int:
     if rejudge_stub:
         log("MODE: --rejudge-stub (cap test — revision will NOT converge)")
 
+    started = time.monotonic()
     try:
-        verdict = run_check(items, log, rejudge_stub=rejudge_stub)
+        with _wall_clock_budget(budget, log):
+            verdict = run_check(items, log, rejudge_stub=rejudge_stub,
+                                deadline=started + budget)
+    except CheckerTimeout as e:
+        log(f"CHECKER TIMEOUT: {e}")
+        verdict = {"verdict": "TIMEOUT", "iterations": 0, "timed_out": True}
     except Exception as e:
         import traceback
-        log(f"CHECKER ERROR: {type(e).__name__}: {e}")
-        log(traceback.format_exc())
-        log.flush()
-        return 2
+        if time.monotonic() - started >= budget:   # re-wrapped timeout, not an error
+            log(f"CHECKER TIMEOUT (surfaced as {type(e).__name__}: {e})")
+            verdict = {"verdict": "TIMEOUT", "iterations": 0, "timed_out": True}
+        else:
+            log(f"CHECKER ERROR: {type(e).__name__}: {e}")
+            log(traceback.format_exc())
+            log.flush()
+            return 2
 
     log("")
     log("=== VERDICT ===")
     log(f"  result: {verdict['verdict']}")
     log(f"  grader iterations: {verdict.get('iterations')}")
     log(f"  rejudge_items calls: {verdict.get('rejudge_calls')}")
+    log(f"  elapsed: {time.monotonic() - started:.0f}s of {budget}s budget")
     if verdict.get("session_id"):
         log(f"  session: {verdict['session_id']}")
     log.flush()
