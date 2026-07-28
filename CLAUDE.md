@@ -179,46 +179,94 @@ Why the model looks this way (so a cold reader understands the shape, not just t
   retire it only after several successful scheduled Actions runs confirm the new
   token holds. `meta.py` needs only `ads_read`.
 
-## Trend relevance/fit quality checker (Claude Managed Agents, Outcomes)
+## Trend relevance/fit quality checker (reviewer pass, Messages API tool loop)
 
-`intelligence/trend_checker.py` grades the trend pipeline's relevance/fit
-judgments. **The pipeline runs unwrapped as always — the checker only grades its
+`intelligence/trend_checker.py` reviews the trend pipeline's relevance/fit
+judgments. **The pipeline runs unwrapped as always — the checker only reviews its
 output.** Two deliberately-separated checks:
 
 1. **Deterministic invariants** (`trend_pipeline.verify_fit_invariants`): fit ==
    `0.4*fintech + 0.3*replicability + 0.3*reach`, and off-topic ⇒ fit 0. Pure
    Python. A violation is a **code bug** (weighting/gate drift), so it HARD-FAILS
-   and is never fed into revision.
-2. **Relevance defensibility** (the real judgment call): graded by a **Claude
-   Managed Agents** Outcomes session (`user.define_outcome`, beta
-   `managed-agents-2026-04-01`). On `needs_revision`, the in-session agent calls a
-   host-side custom tool `rejudge_items(ids, feedback)` →
-   `trend_pipeline.rejudge_items` re-runs the judgment on ONLY those items with the
-   feedback appended (no re-scrape, cache override). Capped at `max_iterations=3`.
+   and is never sent to a model.
+2. **Relevance defensibility** (the real judgment call): a **reviewer pass** — a
+   plain Messages-API tool loop on `claude-opus-5` at `effort: high`. The reviewer
+   calls the host-side tool `rejudge_items(ids, feedback)` →
+   `trend_pipeline.rejudge_items`, which re-runs the judgment on ONLY those items
+   with the feedback appended (no re-scrape, cache override).
 
-- **MCP was deliberately NOT used.** MCP tunnels are research-preview/gated, and
-  our tools are Python, not MCP servers. The custom-tool pattern keeps keys
-  host-side and the tested pipeline as the source of truth. See the 2026-07-14
-  investigation.
-- **Grounding:** the grader is instructed to judge from the `rejudge_items` tool
-  results + item content, NOT the agent's prose (an earlier version trusted an
-  agent-authored file and could be papered over — fixed).
+### The Outcomes grader was REMOVED on 2026-07-28 — do not reintroduce it
+
+This used to wrap the reviewer in a **Claude Managed Agents Outcomes** session,
+where an independent grader scored the result against a rubric and drove a revise
+loop. That was dropped on evidence, not taste, and the numbers are the reason:
+
+- The grader **failed to complete in 4 of 4 real CI attempts**, across three
+  configurations (600s budget / 3 iterations, 1200s / 3, 1200s / 1). An established
+  failure rate, not bad luck. Every run ended `TIMEOUT` at `iterations=0` or `1`.
+- **Why:** one grader evaluation cost **15-17 minutes** of wall clock (CI run
+  30353690575: 15m14s = 76% of a 1200s budget), plus ~4 min of agent thinking —
+  while **all** of our host-side `rejudge_items` work took **7 seconds** (0.6%).
+  ~97% of every run was spent inside the grading service, so neither the budget nor
+  the candidate count was ever the bottleneck.
+- **The correction pass succeeded in 4 of 4 attempts**, always under 4 minutes, and
+  kept surfacing genuinely defensible corrections.
+- **The graded verdict was never gating anything.** `run_daily_sync` builds the
+  trend dashboard (line ~337) *before* running the checker (line ~351), by design,
+  and the relevance cache the corrections write to is neither committed nor in the
+  deploy file list — so on CI it dies with the runner. Nothing downstream ever
+  consumed the verdict.
+
+So this traded an unreliable component that produced nothing usable for a reliable
+one that was already doing the real work. Measured after the change: **78 seconds,
+verdict `CORRECTED`, 7 corrections in 3 turns** — versus 1204s and `TIMEOUT`.
+
+Notably, the tool loop reproduced the grader's *useful* behaviour for free: the
+reviewer noticed that the tool's own re-judgment of two items contradicted its own
+stated reasoning, pushed back, and — when the second attempt barely moved — said so
+honestly instead of claiming success.
+
+### Operating notes
+
+- **Verdicts:** `HARD_FAIL` (invariant violation = code bug), `CLEAN` (nothing
+  needed correcting), `CORRECTED` (n judgments fixed), `TIMEOUT`, `REFUSED`,
+  `ERROR`. **CLEAN and CORRECTED are both successful reviews** — `CORRECTED` means
+  the checker did its job, not that something broke.
+- **The log IS the deliverable** now that there is no graded verdict. Per-run detail
+  goes to `docs/trend_checker_log/<stamp>.log`; the newest run is mirrored to
+  **`docs/trend_checker_latest.log`, which IS in `_deploy_dashboard`'s file list**
+  so the trail survives CI. Before this, the per-run logs lived in a subdirectory
+  that was never published and died with the runner.
+- **Time bound, kept deliberately.** `TREND_CHECKER_BUDGET_SECONDS` (default 1200)
+  is enforced by a SIGALRM guard, plus an in-loop deadline, a `_MAX_TURNS=10`
+  runaway backstop, and a 120s per-request SDK timeout. The pass measures ~80s, so
+  1200 is generous on purpose. `CheckerTimeout` subclasses **BaseException**, not
+  `TimeoutError` — as a `TimeoutError` it was swallowed by httpcore and re-raised as
+  `httpx.ReadTimeout`, which reported `ERROR` instead of `TIMEOUT`.
+- **Thinking stays ON.** Per the Claude API guidance, disabling thinking on
+  `claude-opus-5` can make the model emit a tool call as plain text — the call
+  silently never runs and the turn still succeeds. That is fatal in a tool loop, so
+  do not add `thinking: {type: "disabled"}` here.
+- **No Managed Agents, no MCP.** MCP was ruled out in the 2026-07-14 investigation
+  (tunnels are research-preview; our tools are Python, not MCP servers). Managed
+  Agents is now ruled out by the evidence above. There is no session, so there is no
+  `$0.08/session-hour` billing and no stuck-session cleanup problem — both of which
+  we hit. `data/processed/checker_agent.json` (persisted agent/env ids) is deleted.
+- **Grounding:** the reviewer is told the `rejudge_items` tool result is the
+  authoritative value — if it still shows the old judgment, the item is NOT fixed
+  and it must not claim otherwise. Keep this; an earlier version could be papered
+  over by agent prose.
 - **Schedule:** rides the **existing Monday** trend rebuild in
   `run_daily_sync._rebuild_trend_dashboard` (gated by `TREND_DASHBOARD_REBUILD` +
-  Monday). No second scheduler. It is **best-effort — never blocks/fails the
-  sync**. Adds ~5-12 min of wall clock on Mondays; confirm the Actions job's
-  30-min timeout has headroom.
-- **Agent/env are persisted** in `data/processed/checker_agent.json` (create-once,
-  reuse-by-id — not recreated per run).
-- **Logs:** every grade, revision cycle, and final verdict is written to a plain
-  text file under `docs/trend_checker_log/<date>.log`, readable without any agent
-  framework knowledge.
-- **Cost:** standard token rates + $0.08/session-hour, billed only while the
-  session is `running` (idle host-side re-judgment isn't billed). A weekly run is
-  a few cents of session time plus the judge/grader tokens.
-- Manual runs: `python intelligence/trend_checker.py` (grade latest real output),
-  `--judged PATH` (grade a specific judged.json), `--rejudge-stub` (cap test with a
-  non-converging revision).
+  Monday, or `TREND_FORCE_REBUILD=1` to override). No second scheduler.
+  **Best-effort — never blocks or fails the sync.** Monday worst case is now
+  ~1.5 min sync + ~9.5 min trend rebuild + ~4 min checker, well inside the Actions
+  job's `timeout-minutes: 45`.
+- **Cost:** ordinary token rates only. A weekly run is a few cents.
+- Manual runs: `python intelligence/trend_checker.py` (review latest real output),
+  `--judged PATH` (review a specific judged.json), `--rejudge-stub` (cap test: the
+  tool hands back unchanged judgments so the loop cannot converge, exercising the
+  turn cap), `--budget N` (override the wall-clock budget).
 
 ## Deliverables
 
