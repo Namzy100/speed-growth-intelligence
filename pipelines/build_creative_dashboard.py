@@ -28,6 +28,8 @@ _ROOT = Path(__file__).resolve().parent.parent
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
+from pipelines import ask_panel
+
 from pipelines.json_embed import dumps_for_script
 
 load_dotenv(_ROOT / ".env")
@@ -499,8 +501,74 @@ def _meta_status_note() -> str:
 # Render
 # ------------------------------------------------------------------
 
+def _ask_config(data: dict) -> dict:
+    """Question set matched to what THIS dashboard actually holds: per-channel and
+    per-campaign acquisition efficiency, plus the headline KPIs and the retention
+    curve. Note eCPI and cost are `lower_is_better`, so "cheapest channel" sorts the
+    right way — the creator dashboard has no such metric."""
+    k = data.get("kpis") or {}
+    ret = data.get("retention") or {}
+    return {
+        "noun": "rows",
+        "generated_at": data.get("generated_at") or data.get("last_updated"),
+        "collections": [
+            {"name": "channels", "words": ["channel", "network", "source", "ecpi", "cpi"],
+             "rows": data.get("channels") or [], "label": "channel",
+             "facets": [{"key": "channel", "words": ["channel"],
+                         "values": sorted({r.get("channel") for r in (data.get("channels") or []) if r.get("channel")})}],
+             "metrics": [
+                 {"key": "ecpi", "words": ["ecpi", "cpi", "cost per install", "efficiency", "cheap", "expensive"],
+                  "label": "eCPI", "fmt": "money", "lower_is_better": True,
+                  # Organic channels have eCPI $0.00; ranking them as "cheapest" is
+                  # literally true and useless. The dashboard draws the same line via
+                  # its best_paid KPI and excluded_organic_rows.
+                  "exclude_zero": True},
+                 {"key": "installs", "words": ["install", "volume"], "label": "installs", "fmt": "int"},
+                 {"key": "clicks", "words": ["click"], "label": "clicks", "fmt": "int"},
+                 {"key": "impressions", "words": ["impression", "reach"], "label": "impressions", "fmt": "int"},
+             ],
+             "detail": ["channel", "installs", "clicks", "impressions", "ecpi"]},
+            {"name": "campaigns", "words": ["campaign", "spend", "cost", "budget"],
+             "rows": data.get("campaigns") or [], "label": "campaign",
+             "facets": [{"key": "channel", "words": ["channel", "network"],
+                         "values": sorted({r.get("channel") for r in (data.get("campaigns") or []) if r.get("channel")})}],
+             "metrics": [
+                 {"key": "cost", "words": ["cost", "spend", "budget", "expensive", "cheap"],
+                  "label": "cost", "fmt": "money", "lower_is_better": True, "exclude_zero": True},
+                 {"key": "installs", "words": ["install", "volume"], "label": "installs", "fmt": "int"},
+             ],
+             "detail": ["campaign", "channel", "cost", "installs"]},
+        ],
+        "scalars": [
+            {"words": ["total installs", "how many installs overall", "installs overall"],
+             "label": "Total installs (last 30 days)", "value": data.get("total_installs"), "fmt": "int"},
+            {"words": ["active channels", "how many channels"], "label": "Active channels",
+             "value": k.get("channel_count"), "fmt": "int"},
+            {"words": ["d1 retention", "day 1 retention"], "label": "D1 retention",
+             "value": k.get("d1_retention"), "fmt": "pct"},
+            {"words": ["most efficient", "best channel"], "label": "Most efficient channel",
+             "value": None, "fmt": "int", "note": "Most efficient channel: " + str(data.get("most_efficient") or "n/a")},
+        ],
+        "series": [
+            {"words": ["retention curve", "retention", "d7", "d30", "cohort"],
+             "label": "Retention curve", "labels": ret.get("labels") or [],
+             "values": ret.get("values") or [], "fmt": "pct",
+             "note": f"{ret.get('cohort_count', 0)} cohorts."},
+        ],
+        "examples": [
+            "cheapest channel by eCPI",
+            "top 5 channels by installs",
+            "total installs",
+            "which campaigns cost over $500?",
+            "breakdown of installs by channel",
+            "retention curve",
+        ],
+    }
+
 def render_html(data: dict) -> str:
-    return _TEMPLATE.replace("/*__DATA__*/", dumps_for_script(data))
+    html = _TEMPLATE.replace("/*__DATA__*/", dumps_for_script(data))
+    return ask_panel.inject(html, _ask_config(data),
+                            note="answers computed from the channel/campaign rows on this page")
 
 
 def main() -> None:
