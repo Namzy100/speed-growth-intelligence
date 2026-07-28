@@ -130,13 +130,26 @@
   .ask-list li:last-child{border-bottom:none;}
   .ask-list .ask-meta{color:var(--muted,var(--faint)); font-size:12.5px; font-variant-numeric:tabular-nums; white-space:nowrap;}
   .ask-prov{margin-top:10px; font-size:11px; color:var(--faint);}
+
+  /* Collapsed long lists (shared — pipelines/list_collapse.py) */
+  .lc-more{display:flex; justify-content:center; align-items:center; gap:10px; margin-top:10px;}
+  .lc-btn{background:rgba(47,93,251,0.10); border:1px solid var(--hairline-strong,var(--hairline));
+    color:var(--accent-2,var(--accent)); padding:5px 14px; border-radius:999px; cursor:pointer;
+    font-family:inherit; font-size:12px; font-weight:650; transition:border-color .15s, filter .15s;}
+  .lc-btn:hover{border-color:var(--accent); filter:brightness(1.08);}
+  .lc-count{font-size:11.5px; color:var(--faint);}
+  /* Fade the last visible row so a truncated table reads as truncated rather than
+     as the end of the data. Only applied while collapsed. */
+  .lc-clipped{position:relative;}
+  .lc-clipped::after{content:""; position:absolute; left:0; right:0; bottom:0; height:38px;
+    pointer-events:none; background:linear-gradient(to bottom, transparent, var(--panel));}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="brandbar">
     <div class="brand"><span class="bolt">⚡</span>Speed Wallet</div>
-    <div class="sync">Synced: <b>2026-07-28 15:05 UTC</b></div>
+    <div class="sync">Synced: <b>2026-07-28 15:34 UTC</b></div>
   </div>
 
   <div class="title-block">
@@ -152,21 +165,21 @@
           <span class="rank-no">Rank 1</span></div>
         <div class="rank-name">Germany</div>
         <div class="rank-metric">1,657 organic installs</div>
-        <div class="rank-rationale">Highest EU demand signal already unprompted; single EMI license covers future EU expansion alongside it.</div>
+        <div class="rank-rationale">Strongest EU demand signal already present; single EMI license covers future EU expansion alongside growing Indian corridor.</div>
       </div>
       <div class="rank-card">
         <div class="rank-head"><span class="medal">🥈</span>
           <span class="rank-no">Rank 2</span></div>
         <div class="rank-name">United Kingdom</div>
         <div class="rank-metric">873 organic installs</div>
-        <div class="rank-rationale">UK-to-India and UK-to-Nigeria are Speed&#x27;s two strongest corridor matches in Europe, plus mature iGaming.</div>
+        <div class="rank-rationale">UK-to-India and UK-to-Nigeria are Speed&#x27;s two highest-volume corridor matches, plus mature iGaming market.</div>
       </div>
       <div class="rank-card">
         <div class="rank-head"><span class="medal">🥉</span>
           <span class="rank-no">Rank 3</span></div>
         <div class="rank-name">Portugal</div>
         <div class="rank-metric">400k+ Brazilian nationals</div>
-        <div class="rank-rationale">Most concentrated single-corridor opportunity per capita; one language, one message drives dense word-of-mouth growth.</div>
+        <div class="rank-rationale">Unmatched single-corridor concentration; one language and one message drives dense word-of-mouth acquisition.</div>
       </div></div>
   </section>
 
@@ -177,13 +190,13 @@
         <div class="strat-market">Germany</div>
         <div class="strat-row"><div class="strat-k">Top channel</div><div class="strat-v">WhatsApp diaspora networks</div></div>
         <div class="strat-row"><div class="strat-k">Messaging angle</div><div class="strat-v">Send to India. Zero fees. Arrives in seconds.</div></div>
-        <div class="strat-row"><div class="strat-k">First creator segment</div><div class="strat-v">Indian-German remittance and finance creators (NRI-focused)</div></div>
+        <div class="strat-row"><div class="strat-k">First creator segment</div><div class="strat-v">Indian-German remittance and NRI finance creators</div></div>
       </div>
       <div class="strat-col">
         <div class="strat-market">United Kingdom</div>
         <div class="strat-row"><div class="strat-k">Top channel</div><div class="strat-v">WhatsApp diaspora networks</div></div>
         <div class="strat-row"><div class="strat-k">Messaging angle</div><div class="strat-v">Zero fees to Nigeria. Zero fees to India. Instant.</div></div>
-        <div class="strat-row"><div class="strat-k">First creator segment</div><div class="strat-v">Nigerian and Indian diaspora finance creators in London and Birmingham</div></div>
+        <div class="strat-row"><div class="strat-k">First creator segment</div><div class="strat-v">Nigerian and Indian diaspora finance creators based in London and Birmingham</div></div>
       </div>
       <div class="strat-col">
         <div class="strat-market">Portugal</div>
@@ -197,14 +210,14 @@
     <div class="sec-head"><h2>Competitive White Space</h2><span class="sec-note">Where Robinhood, Crypto.com &amp; Kraken are absent</span></div>
     
     <div class="ws-banner"><span class="ws-flag">UNCONTESTED TERRITORY</span>
-      <div class="ws-headline">Speed owns zero-fee remittance and iGaming deposits — no competitor does</div></div>
+      <div class="ws-headline">Speed Wallet owns remittance and iGaming: zero fees, instant, uncontested</div></div>
     <div class="table-wrap"><table class="ws-table">
       <thead><tr><th>Competitor</th><th>Zero-fee remittance</th><th>iGaming instant deposits</th><th>Literal speed</th></tr></thead>
-      <tbody><tr><td class="comp-name">Robinhood<span class="comp-focus">Premium trading tools, Gold membership, transparent investor fees</span></td><td class="mx open" title="not touching this angle">○ Open</td><td class="mx open" title="not touching this angle">○ Open</td><td class="mx open" title="not touching this angle">○ Open</td></tr><tr><td class="comp-name">Crypto.com<span class="comp-focus">Gamified rewards, card cashback, promotional zero-fee incentives</span></td><td class="mx open" title="not touching this angle">○ Open</td><td class="mx open" title="not touching this angle">○ Open</td><td class="mx open" title="not touching this angle">○ Open</td></tr><tr><td class="comp-name">Kraken<span class="comp-focus">Trading speed, performance visualization, product-led carousels</span></td><td class="mx open" title="not touching this angle">○ Open</td><td class="mx open" title="not touching this angle">○ Open</td><td class="mx contested" title="actively competing">● Competing</td></tr></tbody>
+      <tbody><tr><td class="comp-name">Robinhood<span class="comp-focus">Premium trading tools, Gold membership, transparent investor pricing</span></td><td class="mx open" title="not touching this angle">○ Open</td><td class="mx open" title="not touching this angle">○ Open</td><td class="mx open" title="not touching this angle">○ Open</td></tr><tr><td class="comp-name">Crypto.com<span class="comp-focus">Gamified rewards, card cashback, promotional fee offers</span></td><td class="mx open" title="not touching this angle">○ Open</td><td class="mx open" title="not touching this angle">○ Open</td><td class="mx open" title="not touching this angle">○ Open</td></tr><tr><td class="comp-name">Kraken<span class="comp-focus">Trading speed, visual product demos, performance credibility</span></td><td class="mx open" title="not touching this angle">○ Open</td><td class="mx open" title="not touching this angle">○ Open</td><td class="mx contested" title="actively competing">● Competing</td></tr></tbody>
     </table></div>
     <div class="ws-legend"><span class="lg open">○ Open = no competitor presence (Speed's lane)</span>
       <span class="lg contested">● Competing = already contested</span></div>
-    <div class="ws-chips"><span class="ws-chip">✓ Zero-fee international remittance with real corridor messaging</span><span class="ws-chip">✓ iGaming instant deposit positioning across permissive markets</span></div>
+    <div class="ws-chips"><span class="ws-chip">✓ Zero-fee corridor remittance messaging targeting international money senders</span><span class="ws-chip">✓ iGaming instant deposit positioning for casino and sportsbook users</span></div>
   </section>
 
   <section>
@@ -212,23 +225,23 @@
     <div class="tac-grid">
       <div class="tac-card">
         <span class="tac-cat">Remittance</span>
-        <div class="tac-title">Recipient-Side Micro-Creator Videos</div>
-        <div class="tac-why">Showing the receiving family&#x27;s experience closes the emotional loop senders respond to most.</div>
+        <div class="tac-title">Recipient-Side Creator Videos Close Loop</div>
+        <div class="tac-why">Showing the family receive funds triggers the sender&#x27;s emotional decision; almost no competitor markets from the recipient&#x27;s perspective.</div>
       </div>
       <div class="tac-card">
         <span class="tac-cat">Referral</span>
-        <div class="tac-title">Family-Chain Referral After First Transfer</div>
-        <div class="tac-why">Recipients already trust Speed at delivery; conversion at that moment vastly outperforms cold acquisition.</div>
+        <div class="tac-title">Family-Chain Referral at Moment of Receipt</div>
+        <div class="tac-why">Recipients already trust Speed the instant funds arrive, making conversion dramatically higher than any cold acquisition channel.</div>
       </div>
       <div class="tac-card">
         <span class="tac-cat">Guerrilla</span>
         <div class="tac-title">Fee-Comparison Posters Near Competitor Locations</div>
-        <div class="tac-why">Intercepts high-intent users at the exact competitive decision moment with zero media spend.</div>
+        <div class="tac-why">Captures undecided senders at peak competitive consideration with a single scannable, zero-cost call to action.</div>
       </div>
       <div class="tac-card">
         <span class="tac-cat">Crypto</span>
-        <div class="tac-title">Sats Bounties for Open-Source Integrations</div>
-        <div class="tac-why">Developers who build on Speed become credible advocates and compound the product&#x27;s reach permanently.</div>
+        <div class="tac-title">Sats Bounties for Developer Integrations</div>
+        <div class="tac-why">Developers who build on Speed become its most credible advocates, and each integration compounds organic reach indefinitely.</div>
       </div></div>
   </section>
 
@@ -246,7 +259,7 @@
 
   <footer>
     <b>Data sources:</b> eu_market_analysis_2026_06_24.txt · eu_channel_strategy_2026_06_24.txt · competitor_influencer_analysis_2026_06_26.txt · fintech_marketing_strategies.txt · data/processed/competitor_analysis_*.json<br>
-    Generated 2026-07-28 15:05 UTC · Sections extracted &amp; condensed by Claude (claude-sonnet-4-6) · rebuilt by pipelines/build_strategy_dashboard.py
+    Generated 2026-07-28 15:34 UTC · Sections extracted &amp; condensed by Claude (claude-sonnet-4-6) · rebuilt by pipelines/build_strategy_dashboard.py
   </footer>
 </div>
 <script>
@@ -258,7 +271,7 @@
    already embedded above, which is why the numbers are checkable against the
    tables on this page. `answerQuestion` is the seam to swap for a real backend.
    ========================================================================== */
-const ASK = {"noun": "entries", "generated_at": null, "collections": [{"name": "EU markets", "words": ["market", "eu", "europe", "enter", "priorit"], "rows": [{"rank": 1, "name": "Germany", "metric": "1,657 organic installs", "rationale": "Highest EU demand signal already unprompted; single EMI license covers future EU expansion alongside it."}, {"rank": 2, "name": "United Kingdom", "metric": "873 organic installs", "rationale": "UK-to-India and UK-to-Nigeria are Speed's two strongest corridor matches in Europe, plus mature iGaming."}, {"rank": 3, "name": "Portugal", "metric": "400k+ Brazilian nationals", "rationale": "Most concentrated single-corridor opportunity per capita; one language, one message drives dense word-of-mouth growth."}], "label": "name", "facets": [], "metrics": [{"key": "rank", "words": ["rank", "priority", "first"], "label": "rank", "fmt": "int", "lower_is_better": true}], "detail": ["name", "rank", "metric", "rationale"]}, {"name": "channel plans", "words": ["channel", "messaging", "angle", "segment", "germany", "united kingdom", "portugal"], "rows": [{"name": "Germany", "top_channel": "WhatsApp diaspora networks", "messaging_angle": "Send to India. Zero fees. Arrives in seconds.", "first_segment": "Indian-German remittance and finance creators (NRI-focused)"}, {"name": "United Kingdom", "top_channel": "WhatsApp diaspora networks", "messaging_angle": "Zero fees to Nigeria. Zero fees to India. Instant.", "first_segment": "Nigerian and Indian diaspora finance creators in London and Birmingham"}, {"name": "Portugal", "top_channel": "WhatsApp diaspora networks", "messaging_angle": "Manda dinheiro pro Brasil. Taxa zero. Na hora.", "first_segment": "Brazilian-Portuguese finance and expat-life creators"}], "label": "name", "facets": [], "metrics": [], "detail": ["name", "top_channel", "messaging_angle", "first_segment"]}, {"name": "tactics", "words": ["tactic", "recommend", "leverage", "underused", "play"], "rows": [{"title": "Recipient-Side Micro-Creator Videos", "category": "Remittance", "why": "Showing the receiving family's experience closes the emotional loop senders respond to most."}, {"title": "Family-Chain Referral After First Transfer", "category": "Referral", "why": "Recipients already trust Speed at delivery; conversion at that moment vastly outperforms cold acquisition."}, {"title": "Fee-Comparison Posters Near Competitor Locations", "category": "Guerrilla", "why": "Intercepts high-intent users at the exact competitive decision moment with zero media spend."}, {"title": "Sats Bounties for Open-Source Integrations", "category": "Crypto", "why": "Developers who build on Speed become credible advocates and compound the product's reach permanently."}], "label": "title", "facets": [{"key": "category", "words": ["category", "kind"], "values": ["Crypto", "Guerrilla", "Referral", "Remittance"]}], "metrics": [], "detail": ["title", "category", "why"]}, {"name": "competitors", "words": ["competitor", "robinhood", "kraken", "crypto.com", "whitespace", "uncontested"], "rows": [{"name": "Robinhood", "focus": "Premium trading tools, Gold membership, transparent investor fees", "Zero-fee remittance": "no", "iGaming instant deposits": "no", "Literal speed": "no", "uses": "none of the three"}, {"name": "Crypto.com", "focus": "Gamified rewards, card cashback, promotional zero-fee incentives", "Zero-fee remittance": "no", "iGaming instant deposits": "no", "Literal speed": "no", "uses": "none of the three"}, {"name": "Kraken", "focus": "Trading speed, performance visualization, product-led carousels", "Zero-fee remittance": "no", "iGaming instant deposits": "no", "Literal speed": "yes", "uses": "Literal speed"}], "label": "name", "facets": [], "metrics": [], "detail": ["name", "focus", "uses", "Zero-fee remittance", "iGaming instant deposits", "Literal speed"]}], "scalars": [{"words": ["biggest opportunity", "headline", "uncontested opportunity"], "label": "Biggest uncontested opportunity", "value": null, "fmt": "int", "note": "Speed owns zero-fee remittance and iGaming deposits \u2014 no competitor does"}], "series": [{"words": ["uncontested angles", "what is uncontested", "whitespace angles"], "label": "Uncontested angles", "labels": ["Zero-fee international remittance with real corridor messaging", "iGaming instant deposit positioning across permissive markets"], "values": ["uncontested", "uncontested"], "fmt": "raw"}], "examples": ["which EU markets should we enter first?", "what's the plan for Germany?", "list the recommended tactics", "which tactics are remittance?", "does Robinhood use zero-fee remittance?", "what is uncontested?"]};
+const ASK = {"noun": "entries", "generated_at": null, "collections": [{"name": "EU markets", "words": ["market", "eu", "europe", "enter", "priorit"], "rows": [{"rank": 1, "name": "Germany", "metric": "1,657 organic installs", "rationale": "Strongest EU demand signal already present; single EMI license covers future EU expansion alongside growing Indian corridor."}, {"rank": 2, "name": "United Kingdom", "metric": "873 organic installs", "rationale": "UK-to-India and UK-to-Nigeria are Speed's two highest-volume corridor matches, plus mature iGaming market."}, {"rank": 3, "name": "Portugal", "metric": "400k+ Brazilian nationals", "rationale": "Unmatched single-corridor concentration; one language and one message drives dense word-of-mouth acquisition."}], "label": "name", "facets": [], "metrics": [{"key": "rank", "words": ["rank", "priority", "first"], "label": "rank", "fmt": "int", "lower_is_better": true}], "detail": ["name", "rank", "metric", "rationale"]}, {"name": "channel plans", "words": ["channel", "messaging", "angle", "segment", "germany", "united kingdom", "portugal"], "rows": [{"name": "Germany", "top_channel": "WhatsApp diaspora networks", "messaging_angle": "Send to India. Zero fees. Arrives in seconds.", "first_segment": "Indian-German remittance and NRI finance creators"}, {"name": "United Kingdom", "top_channel": "WhatsApp diaspora networks", "messaging_angle": "Zero fees to Nigeria. Zero fees to India. Instant.", "first_segment": "Nigerian and Indian diaspora finance creators based in London and Birmingham"}, {"name": "Portugal", "top_channel": "WhatsApp diaspora networks", "messaging_angle": "Manda dinheiro pro Brasil. Taxa zero. Na hora.", "first_segment": "Brazilian-Portuguese finance and expat-life creators"}], "label": "name", "facets": [], "metrics": [], "detail": ["name", "top_channel", "messaging_angle", "first_segment"]}, {"name": "tactics", "words": ["tactic", "recommend", "leverage", "underused", "play"], "rows": [{"title": "Recipient-Side Creator Videos Close Loop", "category": "Remittance", "why": "Showing the family receive funds triggers the sender's emotional decision; almost no competitor markets from the recipient's perspective."}, {"title": "Family-Chain Referral at Moment of Receipt", "category": "Referral", "why": "Recipients already trust Speed the instant funds arrive, making conversion dramatically higher than any cold acquisition channel."}, {"title": "Fee-Comparison Posters Near Competitor Locations", "category": "Guerrilla", "why": "Captures undecided senders at peak competitive consideration with a single scannable, zero-cost call to action."}, {"title": "Sats Bounties for Developer Integrations", "category": "Crypto", "why": "Developers who build on Speed become its most credible advocates, and each integration compounds organic reach indefinitely."}], "label": "title", "facets": [{"key": "category", "words": ["category", "kind"], "values": ["Crypto", "Guerrilla", "Referral", "Remittance"]}], "metrics": [], "detail": ["title", "category", "why"]}, {"name": "competitors", "words": ["competitor", "robinhood", "kraken", "crypto.com", "whitespace", "uncontested"], "rows": [{"name": "Robinhood", "focus": "Premium trading tools, Gold membership, transparent investor pricing", "Zero-fee remittance": "no", "iGaming instant deposits": "no", "Literal speed": "no", "uses": "none of the three"}, {"name": "Crypto.com", "focus": "Gamified rewards, card cashback, promotional fee offers", "Zero-fee remittance": "no", "iGaming instant deposits": "no", "Literal speed": "no", "uses": "none of the three"}, {"name": "Kraken", "focus": "Trading speed, visual product demos, performance credibility", "Zero-fee remittance": "no", "iGaming instant deposits": "no", "Literal speed": "yes", "uses": "Literal speed"}], "label": "name", "facets": [], "metrics": [], "detail": ["name", "focus", "uses", "Zero-fee remittance", "iGaming instant deposits", "Literal speed"]}], "scalars": [{"words": ["biggest opportunity", "headline", "uncontested opportunity"], "label": "Biggest uncontested opportunity", "value": null, "fmt": "int", "note": "Speed Wallet owns remittance and iGaming: zero fees, instant, uncontested"}], "series": [{"words": ["uncontested angles", "what is uncontested", "whitespace angles"], "label": "Uncontested angles", "labels": ["Zero-fee corridor remittance messaging targeting international money senders", "iGaming instant deposit positioning for casino and sportsbook users"], "values": ["uncontested", "uncontested"], "fmt": "raw"}], "examples": ["which EU markets should we enter first?", "what's the plan for Germany?", "list the recommended tactics", "which tactics are remittance?", "does Robinhood use zero-fee remittance?", "what is uncontested?"]};
 const askInt = new Intl.NumberFormat("en-US");
 const askEsc = s => { const d = document.createElement("div"); d.textContent = (s == null ? "" : s); return d.innerHTML; };
 
@@ -577,6 +590,124 @@ function askRun(q){
   const total = (ASK.collections || []).reduce((a, c) => a + ((c.rows || []).length), 0);
   document.getElementById("askA").textContent =
     `Ask a question about the ${askInt.format(total)} rows on this page.`;
+})();
+
+</script>
+<script>
+
+/* ==========================================================================
+   Collapse long tables to a preview (shared — pipelines/list_collapse.py).
+   Keeps the Ask panel reachable without scrolling a multi-thousand-pixel table.
+   Targets `.table-wrap > table > tbody` only: that is the shared pattern across
+   these dashboards, and it means pages without a long list get no control.
+   ========================================================================== */
+(function(){
+  var LIMIT = 10;
+  var seq = 0;
+
+  function rowsOf(tbody){
+    var out = [], k;
+    for (k = 0; k < tbody.children.length; k++){
+      if (tbody.children[k].tagName === "TR") out.push(tbody.children[k]);
+    }
+    return out;
+  }
+
+  function apply(box, tbody, state){
+    var rows = rowsOf(tbody), i;
+    var expanded = state.expanded;
+    // Nothing to do: fewer rows than the limit. Clean up any stale control so a
+    // filter that narrows the set below the limit doesn't leave one behind.
+    if (rows.length <= LIMIT){
+      for (i = 0; i < rows.length; i++) rows[i].style.display = "";
+      box.classList.remove("lc-clipped");
+      if (state.ctrl) state.ctrl.style.display = "none";
+      return;
+    }
+    for (i = 0; i < rows.length; i++){
+      rows[i].style.display = (expanded || i < LIMIT) ? "" : "none";
+    }
+    if (expanded) box.classList.remove("lc-clipped");
+    else box.classList.add("lc-clipped");
+
+    if (!state.ctrl){
+      var wrap = document.createElement("div");
+      wrap.className = "lc-more";
+      var btn = document.createElement("button");
+      btn.className = "lc-btn";
+      btn.type = "button";
+      var note = document.createElement("span");
+      note.className = "lc-count";
+      wrap.appendChild(btn); wrap.appendChild(note);
+      box.parentNode.insertBefore(wrap, box.nextSibling);
+      state.ctrl = wrap; state.btn = btn; state.note = note;
+      btn.addEventListener("click", function(){
+        state.expanded = !state.expanded;
+        apply(box, tbody, state);
+        if (!state.expanded){
+          // Collapsing from far down the table would otherwise leave the reader
+          // stranded below the content that just disappeared.
+          var y = box.getBoundingClientRect().top + window.scrollY - 90;
+          window.scrollTo({top: y < 0 ? 0 : y, behavior: "smooth"});
+        }
+      });
+    }
+    state.ctrl.style.display = "";
+    state.btn.textContent = expanded ? ("Show first " + LIMIT) : ("Show all " + rows.length);
+    state.btn.setAttribute("aria-expanded", expanded ? "true" : "false");
+    state.note.textContent = expanded
+      ? ("all " + rows.length + " shown")
+      : ("showing " + LIMIT + " of " + rows.length);
+    syncCounters(!expanded);
+  }
+
+  // A dashboard's own "N of M shown" counter becomes a contradiction the moment we
+  // draw only the first 10 of N — the screenshot review caught "93 of 93 shown"
+  // sitting directly above ten rows. Reword it to describe what MATCHED while the
+  // table is truncated, and restore the original wording on expand. Matched by text
+  // pattern rather than per-dashboard id, so it needs no builder-specific wiring.
+  var COUNT_RE = /^\s*([\d,]+) of ([\d,]+) shown\s*$/;
+  function syncCounters(truncated){
+    var all = document.querySelectorAll("span,div,p,small"), i, el, m;
+    for (i = 0; i < all.length; i++){
+      el = all[i];
+      if (el.children.length) continue;
+      m = COUNT_RE.exec(el.textContent || "");
+      if (m){
+        if (truncated) el.textContent = m[1] + " of " + m[2] + " match";
+        continue;
+      }
+      m = /^\s*([\d,]+) of ([\d,]+) match\s*$/.exec(el.textContent || "");
+      if (m && !truncated) el.textContent = m[1] + " of " + m[2] + " shown";
+    }
+  }
+
+  function attach(box){
+    var tbody = box.querySelector("table > tbody");
+    if (!tbody || box.getAttribute("data-lc")) return;
+    box.setAttribute("data-lc", String(++seq));
+    var state = {expanded: false, ctrl: null, btn: null, note: null, busy: false};
+    apply(box, tbody, state);
+    // These tables are redrawn by the page's own filter/sort code, which would
+    // silently undo the collapse. Watch childList ONLY — observing attributes
+    // would re-fire on our own row hiding.
+    if (window.MutationObserver){
+      var mo = new MutationObserver(function(){
+        if (state.busy) return;
+        state.busy = true;
+        apply(box, tbody, state);
+        state.busy = false;
+      });
+      mo.observe(tbody, {childList: true});
+    }
+  }
+
+  function init(){
+    var boxes = document.querySelectorAll(".table-wrap"), i;
+    for (i = 0; i < boxes.length; i++) attach(boxes[i]);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
 })();
 
 </script>
