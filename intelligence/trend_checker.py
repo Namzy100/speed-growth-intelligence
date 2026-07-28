@@ -15,7 +15,7 @@ Outcomes primitive (`user.define_outcome`). Two kinds of check, deliberately spl
      Managed Agents Outcomes grader. On `needs_revision`, the in-session agent calls
      the host-side `rejudge_items` custom tool, which re-runs the judgment on ONLY
      the flagged items with the grader's feedback appended (no re-scraping). Capped
-     at max_iterations=3.
+     at max_iterations=1 (see the constant for why 3 could never fit the job timeout).
 
 Schedule: invoked by the Monday trend rebuild (see run_daily_sync); NO second
 scheduler. Every grade, revision cycle, and the final verdict are written to a
@@ -57,7 +57,21 @@ from intelligence import trend_pipeline as tp
 
 _AGENT_CFG = _ROOT / "data" / "processed" / "checker_agent.json"  # persisted agent/env ids
 _LOG_DIR = _ROOT / "docs" / "trend_checker_log"
-_MAX_ITERATIONS = 3
+# Grader iterations allowed per run. Cut 3 -> 1 on 2026-07-28 on measured evidence:
+# ONE grader evaluation costs ~15 minutes of wall clock (CI run 30353690575: 15m14s,
+# 76% of a 1200s budget), while all of our own host-side rejudge work took 7 seconds.
+# At 3 iterations a converging run therefore needs 45-60+ min and can never fit the
+# job's timeout-minutes: 45 — no budget increase fixes that, which is why raising
+# 600 -> 1200 still ended in a TIMEOUT.
+#
+# What 1 actually buys, stated honestly: the agent still gets its full correction
+# pass (in run 9 it made 3 rejudge_items calls BEFORE the first grader evaluation),
+# then the grader evaluates once. If that pass satisfied the rubric we get a real
+# PASS; if not we get FAIL_MAX_ITERATIONS. Either is a genuine graded verdict inside
+# budget, which is strictly more than the TIMEOUT we get today — but 1 iteration is
+# a bound, not a guarantee of convergence, and it does give up the second and third
+# chances to fix what the first pass missed.
+_MAX_ITERATIONS = 1
 _AGENT_MODEL = "claude-opus-4-8"
 _CANDIDATE_CAP = 30          # items graded per run (surfaced + a sample of gated)
 
