@@ -23,6 +23,8 @@ _ROOT = Path(__file__).resolve().parent.parent
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
+from pipelines.json_embed import dumps_for_script
+
 _IN = _ROOT / "data" / "processed" / "merchant_candidates.json"
 _OUT = _ROOT / "docs" / "merchant_dashboard.html"
 
@@ -102,7 +104,7 @@ def main() -> None:
         "by_source": dict(Counter(r["judge_source"] for r in rows)),
     }
     _OUT.parent.mkdir(parents=True, exist_ok=True)
-    _OUT.write_text(_TEMPLATE.replace("/*__DATA__*/", json.dumps(payload)), encoding="utf-8")
+    _OUT.write_text(_TEMPLATE.replace("/*__DATA__*/", dumps_for_script(payload)), encoding="utf-8")
     print(f"Wrote {_OUT.relative_to(_ROOT)} ({_OUT.stat().st_size:,} bytes)")
     print(f"  total={payload['total']} on_topic={payload['on_topic']} "
           f"verified_url={payload['verified']} sources={payload['by_source']}")

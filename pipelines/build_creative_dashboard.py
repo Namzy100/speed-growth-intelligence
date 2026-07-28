@@ -28,6 +28,8 @@ _ROOT = Path(__file__).resolve().parent.parent
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
+from pipelines.json_embed import dumps_for_script
+
 load_dotenv(_ROOT / ".env")
 
 from pipelines import sheets  # reuse _open/_retry auth + retry
@@ -498,7 +500,7 @@ def _meta_status_note() -> str:
 # ------------------------------------------------------------------
 
 def render_html(data: dict) -> str:
-    return _TEMPLATE.replace("/*__DATA__*/", json.dumps(data))
+    return _TEMPLATE.replace("/*__DATA__*/", dumps_for_script(data))
 
 
 def main() -> None:

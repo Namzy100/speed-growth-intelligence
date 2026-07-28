@@ -22,6 +22,8 @@ _ROOT = Path(__file__).resolve().parent.parent
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
+from pipelines.json_embed import dumps_for_script
+
 load_dotenv(_ROOT / ".env")
 
 from creators import database
@@ -182,7 +184,7 @@ def main() -> None:
     }
 
     _OUT.parent.mkdir(parents=True, exist_ok=True)
-    _OUT.write_text(_TEMPLATE.replace("/*__DATA__*/", json.dumps(data)), encoding="utf-8")
+    _OUT.write_text(_TEMPLATE.replace("/*__DATA__*/", dumps_for_script(data)), encoding="utf-8")
     print(f"Wrote {_OUT.relative_to(_ROOT)} ({_OUT.stat().st_size:,} bytes)")
     print(f"  total={data['total']} platforms={data['platforms']} "
           f"influencers={data['influencers']} mimanshi={data['mimanshi']} "
