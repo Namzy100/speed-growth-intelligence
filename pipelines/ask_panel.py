@@ -46,6 +46,7 @@ dashboard that invents a number is worse than one that declines.
 
 import json
 
+from pipelines import list_collapse
 from pipelines.json_embed import dumps_for_script
 
 __all__ = ["css", "html_section", "js", "inject"]
@@ -67,9 +68,14 @@ def inject(html: str, config: dict, heading: str = "Ask this dashboard",
     for anchor in ("</style>", "<footer", "</body>"):
         if anchor not in html:
             raise ValueError(f"ask_panel.inject: anchor {anchor!r} not found")
-    html = html.replace("</style>", css() + "</style>", 1)
+    # The long-list collapse ships with the panel deliberately: it exists so the
+    # panel is reachable without scrolling a multi-thousand-pixel table, and both
+    # want the same single injection point rather than five more builder edits.
+    html = html.replace("</style>", css() + list_collapse.css() + "</style>", 1)
     html = html.replace("<footer", html_section(heading, note) + "\n  <footer", 1)
-    return html.replace("</body>", "<script>\n" + js(config) + "\n</script>\n</body>", 1)
+    return html.replace("</body>",
+                        "<script>\n" + js(config) + "\n</script>\n"
+                        "<script>\n" + list_collapse.js() + "\n</script>\n</body>", 1)
 
 
 def css() -> str:

@@ -195,6 +195,43 @@
   .ask-list li:last-child{border-bottom:none;}
   .ask-list .ask-meta{color:var(--muted,var(--faint)); font-size:12.5px; font-variant-numeric:tabular-nums; white-space:nowrap;}
   .ask-prov{margin-top:10px; font-size:11px; color:var(--faint);}
+
+  /* Ask panel (shared — pipelines/ask_panel.py) */
+  .ask-wrap{background:var(--panel); border:1px solid var(--hairline); border-radius:var(--r-md,10px); padding:16px 18px; box-shadow:var(--shadow,none);}
+  .ask-row{display:flex; gap:10px; align-items:center;}
+  .ask-row input[type=text]{flex:1; min-width:0; padding:10px 13px; font-size:14px; background:#0e1117;
+    color:var(--text); border:1px solid var(--hairline); border-radius:8px; font-family:inherit;}
+  .ask-row input[type=text]:focus{outline:none; border-color:var(--accent);}
+  .ask-row button{background:var(--accent); color:#fff; border:1px solid var(--accent); border-radius:8px;
+    padding:10px 20px; font-size:13.5px; font-weight:650; cursor:pointer; font-family:inherit; transition:filter .15s;}
+  .ask-row button:hover{filter:brightness(1.12);}
+  .ask-eg{margin-top:11px; font-size:11.5px; color:var(--faint); display:flex; flex-wrap:wrap; gap:7px; align-items:center;}
+  .ask-chip{background:rgba(47,93,251,0.10); border:1px solid var(--hairline-strong,var(--hairline)); color:var(--accent-2,var(--accent));
+    padding:3px 10px; border-radius:999px; cursor:pointer; transition:border-color .15s;}
+  .ask-chip:hover{border-color:var(--accent);}
+  .ask-answer{margin-top:14px; padding-top:14px; border-top:1px solid var(--hairline); font-size:13.5px; line-height:1.55;}
+  .ask-answer.ask-empty{color:var(--faint);}
+  .ask-answer b{color:var(--text); font-weight:700; font-variant-numeric:tabular-nums;}
+  .ask-answer .ask-head{font-size:15px; font-weight:650; color:var(--text); margin-bottom:8px;}
+  .ask-answer .ask-miss{color:var(--warn,#e3b341);}
+  .ask-list{margin:9px 0 0; padding-left:0; list-style:none;}
+  .ask-list li{display:flex; justify-content:space-between; gap:14px; padding:5px 0; border-bottom:1px solid var(--hairline);}
+  .ask-list li:last-child{border-bottom:none;}
+  .ask-list .ask-meta{color:var(--muted,var(--faint)); font-size:12.5px; font-variant-numeric:tabular-nums; white-space:nowrap;}
+  .ask-prov{margin-top:10px; font-size:11px; color:var(--faint);}
+
+  /* Collapsed long lists (shared — pipelines/list_collapse.py) */
+  .lc-more{display:flex; justify-content:center; align-items:center; gap:10px; margin-top:10px;}
+  .lc-btn{background:rgba(47,93,251,0.10); border:1px solid var(--hairline-strong,var(--hairline));
+    color:var(--accent-2,var(--accent)); padding:5px 14px; border-radius:999px; cursor:pointer;
+    font-family:inherit; font-size:12px; font-weight:650; transition:border-color .15s, filter .15s;}
+  .lc-btn:hover{border-color:var(--accent); filter:brightness(1.08);}
+  .lc-count{font-size:11.5px; color:var(--faint);}
+  /* Fade the last visible row so a truncated table reads as truncated rather than
+     as the end of the data. Only applied while collapsed. */
+  .lc-clipped{position:relative;}
+  .lc-clipped::after{content:""; position:absolute; left:0; right:0; bottom:0; height:38px;
+    pointer-events:none; background:linear-gradient(to bottom, transparent, var(--panel));}
 </style>
 </head>
 <body>
@@ -720,7 +757,6 @@
       </div></div>
     </details>
   </section>
-
     <section>
     <div class="sec-head"><h2>Ask this dashboard</h2><span class="note">answers computed from the pipeline items on this page</span></div>
     <div class="ask-wrap">
@@ -1324,6 +1360,124 @@ function askRun(q){
   const total = (ASK.collections || []).reduce((a, c) => a + ((c.rows || []).length), 0);
   document.getElementById("askA").textContent =
     `Ask a question about the ${askInt.format(total)} rows on this page.`;
+})();
+
+</script>
+<script>
+
+/* ==========================================================================
+   Collapse long tables to a preview (shared — pipelines/list_collapse.py).
+   Keeps the Ask panel reachable without scrolling a multi-thousand-pixel table.
+   Targets `.table-wrap > table > tbody` only: that is the shared pattern across
+   these dashboards, and it means pages without a long list get no control.
+   ========================================================================== */
+(function(){
+  var LIMIT = 10;
+  var seq = 0;
+
+  function rowsOf(tbody){
+    var out = [], k;
+    for (k = 0; k < tbody.children.length; k++){
+      if (tbody.children[k].tagName === "TR") out.push(tbody.children[k]);
+    }
+    return out;
+  }
+
+  function apply(box, tbody, state){
+    var rows = rowsOf(tbody), i;
+    var expanded = state.expanded;
+    // Nothing to do: fewer rows than the limit. Clean up any stale control so a
+    // filter that narrows the set below the limit doesn't leave one behind.
+    if (rows.length <= LIMIT){
+      for (i = 0; i < rows.length; i++) rows[i].style.display = "";
+      box.classList.remove("lc-clipped");
+      if (state.ctrl) state.ctrl.style.display = "none";
+      return;
+    }
+    for (i = 0; i < rows.length; i++){
+      rows[i].style.display = (expanded || i < LIMIT) ? "" : "none";
+    }
+    if (expanded) box.classList.remove("lc-clipped");
+    else box.classList.add("lc-clipped");
+
+    if (!state.ctrl){
+      var wrap = document.createElement("div");
+      wrap.className = "lc-more";
+      var btn = document.createElement("button");
+      btn.className = "lc-btn";
+      btn.type = "button";
+      var note = document.createElement("span");
+      note.className = "lc-count";
+      wrap.appendChild(btn); wrap.appendChild(note);
+      box.parentNode.insertBefore(wrap, box.nextSibling);
+      state.ctrl = wrap; state.btn = btn; state.note = note;
+      btn.addEventListener("click", function(){
+        state.expanded = !state.expanded;
+        apply(box, tbody, state);
+        if (!state.expanded){
+          // Collapsing from far down the table would otherwise leave the reader
+          // stranded below the content that just disappeared.
+          var y = box.getBoundingClientRect().top + window.scrollY - 90;
+          window.scrollTo({top: y < 0 ? 0 : y, behavior: "smooth"});
+        }
+      });
+    }
+    state.ctrl.style.display = "";
+    state.btn.textContent = expanded ? ("Show first " + LIMIT) : ("Show all " + rows.length);
+    state.btn.setAttribute("aria-expanded", expanded ? "true" : "false");
+    state.note.textContent = expanded
+      ? ("all " + rows.length + " shown")
+      : ("showing " + LIMIT + " of " + rows.length);
+    syncCounters(!expanded);
+  }
+
+  // A dashboard's own "N of M shown" counter becomes a contradiction the moment we
+  // draw only the first 10 of N — the screenshot review caught "93 of 93 shown"
+  // sitting directly above ten rows. Reword it to describe what MATCHED while the
+  // table is truncated, and restore the original wording on expand. Matched by text
+  // pattern rather than per-dashboard id, so it needs no builder-specific wiring.
+  var COUNT_RE = /^\s*([\d,]+) of ([\d,]+) shown\s*$/;
+  function syncCounters(truncated){
+    var all = document.querySelectorAll("span,div,p,small"), i, el, m;
+    for (i = 0; i < all.length; i++){
+      el = all[i];
+      if (el.children.length) continue;
+      m = COUNT_RE.exec(el.textContent || "");
+      if (m){
+        if (truncated) el.textContent = m[1] + " of " + m[2] + " match";
+        continue;
+      }
+      m = /^\s*([\d,]+) of ([\d,]+) match\s*$/.exec(el.textContent || "");
+      if (m && !truncated) el.textContent = m[1] + " of " + m[2] + " shown";
+    }
+  }
+
+  function attach(box){
+    var tbody = box.querySelector("table > tbody");
+    if (!tbody || box.getAttribute("data-lc")) return;
+    box.setAttribute("data-lc", String(++seq));
+    var state = {expanded: false, ctrl: null, btn: null, note: null, busy: false};
+    apply(box, tbody, state);
+    // These tables are redrawn by the page's own filter/sort code, which would
+    // silently undo the collapse. Watch childList ONLY — observing attributes
+    // would re-fire on our own row hiding.
+    if (window.MutationObserver){
+      var mo = new MutationObserver(function(){
+        if (state.busy) return;
+        state.busy = true;
+        apply(box, tbody, state);
+        state.busy = false;
+      });
+      mo.observe(tbody, {childList: true});
+    }
+  }
+
+  function init(){
+    var boxes = document.querySelectorAll(".table-wrap"), i;
+    for (i = 0; i < boxes.length; i++) attach(boxes[i]);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
 })();
 
 </script>
