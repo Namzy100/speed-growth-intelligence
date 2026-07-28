@@ -302,16 +302,20 @@ def _rebuild_trend_dashboard() -> bool:
         _log(f"Trend dashboard: rebuild FAILED — {e}")
         ok = False
 
-    # Outcomes-graded quality check of the relevance/fit judgments — rides this
-    # same Monday cadence (no separate scheduler). Best-effort: it runs a Managed
-    # Agent session (~5-12 min) and NEVER blocks or fails the sync. Verdict + full
-    # revision trace are logged under docs/trend_checker_log/.
+    # Quality review of the relevance/fit judgments — rides this same Monday cadence
+    # (no separate scheduler). Best-effort: it NEVER blocks or fails the sync. The
+    # Outcomes grader was removed on 2026-07-28 after failing 4 of 4 CI attempts;
+    # what remains is the reviewer pass that always worked, ~1 min instead of ~20.
+    # Its findings are the deliverable, logged to docs/trend_checker_latest.log
+    # (published) and docs/trend_checker_log/<stamp>.log (per-run detail).
     try:
         from intelligence import trend_checker
-        _log("Trend checker: grading relevance/fit judgments via Outcomes...")
+        _log("Trend checker: reviewing relevance/fit judgments...")
         v = trend_checker.check_pipeline_output()
         _log(f"Trend checker: verdict={v.get('verdict')} "
-             f"(grader iterations={v.get('iterations')}) — see docs/trend_checker_log/")
+             f"({len(v.get('corrections') or [])} correction(s), "
+             f"{v.get('rejudge_calls')} tool call(s), {v.get('turns')} turn(s)) — "
+             "see docs/trend_checker_latest.log")
     except Exception as e:  # never block the sync on the checker
         _log(f"Trend checker: skipped ({e})")
     return ok
@@ -345,6 +349,10 @@ def _deploy_dashboard(include_trend: bool = True) -> bool:
         files.append("docs/trend_dashboard.html")
         # trend dashboard status/results — persist across rebuilds
         files.append("docs/dashboard_state.json")
+        # The reviewer's findings are the trend checker's only durable output now
+        # that the Outcomes grader is gone, so its log has to be published rather
+        # than dying with the CI runner.
+        files.append("docs/trend_checker_latest.log")
     try:
         subprocess.run(["git", "add", *files], cwd=_ROOT, check=True)
         # Nothing staged → no change to deploy.

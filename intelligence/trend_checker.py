@@ -1,37 +1,64 @@
-"""Outcomes-graded quality checker for the trend relevance/fit judgments.
+"""Quality checker for the trend relevance/fit judgments.
 
-The trend pipeline runs UNWRAPPED, exactly as today. This module only *grades* the
-real output of `trend_pipeline.judge_and_score`, using Claude Managed Agents'
-Outcomes primitive (`user.define_outcome`). Two kinds of check, deliberately split:
+The trend pipeline runs UNWRAPPED, exactly as before. This module only reviews the
+real output of `trend_pipeline.judge_and_score`. Two kinds of check, deliberately
+separated:
 
   1. DETERMINISTIC invariants — fit == 0.4*fintech + 0.3*replicability + 0.3*reach,
      and off-topic => fit 0. Verified in plain Python (`verify_fit_invariants`).
      A violation here is a CODE bug (weighting/gate drift), not a judgment miss, so
-     it HARD-FAILS immediately and is never fed into the revision loop.
+     it HARD-FAILS immediately and is never sent to a model.
 
   2. RELEVANCE DEFENSIBILITY — is each on/off-topic call defensible (no metaphor,
      homonym, or throwaway mention scored on-topic; nothing genuinely relevant
-     scored off)? This is the real judgment call, so it is graded by an independent
-     Managed Agents Outcomes grader. On `needs_revision`, the in-session agent calls
-     the host-side `rejudge_items` custom tool, which re-runs the judgment on ONLY
-     the flagged items with the grader's feedback appended (no re-scraping). Capped
-     at max_iterations=1 (see the constant for why 3 could never fit the job timeout).
+     scored off; no substanceless hype scored as a strong fit)? A reviewer model
+     works through the set and calls the host-side `rejudge_items` tool for each
+     judgment it finds indefensible, which re-runs the judgment on ONLY those items
+     with the reviewer's feedback appended (no re-scrape).
+
+WHY THE OUTCOMES GRADER WAS REMOVED (2026-07-28). This used to wrap the reviewer in
+a Claude Managed Agents Outcomes session, where an independent grader scored the
+result against a rubric and drove a revise loop. That grader failed to complete in
+4 of 4 real CI attempts across two different budget/iteration configurations
+(600s/3 iterations, 1200s/3, 1200s/1) — an established failure rate, not bad luck.
+The measured reason: ONE grader evaluation cost 15-17 minutes of wall clock while
+the reviewer's own correction pass took under 4 minutes and all host-side
+rejudge_items work took 7 seconds, so ~97% of every run was spent inside the
+grading service and no run ever got past iteration 0. The correction pass, by
+contrast, succeeded in 4 of 4 attempts and kept surfacing genuinely defensible
+corrections. And the graded verdict was never gating anything: run_daily_sync
+builds the trend dashboard BEFORE the checker runs, and the relevance cache the
+corrections write to is not committed, so nothing downstream ever consumed it.
+Dropping the grader trades an unreliable component that produced nothing usable
+for a reliable one that was already doing the real work. The reviewer now runs as a
+plain Messages-API tool loop — no session, no per-hour billing, no session-stop
+problem, and no grader latency.
+
+Because there is no graded verdict any more, THE LOG IS THE DELIVERABLE. Verdicts:
+HARD_FAIL (invariant violation, a code bug), CLEAN (no item needed correcting),
+CORRECTED (n judgments actually changed), FLAGGED_UNCHANGED (the reviewer objected
+to items but every re-judgment came back identical — the judgments it objected to
+are still in place, so a human should look), TIMEOUT, REFUSED, ERROR. Only CLEAN
+and CORRECTED are successful reviews. A "correction" is counted only when the value
+really moved, compared against a snapshot taken before rejudge_items mutates the
+item in place — an unchanged re-judgment used to be miscounted as a fix.
 
 Schedule: invoked by the Monday trend rebuild (see run_daily_sync); NO second
-scheduler. Every grade, revision cycle, and the final verdict are written to a
-plain-text log under docs/trend_checker_log/ that a successor can read without
-knowing anything about the agent framework. The log is written line-by-line as it
-happens, so a run killed mid-flight still leaves a readable partial trace.
+scheduler. Every correction and the final verdict are written to a plain-text log
+under docs/trend_checker_log/, written line-by-line as it happens so a run killed
+mid-flight still leaves a readable partial trace. The newest run is also mirrored
+to docs/trend_checker_latest.log, which IS published by the deploy step — the
+per-run logs live in a subdirectory that is not, so on CI they died with the runner.
 
-TIME BOUND: the session is capped at TREND_CHECKER_BUDGET_SECONDS (default 1200).
-max_iterations bounds grader iterations, NOT duration — on 2026-07-27 an unbounded
-session ran 17m24s and was SIGKILLed by the CI job timeout, taking the deploy step
-with it. Over budget is now a logged TIMEOUT verdict, never a silent kill.
+TIME BOUND: the pass is capped at TREND_CHECKER_BUDGET_SECONDS (default 1200).
+On 2026-07-27 an unbounded session ran 17m24s and was SIGKILLed by the CI job
+timeout, taking the deploy step with it. Over budget is now a logged TIMEOUT
+verdict, never a silent kill.
 
 Run manually:
-  python intelligence/trend_checker.py                 # grade the real pipeline output
-  python intelligence/trend_checker.py --judged PATH    # grade a specific judged.json
-  python intelligence/trend_checker.py --rejudge-stub    # cap test: non-converging revision
+  python intelligence/trend_checker.py                 # review the real pipeline output
+  python intelligence/trend_checker.py --judged PATH    # review a specific judged.json
+  python intelligence/trend_checker.py --rejudge-stub    # cap test: non-converging loop
   python intelligence/trend_checker.py --budget 60       # override the wall-clock budget
 """
 
@@ -55,52 +82,46 @@ load_dotenv(_ROOT / ".env")
 
 from intelligence import trend_pipeline as tp
 
-_AGENT_CFG = _ROOT / "data" / "processed" / "checker_agent.json"  # persisted agent/env ids
 _LOG_DIR = _ROOT / "docs" / "trend_checker_log"
-# Grader iterations allowed per run. Cut 3 -> 1 on 2026-07-28 on measured evidence:
-# ONE grader evaluation costs ~15 minutes of wall clock (CI run 30353690575: 15m14s,
-# 76% of a 1200s budget), while all of our own host-side rejudge work took 7 seconds.
-# At 3 iterations a converging run therefore needs 45-60+ min and can never fit the
-# job's timeout-minutes: 45 — no budget increase fixes that, which is why raising
-# 600 -> 1200 still ended in a TIMEOUT.
-#
-# What 1 actually buys, stated honestly: the agent still gets its full correction
-# pass (in run 9 it made 3 rejudge_items calls BEFORE the first grader evaluation),
-# then the grader evaluates once. If that pass satisfied the rubric we get a real
-# PASS; if not we get FAIL_MAX_ITERATIONS. Either is a genuine graded verdict inside
-# budget, which is strictly more than the TIMEOUT we get today — but 1 iteration is
-# a bound, not a guarantee of convergence, and it does give up the second and third
-# chances to fix what the first pass missed.
-_MAX_ITERATIONS = 1
-_AGENT_MODEL = "claude-opus-4-8"
+# Stable, publishable copy of the newest run's log. The per-run logs live in a
+# subdirectory that _deploy_dashboard does not publish, so on CI they died with the
+# runner and only the Actions log carried the trail. Now that the reviewer's findings
+# ARE the deliverable, that trail has to survive: this file is in the deploy list.
+_LATEST_LOG = _ROOT / "docs" / "trend_checker_latest.log"
+
+_REVIEW_MODEL = "claude-opus-5"
+_REVIEW_EFFORT = "high"      # judgment quality matters more here than token spend
+_REVIEW_MAX_TOKENS = 16000   # caps thinking + text together; thinking is on by default
+# Turns of the tool loop. A turn is one model call plus any rejudge_items it asks for,
+# and the reviewer has finished its pass in 2-3 turns every time it has been measured.
+# This is a runaway backstop, not a budget: the wall-clock budget is the real bound.
+_MAX_TURNS = 10
 _CANDIDATE_CAP = 30          # items graded per run (surfaced + a sample of gated)
 
-# Hard wall-clock budget for the whole grading session. _MAX_ITERATIONS caps grader
-# ITERATIONS, not duration: one iteration is unbounded (agent thinking + host-side
-# rejudge_items, which makes its own Claude calls), and `for event in stream` blocks
-# indefinitely if the session goes quiet. On 2026-07-27 that ate 17m24s of the CI
-# job's 30-minute timeout and killed the deploy step.
-#
-# Raised 600 -> 1200 on 2026-07-28, deliberately buying coverage with headroom we
-# actually have. At 600 the checker never once converged (2 straight TIMEOUTs), and
-# the CI run showed why that mattered: before being cut off it made two GENUINELY
-# CORRECT corrections (t1 and t27, both real crypto content wrongly gated
-# off-topic), then died at grader iterations=0. It was finding real misjudgements
-# and being killed before it could report them. The alternative — halving
-# _CANDIDATE_CAP to fit 600s — would have cut coverage instead. Monday worst case
-# is now ~1.5 min sync + ~9.5 min trend rebuild + ~21 min checker (budget + the
-# 60s stop-session settle) ≈ 32 min, inside timeout-minutes: 45.
+# Hard wall-clock budget for the whole reviewer pass. Kept even though the pass now
+# completes in ~4 minutes: an unbounded model loop is what caused the 2026-07-27
+# incident (17m24s, SIGKILLed by the CI job timeout, taking the deploy step with it),
+# and the bound is what turns a slow run into a logged TIMEOUT instead of a silent
+# kill. 1200 is deliberately generous relative to the measured ~4 min so a slow day
+# does not trip it; the turn cap and the per-request SDK timeout are the inner
+# bounds. Monday worst case is now ~1.5 min sync + ~9.5 min trend rebuild + ~4 min
+# checker, comfortably inside timeout-minutes: 45.
 _CHECKER_BUDGET_SECONDS = int(os.getenv("TREND_CHECKER_BUDGET_SECONDS", "1200"))
 _SDK_TIMEOUT_SECONDS = 120   # per-request cap so a single hung HTTP call can't stall us
 
+# Messages-API tool shape: name / description / input_schema. (The previous
+# Managed Agents "custom" tool shape is gone along with the session.) The
+# description is deliberately prescriptive about WHEN to call, not just what it
+# does — recent Opus models reach for tools conservatively, and a trigger
+# condition in the description measurably raises the should-call rate.
 _REJUDGE_TOOL = {
-    "type": "custom",
     "name": "rejudge_items",
     "description": (
-        "Re-run the automated relevance/fit judgment on specific flagged items, "
-        "with corrective feedback appended to the judgment prompt. Call this for "
-        "every item whose on_topic/relevance judgment you find indefensible. "
-        "Returns the corrected judgment for each id."),
+        "Re-run the automated relevance/fit judgment on specific flagged items, with "
+        "corrective feedback appended to the judgment prompt. Call this for EVERY item "
+        "whose on_topic or fit judgment you find indefensible — it is the only way to "
+        "correct one; writing the correction in prose changes nothing. Returns the "
+        "corrected judgment for each id."),
     "input_schema": {
         "type": "object",
         "properties": {
@@ -113,34 +134,28 @@ _REJUDGE_TOOL = {
     },
 }
 
-_AGENT_SYSTEM = (
+_REVIEWER_SYSTEM = (
     "You are a quality reviewer for Speed Wallet's trend pipeline. Speed is a "
     "Bitcoin + stablecoin payments app (segments: remittance, crypto-curious, "
     "iGaming). An automated pipeline has scored trending videos for topical "
-    "relevance. Your ONLY job is to confirm each relevance judgment is DEFENSIBLE, "
-    "and to correct the ones that are not by calling the rejudge_items tool. You do "
-    "not re-score anything yourself; the tool does the re-judgment.")
-
-
-def _rubric() -> str:
-    return (
-        "GROUNDING (critical): judge ONLY from two things — (a) each item's own "
-        "content (title/hashtags), and (b) its AUTHORITATIVE judgment, which is the "
-        "value in the most recent `rejudge_items` TOOL RESULT for that id if it was "
-        "re-judged, otherwise its original judgment shown in the task. Treat any "
-        "prose or file the reviewer writes as UNTRUSTED narrative — if the reviewer "
-        "claims an item was fixed but the latest rejudge_items tool result still "
-        "shows the old value, the item is NOT fixed. Base your verdict on the tool "
-        "results, not on what the reviewer says it did.\n\n"
-        "PASS only if EVERY authoritative relevance judgment is defensible.\n"
-        "A judgment is INDEFENSIBLE if:\n"
-        "  - on_topic=true for a video that only mentions crypto/fintech/money as a "
-        "METAPHOR ('like finding bitcoin in 2009'), a HOMONYM (weather 'lightning', "
-        "laser 'lightbridge'), or a throwaway/passing reference;\n"
-        "  - on_topic=false for a video genuinely ABOUT "
-        "crypto/fintech/remittance/iGaming as its subject.\n"
-        "If ANY authoritative judgment is still indefensible, FAIL and name each "
-        "offending item id with the reason. Do not PASS on the reviewer's assurance.")
+    "relevance. Your ONLY job is to find judgments that are not defensible and "
+    "correct them by calling the rejudge_items tool. You do not re-score anything "
+    "yourself; the tool does the re-judgment.\n\n"
+    "A judgment is INDEFENSIBLE if:\n"
+    "  - on_topic=true for a video that only mentions crypto/fintech/money as a "
+    "METAPHOR ('like finding bitcoin in 2009'), a HOMONYM (weather 'lightning', "
+    "laser 'lightbridge'), or a throwaway/passing reference;\n"
+    "  - on_topic=false for a video genuinely ABOUT "
+    "crypto/fintech/remittance/iGaming as its subject;\n"
+    "  - the fit score is far out of line with how usable the content actually is "
+    "for Speed (e.g. substanceless hype scored as a strong fit).\n\n"
+    "Judge only from each item's own content and its stated judgment. The tool "
+    "result is the authoritative corrected value — if it still shows the old "
+    "judgment, that item is NOT fixed, and you must not claim it is.\n\n"
+    "Work through the whole set, then stop. When you are done, reply with one short "
+    "paragraph naming what you corrected and what you deliberately left alone. Do "
+    "not pad the summary, and do not re-report a correction the tool already "
+    "confirmed.")
 
 
 # ------------------------------------------------------------------
@@ -220,63 +235,6 @@ def _wall_clock_budget(seconds: int, log):
         signal.signal(signal.SIGALRM, previous)
 
 
-def _stop_session(client, session_id: str, log, settle_seconds: float = 60.0) -> None:
-    """Stop a session we are abandoning, so we stop paying $0.08/session-hour.
-
-    Best-effort throughout: we are already on the failure path and must not raise.
-
-    Getting this right needed the real API's behaviour (learned 2026-07-28):
-      * `user.interrupt` is ASYNCHRONOUS. The session stays "running" after the
-        interrupt is accepted.
-      * BOTH archive and delete are REJECTED while the status is "running"
-        ("cannot be archived while its status is running" / "Cannot delete session
-        while it is running"). So there is no way to force-stop it — the only
-        route is to interrupt, wait for it to leave "running", then archive.
-      * One interrupt is not always enough, so it is re-sent while we wait.
-    Archiving is the definitive stop; the host-side log file is the post-mortem
-    record, so nothing diagnostic is lost by archiving. Safe to sleep here: the
-    one-shot alarm has already fired by the time this is called.
-
-    How long the wait actually is (measured 2026-07-28): a session interrupted on
-    the normal timeout path went idle in ~5s, well inside this window. A session
-    ABANDONED mid-tool-call (host process died without answering rejudge_items)
-    kept working and took ~13 minutes to go idle — far past any window worth
-    blocking a CI job for. It does eventually stop on its own, so the failure mode
-    is a few cents of session time, not a permanent leak; we log and move on.
-    """
-    give_up_at = time.monotonic() + settle_seconds
-    status, last_error, next_interrupt = "?", None, 0.0
-    while True:
-        now = time.monotonic()
-        if now >= next_interrupt:
-            try:
-                client.beta.sessions.events.send(
-                    session_id=session_id, events=[{"type": "user.interrupt"}])
-                log(f"  session {session_id}: interrupt sent (agent pausing).")
-            except Exception as e:  # noqa: BLE001
-                log(f"  session {session_id}: interrupt failed — {type(e).__name__}: {e}")
-            next_interrupt = now + 10.0
-        try:
-            status = getattr(client.beta.sessions.retrieve(session_id=session_id),
-                             "status", "?")
-        except Exception:  # noqa: BLE001
-            status = "?"
-        if status != "running":
-            try:
-                client.beta.sessions.archive(session_id=session_id)
-                log(f"  session {session_id}: archived from '{status}' (billing stopped).")
-                return
-            except Exception as e:  # noqa: BLE001
-                last_error = e
-        if time.monotonic() >= give_up_at:
-            break
-        time.sleep(3.0)
-    tail = f", last error {type(last_error).__name__}" if last_error else ""
-    log(f"  session {session_id}: NOT stopped after {settle_seconds:.0f}s "
-        f"(status={status}{tail}) — it may still be billing at $0.08/session-hour; "
-        "check the Managed Agents console.")
-
-
 # ------------------------------------------------------------------
 # Build the judged candidate set from the REAL pipeline output
 # ------------------------------------------------------------------
@@ -319,153 +277,149 @@ def _compact(items: list[dict]) -> list[dict]:
     } for v in items]
 
 
-# ------------------------------------------------------------------
-# Managed Agent (create once, reuse by id)
-# ------------------------------------------------------------------
-
-def _ensure_agent(client, log) -> tuple[str, str]:
-    if _AGENT_CFG.exists():
-        cfg = json.loads(_AGENT_CFG.read_text())
-        # sanity: confirm they still resolve
-        try:
-            client.beta.agents.retrieve(cfg["agent_id"])
-            client.beta.environments.retrieve(cfg["environment_id"])
-            log(f"Reusing agent {cfg['agent_id']} + env {cfg['environment_id']}")
-            return cfg["agent_id"], cfg["environment_id"]
-        except Exception:
-            log("Persisted agent/env no longer resolve — recreating.")
-    env = client.beta.environments.create(
-        name=f"speed-trend-checker-{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}",
-        config={"type": "cloud", "networking": {"type": "unrestricted"}})
-    agent = client.beta.agents.create(
-        name="Speed Trend Relevance Checker",
-        model=_AGENT_MODEL,
-        system=_AGENT_SYSTEM,
-        tools=[{"type": "agent_toolset_20260401"}, _REJUDGE_TOOL])
-    _AGENT_CFG.parent.mkdir(parents=True, exist_ok=True)
-    _AGENT_CFG.write_text(json.dumps(
-        {"agent_id": agent.id, "environment_id": env.id, "version": getattr(agent, "version", None)},
-        indent=2))
-    log(f"Created agent {agent.id} + env {env.id}")
-    return agent.id, env.id
-
 
 # ------------------------------------------------------------------
-# Run the Outcomes-graded check
+# Run the reviewer pass
 # ------------------------------------------------------------------
 
 def run_check(items: list[dict], log, rejudge_stub: bool = False,
               deadline: float | None = None) -> dict:
-    """Grade `items` via an Outcomes session. Returns a verdict dict. Mutates
-    `items` in place when rejudge corrects them (host-side source of truth).
+    """Review `items` and correct indefensible judgments in place.
 
-    `deadline` is a `time.monotonic()` timestamp. Past it, the grading loop stops
-    and the verdict is TIMEOUT — never a silent kill (see _wall_clock_budget).
+    Two checks, deliberately separated. First the deterministic invariants, in
+    plain Python — a violation there is a code bug, so it hard-fails and is never
+    sent to a model. Then the REVIEWER PASS: a plain Messages-API tool loop where
+    the model calls the host-side `rejudge_items` tool for each judgment it finds
+    indefensible. `items` is mutated in place; the host stays the source of truth.
+
+    There is no Outcomes grader and no Managed Agents session — see the module
+    docstring for the measured reasons that was removed.
+
+    `deadline` is a `time.monotonic()` timestamp. Past it the loop stops and the
+    verdict is TIMEOUT, never a silent kill (see _wall_clock_budget).
     """
     by_id = {v["id"]: v for v in items}
 
-    # --- 1. Deterministic invariants (hard fail, never revised) ---
+    # --- 1. Deterministic invariants (hard fail, never reviewed) ---
     violations = tp.verify_fit_invariants(items)
     if violations:
-        log(f"DETERMINISTIC INVARIANT VIOLATION ({len(violations)}) — hard fail, no revision:")
+        log(f"DETERMINISTIC INVARIANT VIOLATION ({len(violations)}) — hard fail, no review:")
         for x in violations:
             log(f"    - [{x['kind']}] {x['id']}: {x['detail']}")
         return {"verdict": "HARD_FAIL", "reason": "fit/gate invariant violated (code bug)",
-                "violations": violations, "iterations": 0}
+                "violations": violations, "turns": 0, "rejudge_calls": 0}
     log(f"Deterministic invariants OK for all {len(items)} items (fit=0.4/0.3/0.3, gate enforced).")
 
-    # --- 2. Relevance defensibility via Outcomes ---
+    # --- 2. Reviewer pass (Messages API tool loop) ---
     client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"),
                                  timeout=_SDK_TIMEOUT_SECONDS)
-    agent_id, env_id = _ensure_agent(client, log)
-    session = client.beta.sessions.create(
-        agent=agent_id, environment_id=env_id,
-        title=f"trend relevance check {datetime.now(timezone.utc).date()}")
-    log(f"Session {session.id} created.")
-
-    description = (
-        "Below is the current relevance/fit judgment for a set of trending videos "
-        "(JSON). Verify every relevance judgment is defensible per the rubric. For "
-        "each indefensible item, call rejudge_items(ids=[...], feedback='...'). The "
-        "tool result is the AUTHORITATIVE corrected judgment — if it still shows the "
-        "old (indefensible) value, that item is NOT fixed and you must not claim it "
-        "is. Keep going until every authoritative judgment is defensible. Do NOT "
-        "write any files and do NOT summarize judgments you did not actually change; "
-        "the grader reads the rejudge_items tool results directly, not your prose.\n\n"
+    task = (
+        "Below is the current relevance/fit judgment for a set of trending videos, as "
+        "JSON. Review every item. For each judgment you find indefensible, call "
+        "rejudge_items(ids=[...], feedback='...') with a specific reason.\n\n"
         + json.dumps(_compact(items), ensure_ascii=False))
+    messages: list[dict] = [{"role": "user", "content": task}]
 
-    verdict = {"verdict": "UNKNOWN", "iterations": 0, "evaluations": [],
-               "rejudge_calls": 0, "timed_out": False, "session_id": session.id}
+    verdict = {"verdict": "UNKNOWN", "turns": 0, "rejudge_calls": 0,
+               "corrections": [], "unchanged": 0, "timed_out": False, "summary": ""}
+    log(f"Reviewer pass: {_REVIEW_MODEL} (effort={_REVIEW_EFFORT}) over {len(items)} items.")
 
     try:
-        with client.beta.sessions.events.stream(session_id=session.id) as stream:
-            client.beta.sessions.events.send(session_id=session.id, events=[{
-                "type": "user.define_outcome",
-                "description": description,
-                "rubric": {"type": "text", "content": _rubric()},
-                "max_iterations": _MAX_ITERATIONS,
-            }])
-            log(f"Outcome defined (max_iterations={_MAX_ITERATIONS}); grading {len(items)} items.")
+        for turn in range(1, _MAX_TURNS + 1):
+            if deadline is not None and time.monotonic() >= deadline:
+                log("  BUDGET EXPIRED (soft, between turns) — stopping the reviewer pass.")
+                verdict["timed_out"] = True
+                break
 
-            for event in stream:
-                # Soft deadline: handles a session that is still talking but too
-                # slow. A silent session is caught by the SIGALRM guard instead.
-                if deadline is not None and time.monotonic() >= deadline:
-                    log("  BUDGET EXPIRED (soft, in-loop) — stopping the grading loop.")
-                    verdict["timed_out"] = True
-                    break
-                et = getattr(event, "type", "")
-                if et == "agent.custom_tool_use" and getattr(event, "name", "") == "rejudge_items":
-                    inp = getattr(event, "input", {}) or {}
-                    ids, fb = inp.get("ids", []), inp.get("feedback", "")
-                    verdict["rejudge_calls"] += 1
-                    log(f"  rejudge_items called: ids={ids} feedback={fb[:100]!r}")
-                    if rejudge_stub:
-                        # CAP TEST: return the SAME (still-bad) judgment -> non-converging.
-                        result = [{"id": i, "on_topic": by_id.get(i, {}).get("on_topic"),
-                                   "fintech_involvement": by_id.get(i, {}).get("fintech_involvement"),
-                                   "note": "stub: unchanged"} for i in ids]
-                        log("    [stub] returning unchanged judgments (forcing non-convergence)")
-                    else:
-                        corrected = tp.rejudge_items(items, ids, fb)
-                        result = [{"id": c["id"], "on_topic": c["on_topic"],
-                                   "fintech_involvement": c["fintech_involvement"],
-                                   "reason": c.get("relevance_reason", "")[:160]} for c in corrected]
-                        for c in corrected:
-                            log(f"    -> {c['id']} re-judged: on_topic={c['on_topic']} "
-                                f"fintech={c['fintech_involvement']} fit={c['fit_score']}")
-                    client.beta.sessions.events.send(session_id=session.id, events=[{
-                        "type": "user.custom_tool_result",
-                        "custom_tool_use_id": event.id,
-                        "content": [{"type": "text", "text": json.dumps(result, ensure_ascii=False)}],
-                    }])
-                elif et == "span.outcome_evaluation_end":
-                    res = getattr(event, "result", None)
-                    expl = getattr(event, "explanation", "") or ""
-                    it = getattr(event, "iteration", None)
-                    verdict["iterations"] = (it + 1) if isinstance(it, int) else verdict["iterations"] + 1
-                    verdict["evaluations"].append({"iteration": it, "result": res, "explanation": expl})
-                    log(f"  GRADER iteration {it}: {res} — {expl[:200]}")
-                elif et == "session.status_idle":
-                    sr = getattr(event, "stop_reason", None)
-                    srt = getattr(sr, "type", None)
-                    if srt != "requires_action":
-                        log(f"  session idle (stop_reason={srt}) — done.")
-                        break
-                elif et == "session.status_terminated":
-                    log("  session terminated.")
-                    break
-                elif et == "session.error":
-                    log(f"  session.error: {getattr(event,'error',None)}")
+            resp = client.messages.create(
+                model=_REVIEW_MODEL,
+                max_tokens=_REVIEW_MAX_TOKENS,
+                system=_REVIEWER_SYSTEM,
+                output_config={"effort": _REVIEW_EFFORT},
+                tools=[_REJUDGE_TOOL],
+                messages=messages,
+            )
+            verdict["turns"] = turn
+
+            # Check stop_reason BEFORE reading content: on a refusal the content
+            # is empty or partial, so indexing it blindly would raise.
+            if resp.stop_reason == "refusal":
+                cat = getattr(getattr(resp, "stop_details", None), "category", None)
+                log(f"  reviewer REFUSED (category={cat}) — no review performed.")
+                verdict["verdict"] = "REFUSED"
+                return verdict
+
+            messages.append({"role": "assistant", "content": resp.content})
+            for block in resp.content:
+                if block.type == "text" and block.text.strip():
+                    verdict["summary"] = " ".join(block.text.split())
+                    log(f"  reviewer: {verdict['summary'][:400]}")
+
+            if resp.stop_reason != "tool_use":
+                log(f"  reviewer finished on turn {turn} (stop_reason={resp.stop_reason}).")
+                break
+
+            # Every tool_result for this turn goes back in ONE user message —
+            # splitting them across messages trains the model out of parallel calls.
+            results = []
+            for block in resp.content:
+                if block.type != "tool_use" or block.name != "rejudge_items":
+                    continue
+                ids = (block.input or {}).get("ids", [])
+                fb = (block.input or {}).get("feedback", "")
+                verdict["rejudge_calls"] += 1
+                log(f"  rejudge_items called: ids={ids} feedback={fb[:100]!r}")
+                if rejudge_stub:
+                    # Cap test: hand back the SAME (still-bad) judgment so the loop
+                    # cannot converge, exercising the turn/budget bounds.
+                    payload = [{"id": i, "on_topic": by_id.get(i, {}).get("on_topic"),
+                                "fintech_involvement": by_id.get(i, {}).get("fintech_involvement"),
+                                "note": "stub: unchanged"} for i in ids]
+                    log("    [stub] returning unchanged judgments (forcing non-convergence)")
+                else:
+                    # Snapshot the judgment BEFORE re-judging: rejudge_items mutates
+                    # the item dicts in place, and by_id holds the same references,
+                    # so there is nothing left to compare against afterwards. Without
+                    # this, a re-judgment that returned the value unchanged still got
+                    # counted as a "correction" — which happened for real (t53 came
+                    # back at fit 8.2 twice).
+                    before = {i: {k: by_id.get(i, {}).get(k)
+                                  for k in ("on_topic", "fintech_involvement", "fit_score")}
+                              for i in ids}
+                    corrected = tp.rejudge_items(items, ids, fb)
+                    payload = [{"id": c["id"], "on_topic": c["on_topic"],
+                                "fintech_involvement": c["fintech_involvement"],
+                                "fit_score": c.get("fit_score"),
+                                "reason": c.get("relevance_reason", "")[:160]} for c in corrected]
+                    for c in corrected:
+                        was = before.get(c["id"], {})
+                        now = {"on_topic": c["on_topic"],
+                               "fintech_involvement": c["fintech_involvement"],
+                               "fit_score": c.get("fit_score")}
+                        changed = was != now
+                        log(f"    -> {c['id']} re-judged: on_topic={c['on_topic']} "
+                            f"fintech={c['fintech_involvement']} fit={c['fit_score']}"
+                            f" {'(CHANGED)' if changed else '(unchanged)'}")
+                        if changed:
+                            verdict["corrections"].append(
+                                {"id": c["id"], "was": was, "now": now, "feedback": fb[:200]})
+                        else:
+                            verdict["unchanged"] += 1
+                results.append({"type": "tool_result", "tool_use_id": block.id,
+                                "content": json.dumps(payload, ensure_ascii=False)})
+            if not results:
+                log("  stop_reason was tool_use but no rejudge_items call found — stopping.")
+                break
+            messages.append({"role": "user", "content": results})
+        else:
+            log(f"  turn cap reached ({_MAX_TURNS}) — stopping the reviewer pass.")
     except CheckerTimeout as e:
-        # Hard bound fired mid-stream. Report it, don't re-raise: a timed-out
-        # checker is a logged TIMEOUT verdict, never a silent kill.
         log(f"  BUDGET EXPIRED (hard, SIGALRM): {e}")
         verdict["timed_out"] = True
     except Exception as e:  # noqa: BLE001
-        # Safety net for a library that swallows the alarm and re-wraps it anyway
-        # (httpx did exactly that while CheckerTimeout was a TimeoutError). Past
-        # the deadline, the clock is the ground truth, not the exception type.
+        # Safety net for a library that swallows the alarm and re-wraps it (httpx
+        # did exactly that while CheckerTimeout was a TimeoutError). Past the
+        # deadline the clock is ground truth, not the exception type.
         if deadline is not None and time.monotonic() >= deadline:
             log(f"  BUDGET EXPIRED (detected via deadline; surfaced as "
                 f"{type(e).__name__}: {e})")
@@ -473,21 +427,22 @@ def run_check(items: list[dict], log, rejudge_stub: bool = False,
         else:
             raise
 
+    n, stale = len(verdict["corrections"]), verdict["unchanged"]
     if verdict["timed_out"]:
-        _stop_session(client, session.id, log)
-
-    # Final verdict from the last grader evaluation. A timeout wins outright: a
-    # partial grade is not a verdict, so we say TIMEOUT and keep `evaluations`
-    # so the log still shows how far it got.
-    last = verdict["evaluations"][-1] if verdict["evaluations"] else {}
-    final = last.get("result")
-    verdict["verdict"] = "TIMEOUT" if verdict["timed_out"] else {
-        "satisfied": "PASS", "needs_revision": "INCOMPLETE",
-        "max_iterations_reached": "FAIL_MAX_ITERATIONS", "failed": "FAIL",
-        "interrupted": "INTERRUPTED",
-    }.get(final, "UNKNOWN")
-    if verdict["timed_out"] and final:
-        log(f"  (last grader result before the timeout: {final})")
+        verdict["verdict"] = "TIMEOUT"
+    elif n:
+        verdict["verdict"] = "CORRECTED"
+    elif verdict["rejudge_calls"]:
+        # The reviewer flagged items but every re-judgment came back identical. That
+        # is NOT clean — the judgments it objected to are still in place — and it is
+        # not a crash either. Distinct verdict so a human looks: either the reviewer
+        # was wrong, or the judge is not responding to the feedback it was given.
+        verdict["verdict"] = "FLAGGED_UNCHANGED"
+    else:
+        verdict["verdict"] = "CLEAN"
+    log(f"Reviewer pass done: {n} correction(s) applied, {stale} re-judgment(s) "
+        f"returned unchanged, across {verdict['rejudge_calls']} tool call(s) in "
+        f"{verdict['turns']} turn(s).")
     return verdict
 
 
@@ -512,25 +467,34 @@ def check_pipeline_output(budget_seconds: int | None = None) -> dict:
             log(f"Grading {len(items)} candidate items from the latest pipeline output.")
             verdict = run_check(items, log, deadline=started + budget)
     except CheckerTimeout as e:
-        # Fired outside the stream loop (e.g. during load_real_judged or session
-        # setup), so run_check never got to record it.
+        # Fired outside the tool loop (e.g. during load_real_judged), so run_check
+        # never got to record it.
         log(f"CHECKER TIMEOUT: {e}")
-        verdict = {"verdict": "TIMEOUT", "iterations": 0, "timed_out": True}
+        verdict = {"verdict": "TIMEOUT", "turns": 0, "timed_out": True}
     except Exception as e:
         import traceback
         elapsed = time.monotonic() - started
         if elapsed >= budget:   # a re-wrapped timeout, not a genuine error
             log(f"CHECKER TIMEOUT (surfaced as {type(e).__name__}: {e})")
-            verdict = {"verdict": "TIMEOUT", "iterations": 0, "timed_out": True}
+            verdict = {"verdict": "TIMEOUT", "turns": 0, "timed_out": True}
         else:
             log(f"CHECKER ERROR: {type(e).__name__}: {e}")
             log(traceback.format_exc())
-            verdict = {"verdict": "ERROR", "iterations": 0}
+            verdict = {"verdict": "ERROR", "turns": 0}
     log("")
-    log(f"=== VERDICT: {verdict.get('verdict')} (iterations={verdict.get('iterations')}, "
-        f"rejudge_calls={verdict.get('rejudge_calls')}, "
+    log(f"=== VERDICT: {verdict.get('verdict')} "
+        f"(corrections={len(verdict.get('corrections') or [])}, "
+        f"tool_calls={verdict.get('rejudge_calls')}, turns={verdict.get('turns')}, "
         f"elapsed={time.monotonic() - started:.0f}s of {budget}s budget) ===")
     log.flush()
+    # The log IS the deliverable now that there is no graded verdict to publish, so
+    # mirror it to a stable filename the deploy step can pick up (docs/*.log inside a
+    # subdirectory is not in _deploy_dashboard's file list and dies with the runner).
+    try:
+        _LATEST_LOG.write_text(log.path.read_text(encoding="utf-8"), encoding="utf-8")
+        log(f"(log mirrored to {_LATEST_LOG.relative_to(_ROOT)} for publishing)")
+    except Exception as e:  # noqa: BLE001 — mirroring must never fail the sync
+        log(f"(could not mirror log: {type(e).__name__}: {e})")
     return verdict
 
 
@@ -545,7 +509,7 @@ def main(argv: list[str]) -> int:
     if "--budget" in argv:
         budget = int(argv[argv.index("--budget") + 1])
 
-    log("=== Speed trend relevance checker (Outcomes-graded) ===")
+    log("=== Speed trend relevance checker (reviewer pass) ===")
     if judged_path:
         items = json.loads(Path(judged_path).read_text(encoding="utf-8"))
         log(f"Loaded {len(items)} judged items from {judged_path}")
@@ -556,7 +520,7 @@ def main(argv: list[str]) -> int:
             f"({sum(1 for v in items if v.get('on_topic'))} on-topic surfaced, "
             f"{sum(1 for v in items if not v.get('on_topic'))} gated).")
     if rejudge_stub:
-        log("MODE: --rejudge-stub (cap test — revision will NOT converge)")
+        log("MODE: --rejudge-stub (cap test — corrections will NOT converge)")
 
     started = time.monotonic()
     try:
@@ -565,12 +529,12 @@ def main(argv: list[str]) -> int:
                                 deadline=started + budget)
     except CheckerTimeout as e:
         log(f"CHECKER TIMEOUT: {e}")
-        verdict = {"verdict": "TIMEOUT", "iterations": 0, "timed_out": True}
+        verdict = {"verdict": "TIMEOUT", "turns": 0, "timed_out": True}
     except Exception as e:
         import traceback
         if time.monotonic() - started >= budget:   # re-wrapped timeout, not an error
             log(f"CHECKER TIMEOUT (surfaced as {type(e).__name__}: {e})")
-            verdict = {"verdict": "TIMEOUT", "iterations": 0, "timed_out": True}
+            verdict = {"verdict": "TIMEOUT", "turns": 0, "timed_out": True}
         else:
             log(f"CHECKER ERROR: {type(e).__name__}: {e}")
             log(traceback.format_exc())
@@ -580,14 +544,16 @@ def main(argv: list[str]) -> int:
     log("")
     log("=== VERDICT ===")
     log(f"  result: {verdict['verdict']}")
-    log(f"  grader iterations: {verdict.get('iterations')}")
+    log(f"  corrections applied: {len(verdict.get('corrections') or [])}")
+    log(f"  re-judgments returned unchanged: {verdict.get('unchanged')}")
     log(f"  rejudge_items calls: {verdict.get('rejudge_calls')}")
+    log(f"  reviewer turns: {verdict.get('turns')}")
     log(f"  elapsed: {time.monotonic() - started:.0f}s of {budget}s budget")
-    if verdict.get("session_id"):
-        log(f"  session: {verdict['session_id']}")
     log.flush()
     log(f"(log written to {log.path.relative_to(_ROOT)})")
-    return 0 if verdict["verdict"] == "PASS" else 1
+    # CLEAN and CORRECTED are both successful reviews — CORRECTED just means it
+    # found something, which is the checker doing its job, not a failure.
+    return 0 if verdict["verdict"] in ("CLEAN", "CORRECTED") else 1
 
 
 if __name__ == "__main__":
