@@ -30,6 +30,8 @@ _ROOT = Path(__file__).resolve().parent.parent
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
+from pipelines import ask_panel
+
 load_dotenv(_ROOT / ".env")
 
 _DOCS = _ROOT / "docs"
@@ -245,6 +247,76 @@ def _render_tactics(tactics: dict) -> str:
     return f'<div class="tac-grid">{"".join(cards)}</div>'
 
 
+def _ask_config(data: dict) -> dict:
+    """Question set matched to a STRATEGY DOCUMENT, not a metrics table.
+
+    This dashboard is the only one of the five with no numeric data — Claude extracts
+    ranked EU markets, per-market channel plans, competitor whitespace and recommended
+    tactics, all of which were previously rendered straight to HTML and the structured
+    form thrown away. It is embedded here so it can be queried. The useful questions
+    are therefore RETRIEVAL ("what's the top channel for Germany?", "which tactics are
+    remittance?"), not aggregation — there is nothing meaningful to average, and the
+    engine says so rather than inventing a statistic.
+    """
+    eu = (data.get("eu") or {}).get("markets") or []
+    chan = (data.get("channel") or {}).get("markets") or []
+    ws = data.get("whitespace") or {}
+    comps = ws.get("competitors") or []
+    axes = ws.get("axes") or []
+    tactics = (data.get("tactics") or {}).get("tactics") or []
+
+    # Flatten each competitor's boolean touch vector into readable fields so a
+    # lookup can answer "does Robinhood use zero-fee remittance messaging?".
+    comp_rows = []
+    for c in comps:
+        row = {"name": c.get("name"), "focus": c.get("focus")}
+        for i, ax in enumerate(axes):
+            row[ax] = "yes" if (c.get("touches") or [False] * len(axes))[i:i + 1] == [True] else "no"
+        row["uses"] = ", ".join(ax for i, ax in enumerate(axes)
+                                if (c.get("touches") or [])[i:i + 1] == [True]) or "none of the three"
+        comp_rows.append(row)
+
+    return {
+        "noun": "entries",
+        "generated_at": data.get("generated_at"),
+        "collections": [
+            {"name": "EU markets", "words": ["market", "eu", "europe", "enter", "priorit"],
+             "rows": eu, "label": "name",
+             "facets": [], "metrics": [{"key": "rank", "words": ["rank", "priority", "first"],
+                                        "label": "rank", "fmt": "int", "lower_is_better": True}],
+             "detail": ["name", "rank", "metric", "rationale"]},
+            {"name": "channel plans", "words": ["channel", "messaging", "angle", "segment", "germany", "united kingdom", "portugal"],
+             "rows": chan, "label": "name", "facets": [], "metrics": [],
+             "detail": ["name", "top_channel", "messaging_angle", "first_segment"]},
+            {"name": "tactics", "words": ["tactic", "recommend", "leverage", "underused", "play"],
+             "rows": tactics, "label": "title",
+             "facets": [{"key": "category", "words": ["category", "kind"],
+                         "values": sorted({t.get("category") for t in tactics if t.get("category")})}],
+             "metrics": [], "detail": ["title", "category", "why"]},
+            {"name": "competitors", "words": ["competitor", "robinhood", "kraken", "crypto.com", "whitespace", "uncontested"],
+             "rows": comp_rows, "label": "name", "facets": [], "metrics": [],
+             "detail": ["name", "focus", "uses"] + axes},
+        ],
+        "scalars": [
+            {"words": ["biggest opportunity", "headline", "uncontested opportunity"],
+             "label": "Biggest uncontested opportunity", "value": None, "fmt": "int",
+             "note": ws.get("headline") or "not extracted"},
+        ],
+        "series": [
+            {"words": ["uncontested angles", "what is uncontested", "whitespace angles"],
+             "label": "Uncontested angles", "labels": ws.get("uncontested") or [],
+             "values": ["uncontested"] * len(ws.get("uncontested") or []), "fmt": "raw"},
+        ],
+        "examples": [
+            "which EU markets should we enter first?",
+            "what's the plan for Germany?",
+            "list the recommended tactics",
+            "which tactics are remittance?",
+            "does Robinhood use zero-fee remittance?",
+            "what is uncontested?",
+        ],
+    }
+
 def render(data: dict) -> str:
     """Fill the template by replacing /*__NAME__*/ comment placeholders.
 
@@ -437,7 +509,9 @@ def main() -> None:
     client = Anthropic(api_key=api_key)
     data = extract_sections(client)
     _OUT.parent.mkdir(parents=True, exist_ok=True)
-    _OUT.write_text(render(data), encoding="utf-8")
+    _OUT.write_text(ask_panel.inject(render(data), _ask_config(data),
+                                     note="answers computed from the extracted strategy sections on this page"),
+                    encoding="utf-8")
     print(f"Wrote {_OUT.relative_to(_ROOT)} ({_OUT.stat().st_size:,} bytes)")
     print(f"  EU markets: {len(data['eu'].get('markets', []))} · "
           f"channel cols: {len(data['channel'].get('markets', []))} · "

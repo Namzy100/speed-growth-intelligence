@@ -160,6 +160,30 @@
   .ins-card:nth-child(2){animation-delay:.06s} .ins-card:nth-child(3){animation-delay:.12s}
   .ins-card:nth-child(4){animation-delay:.18s} .ins-card:nth-child(5){animation-delay:.24s}
   @media (prefers-reduced-motion: reduce){ *{animation:none!important; transition:none!important;} }
+
+  /* Ask panel (shared — pipelines/ask_panel.py) */
+  .ask-wrap{background:var(--panel); border:1px solid var(--hairline); border-radius:var(--r-md,10px); padding:16px 18px; box-shadow:var(--shadow,none);}
+  .ask-row{display:flex; gap:10px; align-items:center;}
+  .ask-row input[type=text]{flex:1; min-width:0; padding:10px 13px; font-size:14px; background:#0e1117;
+    color:var(--text); border:1px solid var(--hairline); border-radius:8px; font-family:inherit;}
+  .ask-row input[type=text]:focus{outline:none; border-color:var(--accent);}
+  .ask-row button{background:var(--accent); color:#fff; border:1px solid var(--accent); border-radius:8px;
+    padding:10px 20px; font-size:13.5px; font-weight:650; cursor:pointer; font-family:inherit; transition:filter .15s;}
+  .ask-row button:hover{filter:brightness(1.12);}
+  .ask-eg{margin-top:11px; font-size:11.5px; color:var(--faint); display:flex; flex-wrap:wrap; gap:7px; align-items:center;}
+  .ask-chip{background:rgba(47,93,251,0.10); border:1px solid var(--hairline-strong,var(--hairline)); color:var(--accent-2,var(--accent));
+    padding:3px 10px; border-radius:999px; cursor:pointer; transition:border-color .15s;}
+  .ask-chip:hover{border-color:var(--accent);}
+  .ask-answer{margin-top:14px; padding-top:14px; border-top:1px solid var(--hairline); font-size:13.5px; line-height:1.55;}
+  .ask-answer.ask-empty{color:var(--faint);}
+  .ask-answer b{color:var(--text); font-weight:700; font-variant-numeric:tabular-nums;}
+  .ask-answer .ask-head{font-size:15px; font-weight:650; color:var(--text); margin-bottom:8px;}
+  .ask-answer .ask-miss{color:var(--warn,#e3b341);}
+  .ask-list{margin:9px 0 0; padding-left:0; list-style:none;}
+  .ask-list li{display:flex; justify-content:space-between; gap:14px; padding:5px 0; border-bottom:1px solid var(--hairline);}
+  .ask-list li:last-child{border-bottom:none;}
+  .ask-list .ask-meta{color:var(--muted,var(--faint)); font-size:12.5px; font-variant-numeric:tabular-nums; white-space:nowrap;}
+  .ask-prov{margin-top:10px; font-size:11px; color:var(--faint);}
 </style>
 </head>
 <body>
@@ -227,6 +251,18 @@
     </table></div></div>
   </section>
 
+    <section>
+    <div class="sec-head"><h2>Ask this dashboard</h2><span class="note">answers computed from the channel/campaign rows on this page</span></div>
+    <div class="ask-wrap">
+      <div class="ask-row">
+        <input type="text" id="askQ" autocomplete="off" placeholder="ask a question about this data…">
+        <button id="askGo">Ask</button>
+      </div>
+      <div class="ask-eg" id="askEg">Try:</div>
+      <div id="askA" class="ask-answer ask-empty"></div>
+    </div>
+  </section>
+
   <footer>
     Data pulled live from Google Sheets at build time and inlined into this file.
     Charts via Chart.js (cdnjs). Insights by <code id="modelName">—</code>.
@@ -235,7 +271,7 @@
 </div>
 
 <script>
-const DATA = {"generated_at": "2026-07-28 12:09:52 UTC", "last_updated": "2026-07-28 06:17:02 UTC", "kpis": {"total_installs": 54816, "channel_count": 16, "best_paid": {"channel": "Apple", "installs": 4312, "impressions": 57287, "clicks": 4960, "ecpi": 2.1838}, "d1_retention": 0.2575, "d1_above": true, "d1_target": 0.25, "matured_cohorts": 28, "reengagement": {"channel": "Re-engagement campaigns", "clicks": 59808, "installs": 25, "cvr": 0.042}}, "channels": [{"channel": "Organic", "installs": 35904, "impressions": 0, "clicks": 0, "ecpi": 0.0}, {"channel": "Google Ads", "installs": 6980, "impressions": 1108019, "clicks": 15321, "ecpi": 4.2628}, {"channel": "Apple", "installs": 4312, "impressions": 57287, "clicks": 4960, "ecpi": 2.1838}, {"channel": "Website", "installs": 2183, "impressions": 0, "clicks": 21518, "ecpi": 0.0}, {"channel": "Facebook", "installs": 2086, "impressions": 128412, "clicks": 12292, "ecpi": 2.5975}, {"channel": "Google Organic Search", "installs": 1482, "impressions": 0, "clicks": 0, "ecpi": 0.0}, {"channel": "Partnership", "installs": 1304, "impressions": 0, "clicks": 11086, "ecpi": 0.0}, {"channel": "Meta Retargeting Campaign", "installs": 318, "impressions": 0, "clicks": 6143, "ecpi": 0.0}, {"channel": "Social Media", "installs": 106, "impressions": 0, "clicks": 4735, "ecpi": 0.0}, {"channel": "Untrusted Devices", "installs": 56, "impressions": 0, "clicks": 0, "ecpi": 0.0}, {"channel": "MiniBet", "installs": 28, "impressions": 0, "clicks": 1014, "ecpi": 0.0}, {"channel": "Las Vegas Billboard", "installs": 26, "impressions": 0, "clicks": 221, "ecpi": 0.0}, {"channel": "Re-engagement campaigns", "installs": 25, "impressions": 0, "clicks": 59808, "ecpi": 0.0}, {"channel": "Meta Video Ads", "installs": 3, "impressions": 0, "clicks": 9314, "ecpi": 0.0}, {"channel": "Flipit New", "installs": 2, "impressions": 0, "clicks": 50, "ecpi": 0.0}, {"channel": "Chrome Wallet", "installs": 1, "impressions": 0, "clicks": 9, "ecpi": 0.0}], "total_installs": 54816, "most_efficient": "Apple", "most_efficient_detail": {"channel": "Apple", "installs": 4312, "impressions": 57287, "clicks": 4960, "ecpi": 2.1838}, "facebook_flag": {"facebook_ecpi": 2.5975, "apple_ecpi": 2.1838, "flagged": true}, "min_meaningful_installs": 100, "reengagement": {"channel": "Re-engagement campaigns", "clicks": 59808, "installs": 25, "cvr": 0.042}, "campaigns": [{"campaign": "New - Android Brand US", "channel": "Google Ads", "installs": 4828, "cost": 18934.56}, {"campaign": "US - Brand - Exact", "channel": "Apple", "installs": 2562, "cost": 3936.47}, {"campaign": "XAUT offers", "channel": "Google Ads", "installs": 2088, "cost": 10820.05}, {"campaign": "Payday - Android - Broad+", "channel": "Facebook", "installs": 1448, "cost": 3912.27}, {"campaign": "Home\u003ebanner\u003eandroid", "channel": "Website", "installs": 1216, "cost": 0.0}, {"campaign": "US - Max Conversion Campaign", "channel": "Apple", "installs": 1081, "cost": 3740.2}, {"campaign": "Fumb", "channel": "Partnership", "installs": 839, "cost": 0.0}, {"campaign": "Global - Brand - Exact", "channel": "Apple", "installs": 590, "cost": 1336.19}, {"campaign": "Home\u003ebanner\u003eiOS", "channel": "Website", "installs": 541, "cost": 0.0}, {"campaign": "speed wallet", "channel": "Google Organic Search", "installs": 527, "cost": 0.0}], "excluded_organic_rows": 4, "retention": {"labels": ["D1", "D2", "D3", "D4", "D5", "D6", "D7"], "values": [0.2575, 0.2084, 0.1775, 0.1617, 0.1506, 0.1422, 0.1375], "cohort_count": 28, "excluded_days": ["2026-07-26", "2026-07-27"]}, "meta": {"campaigns": [{"campaign": "Payday - Android - Broad+", "spend": 3912.45, "impressions": 99575, "clicks": 8611, "installs": 1542, "creative_score": 90.1}, {"campaign": "Payday android Video", "spend": 1506.17, "impressions": 28847, "clicks": 3685, "installs": 409, "creative_score": 88.3}, {"campaign": "Cash Deposit", "spend": 1505.37, "impressions": 226432, "clicks": 5276, "installs": 7, "creative_score": 0.0}, {"campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 1442.87, "impressions": 126072, "clicks": 4540, "installs": 96, "creative_score": 48.7}], "totals": {"spend": 8366.86, "impressions": 480926, "clicks": 22112, "installs": 2054}}, "meta_creatives": {"ads": [{"ad_name": "Android - FREE $50", "campaign": "Payday - Android - Broad+", "spend": 3860.04, "impressions": 98193, "clicks": 8587, "installs": 1533, "ctr": 8.75, "cpi": 2.52}, {"ad_name": "Buy bitcoin $10 v2", "campaign": "Payday android Video", "spend": 1294.07, "impressions": 24387, "clicks": 3366, "installs": 371, "ctr": 13.8, "cpi": 3.49}, {"ad_name": "Cash Deposit Educate", "campaign": "Cash Deposit", "spend": 720.45, "impressions": 92222, "clicks": 2509, "installs": 7, "ctr": 2.72, "cpi": 102.92}, {"ad_name": "Static ad 2", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 324.86, "impressions": 29791, "clicks": 1163, "installs": 27, "ctr": 3.9, "cpi": 12.03}, {"ad_name": "Static ad 2", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 262.89, "impressions": 17296, "clicks": 715, "installs": 24, "ctr": 4.13, "cpi": 10.95}, {"ad_name": "Cash Deposit educate v3", "campaign": "Cash Deposit", "spend": 218.19, "impressions": 31604, "clicks": 743, "installs": 0, "ctr": 2.35, "cpi": null}, {"ad_name": "Static $10 on $25", "campaign": "Cash Deposit", "spend": 210.9, "impressions": 24930, "clicks": 667, "installs": 0, "ctr": 2.68, "cpi": null}, {"ad_name": "Static ad 2", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 200.2, "impressions": 13321, "clicks": 546, "installs": 9, "ctr": 4.1, "cpi": 22.24}, {"ad_name": "Static ad 1", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 145.21, "impressions": 9333, "clicks": 471, "installs": 12, "ctr": 5.05, "cpi": 12.1}, {"ad_name": "Cash Deposit Retailers Nationwide", "campaign": "Cash Deposit", "spend": 136.88, "impressions": 25768, "clicks": 464, "installs": 0, "ctr": 1.8, "cpi": null}, {"ad_name": "Buy Video New Screen - Android - Broad+", "campaign": "Payday android Video", "spend": 123.14, "impressions": 2465, "clicks": 181, "installs": 23, "ctr": 7.34, "cpi": 5.35}, {"ad_name": "Buy $25 Bitcoin v1", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 108.11, "impressions": 8885, "clicks": 245, "installs": 2, "ctr": 2.76, "cpi": 54.05}, {"ad_name": "Static ad 1", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 99.62, "impressions": 6727, "clicks": 268, "installs": 0, "ctr": 3.98, "cpi": null}, {"ad_name": "Cash Deposit educate v2", "campaign": "Cash Deposit", "spend": 64.65, "impressions": 16127, "clicks": 273, "installs": 0, "ctr": 1.69, "cpi": null}, {"ad_name": "Static ad 1", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 63.32, "impressions": 5184, "clicks": 259, "installs": 4, "ctr": 5.0, "cpi": 15.83}, {"ad_name": "Static $10 on $25 v2", "campaign": "Cash Deposit", "spend": 61.14, "impressions": 16584, "clicks": 280, "installs": 0, "ctr": 1.69, "cpi": null}, {"ad_name": "Cash Deposit offers", "campaign": "Cash Deposit", "spend": 52.38, "impressions": 8427, "clicks": 164, "installs": 0, "ctr": 1.95, "cpi": null}, {"ad_name": "BUY Bitcoin $10 on $25 v1", "campaign": "Payday - Android - Broad+", "spend": 41.99, "impressions": 999, "clicks": 21, "installs": 5, "ctr": 2.1, "cpi": 8.4}, {"ad_name": "Cash Deposit offer 2", "campaign": "Cash Deposit", "spend": 40.26, "impressions": 10705, "clicks": 172, "installs": 0, "ctr": 1.61, "cpi": null}, {"ad_name": "No Spread Fees UGC Ads", "campaign": "Payday android Video", "spend": 30.91, "impressions": 850, "clicks": 49, "installs": 2, "ctr": 5.76, "cpi": 15.46}, {"ad_name": "Coffee shop Influencer Video", "campaign": "Payday android Video", "spend": 25.88, "impressions": 368, "clicks": 32, "installs": 3, "ctr": 8.7, "cpi": 8.63}, {"ad_name": "Static ad 3", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 25.29, "impressions": 6438, "clicks": 95, "installs": 0, "ctr": 1.48, "cpi": null}, {"ad_name": "Static ad 3", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 6.7, "impressions": 939, "clicks": 24, "installs": 0, "ctr": 2.56, "cpi": null}, {"ad_name": "Buy Video - Android - Broad+", "campaign": "Payday android Video", "spend": 5.92, "impressions": 78, "clicks": 5, "installs": 0, "ctr": 6.41, "cpi": null}, {"ad_name": "Buy Bitcoin Instantly - Android Broad+ Revised", "campaign": "Payday android Video", "spend": 5.18, "impressions": 98, "clicks": 8, "installs": 1, "ctr": 8.16, "cpi": 5.18}, {"ad_name": "Chameleons Video Ad", "campaign": "Payday android Video", "spend": 5.16, "impressions": 132, "clicks": 6, "installs": 1, "ctr": 4.55, "cpi": 5.16}, {"ad_name": "Buy $25 Bitcoin v1", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 4.64, "impressions": 408, "clicks": 12, "installs": 1, "ctr": 2.94, "cpi": 4.64}, {"ad_name": "Emily Influencer V3", "campaign": "Payday android Video", "spend": 4.58, "impressions": 162, "clicks": 7, "installs": 1, "ctr": 4.32, "cpi": 4.58}, {"ad_name": "Floor Breakthrough Video", "campaign": "Payday android Video", "spend": 4.52, "impressions": 103, "clicks": 19, "installs": 2, "ctr": 18.45, "cpi": 2.26}, {"ad_name": "Chameleons Video Ad", "campaign": "Payday - Android - Broad+", "spend": 3.35, "impressions": 103, "clicks": 1, "installs": 1, "ctr": 0.97, "cpi": 3.35}, {"ad_name": "Buy - Gym Video", "campaign": "Payday android Video", "spend": 3.22, "impressions": 80, "clicks": 9, "installs": 2, "ctr": 11.25, "cpi": 1.61}, {"ad_name": "Static GET $10 on $100", "campaign": "Payday - Android - Broad+", "spend": 1.52, "impressions": 58, "clicks": 1, "installs": 1, "ctr": 1.72, "cpi": 1.52}, {"ad_name": "Buy BTC Video Ads", "campaign": "Payday android Video", "spend": 1.28, "impressions": 48, "clicks": 1, "installs": 1, "ctr": 2.08, "cpi": 1.28}, {"ad_name": "Static 10% on $500", "campaign": "Payday - Android - Broad+", "spend": 1.25, "impressions": 48, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Static $10 with Kyc Instructions", "campaign": "Payday - Android - Broad+", "spend": 1.17, "impressions": 17, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Static ad 3", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 1.06, "impressions": 128, "clicks": 3, "installs": 0, "ctr": 2.34, "cpi": null}, {"ad_name": "Static 10% on $500", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 0.76, "impressions": 62, "clicks": 2, "installs": 0, "ctr": 3.23, "cpi": null}, {"ad_name": "Emily Influencer V2", "campaign": "Payday android Video", "spend": 0.67, "impressions": 26, "clicks": 0, "installs": 1, "ctr": 0.0, "cpi": 0.67}, {"ad_name": "Speed unbeat", "campaign": "Payday android Video", "spend": 0.61, "impressions": 7, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Static GET $10 on $25", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 0.54, "impressions": 84, "clicks": 3, "installs": 0, "ctr": 3.57, "cpi": null}, {"ad_name": "Static 10% on $500", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 0.52, "impressions": 151, "clicks": 2, "installs": 0, "ctr": 1.32, "cpi": null}, {"ad_name": "Static $25 with Kyc Instructions", "campaign": "Payday - Android - Broad+", "spend": 0.51, "impressions": 17, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "New Video Bitcoin Easy", "campaign": "Payday android Video", "spend": 0.47, "impressions": 21, "clicks": 1, "installs": 1, "ctr": 4.76, "cpi": 0.47}, {"ad_name": "Static Bonus v1", "campaign": "Payday - Android - Broad+", "spend": 0.41, "impressions": 25, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Static GET $10 on $25", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 0.4, "impressions": 37, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "BUY Bitcoin $10 on $100 v1", "campaign": "Payday - Android - Broad+", "spend": 0.36, "impressions": 11, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Static Reward - New", "campaign": "Payday - Android - Broad+", "spend": 0.35, "impressions": 12, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Surprise Hook Video", "campaign": "Payday android Video", "spend": 0.31, "impressions": 12, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Static GET $10 on $25 v2", "campaign": "Payday - Android - Broad+", "spend": 0.29, "impressions": 17, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Emily Influencer Video", "campaign": "Payday android Video", "spend": 0.25, "impressions": 10, "clicks": 1, "installs": 0, "ctr": 10.0, "cpi": null}, {"ad_name": "Buy Video New Screen - Android - Broad+", "campaign": "Payday - Android - Broad+", "spend": 0.19, "impressions": 4, "clicks": 0, "installs": 1, "ctr": 0.0, "cpi": 0.19}, {"ad_name": "2M Users", "campaign": "Payday - Android - Broad+", "spend": 0.18, "impressions": 19, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Static 10% with Kyc Instructions", "campaign": "Payday - Android - Broad+", "spend": 0.16, "impressions": 4, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Speed unbeat", "campaign": "Payday - Android - Broad+", "spend": 0.11, "impressions": 4, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Floor Breakthrough Video", "campaign": "Payday - Android - Broad+", "spend": 0.08, "impressions": 1, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Static BTC v1", "campaign": "Payday - Android - Broad+", "spend": 0.07, "impressions": 3, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Static GET $10 on $25", "campaign": "Payday - Android - Broad+", "spend": 0.07, "impressions": 2, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Skip the fees Static v1", "campaign": "Payday - Android - Broad+", "spend": 0.05, "impressions": 2, "clicks": 1, "installs": 1, "ctr": 50.0, "cpi": 0.05}, {"ad_name": "Surprise Hook Video", "campaign": "Payday - Android - Broad+", "spend": 0.05, "impressions": 5, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Everyday Wallet Static", "campaign": "Payday - Android - Broad+", "spend": 0.04, "impressions": 6, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Emily Influencer Video", "campaign": "Payday - Android - Broad+", "spend": 0.04, "impressions": 6, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Buy Video Revised - Android - Broad+", "campaign": "Payday - Android - Broad+", "spend": 0.04, "impressions": 1, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Lightning Speed BTC Static", "campaign": "Payday - Android - Broad+", "spend": 0.03, "impressions": 2, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Static promo v1", "campaign": "Payday - Android - Broad+", "spend": 0.02, "impressions": 3, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Android - FREE $50 v1", "campaign": "Payday - Android - Broad+", "spend": 0.01, "impressions": 1, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "New static v1", "campaign": "Payday - Android - Broad+", "spend": 0.0, "impressions": 5, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Skip the fees Static v2", "campaign": "Payday - Android - Broad+", "spend": 0.0, "impressions": 1, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "BUY Bitcoin $10 on $100 v2", "campaign": "Payday - Android - Broad+", "spend": 0.0, "impressions": 1, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}], "totals": {"spend": 8167.52, "impressions": 453568, "clicks": 21376, "installs": 2037, "ad_count": 68}}, "meta_note": "", "insights": [{"type": "positive", "headline": "Organic Dominates at Zero Acquisition Cost", "detail": "Organic installs account for 35,904 of ~54,569 total installs (65.8%), dwarfing every paid channel combined and delivering users at $0 eCPI, signaling strong brand pull in the US, Mexico, and Brazil markets."}, {"type": "warning", "headline": "Re-Engagement Burns Budget on Near-Zero Conversions", "detail": "Re-engagement campaigns generated 59,808 clicks but only 25 installs \u2014 a 0.042% CVR \u2014 meaning roughly $1,442.87 of the Meta 'Re-targeting Campaign Android \u0026 iOS' spend alone (96 installs, $15.03 CPI) is outperforming the broader re-engagement pool that is functionally wasting every click it receives."}, {"type": "warning", "headline": "Meta 'Cash Deposit' Campaign Is Nearly Dead", "detail": "The Meta 'Cash Deposit' campaign spent $1,505.37, generated 226,432 impressions and 5,276 clicks, but drove only 7 installs \u2014 a $214.91 effective CPI and a creative score of 0.0 \u2014 making it the single most wasteful paid campaign in the portfolio."}, {"type": "neutral", "headline": "Meta Payday Campaigns Anchor Paid Social Efficiency", "detail": "Across Meta's $8,366.86 total paid spend, the 'Payday - Android - Broad+' campaign alone delivered 1,542 installs at $2.54 CPI (creative score 90.1) and 'Payday Android Video' added 409 installs at $3.68 CPI (score 88.3), together accounting for 95% of Meta's viable install volume while 'Cash Deposit' and retargeting collectively drain $2,948.24 for just 103 installs."}, {"type": "warning", "headline": "D1\u2013D7 Retention Cliff Threatens Paid Channel ROI", "detail": "Only 25.75% of new users return on Day 1, and retention collapses to 13.75% by Day 7 across 28 matured cohorts \u2014 meaning that at a blended paid eCPI of ~$3\u2013$4 (Google Ads at $4.26, Facebook at $2.60), the majority of paid installs churn before generating meaningful downstream value."}], "insights_critical_index": 1, "insights_source": "claude-sonnet-4-6"};
+const DATA = {"generated_at": "2026-07-28 15:05:02 UTC", "last_updated": "2026-07-28 06:17:02 UTC", "kpis": {"total_installs": 54816, "channel_count": 16, "best_paid": {"channel": "Apple", "installs": 4312, "impressions": 57287, "clicks": 4960, "ecpi": 2.1838}, "d1_retention": 0.2575, "d1_above": true, "d1_target": 0.25, "matured_cohorts": 28, "reengagement": {"channel": "Re-engagement campaigns", "clicks": 59808, "installs": 25, "cvr": 0.042}}, "channels": [{"channel": "Organic", "installs": 35904, "impressions": 0, "clicks": 0, "ecpi": 0.0}, {"channel": "Google Ads", "installs": 6980, "impressions": 1108019, "clicks": 15321, "ecpi": 4.2628}, {"channel": "Apple", "installs": 4312, "impressions": 57287, "clicks": 4960, "ecpi": 2.1838}, {"channel": "Website", "installs": 2183, "impressions": 0, "clicks": 21518, "ecpi": 0.0}, {"channel": "Facebook", "installs": 2086, "impressions": 128412, "clicks": 12292, "ecpi": 2.5975}, {"channel": "Google Organic Search", "installs": 1482, "impressions": 0, "clicks": 0, "ecpi": 0.0}, {"channel": "Partnership", "installs": 1304, "impressions": 0, "clicks": 11086, "ecpi": 0.0}, {"channel": "Meta Retargeting Campaign", "installs": 318, "impressions": 0, "clicks": 6143, "ecpi": 0.0}, {"channel": "Social Media", "installs": 106, "impressions": 0, "clicks": 4735, "ecpi": 0.0}, {"channel": "Untrusted Devices", "installs": 56, "impressions": 0, "clicks": 0, "ecpi": 0.0}, {"channel": "MiniBet", "installs": 28, "impressions": 0, "clicks": 1014, "ecpi": 0.0}, {"channel": "Las Vegas Billboard", "installs": 26, "impressions": 0, "clicks": 221, "ecpi": 0.0}, {"channel": "Re-engagement campaigns", "installs": 25, "impressions": 0, "clicks": 59808, "ecpi": 0.0}, {"channel": "Meta Video Ads", "installs": 3, "impressions": 0, "clicks": 9314, "ecpi": 0.0}, {"channel": "Flipit New", "installs": 2, "impressions": 0, "clicks": 50, "ecpi": 0.0}, {"channel": "Chrome Wallet", "installs": 1, "impressions": 0, "clicks": 9, "ecpi": 0.0}], "total_installs": 54816, "most_efficient": "Apple", "most_efficient_detail": {"channel": "Apple", "installs": 4312, "impressions": 57287, "clicks": 4960, "ecpi": 2.1838}, "facebook_flag": {"facebook_ecpi": 2.5975, "apple_ecpi": 2.1838, "flagged": true}, "min_meaningful_installs": 100, "reengagement": {"channel": "Re-engagement campaigns", "clicks": 59808, "installs": 25, "cvr": 0.042}, "campaigns": [{"campaign": "New - Android Brand US", "channel": "Google Ads", "installs": 4828, "cost": 18934.56}, {"campaign": "US - Brand - Exact", "channel": "Apple", "installs": 2562, "cost": 3936.47}, {"campaign": "XAUT offers", "channel": "Google Ads", "installs": 2088, "cost": 10820.05}, {"campaign": "Payday - Android - Broad+", "channel": "Facebook", "installs": 1448, "cost": 3912.27}, {"campaign": "Home\u003ebanner\u003eandroid", "channel": "Website", "installs": 1216, "cost": 0.0}, {"campaign": "US - Max Conversion Campaign", "channel": "Apple", "installs": 1081, "cost": 3740.2}, {"campaign": "Fumb", "channel": "Partnership", "installs": 839, "cost": 0.0}, {"campaign": "Global - Brand - Exact", "channel": "Apple", "installs": 590, "cost": 1336.19}, {"campaign": "Home\u003ebanner\u003eiOS", "channel": "Website", "installs": 541, "cost": 0.0}, {"campaign": "speed wallet", "channel": "Google Organic Search", "installs": 527, "cost": 0.0}], "excluded_organic_rows": 4, "retention": {"labels": ["D1", "D2", "D3", "D4", "D5", "D6", "D7"], "values": [0.2575, 0.2084, 0.1775, 0.1617, 0.1506, 0.1422, 0.1375], "cohort_count": 28, "excluded_days": ["2026-07-26", "2026-07-27"]}, "meta": {"campaigns": [{"campaign": "Payday - Android - Broad+", "spend": 3912.45, "impressions": 99575, "clicks": 8611, "installs": 1542, "creative_score": 90.1}, {"campaign": "Payday android Video", "spend": 1506.17, "impressions": 28847, "clicks": 3685, "installs": 409, "creative_score": 88.3}, {"campaign": "Cash Deposit", "spend": 1505.37, "impressions": 226432, "clicks": 5276, "installs": 7, "creative_score": 0.0}, {"campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 1442.87, "impressions": 126072, "clicks": 4540, "installs": 96, "creative_score": 48.7}], "totals": {"spend": 8366.86, "impressions": 480926, "clicks": 22112, "installs": 2054}}, "meta_creatives": {"ads": [{"ad_name": "Android - FREE $50", "campaign": "Payday - Android - Broad+", "spend": 3860.04, "impressions": 98193, "clicks": 8587, "installs": 1533, "ctr": 8.75, "cpi": 2.52}, {"ad_name": "Buy bitcoin $10 v2", "campaign": "Payday android Video", "spend": 1294.07, "impressions": 24387, "clicks": 3366, "installs": 371, "ctr": 13.8, "cpi": 3.49}, {"ad_name": "Cash Deposit Educate", "campaign": "Cash Deposit", "spend": 720.45, "impressions": 92222, "clicks": 2509, "installs": 7, "ctr": 2.72, "cpi": 102.92}, {"ad_name": "Static ad 2", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 324.86, "impressions": 29791, "clicks": 1163, "installs": 27, "ctr": 3.9, "cpi": 12.03}, {"ad_name": "Static ad 2", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 262.89, "impressions": 17296, "clicks": 715, "installs": 24, "ctr": 4.13, "cpi": 10.95}, {"ad_name": "Cash Deposit educate v3", "campaign": "Cash Deposit", "spend": 218.19, "impressions": 31604, "clicks": 743, "installs": 0, "ctr": 2.35, "cpi": null}, {"ad_name": "Static $10 on $25", "campaign": "Cash Deposit", "spend": 210.9, "impressions": 24930, "clicks": 667, "installs": 0, "ctr": 2.68, "cpi": null}, {"ad_name": "Static ad 2", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 200.2, "impressions": 13321, "clicks": 546, "installs": 9, "ctr": 4.1, "cpi": 22.24}, {"ad_name": "Static ad 1", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 145.21, "impressions": 9333, "clicks": 471, "installs": 12, "ctr": 5.05, "cpi": 12.1}, {"ad_name": "Cash Deposit Retailers Nationwide", "campaign": "Cash Deposit", "spend": 136.88, "impressions": 25768, "clicks": 464, "installs": 0, "ctr": 1.8, "cpi": null}, {"ad_name": "Buy Video New Screen - Android - Broad+", "campaign": "Payday android Video", "spend": 123.14, "impressions": 2465, "clicks": 181, "installs": 23, "ctr": 7.34, "cpi": 5.35}, {"ad_name": "Buy $25 Bitcoin v1", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 108.11, "impressions": 8885, "clicks": 245, "installs": 2, "ctr": 2.76, "cpi": 54.05}, {"ad_name": "Static ad 1", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 99.62, "impressions": 6727, "clicks": 268, "installs": 0, "ctr": 3.98, "cpi": null}, {"ad_name": "Cash Deposit educate v2", "campaign": "Cash Deposit", "spend": 64.65, "impressions": 16127, "clicks": 273, "installs": 0, "ctr": 1.69, "cpi": null}, {"ad_name": "Static ad 1", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 63.32, "impressions": 5184, "clicks": 259, "installs": 4, "ctr": 5.0, "cpi": 15.83}, {"ad_name": "Static $10 on $25 v2", "campaign": "Cash Deposit", "spend": 61.14, "impressions": 16584, "clicks": 280, "installs": 0, "ctr": 1.69, "cpi": null}, {"ad_name": "Cash Deposit offers", "campaign": "Cash Deposit", "spend": 52.38, "impressions": 8427, "clicks": 164, "installs": 0, "ctr": 1.95, "cpi": null}, {"ad_name": "BUY Bitcoin $10 on $25 v1", "campaign": "Payday - Android - Broad+", "spend": 41.99, "impressions": 999, "clicks": 21, "installs": 5, "ctr": 2.1, "cpi": 8.4}, {"ad_name": "Cash Deposit offer 2", "campaign": "Cash Deposit", "spend": 40.26, "impressions": 10705, "clicks": 172, "installs": 0, "ctr": 1.61, "cpi": null}, {"ad_name": "No Spread Fees UGC Ads", "campaign": "Payday android Video", "spend": 30.91, "impressions": 850, "clicks": 49, "installs": 2, "ctr": 5.76, "cpi": 15.46}, {"ad_name": "Coffee shop Influencer Video", "campaign": "Payday android Video", "spend": 25.88, "impressions": 368, "clicks": 32, "installs": 3, "ctr": 8.7, "cpi": 8.63}, {"ad_name": "Static ad 3", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 25.29, "impressions": 6438, "clicks": 95, "installs": 0, "ctr": 1.48, "cpi": null}, {"ad_name": "Static ad 3", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 6.7, "impressions": 939, "clicks": 24, "installs": 0, "ctr": 2.56, "cpi": null}, {"ad_name": "Buy Video - Android - Broad+", "campaign": "Payday android Video", "spend": 5.92, "impressions": 78, "clicks": 5, "installs": 0, "ctr": 6.41, "cpi": null}, {"ad_name": "Buy Bitcoin Instantly - Android Broad+ Revised", "campaign": "Payday android Video", "spend": 5.18, "impressions": 98, "clicks": 8, "installs": 1, "ctr": 8.16, "cpi": 5.18}, {"ad_name": "Chameleons Video Ad", "campaign": "Payday android Video", "spend": 5.16, "impressions": 132, "clicks": 6, "installs": 1, "ctr": 4.55, "cpi": 5.16}, {"ad_name": "Buy $25 Bitcoin v1", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 4.64, "impressions": 408, "clicks": 12, "installs": 1, "ctr": 2.94, "cpi": 4.64}, {"ad_name": "Emily Influencer V3", "campaign": "Payday android Video", "spend": 4.58, "impressions": 162, "clicks": 7, "installs": 1, "ctr": 4.32, "cpi": 4.58}, {"ad_name": "Floor Breakthrough Video", "campaign": "Payday android Video", "spend": 4.52, "impressions": 103, "clicks": 19, "installs": 2, "ctr": 18.45, "cpi": 2.26}, {"ad_name": "Chameleons Video Ad", "campaign": "Payday - Android - Broad+", "spend": 3.35, "impressions": 103, "clicks": 1, "installs": 1, "ctr": 0.97, "cpi": 3.35}, {"ad_name": "Buy - Gym Video", "campaign": "Payday android Video", "spend": 3.22, "impressions": 80, "clicks": 9, "installs": 2, "ctr": 11.25, "cpi": 1.61}, {"ad_name": "Static GET $10 on $100", "campaign": "Payday - Android - Broad+", "spend": 1.52, "impressions": 58, "clicks": 1, "installs": 1, "ctr": 1.72, "cpi": 1.52}, {"ad_name": "Buy BTC Video Ads", "campaign": "Payday android Video", "spend": 1.28, "impressions": 48, "clicks": 1, "installs": 1, "ctr": 2.08, "cpi": 1.28}, {"ad_name": "Static 10% on $500", "campaign": "Payday - Android - Broad+", "spend": 1.25, "impressions": 48, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Static $10 with Kyc Instructions", "campaign": "Payday - Android - Broad+", "spend": 1.17, "impressions": 17, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Static ad 3", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 1.06, "impressions": 128, "clicks": 3, "installs": 0, "ctr": 2.34, "cpi": null}, {"ad_name": "Static 10% on $500", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 0.76, "impressions": 62, "clicks": 2, "installs": 0, "ctr": 3.23, "cpi": null}, {"ad_name": "Emily Influencer V2", "campaign": "Payday android Video", "spend": 0.67, "impressions": 26, "clicks": 0, "installs": 1, "ctr": 0.0, "cpi": 0.67}, {"ad_name": "Speed unbeat", "campaign": "Payday android Video", "spend": 0.61, "impressions": 7, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Static GET $10 on $25", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 0.54, "impressions": 84, "clicks": 3, "installs": 0, "ctr": 3.57, "cpi": null}, {"ad_name": "Static 10% on $500", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 0.52, "impressions": 151, "clicks": 2, "installs": 0, "ctr": 1.32, "cpi": null}, {"ad_name": "Static $25 with Kyc Instructions", "campaign": "Payday - Android - Broad+", "spend": 0.51, "impressions": 17, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "New Video Bitcoin Easy", "campaign": "Payday android Video", "spend": 0.47, "impressions": 21, "clicks": 1, "installs": 1, "ctr": 4.76, "cpi": 0.47}, {"ad_name": "Static Bonus v1", "campaign": "Payday - Android - Broad+", "spend": 0.41, "impressions": 25, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Static GET $10 on $25", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 0.4, "impressions": 37, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "BUY Bitcoin $10 on $100 v1", "campaign": "Payday - Android - Broad+", "spend": 0.36, "impressions": 11, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Static Reward - New", "campaign": "Payday - Android - Broad+", "spend": 0.35, "impressions": 12, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Surprise Hook Video", "campaign": "Payday android Video", "spend": 0.31, "impressions": 12, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Static GET $10 on $25 v2", "campaign": "Payday - Android - Broad+", "spend": 0.29, "impressions": 17, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Emily Influencer Video", "campaign": "Payday android Video", "spend": 0.25, "impressions": 10, "clicks": 1, "installs": 0, "ctr": 10.0, "cpi": null}, {"ad_name": "Buy Video New Screen - Android - Broad+", "campaign": "Payday - Android - Broad+", "spend": 0.19, "impressions": 4, "clicks": 0, "installs": 1, "ctr": 0.0, "cpi": 0.19}, {"ad_name": "2M Users", "campaign": "Payday - Android - Broad+", "spend": 0.18, "impressions": 19, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Static 10% with Kyc Instructions", "campaign": "Payday - Android - Broad+", "spend": 0.16, "impressions": 4, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Speed unbeat", "campaign": "Payday - Android - Broad+", "spend": 0.11, "impressions": 4, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Floor Breakthrough Video", "campaign": "Payday - Android - Broad+", "spend": 0.08, "impressions": 1, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Static BTC v1", "campaign": "Payday - Android - Broad+", "spend": 0.07, "impressions": 3, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Static GET $10 on $25", "campaign": "Payday - Android - Broad+", "spend": 0.07, "impressions": 2, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Skip the fees Static v1", "campaign": "Payday - Android - Broad+", "spend": 0.05, "impressions": 2, "clicks": 1, "installs": 1, "ctr": 50.0, "cpi": 0.05}, {"ad_name": "Surprise Hook Video", "campaign": "Payday - Android - Broad+", "spend": 0.05, "impressions": 5, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Everyday Wallet Static", "campaign": "Payday - Android - Broad+", "spend": 0.04, "impressions": 6, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Emily Influencer Video", "campaign": "Payday - Android - Broad+", "spend": 0.04, "impressions": 6, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Buy Video Revised - Android - Broad+", "campaign": "Payday - Android - Broad+", "spend": 0.04, "impressions": 1, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Lightning Speed BTC Static", "campaign": "Payday - Android - Broad+", "spend": 0.03, "impressions": 2, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Static promo v1", "campaign": "Payday - Android - Broad+", "spend": 0.02, "impressions": 3, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Android - FREE $50 v1", "campaign": "Payday - Android - Broad+", "spend": 0.01, "impressions": 1, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "New static v1", "campaign": "Payday - Android - Broad+", "spend": 0.0, "impressions": 5, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Skip the fees Static v2", "campaign": "Payday - Android - Broad+", "spend": 0.0, "impressions": 1, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "BUY Bitcoin $10 on $100 v2", "campaign": "Payday - Android - Broad+", "spend": 0.0, "impressions": 1, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}], "totals": {"spend": 8167.52, "impressions": 453568, "clicks": 21376, "installs": 2037, "ad_count": 68}}, "meta_note": "", "insights": [{"type": "positive", "headline": "Organic Dominates at Zero Acquisition Cost", "detail": "Organic installs account for 35,904 of ~54,569 total installs (65.8%), dwarfing every paid channel combined and delivering a $0.00 eCPI \u2014 making it by far the largest and most cost-efficient source in the portfolio."}, {"type": "warning", "headline": "Re-Engagement Campaigns Are Nearly Useless", "detail": "Re-engagement campaigns generated 59,808 clicks but only 25 installs, a catastrophic 0.042% CVR, meaning roughly $0 in measurable installs is being driven per ~2,392 clicks \u2014 this funnel is broken and demands immediate audit before another dollar is allocated."}, {"type": "warning", "headline": "Meta 'Cash Deposit' Campaign Is Dead Weight", "detail": "The Meta 'Cash Deposit' campaign burned $1,505.37 across 226,432 impressions and 5,276 clicks yet produced only 7 installs \u2014 a cost-per-install of ~$215 and a creative score of 0.0 \u2014 making it the single worst-performing paid campaign by every efficiency metric."}, {"type": "neutral", "headline": "Meta Payday Campaigns Carry the Full Load", "detail": "Across all four Meta paid campaigns ($8,366.86 total spend, 2,054 installs), 'Payday - Android - Broad+' alone accounts for 1,542 of those installs at a $2.54 CPI with a 90.1 creative score, while 'Payday android Video' adds 409 installs at $3.68 CPI \u2014 together these two campaigns justify the entire Meta budget while the other two ('Cash Deposit' and 'Re-targeting Campaign Android \u0026 iOS') destroy blended efficiency."}, {"type": "warning", "headline": "D1\u2013D7 Retention Signals a 47% Weekly Dropout", "detail": "Across 28 matured cohorts, D1 retention is 25.75% and falls to just 13.75% by D7 \u2014 meaning nearly half of users who return on Day 1 are lost within the first week, a structural onboarding or activation problem that undermines the ROI of every paid channel."}], "insights_critical_index": 1, "insights_source": "claude-sonnet-4-6"};
 
 const intFmt = new Intl.NumberFormat("en-US");
 const fmtInt = n => intFmt.format(Math.round(n||0));
@@ -516,6 +552,337 @@ function init(){
   }
 }
 document.addEventListener("DOMContentLoaded", init);
+</script>
+<script>
+
+/* ==========================================================================
+   "Ask this dashboard" — shared engine (pipelines/ask_panel.py).
+   Deliberately NOT a runtime model call: these pages are static and public, so
+   there is nowhere to hold an API key. Every answer is computed from the rows
+   already embedded above, which is why the numbers are checkable against the
+   tables on this page. `answerQuestion` is the seam to swap for a real backend.
+   ========================================================================== */
+const ASK = {"noun": "rows", "generated_at": "2026-07-28 15:05:02 UTC", "collections": [{"name": "channels", "words": ["channel", "network", "source", "ecpi", "cpi"], "rows": [{"channel": "Organic", "installs": 35904, "impressions": 0, "clicks": 0, "ecpi": 0.0}, {"channel": "Google Ads", "installs": 6980, "impressions": 1108019, "clicks": 15321, "ecpi": 4.2628}, {"channel": "Apple", "installs": 4312, "impressions": 57287, "clicks": 4960, "ecpi": 2.1838}, {"channel": "Website", "installs": 2183, "impressions": 0, "clicks": 21518, "ecpi": 0.0}, {"channel": "Facebook", "installs": 2086, "impressions": 128412, "clicks": 12292, "ecpi": 2.5975}, {"channel": "Google Organic Search", "installs": 1482, "impressions": 0, "clicks": 0, "ecpi": 0.0}, {"channel": "Partnership", "installs": 1304, "impressions": 0, "clicks": 11086, "ecpi": 0.0}, {"channel": "Meta Retargeting Campaign", "installs": 318, "impressions": 0, "clicks": 6143, "ecpi": 0.0}, {"channel": "Social Media", "installs": 106, "impressions": 0, "clicks": 4735, "ecpi": 0.0}, {"channel": "Untrusted Devices", "installs": 56, "impressions": 0, "clicks": 0, "ecpi": 0.0}, {"channel": "MiniBet", "installs": 28, "impressions": 0, "clicks": 1014, "ecpi": 0.0}, {"channel": "Las Vegas Billboard", "installs": 26, "impressions": 0, "clicks": 221, "ecpi": 0.0}, {"channel": "Re-engagement campaigns", "installs": 25, "impressions": 0, "clicks": 59808, "ecpi": 0.0}, {"channel": "Meta Video Ads", "installs": 3, "impressions": 0, "clicks": 9314, "ecpi": 0.0}, {"channel": "Flipit New", "installs": 2, "impressions": 0, "clicks": 50, "ecpi": 0.0}, {"channel": "Chrome Wallet", "installs": 1, "impressions": 0, "clicks": 9, "ecpi": 0.0}], "label": "channel", "facets": [{"key": "channel", "words": ["channel"], "values": ["Apple", "Chrome Wallet", "Facebook", "Flipit New", "Google Ads", "Google Organic Search", "Las Vegas Billboard", "Meta Retargeting Campaign", "Meta Video Ads", "MiniBet", "Organic", "Partnership", "Re-engagement campaigns", "Social Media", "Untrusted Devices", "Website"]}], "metrics": [{"key": "ecpi", "words": ["ecpi", "cpi", "cost per install", "efficiency", "cheap", "expensive"], "label": "eCPI", "fmt": "money", "lower_is_better": true, "exclude_zero": true}, {"key": "installs", "words": ["install", "volume"], "label": "installs", "fmt": "int"}, {"key": "clicks", "words": ["click"], "label": "clicks", "fmt": "int"}, {"key": "impressions", "words": ["impression", "reach"], "label": "impressions", "fmt": "int"}], "detail": ["channel", "installs", "clicks", "impressions", "ecpi"]}, {"name": "campaigns", "words": ["campaign", "spend", "cost", "budget"], "rows": [{"campaign": "New - Android Brand US", "channel": "Google Ads", "installs": 4828, "cost": 18934.56}, {"campaign": "US - Brand - Exact", "channel": "Apple", "installs": 2562, "cost": 3936.47}, {"campaign": "XAUT offers", "channel": "Google Ads", "installs": 2088, "cost": 10820.05}, {"campaign": "Payday - Android - Broad+", "channel": "Facebook", "installs": 1448, "cost": 3912.27}, {"campaign": "Home\u003ebanner\u003eandroid", "channel": "Website", "installs": 1216, "cost": 0.0}, {"campaign": "US - Max Conversion Campaign", "channel": "Apple", "installs": 1081, "cost": 3740.2}, {"campaign": "Fumb", "channel": "Partnership", "installs": 839, "cost": 0.0}, {"campaign": "Global - Brand - Exact", "channel": "Apple", "installs": 590, "cost": 1336.19}, {"campaign": "Home\u003ebanner\u003eiOS", "channel": "Website", "installs": 541, "cost": 0.0}, {"campaign": "speed wallet", "channel": "Google Organic Search", "installs": 527, "cost": 0.0}], "label": "campaign", "facets": [{"key": "channel", "words": ["channel", "network"], "values": ["Apple", "Facebook", "Google Ads", "Google Organic Search", "Partnership", "Website"]}], "metrics": [{"key": "cost", "words": ["cost", "spend", "budget", "expensive", "cheap"], "label": "cost", "fmt": "money", "lower_is_better": true, "exclude_zero": true}, {"key": "installs", "words": ["install", "volume"], "label": "installs", "fmt": "int"}], "detail": ["campaign", "channel", "cost", "installs"]}], "scalars": [{"words": ["total installs", "how many installs overall", "installs overall"], "label": "Total installs (last 30 days)", "value": 54816, "fmt": "int"}, {"words": ["active channels", "how many channels"], "label": "Active channels", "value": 16, "fmt": "int"}, {"words": ["d1 retention", "day 1 retention"], "label": "D1 retention", "value": 0.2575, "fmt": "pct"}, {"words": ["most efficient", "best channel"], "label": "Most efficient channel", "value": null, "fmt": "int", "note": "Most efficient channel: Apple"}], "series": [{"words": ["retention curve", "retention", "d7", "d30", "cohort"], "label": "Retention curve", "labels": ["D1", "D2", "D3", "D4", "D5", "D6", "D7"], "values": [0.2575, 0.2084, 0.1775, 0.1617, 0.1506, 0.1422, 0.1375], "fmt": "pct", "note": "28 cohorts."}], "examples": ["cheapest channel by eCPI", "top 5 channels by installs", "total installs", "which campaigns cost over $500?", "breakdown of installs by channel", "retention curve"]};
+const askInt = new Intl.NumberFormat("en-US");
+const askEsc = s => { const d = document.createElement("div"); d.textContent = (s == null ? "" : s); return d.innerHTML; };
+
+function askNum(v){
+  if (typeof v === "number") return v;
+  if (v == null) return null;
+  const n = parseFloat(String(v).replace(/[$,%\s,]/g, ""));
+  return isNaN(n) ? null : n;
+}
+function askFmt(v, fmt){
+  if (v == null) return "—";
+  if (fmt === "money") return "$" + (Math.abs(v) >= 100 ? askInt.format(Math.round(v)) : v.toFixed(2));
+  if (fmt === "pct")   return (Math.round(v * 10) / 10) + "%";
+  if (fmt === "int")   return askInt.format(Math.round(v));
+  return String(Math.round(v * 10) / 10);
+}
+// Matches a whole word, allowing a short inflection (install -> installs,
+// tactic -> tactics). The suffix allowance is withheld from words shorter than 4
+// characters: creator country codes are two letters, and "TH" was matching "the",
+// which made "what is the meaning of life" look like a question about Thailand.
+// Short values must match exactly.
+const askHas = (q, w) => {
+  const lit = String(w).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const tail = String(w).length >= 4 ? "[a-z]{0,3}" : "";
+  return new RegExp("(^|[^a-z0-9])" + lit + tail + "([^a-z0-9]|$)", "i").test(q);
+};
+
+/* ---- parse ------------------------------------------------------------- */
+function askParse(raw){
+  const q = " " + raw.toLowerCase().trim() + " ";
+  const f = {filters: [], intent: null, n: null, metric: null, asc: false, group: null};
+
+  // Which collection? First whose words appear; else the default (first).
+  const matched = (ASK.collections || []).find(c => (c.words || []).some(w => askHas(q, w)));
+  f.collMatched = !!matched;
+  f.coll = matched || (ASK.collections || [])[0];
+
+  // A scalar KPI question ("what is total installs") short-circuits everything.
+  f.scalar = (ASK.scalars || []).find(s => (s.words || []).some(w => askHas(q, w))) || null;
+  f.scalarPhrase = !!(f.scalar && (f.scalar.words || []).some(w => w.includes(" ") && askHas(q, w)));
+  f.series = (ASK.series  || []).find(s => (s.words || []).some(w => askHas(q, w))) || null;
+
+  if (f.coll){
+    for (const fac of (f.coll.facets || [])){
+      let mapped = false;
+      for (const m of (fac.map || [])){
+        if ((m.words || []).some(w => askHas(q, w))){
+          f.filters.push({key: fac.key, val: m.val, label: m.label || (m.words || [])[0]});
+          mapped = true; break;
+        }
+      }
+      if (mapped) continue;
+      for (const val of (fac.values || [])){
+        if (askHas(q, String(val).toLowerCase())){ f.filters.push({key: fac.key, val: val}); break; }
+      }
+      for (const w of (fac.words || [])){
+        const m = q.match(new RegExp(w + "\\s+(?:is\\s+|=\\s*)?([a-z0-9_\\- ]{2,24})", "i"));
+        if (m && !f.filters.some(x => x.key === fac.key)){
+          const cand = (fac.values || []).find(v => m[1].trim().startsWith(String(v).toLowerCase()));
+          if (cand) f.filters.push({key: fac.key, val: cand});
+        }
+      }
+    }
+    // Metric: explicit words win; otherwise the collection's first metric.
+    for (const m of (f.coll.metrics || [])){
+      if ((m.words || []).some(w => askHas(q, w))){ f.metric = m; break; }
+    }
+    // Numeric threshold ("over 1000 installs", "under $2 ecpi")
+    const over = q.match(/(?:over|above|more than|at least|>)\s*\$?([\d.,]+)\s*([km])?/);
+    const under = q.match(/(?:under|below|less than|cheaper than|<)\s*\$?([\d.,]+)\s*([km])?/);
+    for (const [m, dir] of [[over, "gte"], [under, "lte"]]){
+      if (!m) continue;
+      let v = parseFloat(m[1].replace(/,/g, ""));
+      if (m[2] === "k") v *= 1e3; if (m[2] === "m") v *= 1e6;
+      f.threshold = {dir, v, metric: f.metric || (f.coll.metrics || [])[0]};
+      f.filters.push({label: (dir === "gte" ? "over " : "under ") + askFmt(v, (f.threshold.metric || {}).fmt)});
+    }
+  }
+
+  const nm = q.match(/\b(?:top|best|bottom|worst|first)\s+(\d+)/);
+  if (nm) f.n = Math.min(parseInt(nm[1], 10), 50);
+
+  if (/\bhow many\b|\bhow much\b|\bcount\b|\bnumber of\b/.test(q)) f.intent = "count";
+  else if (/\baverage\b|\bavg\b|\bmean\b|\btypical\b/.test(q)) f.intent = "average";
+  else if (/\btotal\b|\bsum\b|\bcombined\b|\ball together\b/.test(q)) f.intent = "sum";
+  else if (/\bbreak ?down\b|\bdistribution\b|\bsplit\b/.test(q)) f.intent = "breakdown";
+  else if (/\bcheapest\b|\blowest\b|\bworst\b|\bbottom\b|\bleast\b|\bsmallest\b/.test(q)) { f.intent = "top"; f.want = "low"; }
+  else if (/\btop\b|\bbest\b|\bhighest\b|\bmost\b|\bbiggest\b|\blargest\b|\bstrongest\b/.test(q)) { f.intent = "top"; f.want = "high"; }
+  // LITERAL direction words name a direction on the metric itself rather than a
+  // quality judgement, and must not be inverted by lower_is_better: "most expensive"
+  // means the highest eCPI even though a low eCPI is the good outcome.
+  if (/\bexpensive\b|\bpriciest\b|\bdearest\b|\bcostliest\b/.test(q)) { f.intent = "top"; f.literal = "high"; }
+  else if (/\bcheapest\b|\bcheap\b/.test(q)) { f.intent = "top"; f.literal = "low"; }
+  else if (/\blist\b|\bshow me\b|\bwhich\b|\bwho\b|\bwhat are\b/.test(q)) f.weakList = true;
+
+  // Direction. A literal word wins outright. Otherwise a quality word is read
+  // against the metric's polarity: "best eCPI" is the lowest, "worst eCPI" the
+  // highest, while "top installs" is simply the highest.
+  const lib = !!(f.metric || (f.coll && (f.coll.metrics || [])[0]) || {}).lower_is_better;
+  f.asc = f.literal ? (f.literal === "low") : ((f.want === "low") !== lib);
+  f.lib = lib;
+
+  // A weak interrogative only becomes a listing when the question is demonstrably
+  // about this dashboard's data; otherwise it falls through to the refusal.
+  if (f.weakList && !f.intent && (f.collMatched || f.filters.length || f.metric)) f.intent = "top";
+
+  if (f.coll){
+    const g = q.match(/\bby\s+([a-z_ ]+)/);
+    if (g){
+      const want = g[1].trim();
+      // A metric named in "by X" is a ranking instruction, never a grouping one.
+      const isMetric = (f.coll.metrics || []).some(m => [m.key].concat(m.words || [])
+        .some(w => want.startsWith(String(w).toLowerCase())));
+      const fac = isMetric ? null : (f.coll.facets || []).find(x => [x.key].concat(x.words || [])
+        .some(w => { const ww = String(w).toLowerCase(); return want === ww || want.startsWith(ww + " ") || ww.startsWith(want); }));
+      if (fac){ f.group = fac.key; if (!f.intent) f.intent = "breakdown"; }
+      // "by <metric>" is a ranking instruction, not a grouping one — leave the
+      // intent alone so "cheapest channel by eCPI" stays a ranking.
+    }
+  }
+  return f;
+}
+
+function askApply(f){
+  const rows = (f.coll && f.coll.rows) || [];
+  return rows.filter(r => {
+    for (const flt of f.filters){
+      if (flt.key && String(r[flt.key]) !== String(flt.val)) return false;
+    }
+    if (f.threshold){
+      const mk = (f.threshold.metric || {}).key;
+      const v = askNum(r[mk]);
+      if (v == null) return false;
+      if (f.threshold.dir === "gte" && !(v >= f.threshold.v)) return false;
+      if (f.threshold.dir === "lte" && !(v <= f.threshold.v)) return false;
+    }
+    return true;
+  });
+}
+
+const askScope = f => {
+  const parts = f.filters.map(x => x.label || x.val);
+  return parts.length ? parts.join(" · ") : ("all " + ((f.coll && f.coll.name) || ASK.noun || "rows"));
+};
+const askProv = n => `<div class="ask-prov">Computed in-browser from ${askInt.format(n)} row${n === 1 ? "" : "s"} embedded in this page`
+  + (ASK.generated_at ? ` · data baked ${askEsc(ASK.generated_at)}` : "")
+  + ` · cross-check any number against the tables on this page.</div>`;
+
+function askRowLine(coll, r, metric){
+  const name = askEsc(r[coll.label] != null ? r[coll.label] : "(unnamed)");
+  const bits = [];
+  if (metric) bits.push(`${askEsc(metric.label)} ${askFmt(askNum(r[metric.key]), metric.fmt)}`);
+  // Metric-less collection (e.g. strategy tactics): fall back to the first detail
+  // field after the label so the row still says something useful.
+  if (!metric){
+    const k = (coll.detail || []).find(x => x !== coll.label && r[x] != null && r[x] !== "");
+    if (k) return `<li><span>${name}</span><span class="ask-meta">${askEsc(String(r[k]).slice(0, 70))}</span></li>`;
+  }
+  for (const m of (coll.metrics || [])){
+    if (metric && m.key === metric.key) continue;
+    const v = askNum(r[m.key]);
+    if (v != null && bits.length < 3) bits.push(`${askEsc(m.label)} ${askFmt(v, m.fmt)}`);
+  }
+  return `<li><span>${name}</span><span class="ask-meta">${bits.join(" · ")}</span></li>`;
+}
+
+/* ---- answer ----------------------------------------------------------- */
+function answerQuestion(raw){
+  if (!raw.trim()) return `<span class="ask-empty">Type a question.</span>`;
+  const f = askParse(raw);
+
+  // Single scalar KPI. A multi-word trigger ("total installs", "d1 retention") is
+  // specific enough to win even though the phrasing also looks like an aggregation.
+  if (f.scalar && (!f.intent || f.scalarPhrase)) {
+    return `<div class="ask-head">${askEsc(f.scalar.label)}: <b>${askFmt(askNum(f.scalar.value), f.scalar.fmt)}</b></div>`
+      + (f.scalar.note ? askEsc(f.scalar.note) : "") + askProv(1);
+  }
+  // A named series (retention curve etc).
+  if (f.series){
+    const rows = (f.series.labels || []).map((l, i) =>
+      `<li><span>${askEsc(l)}</span><span class="ask-meta">${askFmt(askNum((f.series.values || [])[i]), f.series.fmt)}</span></li>`).join("");
+    return `<div class="ask-head">${askEsc(f.series.label)}</div><ul class="ask-list">${rows}</ul>`
+      + (f.series.note ? `<div class="ask-prov">${askEsc(f.series.note)}</div>` : "")
+      + askProv((f.series.labels || []).length);
+  }
+  if (!f.coll) return askRefuse();
+
+  // A named row beats a generic intent ("tell me about Money20/20").
+  const ql = raw.toLowerCase();
+  let named = null;
+  const order = f.collMatched
+    ? [f.coll].concat((ASK.collections || []).filter(c => c !== f.coll))
+    : (ASK.collections || []);
+  for (const c of order){
+    for (const r of (c.rows || [])){
+      const nm = String(r[c.label] || "").toLowerCase();
+      if (nm.length > 3 && ql.includes(nm) && (!named || nm.length > String(named.r[named.c.label]).length)) named = {c, r};
+    }
+  }
+  if (named && !f.intent){
+    const c = named.c, r = named.r;
+    const lines = (c.detail || Object.keys(r)).filter(k => r[k] != null && String(r[k]) !== "")
+      .map(k => `${askEsc(k.replace(/_/g, " "))}: <b>${askEsc(typeof r[k] === "object" ? JSON.stringify(r[k]) : r[k])}</b>`);
+    return `<div class="ask-head">${askEsc(r[c.label])}</div>${lines.join(" · ")}` + askProv(1);
+  }
+
+  const rows = askApply(f);
+  const metric = f.metric || (f.coll.metrics || [])[0];
+
+  if (f.intent === "count"){
+    const ordered = metric
+      ? rows.slice().sort((a, b) => (askNum(b[metric.key]) || 0) - (askNum(a[metric.key]) || 0))
+      : rows.slice();
+    return `<div class="ask-head"><b>${askInt.format(rows.length)}</b> ${askEsc(f.coll.name)} match ${askEsc(askScope(f))}.</div>`
+      + (rows.length ? `<ul class="ask-list">${ordered
+          .slice(0, 5).map(r => askRowLine(f.coll, r, metric)).join("")}</ul>`
+        + (rows.length > 5 ? `<div class="ask-prov">Showing 5 of ${askInt.format(rows.length)}.</div>` : "") : "")
+      + askProv(rows.length);
+  }
+
+  if (f.intent === "sum" || f.intent === "average"){
+    if (!metric) return `<span class="ask-miss">There is no numeric measure on ${askEsc(f.coll.name)} to total or average.</span>`;
+    const vals = rows.map(r => askNum(r[metric.key]))
+      .filter(v => v != null && !(metric.exclude_zero && v === 0));
+    if (!vals.length) return `<span class="ask-miss">No ${askEsc(f.coll.name)} match ${askEsc(askScope(f))}, so there is nothing to total.</span>`;
+    const total = vals.reduce((a, b) => a + b, 0);
+    if (f.intent === "sum"){
+      return `<div class="ask-head">Total ${askEsc(metric.label)} for ${askEsc(askScope(f))}: <b>${askFmt(total, metric.fmt)}</b></div>`
+        + `Across <b>${askInt.format(vals.length)}</b> ${askEsc(f.coll.name)}.` + askProv(rows.length);
+    }
+    const sorted = vals.slice().sort((a, b) => a - b);
+    const med = sorted.length % 2 ? sorted[(sorted.length - 1) / 2] : (sorted[sorted.length / 2 - 1] + sorted[sorted.length / 2]) / 2;
+    return `<div class="ask-head">Average ${askEsc(metric.label)} for ${askEsc(askScope(f))}: <b>${askFmt(total / vals.length, metric.fmt)}</b></div>`
+      + `Median <b>${askFmt(med, metric.fmt)}</b> · min <b>${askFmt(sorted[0], metric.fmt)}</b> · max <b>${askFmt(sorted[sorted.length - 1], metric.fmt)}</b>`
+      + ` · across <b>${askInt.format(vals.length)}</b> ${askEsc(f.coll.name)}.` + askProv(rows.length);
+  }
+
+  if (f.intent === "breakdown"){
+    const key = f.group || ((f.coll.facets || [])[0] || {}).key;
+    if (!key) return askRefuse();
+    const counts = {};
+    rows.forEach(r => { const k = r[key] == null || r[key] === "" ? "unknown" : r[key]; counts[k] = (counts[k] || 0) + 1; });
+    const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+    if (!entries.length) return `<span class="ask-miss">No ${askEsc(f.coll.name)} match ${askEsc(askScope(f))}.</span>`;
+    return `<div class="ask-head">${askInt.format(rows.length)} ${askEsc(f.coll.name)} by ${askEsc(key.replace(/_/g, " "))}`
+      + (f.filters.length ? ` (${askEsc(askScope(f))})` : "") + `</div><ul class="ask-list">`
+      + entries.map(([k, v]) => `<li><span>${askEsc(k)}</span><span class="ask-meta">${askInt.format(v)} · ${(v / rows.length * 100).toFixed(1)}%</span></li>`).join("")
+      + `</ul>` + askProv(rows.length);
+  }
+
+  if (f.intent === "top"){
+    if (!rows.length) return `<span class="ask-miss">Nothing matches ${askEsc(askScope(f))}. Try loosening the question.</span>`;
+    const n = f.n || 10;
+    let ranked = rows, dropped = 0;
+    if (metric && metric.exclude_zero){
+      ranked = rows.filter(r => { const v = askNum(r[metric.key]); return v != null && v !== 0; });
+      dropped = rows.length - ranked.length;
+      if (!ranked.length) return `<span class="ask-miss">Every matching row has no ${askEsc(metric.label)}, so there is nothing to rank.</span>`;
+    }
+    const sorted = metric ? ranked.slice().sort((a, b) => {
+      const av = askNum(a[metric.key]), bv = askNum(b[metric.key]);
+      if (av == null) return 1; if (bv == null) return -1;
+      return f.asc ? av - bv : bv - av;
+    }) : rows.slice();
+    // Header wording, kept honest three ways: a metric-less collection is "listed"
+    // not "ranked"; ascending on a lower-is-better metric is "Best", not "Lowest"
+    // (rank 1 and the cheapest eCPI are the good end, and "Lowest by rank" read as
+    // if it were the bottom of the list); and when nothing is truncated it says
+    // "All N" rather than the nonsense "Lowest 6 of 6".
+    const showing = Math.min(n, sorted.length);
+    const complete = showing >= ranked.length;
+    const word = metric ? (f.asc ? (f.lib ? "Best" : "Lowest") : "Top") : "Listing";
+    const lead = complete ? `All ${askInt.format(ranked.length)}`
+                          : `${word} ${showing} of ${askInt.format(ranked.length)}`;
+    const order = metric ? ` by ${askEsc(metric.label)}, ${f.asc ? "best" : "highest"} first` : "";
+    return `<div class="ask-head">${lead} ${askEsc(f.coll.name)}${order}`
+      + `${f.filters.length ? " — " + askEsc(askScope(f)) : ""}</div>`
+      + `<ul class="ask-list">${sorted.slice(0, n).map(r => askRowLine(f.coll, r, metric)).join("")}</ul>`
+      + (dropped ? `<div class="ask-prov">${askInt.format(dropped)} row(s) with no ${askEsc(metric.label)} excluded from this ranking (e.g. organic, which has no media cost).</div>` : "")
+      + askProv(rows.length);
+  }
+
+  // Filters but no recognised intent: show what matches rather than guess.
+  if (f.filters.length){
+    return `<div class="ask-head">I did not recognise the question, so here is what matches ${askEsc(askScope(f))}.</div>`
+      + `<b>${askInt.format(rows.length)}</b> ${askEsc(f.coll.name)}.`
+      + `<ul class="ask-list">${rows.slice(0, 10).map(r => askRowLine(f.coll, r, metric)).join("")}</ul>` + askProv(rows.length);
+  }
+  return askRefuse();
+}
+
+function askRefuse(){
+  const cols = (ASK.collections || []).map(c => askEsc(c.name)).join(", ");
+  return `<span class="ask-miss">I can't answer that from the data on this page.</span><br>`
+    + `This panel computes answers from what this dashboard actually carries (${cols}), so it handles counts, `
+    + `totals, averages, rankings, breakdowns, and single-row lookups. It does not do open-ended questions. `
+    + `Try one of the examples above.`;
+}
+
+/* ---- wiring ----------------------------------------------------------- */
+function askRun(q){
+  const el = document.getElementById("askA");
+  el.classList.remove("ask-empty");
+  el.innerHTML = answerQuestion(q);
+}
+(function askInitPanel(){
+  const eg = document.getElementById("askEg");
+  (ASK.examples || []).forEach(x => {
+    const s = document.createElement("span");
+    s.className = "ask-chip"; s.textContent = x;
+    s.addEventListener("click", () => { document.getElementById("askQ").value = x; askRun(x); });
+    eg.appendChild(s);
+  });
+  document.getElementById("askGo").addEventListener("click", () => askRun(document.getElementById("askQ").value));
+  document.getElementById("askQ").addEventListener("keydown", e => { if (e.key === "Enter") askRun(e.target.value); });
+  const total = (ASK.collections || []).reduce((a, c) => a + ((c.rows || []).length), 0);
+  document.getElementById("askA").textContent =
+    `Ask a question about the ${askInt.format(total)} rows on this page.`;
+})();
+
 </script>
 </body>
 </html>

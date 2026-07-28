@@ -1,112 +1,80 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Speed Wallet — Strategy &amp; Market Intelligence</title>
-<style>
-  :root{
-    --bg:#0d1117; --panel:#161b22; --panel-2:#1b2230;
-    --hairline:rgba(255,255,255,0.09); --hairline-strong:rgba(255,255,255,0.16);
-    --text:#edf1f7; --muted:#9aa4b2; --faint:#6b7585;
-    --accent:#2f5dfb; --accent-2:#6f9dff;
-    --good:#3fb950; --warn:#e3b341; --bad:#f85149; --gold:#f5c400;
-    --grad:linear-gradient(120deg,#2f5dfb,#6f9dff);
-    --shadow:0 10px 30px -14px rgba(0,0,0,0.7);
-    --shadow-lift:0 18px 44px -16px rgba(0,0,0,0.8);
-    --r-lg:16px; --r-md:12px; --r-sm:9px;
-  }
-  *{box-sizing:border-box}
-  body{
-    margin:0; color:var(--text); min-height:100vh; letter-spacing:-0.005em;
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    line-height:1.5; -webkit-font-smoothing:antialiased;
-    background:
-      radial-gradient(1100px 600px at 50% -10%, rgba(47,93,251,0.20), transparent 58%),
-      radial-gradient(820px 520px at 100% 0%, rgba(111,157,255,0.09), transparent 52%),
-      radial-gradient(720px 480px at 0% 8%, rgba(63,185,80,0.045), transparent 50%),
-      var(--bg);
-    background-attachment:fixed;
-  }
-  .wrap{position:relative; z-index:1; max-width:1180px; margin:0 auto; padding:0 24px 90px;}
+"""Shared "Ask this dashboard" panel — CSS, HTML and a configurable JS engine.
 
-  .brandbar{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; padding:20px 0; border-bottom:1px solid var(--hairline);}
-  .brand{font-weight:760; font-size:16px; display:flex; align-items:center;}
-  .brand .bolt{margin-right:8px; font-size:17px; background:linear-gradient(180deg,#f5c400,#f0a02a);
-    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 0 6px rgba(240,160,42,0.45));}
-  .brandbar .sync{font-size:12px; color:var(--muted);} .brandbar .sync b{color:var(--text); font-weight:600;}
+Every dashboard already bakes its own data into the page. This module turns that
+data into a question box that answers from it, computed entirely in the browser.
 
-  .title-block{margin:36px 0 26px;}
-  h1{font-size:30px; margin:0 0 6px; font-weight:790; letter-spacing:-0.03em;
-    background:linear-gradient(180deg,#ffffff,#c9c3e8); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
-  .title-block .sub{color:var(--muted); font-size:13.5px;}
+WHY IT COMPUTES LOCALLY INSTEAD OF CALLING A MODEL. GitHub Pages is static-only and
+Namzy100/speed-growth-intelligence is a PUBLIC repo, so there is nowhere to put an
+API key: a runtime model call from these pages would either ship a secret in client
+JS or need a backend that does not exist. GitHub-Actions-as-compute does not rescue
+it either — a static page cannot trigger a workflow without an authenticated token,
+which is the same secret problem. So answers are derived from the rows the page
+already carries: the numbers are real and checkable against the tables beside them,
+nothing leaves the browser, and it ships with zero infrastructure. `answerQuestion`
+is the single seam — when a backend exists, swap that one function.
 
-  section{margin:38px 0;}
-  .sec-head{display:flex; align-items:center; gap:11px; margin-bottom:18px; flex-wrap:wrap;}
-  h2{font-size:12.5px; text-transform:uppercase; letter-spacing:0.11em; color:var(--muted); margin:0; font-weight:700; display:flex; align-items:center; gap:10px;}
-  h2::before{content:""; width:3px; height:13px; border-radius:2px; background:var(--grad);}
-  .sec-note{font-size:12px; color:var(--faint);}
+WHY ONE SHARED ENGINE. The five dashboards hold genuinely different data (channel
+performance, venue prospecting, a content kanban, a strategy doc, creator scores),
+so the QUESTION SETS differ per dashboard — but the machinery underneath is the
+same: pick a collection, filter it, then count / rank / average / break down / look
+up one row. Five inline copies would drift. Each dashboard supplies a config
+describing its own collections, facets, metrics and scalars; the engine is identical.
 
-  /* Section 2 — EU rank cards */
-  .rank-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
-  @media(max-width:820px){.rank-grid{grid-template-columns:1fr;}}
-  .rank-card{padding:20px; background:linear-gradient(180deg,var(--panel),rgba(22,27,34,0.55));
-    border:1px solid var(--hairline); border-radius:var(--r-lg); box-shadow:var(--shadow); position:relative; overflow:hidden;}
-  .rank-card::before{content:""; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--grad);}
-  .rank-head{display:flex; align-items:center; gap:9px; margin-bottom:8px;}
-  .medal{font-size:20px;}
-  .rank-no{font-size:10px; text-transform:uppercase; letter-spacing:0.09em; color:var(--faint); font-weight:700;}
-  .rank-name{font-size:22px; font-weight:770; letter-spacing:-0.02em;}
-  .rank-metric{display:inline-block; margin:10px 0 12px; font-size:12.5px; font-weight:680; color:var(--gold);
-    background:rgba(240,160,42,0.12); border:1px solid rgba(240,160,42,0.28); padding:3px 10px; border-radius:20px;}
-  .rank-rationale{font-size:13.5px; color:var(--muted); line-height:1.55;}
+CONFIG SHAPE (per dashboard, passed to `js()`):
 
-  /* Section 3 — channel strategy columns */
-  .strat-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
-  @media(max-width:820px){.strat-grid{grid-template-columns:1fr;}}
-  .strat-col{background:var(--panel); border:1px solid var(--hairline); border-radius:var(--r-md); padding:18px; box-shadow:var(--shadow);}
-  .strat-market{font-size:16px; font-weight:740; letter-spacing:-0.01em; padding-bottom:11px; margin-bottom:11px; border-bottom:1px solid var(--hairline);
-    background:linear-gradient(180deg,#fff,#c9c3e8); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
-  .strat-row{margin:12px 0;}
-  .strat-k{font-size:9.5px; text-transform:uppercase; letter-spacing:0.08em; color:var(--faint); font-weight:700; margin-bottom:3px;}
-  .strat-v{font-size:13px; color:var(--text); line-height:1.5;}
+    {
+      "noun": "channels",                  # what a bare row is called
+      "collections": [
+        {"name": "channels",               # id used in answers
+         "words": ["channel", "network"],  # picks this collection from the question
+         "rows": <list[dict]>,             # the actual data
+         "label": "name",                  # field holding the human name
+         "facets":  [{"key": "...", "words": [...], "values": [...]}],
+         "metrics": [{"key": "...", "words": [...], "label": "...",
+                      "fmt": "int|money|pct|float", "lower_is_better": bool}],
+         "detail": ["field", ...]},        # fields shown in a single-row lookup
+      ],
+      "scalars": [{"words": [...], "label": "...", "value": 123, "fmt": "int"}],
+      "series":  [{"words": [...], "label": "...", "labels": [...], "values": [...],
+                   "fmt": "pct"}],
+      "examples": ["...", "..."],          # the clickable chips
+    }
 
-  /* Section 4 — white space matrix */
-  .ws-banner{display:flex; align-items:center; gap:14px; flex-wrap:wrap; padding:16px 20px; margin-bottom:16px;
-    background:linear-gradient(120deg,rgba(63,185,80,0.12),rgba(47,93,251,0.10)); border:1px solid rgba(63,185,80,0.3); border-radius:var(--r-md);}
-  .ws-flag{font-size:10px; font-weight:800; letter-spacing:0.12em; color:var(--good); background:rgba(63,185,80,0.16); padding:5px 11px; border-radius:6px; white-space:nowrap;}
-  .ws-headline{font-size:16px; font-weight:700; letter-spacing:-0.01em;}
-  .table-wrap{overflow-x:auto; border:1px solid var(--hairline); border-radius:var(--r-md); background:var(--panel);}
-  .ws-table{width:100%; border-collapse:collapse; font-size:13px; min-width:640px;}
-  .ws-table th,.ws-table td{padding:13px 15px; border-bottom:1px solid var(--hairline); text-align:center;}
-  .ws-table th{background:#10151d; color:var(--faint); font-size:10px; text-transform:uppercase; letter-spacing:0.06em; font-weight:700;}
-  .ws-table th:first-child,.ws-table td:first-child{text-align:left;}
-  .ws-table tbody tr:last-child td{border-bottom:none;}
-  .comp-name{font-weight:700; font-size:14px;}
-  .comp-focus{display:block; font-size:11px; color:var(--faint); font-weight:500; margin-top:3px; max-width:220px;}
-  td.mx{font-weight:700; font-variant-numeric:tabular-nums;}
-  td.mx.open{color:var(--good); background:rgba(63,185,80,0.07);}
-  td.mx.contested{color:var(--faint);}
-  .ws-legend{display:flex; gap:18px; flex-wrap:wrap; margin-top:11px; font-size:11.5px;}
-  .lg.open{color:var(--good);} .lg.contested{color:var(--faint);}
-  .ws-chips{display:flex; gap:9px; flex-wrap:wrap; margin-top:14px;}
-  .ws-chip{font-size:12px; font-weight:650; color:var(--good); background:rgba(63,185,80,0.1); border:1px solid rgba(63,185,80,0.28); padding:5px 12px; border-radius:20px;}
+Anything the engine cannot answer from the data gets an explicit refusal — a
+dashboard that invents a number is worse than one that declines.
+"""
 
-  /* Section 5 — tactics cards */
-  .tac-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:16px;}
-  @media(max-width:760px){.tac-grid{grid-template-columns:1fr;}}
-  .tac-card{padding:18px; background:linear-gradient(180deg,var(--panel),rgba(22,27,34,0.55));
-    border:1px solid var(--hairline); border-radius:var(--r-lg); box-shadow:var(--shadow); transition:transform .2s ease,border-color .2s ease;}
-  .tac-card:hover{transform:translateY(-3px); border-color:var(--hairline-strong);}
-  .tac-cat{display:inline-block; font-size:9.5px; font-weight:800; letter-spacing:0.09em; text-transform:uppercase;
-    color:var(--accent-2); background:rgba(111,157,255,0.13); border:1px solid rgba(111,157,255,0.3); padding:3px 9px; border-radius:20px;}
-  .tac-title{font-size:16.5px; font-weight:740; letter-spacing:-0.015em; margin:11px 0 8px;}
-  .tac-why{font-size:13px; color:var(--muted); line-height:1.55;}
+import json
 
-  footer{margin-top:50px; padding-top:18px; border-top:1px solid var(--hairline); font-size:11.5px; color:var(--faint); line-height:1.7;}
-  footer b{color:var(--muted); font-weight:600;}
-  @media (prefers-reduced-motion: reduce){*{transition:none!important;}}
+from pipelines.json_embed import dumps_for_script
 
+__all__ = ["css", "html_section", "js", "inject"]
+
+
+def inject(html: str, config: dict, heading: str = "Ask this dashboard",
+           note: str | None = None) -> str:
+    """Splice the panel into a finished dashboard at three uniform anchors.
+
+    Done by post-processing the rendered HTML rather than by editing each
+    dashboard's own placeholder scheme: the five builders use different marker
+    conventions (`/*__DATA__*/`, `/*__STATE_JSON__*/`, `/*__TACTICS__*/`, …) and
+    only these three anchors are common to all of them. The engine is appended as
+    its own <script> just before </body> — strategy has no script block at all, and
+    a self-contained block avoids assuming anything about the existing one's order.
+    """
+    if "askQ" in html:                       # already injected — idempotent
+        return html
+    for anchor in ("</style>", "<footer", "</body>"):
+        if anchor not in html:
+            raise ValueError(f"ask_panel.inject: anchor {anchor!r} not found")
+    html = html.replace("</style>", css() + "</style>", 1)
+    html = html.replace("<footer", html_section(heading, note) + "\n  <footer", 1)
+    return html.replace("</body>", "<script>\n" + js(config) + "\n</script>\n</body>", 1)
+
+
+def css() -> str:
+    """Panel styles. Uses each dashboard's existing custom properties."""
+    return """
   /* Ask panel (shared — pipelines/ask_panel.py) */
   .ask-wrap{background:var(--panel); border:1px solid var(--hairline); border-radius:var(--r-md,10px); padding:16px 18px; box-shadow:var(--shadow,none);}
   .ask-row{display:flex; gap:10px; align-items:center;}
@@ -130,110 +98,14 @@
   .ask-list li:last-child{border-bottom:none;}
   .ask-list .ask-meta{color:var(--muted,var(--faint)); font-size:12.5px; font-variant-numeric:tabular-nums; white-space:nowrap;}
   .ask-prov{margin-top:10px; font-size:11px; color:var(--faint);}
-</style>
-</head>
-<body>
-<div class="wrap">
-  <div class="brandbar">
-    <div class="brand"><span class="bolt">⚡</span>Speed Wallet</div>
-    <div class="sync">Synced: <b>2026-07-28 15:05 UTC</b></div>
-  </div>
+"""
 
-  <div class="title-block">
-    <h1>Strategy &amp; Market Intelligence</h1>
-    <div class="sub">EU expansion priorities, per-market playbooks, and competitive white space — synthesized from Speed's market &amp; competitor research.</div>
-  </div>
 
-  <section>
-    <div class="sec-head"><h2>EU Market Priority</h2><span class="sec-note">Ranked entry order from install demand &amp; corridor fit</span></div>
-    <div class="rank-grid">
-      <div class="rank-card">
-        <div class="rank-head"><span class="medal">🥇</span>
-          <span class="rank-no">Rank 1</span></div>
-        <div class="rank-name">Germany</div>
-        <div class="rank-metric">1,657 organic installs</div>
-        <div class="rank-rationale">Highest EU demand signal already unprompted; single EMI license covers future EU expansion alongside it.</div>
-      </div>
-      <div class="rank-card">
-        <div class="rank-head"><span class="medal">🥈</span>
-          <span class="rank-no">Rank 2</span></div>
-        <div class="rank-name">United Kingdom</div>
-        <div class="rank-metric">873 organic installs</div>
-        <div class="rank-rationale">UK-to-India and UK-to-Nigeria are Speed&#x27;s two strongest corridor matches in Europe, plus mature iGaming.</div>
-      </div>
-      <div class="rank-card">
-        <div class="rank-head"><span class="medal">🥉</span>
-          <span class="rank-no">Rank 3</span></div>
-        <div class="rank-name">Portugal</div>
-        <div class="rank-metric">400k+ Brazilian nationals</div>
-        <div class="rank-rationale">Most concentrated single-corridor opportunity per capita; one language, one message drives dense word-of-mouth growth.</div>
-      </div></div>
-  </section>
-
-  <section>
-    <div class="sec-head"><h2>Per-Market Channel Strategy</h2><span class="sec-note">Top channel · messaging angle · first creator segment</span></div>
-    <div class="strat-grid">
-      <div class="strat-col">
-        <div class="strat-market">Germany</div>
-        <div class="strat-row"><div class="strat-k">Top channel</div><div class="strat-v">WhatsApp diaspora networks</div></div>
-        <div class="strat-row"><div class="strat-k">Messaging angle</div><div class="strat-v">Send to India. Zero fees. Arrives in seconds.</div></div>
-        <div class="strat-row"><div class="strat-k">First creator segment</div><div class="strat-v">Indian-German remittance and finance creators (NRI-focused)</div></div>
-      </div>
-      <div class="strat-col">
-        <div class="strat-market">United Kingdom</div>
-        <div class="strat-row"><div class="strat-k">Top channel</div><div class="strat-v">WhatsApp diaspora networks</div></div>
-        <div class="strat-row"><div class="strat-k">Messaging angle</div><div class="strat-v">Zero fees to Nigeria. Zero fees to India. Instant.</div></div>
-        <div class="strat-row"><div class="strat-k">First creator segment</div><div class="strat-v">Nigerian and Indian diaspora finance creators in London and Birmingham</div></div>
-      </div>
-      <div class="strat-col">
-        <div class="strat-market">Portugal</div>
-        <div class="strat-row"><div class="strat-k">Top channel</div><div class="strat-v">WhatsApp diaspora networks</div></div>
-        <div class="strat-row"><div class="strat-k">Messaging angle</div><div class="strat-v">Manda dinheiro pro Brasil. Taxa zero. Na hora.</div></div>
-        <div class="strat-row"><div class="strat-k">First creator segment</div><div class="strat-v">Brazilian-Portuguese finance and expat-life creators</div></div>
-      </div></div>
-  </section>
-
-  <section>
-    <div class="sec-head"><h2>Competitive White Space</h2><span class="sec-note">Where Robinhood, Crypto.com &amp; Kraken are absent</span></div>
-    
-    <div class="ws-banner"><span class="ws-flag">UNCONTESTED TERRITORY</span>
-      <div class="ws-headline">Speed owns zero-fee remittance and iGaming deposits — no competitor does</div></div>
-    <div class="table-wrap"><table class="ws-table">
-      <thead><tr><th>Competitor</th><th>Zero-fee remittance</th><th>iGaming instant deposits</th><th>Literal speed</th></tr></thead>
-      <tbody><tr><td class="comp-name">Robinhood<span class="comp-focus">Premium trading tools, Gold membership, transparent investor fees</span></td><td class="mx open" title="not touching this angle">○ Open</td><td class="mx open" title="not touching this angle">○ Open</td><td class="mx open" title="not touching this angle">○ Open</td></tr><tr><td class="comp-name">Crypto.com<span class="comp-focus">Gamified rewards, card cashback, promotional zero-fee incentives</span></td><td class="mx open" title="not touching this angle">○ Open</td><td class="mx open" title="not touching this angle">○ Open</td><td class="mx open" title="not touching this angle">○ Open</td></tr><tr><td class="comp-name">Kraken<span class="comp-focus">Trading speed, performance visualization, product-led carousels</span></td><td class="mx open" title="not touching this angle">○ Open</td><td class="mx open" title="not touching this angle">○ Open</td><td class="mx contested" title="actively competing">● Competing</td></tr></tbody>
-    </table></div>
-    <div class="ws-legend"><span class="lg open">○ Open = no competitor presence (Speed's lane)</span>
-      <span class="lg contested">● Competing = already contested</span></div>
-    <div class="ws-chips"><span class="ws-chip">✓ Zero-fee international remittance with real corridor messaging</span><span class="ws-chip">✓ iGaming instant deposit positioning across permissive markets</span></div>
-  </section>
-
-  <section>
-    <div class="sec-head"><h2>High-Leverage Marketing Tactics</h2><span class="sec-note">Highest-leverage, underused growth plays</span></div>
-    <div class="tac-grid">
-      <div class="tac-card">
-        <span class="tac-cat">Remittance</span>
-        <div class="tac-title">Recipient-Side Micro-Creator Videos</div>
-        <div class="tac-why">Showing the receiving family&#x27;s experience closes the emotional loop senders respond to most.</div>
-      </div>
-      <div class="tac-card">
-        <span class="tac-cat">Referral</span>
-        <div class="tac-title">Family-Chain Referral After First Transfer</div>
-        <div class="tac-why">Recipients already trust Speed at delivery; conversion at that moment vastly outperforms cold acquisition.</div>
-      </div>
-      <div class="tac-card">
-        <span class="tac-cat">Guerrilla</span>
-        <div class="tac-title">Fee-Comparison Posters Near Competitor Locations</div>
-        <div class="tac-why">Intercepts high-intent users at the exact competitive decision moment with zero media spend.</div>
-      </div>
-      <div class="tac-card">
-        <span class="tac-cat">Crypto</span>
-        <div class="tac-title">Sats Bounties for Open-Source Integrations</div>
-        <div class="tac-why">Developers who build on Speed become credible advocates and compound the product&#x27;s reach permanently.</div>
-      </div></div>
-  </section>
-
-    <section>
-    <div class="sec-head"><h2>Ask this dashboard</h2><span class="note">answers computed from the extracted strategy sections on this page</span></div>
+def html_section(heading: str = "Ask this dashboard", note: str | None = None) -> str:
+    """The panel markup. Examples/chips are injected by the JS from the config."""
+    note = note or "answers computed from the data on this page — nothing leaves your browser"
+    return f"""  <section>
+    <div class="sec-head"><h2>{heading}</h2><span class="note">{note}</span></div>
     <div class="ask-wrap">
       <div class="ask-row">
         <input type="text" id="askQ" autocomplete="off" placeholder="ask a question about this data…">
@@ -243,14 +115,15 @@
       <div id="askA" class="ask-answer ask-empty"></div>
     </div>
   </section>
+"""
 
-  <footer>
-    <b>Data sources:</b> eu_market_analysis_2026_06_24.txt · eu_channel_strategy_2026_06_24.txt · competitor_influencer_analysis_2026_06_26.txt · fintech_marketing_strategies.txt · data/processed/competitor_analysis_*.json<br>
-    Generated 2026-07-28 15:05 UTC · Sections extracted &amp; condensed by Claude (claude-sonnet-4-6) · rebuilt by pipelines/build_strategy_dashboard.py
-  </footer>
-</div>
-<script>
 
+def js(config: dict) -> str:
+    """The engine plus this dashboard's config, as one <script>-safe JS blob."""
+    return _ENGINE.replace("/*__ASK_CONFIG__*/", dumps_for_script(config))
+
+
+_ENGINE = r"""
 /* ==========================================================================
    "Ask this dashboard" — shared engine (pipelines/ask_panel.py).
    Deliberately NOT a runtime model call: these pages are static and public, so
@@ -258,7 +131,7 @@
    already embedded above, which is why the numbers are checkable against the
    tables on this page. `answerQuestion` is the seam to swap for a real backend.
    ========================================================================== */
-const ASK = {"noun": "entries", "generated_at": null, "collections": [{"name": "EU markets", "words": ["market", "eu", "europe", "enter", "priorit"], "rows": [{"rank": 1, "name": "Germany", "metric": "1,657 organic installs", "rationale": "Highest EU demand signal already unprompted; single EMI license covers future EU expansion alongside it."}, {"rank": 2, "name": "United Kingdom", "metric": "873 organic installs", "rationale": "UK-to-India and UK-to-Nigeria are Speed's two strongest corridor matches in Europe, plus mature iGaming."}, {"rank": 3, "name": "Portugal", "metric": "400k+ Brazilian nationals", "rationale": "Most concentrated single-corridor opportunity per capita; one language, one message drives dense word-of-mouth growth."}], "label": "name", "facets": [], "metrics": [{"key": "rank", "words": ["rank", "priority", "first"], "label": "rank", "fmt": "int", "lower_is_better": true}], "detail": ["name", "rank", "metric", "rationale"]}, {"name": "channel plans", "words": ["channel", "messaging", "angle", "segment", "germany", "united kingdom", "portugal"], "rows": [{"name": "Germany", "top_channel": "WhatsApp diaspora networks", "messaging_angle": "Send to India. Zero fees. Arrives in seconds.", "first_segment": "Indian-German remittance and finance creators (NRI-focused)"}, {"name": "United Kingdom", "top_channel": "WhatsApp diaspora networks", "messaging_angle": "Zero fees to Nigeria. Zero fees to India. Instant.", "first_segment": "Nigerian and Indian diaspora finance creators in London and Birmingham"}, {"name": "Portugal", "top_channel": "WhatsApp diaspora networks", "messaging_angle": "Manda dinheiro pro Brasil. Taxa zero. Na hora.", "first_segment": "Brazilian-Portuguese finance and expat-life creators"}], "label": "name", "facets": [], "metrics": [], "detail": ["name", "top_channel", "messaging_angle", "first_segment"]}, {"name": "tactics", "words": ["tactic", "recommend", "leverage", "underused", "play"], "rows": [{"title": "Recipient-Side Micro-Creator Videos", "category": "Remittance", "why": "Showing the receiving family's experience closes the emotional loop senders respond to most."}, {"title": "Family-Chain Referral After First Transfer", "category": "Referral", "why": "Recipients already trust Speed at delivery; conversion at that moment vastly outperforms cold acquisition."}, {"title": "Fee-Comparison Posters Near Competitor Locations", "category": "Guerrilla", "why": "Intercepts high-intent users at the exact competitive decision moment with zero media spend."}, {"title": "Sats Bounties for Open-Source Integrations", "category": "Crypto", "why": "Developers who build on Speed become credible advocates and compound the product's reach permanently."}], "label": "title", "facets": [{"key": "category", "words": ["category", "kind"], "values": ["Crypto", "Guerrilla", "Referral", "Remittance"]}], "metrics": [], "detail": ["title", "category", "why"]}, {"name": "competitors", "words": ["competitor", "robinhood", "kraken", "crypto.com", "whitespace", "uncontested"], "rows": [{"name": "Robinhood", "focus": "Premium trading tools, Gold membership, transparent investor fees", "Zero-fee remittance": "no", "iGaming instant deposits": "no", "Literal speed": "no", "uses": "none of the three"}, {"name": "Crypto.com", "focus": "Gamified rewards, card cashback, promotional zero-fee incentives", "Zero-fee remittance": "no", "iGaming instant deposits": "no", "Literal speed": "no", "uses": "none of the three"}, {"name": "Kraken", "focus": "Trading speed, performance visualization, product-led carousels", "Zero-fee remittance": "no", "iGaming instant deposits": "no", "Literal speed": "yes", "uses": "Literal speed"}], "label": "name", "facets": [], "metrics": [], "detail": ["name", "focus", "uses", "Zero-fee remittance", "iGaming instant deposits", "Literal speed"]}], "scalars": [{"words": ["biggest opportunity", "headline", "uncontested opportunity"], "label": "Biggest uncontested opportunity", "value": null, "fmt": "int", "note": "Speed owns zero-fee remittance and iGaming deposits \u2014 no competitor does"}], "series": [{"words": ["uncontested angles", "what is uncontested", "whitespace angles"], "label": "Uncontested angles", "labels": ["Zero-fee international remittance with real corridor messaging", "iGaming instant deposit positioning across permissive markets"], "values": ["uncontested", "uncontested"], "fmt": "raw"}], "examples": ["which EU markets should we enter first?", "what's the plan for Germany?", "list the recommended tactics", "which tactics are remittance?", "does Robinhood use zero-fee remittance?", "what is uncontested?"]};
+const ASK = /*__ASK_CONFIG__*/;
 const askInt = new Intl.NumberFormat("en-US");
 const askEsc = s => { const d = document.createElement("div"); d.textContent = (s == null ? "" : s); return d.innerHTML; };
 
@@ -578,7 +451,4 @@ function askRun(q){
   document.getElementById("askA").textContent =
     `Ask a question about the ${askInt.format(total)} rows on this page.`;
 })();
-
-</script>
-</body>
-</html>
+"""

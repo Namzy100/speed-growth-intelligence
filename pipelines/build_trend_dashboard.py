@@ -46,6 +46,8 @@ _ROOT = Path(__file__).resolve().parent.parent
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
+from pipelines import ask_panel
+
 from pipelines.json_embed import dumps_for_script
 
 load_dotenv(_ROOT / ".env")
@@ -540,6 +542,62 @@ def render_signal(data: dict) -> str:
     return "".join(rows)
 
 
+def _ask_config(state: dict) -> dict:
+    """Question set matched to a CONTENT PIPELINE, not a scored list: these rows are
+    briefs moving through suggested -> briefed -> in_production -> posted ->
+    results_in, so the useful questions are about pipeline status, organic vs paid,
+    segment mix, estimated reach, and actual results once posted."""
+    items = list((state.get("items") or {}).values())
+    rows = []
+    for it in items:
+        pay = it.get("payload") or {}
+        res = it.get("results") or {}
+        rows.append({
+            "hook": (it.get("hook") or "")[:110],
+            "status": it.get("status"), "type": it.get("type"),
+            "segment": it.get("segment"), "platform": pay.get("platform"),
+            "est_reach": it.get("estimate_num"),
+            "views": res.get("views"), "er": res.get("er"),
+            "first_seen": it.get("first_seen"), "posted_url": it.get("posted_url"),
+        })
+    uniq = lambda k: sorted({r.get(k) for r in rows if r.get(k) not in (None, "")})
+    return {
+        "noun": "items",
+        "generated_at": state.get("updated_at"),
+        "collections": [
+            {"name": "content items", "words": ["item", "content", "hook", "brief", "post", "card"],
+             "rows": rows, "label": "hook",
+             "facets": [
+                 {"key": "status", "words": ["status", "stage", "column"], "values": uniq("status")},
+                 {"key": "type", "words": ["type", "organic", "paid"], "values": uniq("type")},
+                 {"key": "segment", "words": ["segment", "audience"], "values": uniq("segment")},
+                 {"key": "platform", "words": ["platform"], "values": uniq("platform")},
+             ],
+             "metrics": [
+                 {"key": "est_reach", "words": ["reach", "estimate", "estimated", "biggest", "projected"],
+                  "label": "est. reach", "fmt": "int"},
+                 {"key": "views", "words": ["view", "actual", "result", "performance"], "label": "views", "fmt": "int"},
+                 {"key": "er", "words": ["engagement", "er"], "label": "ER", "fmt": "pct"},
+             ],
+             "detail": ["hook", "status", "type", "segment", "platform", "est_reach",
+                        "views", "er", "first_seen", "posted_url"]},
+        ],
+        "scalars": [
+            {"words": ["how many items in total", "total items", "how many tracked"],
+             "label": "Tracked content items", "value": len(rows), "fmt": "int"},
+        ],
+        "series": [],
+        "examples": [
+            "breakdown by status",
+            "how many paid items?",
+            "top 5 items by estimated reach",
+            "which items are posted?",
+            "how many in the remittance segment?",
+            "breakdown by platform",
+        ],
+    }
+
+
 def render(data: dict, enrich: dict, candidates: list[dict], state: dict,
            tags: dict, prev_hooks: list[dict], prev_week: str) -> str:
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
@@ -564,6 +622,8 @@ def render(data: dict, enrich: dict, candidates: list[dict], state: dict,
     out = _TEMPLATE
     for k, v in repl.items():
         out = out.replace(k, v)
+    out = ask_panel.inject(out, _ask_config(state),
+                            note="answers computed from the pipeline items on this page")
     return out
 
 

@@ -24,6 +24,7 @@ if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
 from pipelines.json_embed import dumps_for_script
+from pipelines import ask_panel
 
 _IN = _ROOT / "data" / "processed" / "merchant_candidates.json"
 _OUT = _ROOT / "docs" / "merchant_dashboard.html"
@@ -84,6 +85,62 @@ def build_rows(data: dict) -> list[dict]:
     return rows
 
 
+def _ask_config(payload: dict) -> dict:
+    """Question set matched to venue prospecting: this dashboard scores partnership
+    VENUES (events, publications, directories) on relevance/fit/payments and tracks
+    outreach — so the useful questions are about verticals, tiers, channel types and
+    which venues are worth approaching, not audience or spend."""
+    rows = payload.get("venues") or []
+    uniq = lambda k: sorted({r.get(k) for r in rows if r.get(k) not in (None, "")})
+    return {
+        "noun": "venues",
+        "generated_at": payload.get("generated_at"),
+        "collections": [
+            {"name": "venues", "words": ["venue", "event", "publication", "directory", "partner", "merchant"],
+             "rows": rows, "label": "venue",
+             "facets": [
+                 {"key": "vertical", "words": ["vertical", "sector", "industry"], "values": uniq("vertical")},
+                 {"key": "channel_type", "words": ["channel type", "channel", "type"], "values": uniq("channel_type")},
+                 {"key": "tier", "words": ["tier"], "values": uniq("tier")},
+                 {"key": "judge_source", "words": ["source", "judged by"], "values": uniq("judge_source")},
+                 # Booleans need an explicit word -> value map; a bare values list
+                 # can never match, since "true"/"false" don't appear in questions.
+                 {"key": "on_topic", "values": [],
+                  "map": [{"words": ["on topic", "on-topic"], "val": True, "label": "on-topic"},
+                          {"words": ["off topic", "off-topic", "not relevant"], "val": False, "label": "off-topic"}]},
+                 {"key": "url_verified", "values": [],
+                  "map": [{"words": ["verified", "url verified"], "val": True, "label": "URL verified"},
+                          {"words": ["unverified"], "val": False, "label": "URL unverified"}]},
+             ],
+             "metrics": [
+                 {"key": "relevance", "words": ["relevance", "relevant", "best", "score"], "label": "relevance", "fmt": "float"},
+                 {"key": "fit", "words": ["fit"], "label": "fit", "fmt": "float"},
+                 {"key": "payments", "words": ["payment", "payments focus"], "label": "payments", "fmt": "float"},
+                 {"key": "cross_listing", "words": ["cross listing", "cross-listing"], "label": "cross-listings", "fmt": "int"},
+             ],
+             "detail": ["venue", "vertical", "tier", "channel_type", "relevance", "fit", "payments",
+                        "on_topic", "url_verified", "outreach", "url", "reason"]},
+        ],
+        "scalars": [
+            {"words": ["how many venues in total", "total venues"], "label": "Venues discovered",
+             "value": payload.get("total"), "fmt": "int"},
+            {"words": ["how many are on topic overall", "on topic total"], "label": "On-topic venues",
+             "value": payload.get("on_topic"), "fmt": "int"},
+            {"words": ["how many verified", "verified urls"], "label": "Venues with a verified URL",
+             "value": payload.get("verified"), "fmt": "int"},
+        ],
+        "series": [],
+        "examples": [
+            "top 5 venues by relevance",
+            "how many fintech venues?",
+            "breakdown by channel type",
+            "which T1 venues are there?",
+            "average fit for iGaming",
+            "tell me about Money20/20",
+        ],
+    }
+
+
 def main() -> None:
     if not _IN.exists():
         raise FileNotFoundError(f"{_IN} not found — run `python merchants/discovery.py` first.")
@@ -104,7 +161,10 @@ def main() -> None:
         "by_source": dict(Counter(r["judge_source"] for r in rows)),
     }
     _OUT.parent.mkdir(parents=True, exist_ok=True)
-    _OUT.write_text(_TEMPLATE.replace("/*__DATA__*/", dumps_for_script(payload)), encoding="utf-8")
+    html = _TEMPLATE.replace("/*__DATA__*/", dumps_for_script(payload))
+    _OUT.write_text(ask_panel.inject(html, _ask_config(payload),
+                                     note="answers computed from the venue rows on this page"),
+                    encoding="utf-8")
     print(f"Wrote {_OUT.relative_to(_ROOT)} ({_OUT.stat().st_size:,} bytes)")
     print(f"  total={payload['total']} on_topic={payload['on_topic']} "
           f"verified_url={payload['verified']} sources={payload['by_source']}")

@@ -22,6 +22,8 @@ _ROOT = Path(__file__).resolve().parent.parent
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
+from pipelines import ask_panel
+
 from pipelines.json_embed import dumps_for_script
 
 load_dotenv(_ROOT / ".env")
@@ -159,6 +161,72 @@ def _score_bands(scores: list) -> dict:
     }
 
 
+def _ask_config(data: dict) -> dict:
+    """Question set for the creator pool: partnership scoring and audience size.
+
+    Distinct from the other four dashboards — this is the only one with a composite
+    SCORE and a follower count, and the only one where the interesting facets are
+    audience/provenance (segment, platform, creator country, Mimanshi-vetted vs
+    scraped) rather than spend, pipeline stage, or venue tier.
+
+    Three facets are boolean and use explicit word maps: a bare values list cannot
+    match them, because "true"/"false" never appear in a question. `source` is a map
+    too, deliberately omitting its "influencer" value — that string would otherwise
+    also match the is_influencer facet and silently apply a second filter.
+    """
+    rows = data.get("creators") or []
+    uniq = lambda k: sorted({r.get(k) for r in rows if r.get(k) not in (None, "")})
+    return {
+        "noun": "creators",
+        "generated_at": data.get("generated_at"),
+        "collections": [
+            {"name": "creators", "words": ["creator", "influencer", "partner", "channel", "account"],
+             "rows": rows, "label": "name",
+             "facets": [
+                 {"key": "segment", "words": ["segment"], "values": uniq("segment")},
+                 {"key": "platform", "words": ["platform"], "values": uniq("platform")},
+                 {"key": "country", "words": ["country", "based in"], "values": uniq("country")},
+                 {"key": "is_influencer", "values": [],
+                  "map": [{"words": ["influencer", "individual creator", "individual"], "val": True,
+                           "label": "individual creators"},
+                          {"words": ["brand", "media", "company"], "val": False, "label": "brands/media"}]},
+                 {"key": "spavail", "values": [],
+                  "map": [{"words": ["sponsorship measured", "sponsorship data", "has sponsorship", "sponsorship"],
+                           "val": True, "label": "sponsorship measured"},
+                          {"words": ["no sponsorship", "sponsorship unmeasured"], "val": False,
+                           "label": "sponsorship not measured"}]},
+                 {"key": "unscraped", "values": [],
+                  "map": [{"words": ["unscraped", "placeholder"], "val": True, "label": "unscraped"}]},
+                 {"key": "source", "values": [],
+                  "map": [{"words": ["mimanshi"], "val": "mimanshi", "label": "Mimanshi picks"},
+                          {"words": ["scraped"], "val": "scraped", "label": "scraped"}]},
+             ],
+             "metrics": [
+                 {"key": "score", "words": ["score", "rating", "partner score", "best", "strongest"],
+                  "label": "Partner Score", "fmt": "float"},
+                 {"key": "followers", "words": ["follower", "subscriber", "audience", "biggest", "largest", "reach"],
+                  "label": "followers", "fmt": "int"},
+             ],
+             "detail": ["name", "platform", "segment", "followers", "score", "country",
+                        "source", "is_influencer", "spavail", "unscraped", "outreach", "tags"]},
+        ],
+        "scalars": [
+            {"words": ["how many creators in total", "total creators", "pool size"],
+             "label": "Creators in the pool", "value": data.get("total"), "fmt": "int"},
+            {"words": ["average score overall", "avg score overall"], "label": "Average Partner Score",
+             "value": data.get("avg_score"), "fmt": "float"},
+        ],
+        "series": [],
+        "examples": [
+            "how many influencers in iGaming?",
+            "top 5 remittance creators",
+            "average score for crypto-curious",
+            "breakdown by platform",
+            "biggest creators by followers on TikTok",
+            "tell me about Crypto Casey",
+        ],
+    }
+
 def main() -> None:
     print("Reading creators from Supabase...")
     creators = build_rows()
@@ -184,7 +252,10 @@ def main() -> None:
     }
 
     _OUT.parent.mkdir(parents=True, exist_ok=True)
-    _OUT.write_text(_TEMPLATE.replace("/*__DATA__*/", dumps_for_script(data)), encoding="utf-8")
+    html = _TEMPLATE.replace("/*__DATA__*/", dumps_for_script(data))
+    _OUT.write_text(ask_panel.inject(html, _ask_config(data),
+                                     note="answers computed from the creator rows on this page"),
+                    encoding="utf-8")
     print(f"Wrote {_OUT.relative_to(_ROOT)} ({_OUT.stat().st_size:,} bytes)")
     print(f"  total={data['total']} platforms={data['platforms']} "
           f"influencers={data['influencers']} mimanshi={data['mimanshi']} "
