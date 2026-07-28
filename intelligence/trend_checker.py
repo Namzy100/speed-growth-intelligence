@@ -23,7 +23,7 @@ plain-text log under docs/trend_checker_log/ that a successor can read without
 knowing anything about the agent framework. The log is written line-by-line as it
 happens, so a run killed mid-flight still leaves a readable partial trace.
 
-TIME BOUND: the session is capped at TREND_CHECKER_BUDGET_SECONDS (default 600).
+TIME BOUND: the session is capped at TREND_CHECKER_BUDGET_SECONDS (default 1200).
 max_iterations bounds grader iterations, NOT duration — on 2026-07-27 an unbounded
 session ran 17m24s and was SIGKILLed by the CI job timeout, taking the deploy step
 with it. Over budget is now a logged TIMEOUT verdict, never a silent kill.
@@ -65,9 +65,18 @@ _CANDIDATE_CAP = 30          # items graded per run (surfaced + a sample of gate
 # ITERATIONS, not duration: one iteration is unbounded (agent thinking + host-side
 # rejudge_items, which makes its own Claude calls), and `for event in stream` blocks
 # indefinitely if the session goes quiet. On 2026-07-27 that ate 17m24s of the CI
-# job's 30-minute timeout and killed the deploy step. 600s fits the Monday budget
-# (~1.5 min sync + ~11 min trend rebuild + 10 min checker) inside timeout-minutes: 45.
-_CHECKER_BUDGET_SECONDS = int(os.getenv("TREND_CHECKER_BUDGET_SECONDS", "600"))
+# job's 30-minute timeout and killed the deploy step.
+#
+# Raised 600 -> 1200 on 2026-07-28, deliberately buying coverage with headroom we
+# actually have. At 600 the checker never once converged (2 straight TIMEOUTs), and
+# the CI run showed why that mattered: before being cut off it made two GENUINELY
+# CORRECT corrections (t1 and t27, both real crypto content wrongly gated
+# off-topic), then died at grader iterations=0. It was finding real misjudgements
+# and being killed before it could report them. The alternative — halving
+# _CANDIDATE_CAP to fit 600s — would have cut coverage instead. Monday worst case
+# is now ~1.5 min sync + ~9.5 min trend rebuild + ~21 min checker (budget + the
+# 60s stop-session settle) ≈ 32 min, inside timeout-minutes: 45.
+_CHECKER_BUDGET_SECONDS = int(os.getenv("TREND_CHECKER_BUDGET_SECONDS", "1200"))
 _SDK_TIMEOUT_SECONDS = 120   # per-request cap so a single hung HTTP call can't stall us
 
 _REJUDGE_TOOL = {
