@@ -40,6 +40,10 @@ _OUT = _ROOT / "docs" / "creative_dashboard.html"
 _INSIGHTS_MODEL = "claude-sonnet-4-6"
 _MIN_MEANINGFUL_INSTALLS = 100   # floor for "meaningful volume" in efficiency pick
 _RETENTION_EXCLUDE_RECENT_DAYS = 2
+# Floor for trusting a per-campaign deposit CPA. Below this, one extra deposit
+# swings CPA by several dollars (at 6 deposits it moves ~$9), so such rows are
+# still shown but flagged and excluded from best/worst ranking.
+_MIN_MEANINGFUL_DEPOSITS = 10
 _D1_TARGET = 0.25                # D1 retention KPI threshold (green above, red below)
 
 # Insight cache: the Claude call is the only paid step in a daily run, so we
@@ -151,22 +155,102 @@ def build_channels(rows: list[dict]) -> dict:
 
 
 def build_campaigns(rows: list[dict]) -> dict:
+    """Campaign rows for the breakdown chart, plus per-campaign unit economics.
+
+    Two cost-per-outcome figures come out of here, both dividing real Adjust
+    spend by a real Adjust denominator from the same request, so there is no
+    cross-source attribution gap:
+
+      deposit_cpa    cost / deposits_m0        (unique m0-cohort depositors)
+      retention_cpa  cost / retained_users_d7
+
+    THREE integrity rules, each of which changes the answer materially:
+
+    1. CPA is computed ONLY on rows with cost > 0. Measured 2026-07-29, 55.7% of
+       all deposits (1,863 of 3,343) came from zero-cost organic rows. Dividing
+       paid spend by every deposit yields $11.93 against a true paid figure of
+       $27.16 — a 123% understatement. Organic rows keep their deposit counts for
+       display but are never given a CPA.
+    2. Rows below _MIN_MEANINGFUL_DEPOSITS get `thin: True` so the dashboard can
+       mark them. Their CPA is arithmetically correct but statistically thin: one
+       row sits at 6 deposits, where a single deposit moves CPA by ~$9.
+    3. A row with a zero denominator gets CPA `None`, never 0 and never a
+       division guard that silently prints something. Absent is shown as absent.
+    """
     camps = []
     excluded_organic = 0
+    # Deposits sitting in the unattributed 'unknown' bucket. These are dropped
+    # from `camps` below, but they must still be COUNTED, because the dashboard
+    # states an organic share "of all deposits" and this bucket is the bulk of it
+    # (1,521 of 1,863 organic deposits when measured 2026-07-29). Omitting it made
+    # the stated organic share read 17% instead of ~53%.
+    unattributed_deposits = 0
     for r in rows:
         net = str(r.get("campaign_network", "")).strip()
         if not net or net.lower() == "unknown":
             # 'unknown' is the unattributed Organic bucket, not an ad campaign.
             excluded_organic += 1
+            unattributed_deposits += int(_num(r.get("deposits_m0")))
             continue
+        cost = round(_num(r.get("cost")), 2)
+        deposits = int(_num(r.get("deposits_m0")))
+        retained = int(_num(r.get("retained_users_d7")))
         camps.append({
             "campaign": net,
             "channel": str(r.get("channel", "")).strip(),
             "installs": int(_num(r.get("installs"))),
-            "cost": round(_num(r.get("cost")), 2),
+            "cost": cost,
+            "deposits": deposits,
+            "retained_d7": retained,
+            "paid": cost > 0,
+            # None (not 0) wherever a CPA is not computable — see rule 3.
+            "deposit_cpa": round(cost / deposits, 2) if cost > 0 and deposits else None,
+            "retention_cpa": round(cost / retained, 2) if cost > 0 and retained else None,
+            "thin": cost > 0 and 0 < deposits < _MIN_MEANINGFUL_DEPOSITS,
         })
     camps.sort(key=lambda c: c["installs"], reverse=True)
-    return {"campaigns": camps[:10], "excluded_organic_rows": excluded_organic}
+
+    # Economics table: paid campaigns only, ranked by spend (the money view),
+    # not by installs (the volume view the chart above already gives).
+    paid = [c for c in camps if c["paid"]]
+    paid.sort(key=lambda c: c["cost"], reverse=True)
+
+    paid_cost = sum(c["cost"] for c in paid)
+    paid_deposits = sum(c["deposits"] for c in paid)
+    paid_retained = sum(c["retained_d7"] for c in paid)
+    # Organic = named campaigns carrying no spend, PLUS the unattributed bucket.
+    organic_deposits = sum(c["deposits"] for c in camps if not c["paid"]) + unattributed_deposits
+    all_deposits = paid_deposits + organic_deposits
+
+    # Best/worst on deposit CPA, restricted to rows with enough volume to mean
+    # something. Without the thin filter the 6-deposit row would win or lose the
+    # ranking on noise.
+    solid = [c for c in paid if c["deposit_cpa"] is not None and not c["thin"]]
+    best = min(solid, key=lambda c: c["deposit_cpa"]) if solid else None
+    worst = max(solid, key=lambda c: c["deposit_cpa"]) if solid else None
+
+    return {
+        "campaigns": camps[:10],
+        "excluded_organic_rows": excluded_organic,
+        "economics": paid,
+        "econ_totals": {
+            "cost": round(paid_cost, 2),
+            "deposits": paid_deposits,
+            "retained_d7": paid_retained,
+            "deposit_cpa": round(paid_cost / paid_deposits, 2) if paid_deposits else None,
+            "retention_cpa": round(paid_cost / paid_retained, 2) if paid_retained else None,
+            "paid_campaigns": len(paid),
+            "thin_campaigns": sum(1 for c in paid if c["thin"]),
+            # Published so the dashboard can state the organic share out loud
+            # rather than quietly dropping it.
+            "organic_deposits": organic_deposits,
+            "all_deposits": all_deposits,
+            "organic_share": round(organic_deposits / all_deposits, 4) if all_deposits else None,
+            "min_meaningful_deposits": _MIN_MEANINGFUL_DEPOSITS,
+        },
+        "best_deposit_cpa": best,
+        "worst_deposit_cpa": worst,
+    }
 
 
 def build_retention(rows: list[dict]) -> dict:
@@ -538,6 +622,40 @@ def _ask_config(data: dict) -> dict:
                  {"key": "installs", "words": ["install", "volume"], "label": "installs", "fmt": "int"},
              ],
              "detail": ["campaign", "channel", "cost", "installs"]},
+            # Paid campaigns only. Deliberately a SEPARATE collection from
+            # "campaigns" above rather than extra metrics on it: that one carries
+            # zero-cost organic rows, and a CPA question answered over those would
+            # be wrong in exactly the way build_campaigns' rule 1 guards against.
+            {"name": "campaign economics",
+             "words": ["deposit", "deposits", "deposit cpa", "cpa", "cost per deposit",
+                       "cost per acquisition", "retention cpa", "cost per retained",
+                       "retained", "economics", "unit economics"],
+             # `label` is the ROW FIELD holding each row's name, not a display
+             # phrase — the engine reads r[label] to name a row. Setting it to
+             # "paid campaign" made every row render as "(unnamed)".
+             "rows": data.get("economics") or [], "label": "campaign",
+             "facets": [{"key": "channel", "words": ["channel", "network"],
+                         "values": sorted({r.get("channel") for r in (data.get("economics") or []) if r.get("channel")})}],
+             "metrics": [
+                 {"key": "deposit_cpa",
+                  "words": ["deposit cpa", "cost per deposit", "cpa", "cost per acquisition",
+                            "cheapest deposit", "expensive deposit"],
+                  "label": "deposit CPA", "fmt": "money", "lower_is_better": True,
+                  "exclude_zero": True},
+                 {"key": "retention_cpa",
+                  "words": ["retention cpa", "cost per retained", "cost per retained user"],
+                  "label": "retention CPA", "fmt": "money", "lower_is_better": True,
+                  "exclude_zero": True},
+                 {"key": "deposits", "words": ["deposit", "deposits", "depositor"],
+                  "label": "deposits", "fmt": "int"},
+                 {"key": "retained_d7", "words": ["retained", "retained users", "d7 retained"],
+                  "label": "retained at D7", "fmt": "int"},
+                 {"key": "cost", "words": ["spend", "cost", "budget"],
+                  "label": "spend", "fmt": "money", "lower_is_better": True},
+                 {"key": "installs", "words": ["install"], "label": "installs", "fmt": "int"},
+             ],
+             "detail": ["campaign", "channel", "cost", "deposits", "deposit_cpa",
+                        "retained_d7", "retention_cpa"]},
         ],
         "scalars": [
             {"words": ["total installs", "how many installs overall", "installs overall"],
@@ -548,6 +666,18 @@ def _ask_config(data: dict) -> dict:
              "value": k.get("d1_retention"), "fmt": "pct"},
             {"words": ["most efficient", "best channel"], "label": "Most efficient channel",
              "value": None, "fmt": "int", "note": "Most efficient channel: " + str(data.get("most_efficient") or "n/a")},
+            {"words": ["deposit cpa overall", "blended deposit cpa", "overall deposit cpa",
+                       "average deposit cpa"],
+             "label": "Deposit CPA (paid campaigns only)",
+             "value": (data.get("econ_totals") or {}).get("deposit_cpa"), "fmt": "money",
+             "note": "Paid spend divided by paid deposits only. "
+                     + f"{(data.get('econ_totals') or {}).get('organic_deposits', 0):,} of "
+                     + f"{(data.get('econ_totals') or {}).get('all_deposits', 0):,} deposits came from "
+                     + "zero-cost organic sources and are excluded."},
+            {"words": ["retention cpa overall", "blended retention cpa", "overall retention cpa"],
+             "label": "Retention CPA (paid campaigns only)",
+             "value": (data.get("econ_totals") or {}).get("retention_cpa"), "fmt": "money",
+             "note": "Paid spend divided by users still active at D7."},
         ],
         "series": [
             {"words": ["retention curve", "retention", "d7", "d30", "cohort"],
@@ -557,10 +687,11 @@ def _ask_config(data: dict) -> dict:
         ],
         "examples": [
             "cheapest channel by eCPI",
+            "lowest deposit CPA campaign",
             "top 5 channels by installs",
             "total installs",
             "which campaigns cost over $500?",
-            "breakdown of installs by channel",
+            "retention CPA by campaign",
             "retention curve",
         ],
     }
@@ -614,6 +745,8 @@ def main() -> None:
         "d1_target": _D1_TARGET,
         "matured_cohorts": retention["cohort_count"],
         "reengagement": channels["reengagement"],
+        # Paid-only, per the integrity rules in build_campaigns.
+        "econ": campaigns["econ_totals"],
     }
 
     data = {
@@ -804,6 +937,7 @@ _TEMPLATE = r"""<!doctype html>
   @keyframes rise{from{opacity:0; transform:translateY(12px);} to{opacity:1; transform:none;}}
   .kpi:nth-child(1){animation-delay:.05s} .kpi:nth-child(2){animation-delay:.11s}
   .kpi:nth-child(3){animation-delay:.17s} .kpi:nth-child(4){animation-delay:.23s}
+  .kpi:nth-child(5){animation-delay:.29s} .kpi:nth-child(6){animation-delay:.35s}
   .ins-card:nth-child(2){animation-delay:.06s} .ins-card:nth-child(3){animation-delay:.12s}
   .ins-card:nth-child(4){animation-delay:.18s} .ins-card:nth-child(5){animation-delay:.24s}
   @media (prefers-reduced-motion: reduce){ *{animation:none!important; transition:none!important;} }
@@ -847,6 +981,17 @@ _TEMPLATE = r"""<!doctype html>
       <div class="panel"><div class="chart-box"><canvas id="retChart"></canvas></div></div>
     </section>
   </div>
+
+  <!-- 3b. Campaign Economics -->
+  <section>
+    <div class="sec-head"><h2>Campaign Economics</h2><span class="note" id="econNote"></span></div>
+    <div class="panel"><div class="table-wrap"><table id="econTable">
+      <thead><tr><th>Campaign</th><th>Channel</th><th>Spend</th><th>Installs</th>
+        <th>Deposits</th><th>Deposit CPA</th><th>Retained D7</th><th>Retention CPA</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+    <div class="src" id="econSrc"></div></div>
+  </section>
 
   <!-- 4. Meta Campaign Performance -->
   <section>
@@ -946,6 +1091,25 @@ function renderKPIs(){
       {target:k.reengagement.cvr, suffix:"%", decimals:2}));
   else
     cards.push(kpiCard("—", "", "Re-engagement CVR", "no re-engagement channel", ""));
+
+  // Paid-only cost per outcome. The sub-line states the organic share out loud,
+  // because the same totals blended with organic would read ~$12 instead of ~$27
+  // and that difference is the whole point.
+  const e = k.econ || {};
+  if (e.deposit_cpa != null)
+    cards.push(kpiCard("$" + e.deposit_cpa.toFixed(2), "", "Deposit CPA (paid)",
+      `${fmtInt(e.deposits)} deposits across ${e.paid_campaigns} paid campaigns · `
+      + `${Math.round((e.organic_share||0)*100)}% of all deposits were organic and are excluded`, "",
+      {target:e.deposit_cpa, prefix:"$", decimals:2}));
+  else
+    cards.push(kpiCard("—", "", "Deposit CPA (paid)", "no paid deposits in window", ""));
+
+  if (e.retention_cpa != null)
+    cards.push(kpiCard("$" + e.retention_cpa.toFixed(2), "", "Retention CPA (paid)",
+      `cost per user still active at D7 · ${fmtInt(e.retained_d7)} retained`, "",
+      {target:e.retention_cpa, prefix:"$", decimals:2}));
+  else
+    cards.push(kpiCard("—", "", "Retention CPA (paid)", "no retained users in window", ""));
 
   g.innerHTML = cards.join("");
   g.querySelectorAll(".val[data-count]").forEach(animateVal);
@@ -1056,6 +1220,58 @@ function renderRetention(){
   });
 }
 
+function renderEconomics(){
+  const rows = DATA.economics || [], t = DATA.econ_totals || {};
+  const tb = document.querySelector("#econTable tbody");
+  const note = document.getElementById("econNote");
+  if (!rows.length){
+    note.textContent = "No paid campaigns in this window";
+    tb.innerHTML = `<tr><td colspan="8" class="muted">No campaign carried spend in this period, so no cost-per-outcome is computable.</td></tr>`;
+    return;
+  }
+  const best = DATA.best_deposit_cpa, worst = DATA.worst_deposit_cpa;
+  rows.forEach(c => {
+    const tr = document.createElement("tr");
+    // A thin row keeps its real CPA but is marked, and is never the best/worst
+    // pick — see _MIN_MEANINGFUL_DEPOSITS.
+    const thin = c.thin ? ` <span class="muted" title="under ${t.min_meaningful_deposits} deposits — CPA is arithmetically right but statistically thin">⚠</span>` : "";
+    let dcls = "";
+    if (!c.thin && best && c.campaign === best.campaign && c.channel === best.channel) dcls = "num-good";
+    else if (!c.thin && worst && c.campaign === worst.campaign && c.channel === worst.channel) dcls = "num-bad";
+    tr.innerHTML =
+      `<td class="ch">${esc(c.campaign)}${thin}</td>` +
+      `<td class="muted">${esc(c.channel)}</td>` +
+      `<td>${fmtMoney(c.cost)}</td>` +
+      `<td class="muted">${fmtInt(c.installs)}</td>` +
+      `<td>${fmtInt(c.deposits)}</td>` +
+      `<td class="${dcls}">${c.deposit_cpa == null ? "—" : fmtMoney(c.deposit_cpa)}</td>` +
+      `<td class="muted">${fmtInt(c.retained_d7)}</td>` +
+      `<td>${c.retention_cpa == null ? "—" : fmtMoney(c.retention_cpa)}</td>`;
+    tb.appendChild(tr);
+  });
+  const tr = document.createElement("tr");
+  tr.className = "tot";
+  tr.innerHTML =
+    `<td class="ch">Paid total</td><td></td>` +
+    `<td>${fmtMoney(t.cost)}</td><td></td>` +
+    `<td>${fmtInt(t.deposits)}</td>` +
+    `<td>${t.deposit_cpa == null ? "—" : fmtMoney(t.deposit_cpa)}</td>` +
+    `<td>${fmtInt(t.retained_d7)}</td>` +
+    `<td>${t.retention_cpa == null ? "—" : fmtMoney(t.retention_cpa)}</td>`;
+  tb.appendChild(tr);
+
+  note.textContent = `${t.paid_campaigns} paid campaigns`
+    + (t.thin_campaigns ? ` · ${t.thin_campaigns} flagged thin` : "");
+  // State the exclusion rather than performing it silently: a reader who sees
+  // "3,343 deposits" elsewhere needs to know why this table says 1,524.
+  document.getElementById("econSrc").textContent =
+    `Cost and both denominators come from the same Adjust request, so spend and conversions share one attribution model. `
+    + `Measured: unique depositors in month 0 of their install cohort, and users still active at D7. `
+    + `CPA is shown only for campaigns with spend — ${fmtInt(t.organic_deposits)} of ${fmtInt(t.all_deposits)} deposits `
+    + `(${Math.round((t.organic_share||0)*100)}%) came from zero-cost organic sources and are excluded from every CPA here. `
+    + `Rows under ${t.min_meaningful_deposits} deposits are marked ⚠ and excluded from the best/worst highlight.`;
+}
+
 function renderMeta(){
   const m = DATA.meta;
   const tb = document.querySelector("#metaTable tbody");
@@ -1150,6 +1366,7 @@ function init(){
     renderChannels();
     renderCampaigns();
     renderRetention();
+    renderEconomics();
     renderMeta();
     renderMetaCreatives();
     renderInsights();

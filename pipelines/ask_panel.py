@@ -166,19 +166,52 @@ const askHas = (q, w) => {
 };
 
 /* ---- parse ------------------------------------------------------------- */
+/* How SPECIFICALLY does a word list match the question?
+
+   Returns [longestMatchedWordLength, numberOfMatchedWords]. Candidates are then
+   compared on that pair, so the most specific claim wins rather than whichever
+   was declared first.
+
+   This exists because word lists legitimately overlap. The creative dashboard
+   has both a "campaigns" collection (owning "campaign") and a "campaign
+   economics" one (owning "deposit cpa"), and a plain first-match picked
+   "campaigns" for EVERY question containing the word campaign, so
+   "highest deposit CPA" silently ranked by cost instead. Same collision between
+   the retention *curve* series ("retention") and the retention CPA *metric*
+   ("retention cpa"). Length is the right signal: a longer matched phrase is a
+   narrower claim on the question. */
+function askScore(q, words){
+  let longest = 0, count = 0;
+  for (const w of (words || [])) if (askHas(q, w)){ count++; if (w.length > longest) longest = w.length; }
+  return [longest, count];
+}
+function askBeats(a, b){ return a[0] > b[0] || (a[0] === b[0] && a[1] > b[1]); }
+function askPick(q, items){
+  let best = null, bestScore = [0, 0];
+  for (const it of (items || [])){
+    const s = askScore(q, it.words);
+    // Strictly-better only, so ties keep declaration order (previous behaviour).
+    if (s[0] > 0 && askBeats(s, bestScore)){ bestScore = s; best = it; }
+  }
+  return {item: best, score: bestScore};
+}
+
 function askParse(raw){
   const q = " " + raw.toLowerCase().trim() + " ";
   const f = {filters: [], intent: null, n: null, metric: null, asc: false, group: null};
 
-  // Which collection? First whose words appear; else the default (first).
-  const matched = (ASK.collections || []).find(c => (c.words || []).some(w => askHas(q, w)));
-  f.collMatched = !!matched;
-  f.coll = matched || (ASK.collections || [])[0];
+  // Which collection? The most specific match; else the default (first).
+  const collPick = askPick(q, ASK.collections);
+  f.collMatched = !!collPick.item;
+  f.coll = collPick.item || (ASK.collections || [])[0];
 
   // A scalar KPI question ("what is total installs") short-circuits everything.
-  f.scalar = (ASK.scalars || []).find(s => (s.words || []).some(w => askHas(q, w))) || null;
+  const scalarPick = askPick(q, ASK.scalars);
+  f.scalar = scalarPick.item;
   f.scalarPhrase = !!(f.scalar && (f.scalar.words || []).some(w => w.includes(" ") && askHas(q, w)));
-  f.series = (ASK.series  || []).find(s => (s.words || []).some(w => askHas(q, w))) || null;
+  const seriesPick = askPick(q, ASK.series);
+  f.series = seriesPick.item;
+  f.seriesScore = seriesPick.score;
 
   if (f.coll){
     for (const fac of (f.coll.facets || [])){
@@ -201,10 +234,17 @@ function askParse(raw){
         }
       }
     }
-    // Metric: explicit words win; otherwise the collection's first metric.
-    for (const m of (f.coll.metrics || [])){
-      if ((m.words || []).some(w => askHas(q, w))){ f.metric = m; break; }
-    }
+    // Metric: the most specifically-named one wins; otherwise the collection's
+    // first. Specificity matters here too — "cost per deposit" (a deposit_cpa
+    // phrase) must beat a bare "deposit" (the deposits count metric).
+    const metricPick = askPick(q, f.coll.metrics);
+    if (metricPick.item) f.metric = metricPick.item;
+    f.metricScore = metricPick.score;
+
+    // A series and a collection metric can both claim a word: "retention" draws
+    // the retention curve, "retention CPA" ranks campaigns. The more specific
+    // phrase wins, otherwise the curve swallows every CPA question.
+    if (f.series && askBeats(f.metricScore, f.seriesScore)) f.series = null;
     // Numeric threshold ("over 1000 installs", "under $2 ecpi")
     const over = q.match(/(?:over|above|more than|at least|>)\s*\$?([\d.,]+)\s*([km])?/);
     const under = q.match(/(?:under|below|less than|cheaper than|<)\s*\$?([\d.,]+)\s*([km])?/);
@@ -229,8 +269,15 @@ function askParse(raw){
   // LITERAL direction words name a direction on the metric itself rather than a
   // quality judgement, and must not be inverted by lower_is_better: "most expensive"
   // means the highest eCPI even though a low eCPI is the good outcome.
-  if (/\bexpensive\b|\bpriciest\b|\bdearest\b|\bcostliest\b/.test(q)) { f.intent = "top"; f.literal = "high"; }
-  else if (/\bcheapest\b|\bcheap\b/.test(q)) { f.intent = "top"; f.literal = "low"; }
+  // "highest"/"lowest" and friends name a direction on the NUMBER, exactly like
+  // "expensive"/"cheapest", so they belong here rather than in the quality group
+  // above. Left in the quality group they got inverted by lower_is_better and
+  // returned the opposite row: "lowest deposit CPA" answered with the most
+  // expensive campaign. Deliberately NOT included: best, worst, top, bottom,
+  // most, least — those ARE quality judgements and must keep their polarity flip
+  // ("best eCPI" is the lowest eCPI, "most efficient" is not the highest number).
+  if (/\bexpensive\b|\bpriciest\b|\bdearest\b|\bcostliest\b|\bhighest\b|\blargest\b|\bbiggest\b|\bmaximum\b/.test(q)) { f.intent = "top"; f.literal = "high"; }
+  else if (/\bcheapest\b|\bcheap\b|\blowest\b|\bsmallest\b|\bminimum\b|\bfewest\b/.test(q)) { f.intent = "top"; f.literal = "low"; }
   else if (/\blist\b|\bshow me\b|\bwhich\b|\bwho\b|\bwhat are\b/.test(q)) f.weakList = true;
 
   // Direction. A literal word wins outright. Otherwise a quality word is read
@@ -243,6 +290,13 @@ function askParse(raw){
   // A weak interrogative only becomes a listing when the question is demonstrably
   // about this dashboard's data; otherwise it falls through to the refusal.
   if (f.weakList && !f.intent && (f.collMatched || f.filters.length || f.metric)) f.intent = "top";
+
+  // Naming a collection AND one of its metrics with no verb at all ("retention
+  // CPA by campaign", "deposit CPA by channel") is a ranking request. Without
+  // this it fell through to the refusal, which read as "the page doesn't have
+  // that" about a metric the page demonstrably has. Both conditions are required:
+  // a metric alone, or a collection alone, still refuses.
+  if (!f.intent && f.collMatched && f.metric) f.intent = "top";
 
   if (f.coll){
     const g = q.match(/\bby\s+([a-z_ ]+)/);
