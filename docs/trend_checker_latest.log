@@ -1,19 +1,17 @@
-[13:07:29] === Speed trend relevance checker (scheduled, Monday cron) ===
-[13:07:29] Wall-clock budget armed: 1200s (hard, SIGALRM).
-[13:07:29] Grading 30 candidate items from the latest pipeline output.
-[13:07:29] Deterministic invariants OK for all 30 items (fit=0.4/0.3/0.3, gate enforced).
-[13:07:29] Reviewer pass: claude-opus-5 (effort=high) over 30 items.
-[13:07:57]   reviewer: Reviewing the set, three judgments look indefensible to me; the rest are consistent with their own content.
-[13:07:57]   rejudge_items called: ids=['t53', 't47'] feedback='The fit scores contradict the stated reasoning. Both items are crime/fraud/theft narratives (a beate'
-[13:07:59]     -> t53 re-judged: on_topic=True fintech=7.0 fit=5.9 (CHANGED)
-[13:07:59]     -> t47 re-judged: on_topic=True fintech=6.0 fit=7.3 (CHANGED)
-[13:07:59]   rejudge_items called: ids=['t2'] feedback='on_topic=false is wrong. Crypto is not a passing policy mention here — the entire subject of the cli'
-[13:08:01]     -> t2 re-judged: on_topic=True fintech=7.0 fit=5.0 (CHANGED)
-[13:08:10]   reviewer: t47 only moved from 8.1 to 7.3, which still leaves brand-unsafe, non-replicable content scoring above legitimate remittance material. Pushing once more on that one.
-[13:08:10]   rejudge_items called: ids=['t47'] feedback='7.3 is still indefensible and is barely below the original 8.1. Your own reason says this crime/thef'
-[13:08:12]     -> t47 re-judged: on_topic=True fintech=6.0 fit=7.3 (unchanged)
-[13:08:21]   reviewer: I corrected two things and failed to fully correct a third. t53 (Crypto King fraud scandal) was rescored from 8.2 down to 5.9, matching its own brand-risk reasoning, and t2 (Schiff/crypto tax immunity hearing) was flipped from on_topic=false to true, since crypto tax treatment is the clip's actual subject, not a passing mention — it now sits at a low fit score for political brand risk, which is ri
-[13:08:21]   reviewer finished on turn 3 (stop_reason=end_turn).
-[13:08:21] Reviewer pass done: 3 correction(s) applied, 1 re-judgment(s) returned unchanged, across 3 tool call(s) in 3 turn(s).
-[13:08:21] 
-[13:08:21] === VERDICT: CORRECTED (corrections=3, tool_calls=3, turns=3, elapsed=52s of 1200s budget) ===
+[10:00:18] === Speed trend relevance checker (scheduled, Monday cron) ===
+[10:00:18] Wall-clock budget armed: 1200s (hard, SIGALRM).
+[10:00:18] Grading 30 candidate items from the latest pipeline output.
+[10:00:18] Deterministic invariants OK for all 30 items (fit=0.4/0.3/0.3, gate enforced).
+[10:00:18] Reviewer pass: claude-opus-5 (effort=high) over 30 items.
+[10:00:52]   reviewer: I've reviewed all 30 items. Four judgments look indefensible to me: one on-topic call and three inflated fit scores.
+[10:00:52]   rejudge_items called: ids=['t1'] feedback="on_topic=false is indefensible. 'Trump & Crypto: Last Week Tonight' is a long-form segment whose ent"
+[10:00:54]     -> t1 re-judged: on_topic=True fintech=8.0 fit=6.1 (CHANGED)
+[10:00:54]   rejudge_items called: ids=['t53', 't133', 't130'] feedback='t53: the fit score of 7.1 contradicts its own reason, which correctly notes the content is celebrity'
+[10:00:55]     -> t130 re-judged: on_topic=True fintech=7.0 fit=7.5 (CHANGED)
+[10:00:55]     -> t133 re-judged: on_topic=True fintech=8.0 fit=6.5 (CHANGED)
+[10:00:55]     -> t53 re-judged: on_topic=True fintech=4.0 fit=6.3 (CHANGED)
+[10:01:03]   reviewer: I corrected four items. **t1** (John Oliver's crypto segment) was flipped from on_topic=false to true — crypto is that video's actual subject, not a passing reference, with brand-safety risk now reflected in the fit score (6.1) instead. Three inflated fit scores came down: **t53** (Trump meme-coin news, 7.1 → 6.3, with fintech_involvement also cut to 4.0), **t133** (contentless Cash App teaser, 7.
+[10:01:03]   reviewer finished on turn 2 (stop_reason=end_turn).
+[10:01:03] Reviewer pass done: 4 correction(s) applied, 0 re-judgment(s) returned unchanged, across 2 tool call(s) in 2 turn(s).
+[10:01:03] 
+[10:01:03] === VERDICT: CORRECTED (corrections=4, tool_calls=2, turns=2, elapsed=44s of 1200s budget) ===
