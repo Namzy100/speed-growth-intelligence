@@ -15,9 +15,49 @@ _RETENTION_METRICS = ",".join(
     [f"retention_rate_d{d}" for d in [1, 2, 3, 4, 5, 6, 7, 14]]
 )
 
+# ---------------------------------------------------------------------------
+# Deposit signal — READ THIS BEFORE CHANGING THE METRIC NAME
+#
+# Adjust DOES carry a deposit event for this app. An earlier investigation
+# concluded it did not, and that conclusion was wrong: it probed the key names
+# `deposit`, `deposit_completed` and `first_deposit`, all of which correctly
+# return HTTP 400 "Unsupported metric ... event doesn't exist or was renamed"
+# because no event by those names is configured.
+#
+# The configured event is literally named "usd deposit", WITH A SPACE, so the
+# report-service metric key is "usd deposit_m0_conversions_cohort". The
+# underscore form `usd_deposit_m0_conversions_cohort` is rejected with that same
+# "doesn't exist" error, which is exactly how the original probe was misled.
+# Do not "tidy" the space into an underscore.
+#
+# Verified 2026-07-29 by probing 23 candidate deposit event names against the
+# live API: "usd deposit" is the ONLY deposit event that exists, so this is the
+# real deposit signal and not a USD-only slice of a larger set. The account also
+# exposes "verified signups", "payment received", "payment sent" and
+# "kyc completed" on the same naming pattern.
+#
+# `_m0_conversions_cohort` counts UNIQUE converters within month 0 of their
+# install cohort, which is what a CPA wants: it aligns conversions with the
+# install cohort the spend actually bought. The `_events` variant counts raw
+# event fires (40,403 vs 3,343 over the same 27 days) including repeat deposits
+# and users who installed long before the window, so it must NOT be used as a
+# CPA numerator.
+# ---------------------------------------------------------------------------
+_DEPOSIT_EVENT = "usd deposit"
+_DEPOSIT_METRIC = f"{_DEPOSIT_EVENT}_m0_conversions_cohort"
+
+# Sheet/DataFrame column name for the above. The raw metric key contains a space
+# and reads as an implementation detail, so it is renamed once, here.
+_DEPOSIT_COLUMN = "deposits_m0"
+
+# Retained users at D7, the denominator for Retention CPA. This is an absolute
+# count, unlike retention_rate_d7 which is a ratio, so it can be divided into
+# cost directly.
+_RETAINED_METRIC = "retained_users_d7"
+
 _NUMERIC: dict[str, list[str]] = {
     "channel_overview": ["installs", "impressions", "clicks", "ecpi"],
-    "installs_by_campaign": ["installs", "cost"],
+    "installs_by_campaign": ["installs", "cost", _RETAINED_METRIC, _DEPOSIT_COLUMN],
     "installs_by_country": ["installs"],
     "retention": [f"retention_rate_d{d}" for d in [1, 2, 3, 4, 5, 6, 7, 14]],
 }
@@ -51,13 +91,34 @@ class AdjustPipeline:
         return self._to_df(rows, _NUMERIC["channel_overview"])
 
     def get_installs_by_campaign(self, days: int = 30) -> pd.DataFrame:
-        """Installs and cost by channel and campaign."""
+        """Per-campaign unit economics: installs, cost, D7 retained users, deposits.
+
+        Carries the two denominators the campaign dashboard divides cost by:
+        `retained_users_d7` and `deposits_m0` (see _DEPOSIT_METRIC above for why
+        that key is spelled with a space upstream).
+
+        Metrics are APPENDED to the existing installs/cost pair rather than
+        replacing them, because this feeds the "Campaign Installs" sheet tab,
+        which Looker Studio and the creative dashboard both read by column name.
+
+        NOTE the caller's responsibility: the returned frame includes zero-cost
+        organic rows, and a CPA computed over those is meaningless (55.7% of all
+        deposits were organic when measured on 2026-07-29, so dividing paid spend
+        by every deposit understates true paid CPA by ~123%). Filter to cost > 0
+        before computing any cost-per-X. `build_campaigns` in
+        pipelines/build_creative_dashboard.py does this.
+        """
         rows = self._fetch(
             days=days,
             dimensions="channel,campaign_network",
-            metrics="installs,cost",
+            metrics=f"installs,cost,{_RETAINED_METRIC},{_DEPOSIT_METRIC}",
         )
-        return self._to_df(rows, _NUMERIC["installs_by_campaign"])
+        df = self._to_df(rows, _NUMERIC["installs_by_campaign"])
+        if not df.empty and _DEPOSIT_METRIC in df.columns:
+            df = df.rename(columns={_DEPOSIT_METRIC: _DEPOSIT_COLUMN})
+            # rename happens after _to_df, so coerce the renamed column here
+            df[_DEPOSIT_COLUMN] = pd.to_numeric(df[_DEPOSIT_COLUMN], errors="coerce")
+        return df
 
     def get_installs_by_campaign_window(self, since_days: int, until_days: int) -> pd.DataFrame:
         """Installs + cost by channel/campaign for a custom window.
