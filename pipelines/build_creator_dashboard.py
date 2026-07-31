@@ -467,7 +467,7 @@ _TEMPLATE = r"""<!doctype html>
 
   <div class="title-block">
     <h1>Creator Intelligence</h1>
-    <div class="sub">Partner scouting across YouTube &amp; TikTok · scored for Speed's three segments</div>
+    <div class="sub">Partner scouting across YouTube, TikTok, X &amp; Instagram · scored for Speed's three segments</div>
   </div>
 
   <div class="kpi-grid" id="kpis"></div>
