@@ -1,4 +1,4 @@
-"""Shared "Ask this dashboard" panel — CSS, HTML and a configurable JS engine.
+"""Shared "Ask this tool" panel — CSS, HTML and a configurable JS engine.
 
 Every dashboard already bakes its own data into the page. This module turns that
 data into a question box that answers from it, computed entirely in the browser.
@@ -47,12 +47,13 @@ dashboard that invents a number is worse than one that declines.
 import json
 
 from pipelines import list_collapse
+from pipelines import hub_link
 from pipelines.json_embed import dumps_for_script
 
 __all__ = ["css", "html_section", "js", "inject"]
 
 
-def inject(html: str, config: dict, heading: str = "Ask this dashboard",
+def inject(html: str, config: dict, heading: str = "Ask this tool",
            note: str | None = None) -> str:
     """Splice the panel into a finished dashboard at three uniform anchors.
 
@@ -72,6 +73,10 @@ def inject(html: str, config: dict, heading: str = "Ask this dashboard",
     # panel is reachable without scrolling a multi-thousand-pixel table, and both
     # want the same single injection point rather than five more builder edits.
     html = html.replace("</style>", css() + list_collapse.css() + "</style>", 1)
+    # Back-link to the hub rides the same injection point, for the reason documented
+    # in pipelines/hub_link.py: as a per-builder copy it silently regressed on four
+    # of the five tools and nothing failed.
+    html = hub_link.inject(html)
     html = html.replace("<footer", html_section(heading, note) + "\n  <footer", 1)
     return html.replace("</body>",
                         "<script>\n" + js(config) + "\n</script>\n"
@@ -131,7 +136,7 @@ def js(config: dict) -> str:
 
 _ENGINE = r"""
 /* ==========================================================================
-   "Ask this dashboard" — shared engine (pipelines/ask_panel.py).
+   "Ask this tool" — shared engine (pipelines/ask_panel.py).
    Deliberately NOT a runtime model call: these pages are static and public, so
    there is nowhere to hold an API key. Every answer is computed from the rows
    already embedded above, which is why the numbers are checkable against the
@@ -486,7 +491,7 @@ function answerQuestion(raw){
 function askRefuse(){
   const cols = (ASK.collections || []).map(c => askEsc(c.name)).join(", ");
   return `<span class="ask-miss">I can't answer that from the data on this page.</span><br>`
-    + `This panel computes answers from what this dashboard actually carries (${cols}), so it handles counts, `
+    + `This panel computes answers from what this tool actually carries (${cols}), so it handles counts, `
     + `totals, averages, rankings, breakdowns, and single-row lookups. It does not do open-ended questions. `
     + `Try one of the examples above.`;
 }

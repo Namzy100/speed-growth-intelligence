@@ -24,7 +24,7 @@ if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
 from pipelines.json_embed import dumps_for_script
-from pipelines import ask_panel
+from pipelines import ask_panel, starter_set
 
 _IN = _ROOT / "data" / "processed" / "merchant_candidates.json"
 _OUT = _ROOT / "docs" / "merchant_dashboard.html"
@@ -83,6 +83,38 @@ def build_rows(data: dict) -> list[dict]:
         })
     rows.sort(key=lambda r: r["fit"], reverse=True)
     return rows
+
+
+
+def _starter(rows: list[dict]) -> list[dict]:
+    """"Reach out to these 5 first" — highest relevance among venues you can act on.
+
+    NOTE ON `outreach`: on this tool it is NOT a contact status, as it is on creator.
+    It is the list of available outreach ACTIONS (sponsor / advertise / post content /
+    get listed). So the filter is "has at least one action" — a venue with an empty
+    list is one there is nothing concrete to do with. There is no
+    have-we-contacted-them field here, so this shortlist does not claim to exclude
+    prior contact. (My first version filtered outreach like creator's and returned
+    zero rows.)
+
+    on_topic + url_verified are required: a prospecting shortlist whose first entry was
+    judged off-topic or has a dead URL wastes the minute it exists to save. Relevance
+    is coarse with many 10.0 ties, so payments-fit then overall fit break ties rather
+    than leaving order to dict insertion.
+    """
+    pool = [r for r in rows
+            if r.get("on_topic") and r.get("url_verified") and (r.get("outreach") or [])]
+    pool.sort(key=lambda r: (r.get("relevance") or 0, r.get("payments") or 0,
+                             r.get("fit") or 0), reverse=True)
+    out = []
+    for r in pool[:5]:
+        tier = f" \u00b7 {r.get('tier')}" if r.get("tier") else ""
+        acts = ", ".join((r.get("outreach") or [])[:2])
+        out.append({"title": r.get("venue"),
+                    "meta": f"{r.get('vertical')} \u00b7 {r.get('channel_type')}{tier}"
+                            + (f" \u00b7 {acts}" if acts else ""),
+                    "stat": f"{r.get('relevance') or 0:g}", "stat_label": "/ 10 relevance"})
+    return out
 
 
 def _ask_config(payload: dict) -> dict:
@@ -162,9 +194,13 @@ def main() -> None:
     }
     _OUT.parent.mkdir(parents=True, exist_ok=True)
     html = _TEMPLATE.replace("/*__DATA__*/", dumps_for_script(payload))
-    _OUT.write_text(ask_panel.inject(html, _ask_config(payload),
-                                     note="answers computed from the venue rows on this page"),
-                    encoding="utf-8")
+    page = ask_panel.inject(html, _ask_config(payload),
+                            note="answers computed from the venue rows on this page")
+    page = starter_set.inject(
+        page, "Reach out to these 5 first",
+        "highest relevance among on-topic, URL-verified venues with a concrete outreach action",
+        _starter(rows))
+    _OUT.write_text(page, encoding="utf-8")
     print(f"Wrote {_OUT.relative_to(_ROOT)} ({_OUT.stat().st_size:,} bytes)")
     print(f"  total={payload['total']} on_topic={payload['on_topic']} "
           f"verified_url={payload['verified']} sources={payload['by_source']}")
@@ -295,7 +331,7 @@ _TEMPLATE = r"""<!doctype html>
 <div class="wrap">
   <div class="brandbar">
     <div class="brand-left">
-      <a class="hub-link" href="index.html">← Dashboards</a>
+      <a class="hub-link" href="index.html">← Tools</a>
       <div class="brand"><span class="bolt">⚡</span>Speed Wallet</div>
     </div>
     <div class="sync">Synced: <b id="sync">—</b></div>

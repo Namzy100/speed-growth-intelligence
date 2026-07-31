@@ -134,8 +134,8 @@ _TEMPLATE = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Naman's Dashboards — Speed Growth Intelligence</title>
-<meta name="description" content="A hub for the five growth-intelligence dashboards built for Speed Wallet — what each one does and why it exists.">
+<title>Naman's Tools — Speed Growth Intelligence</title>
+<meta name="description" content="A hub for the five growth-intelligence tools built for Speed Wallet — what each one does and why it exists.">
 <style>
   :root{
     --bg:#0d1117; --panel:#161b22; --panel-2:#1b2230;
@@ -226,13 +226,13 @@ _TEMPLATE = r"""<!doctype html>
 <div class="wrap">
 
   <span class="brand"><span class="dot"></span>Speed Wallet · Growth Intelligence</span>
-  <h1>Naman's <span class="g">Dashboards</span></h1>
-  <p class="lede">Five dashboards I built to answer five real growth questions for Speed Wallet, a
+  <h1>Naman's <span class="g">Tools</span></h1>
+  <p class="lede">Five tools I built to answer five real growth questions for Speed Wallet, a
     Bitcoin + stablecoin payments app: <b>which creators to partner with, what creative is working,
     where to expand, what's trending now, and which merchants to reach.</b> Each is live, rebuilt from
     real data, and honest about what it can and can't measure. Pick one below.</p>
   <div class="meta-row">
-    <span class="chip"><b>5</b> live dashboards</span>
+    <span class="chip"><b>5</b> live tools</span>
     <span class="chip">Real data · <b>no mocks</b></span>
     <span class="chip">Rebuilt <b>daily</b></span>
     <span class="chip">Markets: <b>US · EU · MX/BR</b></span>
@@ -242,60 +242,60 @@ _TEMPLATE = r"""<!doctype html>
 
     <a class="card" href="creators/">
       <div class="card-top"><div class="ic">🧭</div>
-        <div><h2>Creator Dashboard</h2><div class="tag">Partner scouting</div></div></div>
+        <div><h2>Creator Intelligence</h2><div class="tag">Partner scouting</div></div></div>
       <p class="what">Every discovered creator, scored 0–100 as a potential Speed partner across four real
         dimensions — audience fit, engagement quality, reach, and sponsorship history.</p>
       <p class="why"><b>Why it's here:</b> influencer marketing is a core Speed channel, but a big following
         isn't the same as a good partner. This ranks real signal over vanity reach — filterable by segment,
         platform and country.</p>
-      <span class="go">Open dashboard <span class="arw">→</span></span>
+      <span class="go">Open tool <span class="arw">→</span></span>
     </a>
 
     <a class="card" href="creative_dashboard.html">
       <div class="card-top"><div class="ic">📊</div>
-        <div><h2>Creative Dashboard</h2><div class="tag">Ad performance</div></div></div>
+        <div><h2>Creative Performance</h2><div class="tag">Ad performance</div></div></div>
       <p class="what">Meta + Adjust campaign performance — spend, installs, retention — with Claude-generated
         insight cards calling out what's actually working and what to reallocate.</p>
       <p class="why"><b>Why it's here:</b> paid spend needs a fast read on what's converting. This turns raw
         campaign data into decisions, not just charts.</p>
-      <span class="go">Open dashboard <span class="arw">→</span></span>
+      <span class="go">Open tool <span class="arw">→</span></span>
     </a>
 
     <a class="card" href="trend/">
       <div class="card-top"><div class="ic">📈</div>
-        <div><h2>Trend Dashboard</h2><div class="tag">Weekly trend scan</div></div></div>
+        <div><h2>Trend Intelligence</h2><div class="tag">Weekly trend scan</div></div></div>
       <p class="what">A weekly scan across YouTube, TikTok, X and Instagram, scored for real topical relevance
         and Speed-fit, turned into ready-to-shoot hooks — plus a drag-and-drop pipeline board from idea to results.</p>
       <p class="why"><b>Why it's here:</b> organic content moves fast. This surfaces what's trending in Speed's
         segments and tracks each hook predict → ship → measure, in one place.</p>
-      <span class="go">Open dashboard <span class="arw">→</span></span>
+      <span class="go">Open tool <span class="arw">→</span></span>
     </a>
 
     <a class="card" href="strategy/">
       <div class="card-top"><div class="ic">🗺️</div>
-        <div><h2>Strategy Dashboard</h2><div class="tag">Market intelligence</div></div></div>
+        <div><h2>Strategy &amp; Markets</h2><div class="tag">Market intelligence</div></div></div>
       <p class="what">EU market-entry intelligence — per-market channel strategy, competitive white space, and
         the highest-leverage tactics, distilled from the research docs.</p>
       <p class="why"><b>Why it's here:</b> expansion decisions (Germany, UK, Portugal) need the strategy in one
         readable view, not scattered across memos.</p>
-      <span class="go">Open dashboard <span class="arw">→</span></span>
+      <span class="go">Open tool <span class="arw">→</span></span>
     </a>
 
     <a class="card" href="merchants/">
       <div class="card-top"><div class="ic">🤝</div>
-        <div><h2>Merchant Dashboard</h2><div class="tag">Outbound discovery</div></div></div>
+        <div><h2>Merchant Discovery</h2><div class="tag">Outbound discovery</div></div></div>
       <p class="what">Real venues — trade publications, associations, events, B2B directories — across iGaming,
         fintech, PSPs and streaming, ranked by how well they put Speed in front of decision-makers.</p>
       <p class="why"><b>Why it's here:</b> merchant adoption needs outbound targets. This finds where the
         decision-makers actually are, honestly labelled by how each was scored.</p>
-      <span class="go">Open dashboard <span class="arw">→</span></span>
+      <span class="go">Open tool <span class="arw">→</span></span>
     </a>
 
     <div class="card" style="justify-content:center; border-style:dashed; background:transparent; box-shadow:none;">
       <div class="card-top"><div class="ic" style="background:rgba(245,196,0,0.10);">✨</div>
         <div><h2>One rule, everywhere</h2><div class="tag">Built the same way</div></div></div>
-      <p class="what">Every dashboard follows one principle: <b>real signal or an honest gap</b> — never a
-        mocked number to fill a chart. If a metric isn't trustworthy yet, the dashboard says so.</p>
+      <p class="what">Every tool follows one principle: <b>real signal or an honest gap</b> — never a
+        mocked number to fill a chart. If a metric isn't trustworthy yet, the tool says so.</p>
       <p class="why">Ship what's real, flag what isn't, and keep the reasoning legible.</p>
     </div>
 
@@ -314,7 +314,7 @@ _TEMPLATE = r"""<!doctype html>
 
   <div class="foot">
     <div class="credit">Designed &amp; built by <span class="by">Naman Behl</span> — Speed Wallet growth internship.</div>
-    <div class="note">Dashboards are self-contained HTML rebuilt from live data (Supabase, Adjust, Meta,
+    <div class="note">Tools are self-contained HTML rebuilt from live data (Supabase, Adjust, Meta,
       YouTube/TikTok/X/Instagram) and auto-deployed. "What's new" and "Next moves" are generated from real
       git history and the blockers tracker on each build. Read-only views. · Generated __GENERATED__</div>
   </div>

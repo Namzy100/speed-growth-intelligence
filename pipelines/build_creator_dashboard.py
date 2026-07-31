@@ -22,7 +22,7 @@ _ROOT = Path(__file__).resolve().parent.parent
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from pipelines import ask_panel
+from pipelines import ask_panel, starter_set
 
 from pipelines.json_embed import dumps_for_script
 
@@ -161,6 +161,31 @@ def _score_bands(scores: list) -> dict:
     }
 
 
+
+def _starter(creators: list[dict]) -> list[dict]:
+    """"Talk to these 5 first" — highest-scoring people we can stand behind and have
+    not already approached.
+
+    Three deliberate exclusions: brand/media accounts (not someone you DM), the
+    bulk-imported placeholder set (`unscraped`, whose audience_fit and engagement are
+    not real measurements), and anyone already contacted — a shortlist that hands back
+    work already done is worse than no shortlist.
+    """
+    pool = [c for c in creators
+            if c.get("is_influencer") and not c.get("unscraped")
+            and c.get("outreach") == "not_contacted"]
+    pool.sort(key=lambda c: c.get("score") or 0, reverse=True)
+    out = []
+    for c in pool[:5]:
+        f = c.get("followers") or 0
+        fs = (f"{f/1_000_000:.1f}M" if f >= 1_000_000
+              else f"{f/1_000:.0f}k" if f >= 1_000 else str(f))
+        out.append({"title": c.get("name"),
+                    "meta": f"{c.get('platform')} \u00b7 {fs} followers \u00b7 {c.get('segment')}",
+                    "stat": f"{c.get('score') or 0:.1f}", "stat_label": "/ 100 partner score"})
+    return out
+
+
 def _ask_config(data: dict) -> dict:
     """Question set for the creator pool: partnership scoring and audience size.
 
@@ -253,9 +278,13 @@ def main() -> None:
 
     _OUT.parent.mkdir(parents=True, exist_ok=True)
     html = _TEMPLATE.replace("/*__DATA__*/", dumps_for_script(data))
-    _OUT.write_text(ask_panel.inject(html, _ask_config(data),
-                                     note="answers computed from the creator rows on this page"),
-                    encoding="utf-8")
+    page = ask_panel.inject(html, _ask_config(data),
+                            note="answers computed from the creator rows on this page")
+    page = starter_set.inject(
+        page, "Talk to these 5 first",
+        "highest-scoring individuals with real scraped data, not yet contacted",
+        _starter(data["creators"]))
+    _OUT.write_text(page, encoding="utf-8")
     print(f"Wrote {_OUT.relative_to(_ROOT)} ({_OUT.stat().st_size:,} bytes)")
     print(f"  total={data['total']} platforms={data['platforms']} "
           f"influencers={data['influencers']} mimanshi={data['mimanshi']} "
