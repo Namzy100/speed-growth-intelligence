@@ -1,17 +1,36 @@
-[10:00:18] === Speed trend relevance checker (scheduled, Monday cron) ===
-[10:00:18] Wall-clock budget armed: 1200s (hard, SIGALRM).
-[10:00:18] Grading 30 candidate items from the latest pipeline output.
-[10:00:18] Deterministic invariants OK for all 30 items (fit=0.4/0.3/0.3, gate enforced).
-[10:00:18] Reviewer pass: claude-opus-5 (effort=high) over 30 items.
-[10:00:52]   reviewer: I've reviewed all 30 items. Four judgments look indefensible to me: one on-topic call and three inflated fit scores.
-[10:00:52]   rejudge_items called: ids=['t1'] feedback="on_topic=false is indefensible. 'Trump & Crypto: Last Week Tonight' is a long-form segment whose ent"
-[10:00:54]     -> t1 re-judged: on_topic=True fintech=8.0 fit=6.1 (CHANGED)
-[10:00:54]   rejudge_items called: ids=['t53', 't133', 't130'] feedback='t53: the fit score of 7.1 contradicts its own reason, which correctly notes the content is celebrity'
-[10:00:55]     -> t130 re-judged: on_topic=True fintech=7.0 fit=7.5 (CHANGED)
-[10:00:55]     -> t133 re-judged: on_topic=True fintech=8.0 fit=6.5 (CHANGED)
-[10:00:55]     -> t53 re-judged: on_topic=True fintech=4.0 fit=6.3 (CHANGED)
-[10:01:03]   reviewer: I corrected four items. **t1** (John Oliver's crypto segment) was flipped from on_topic=false to true — crypto is that video's actual subject, not a passing reference, with brand-safety risk now reflected in the fit score (6.1) instead. Three inflated fit scores came down: **t53** (Trump meme-coin news, 7.1 → 6.3, with fintech_involvement also cut to 4.0), **t133** (contentless Cash App teaser, 7.
-[10:01:03]   reviewer finished on turn 2 (stop_reason=end_turn).
-[10:01:03] Reviewer pass done: 4 correction(s) applied, 0 re-judgment(s) returned unchanged, across 2 tool call(s) in 2 turn(s).
-[10:01:03] 
-[10:01:03] === VERDICT: CORRECTED (corrections=4, tool_calls=2, turns=2, elapsed=44s of 1200s budget) ===
+[06:59:41] === Speed trend relevance checker (scheduled, Monday cron) ===
+[06:59:41] Wall-clock budget armed: 1200s (hard, SIGALRM).
+[06:59:41] Grading 30 candidate items from the latest pipeline output.
+[06:59:41] Deterministic invariants OK for all 30 items (fit=0.4/0.3/0.3, gate enforced).
+[06:59:41] Reviewer pass: claude-opus-5 (effort=high) over 30 items.
+[06:59:41] CHECKER ERROR: BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdfPALsE88KxP64D9qYoZ'}
+[06:59:41] Traceback (most recent call last):
+  File "/home/runner/work/speed-growth-intelligence/speed-growth-intelligence/intelligence/trend_checker.py", line 468, in check_pipeline_output
+    verdict = run_check(items, log, deadline=started + budget)
+  File "/home/runner/work/speed-growth-intelligence/speed-growth-intelligence/intelligence/trend_checker.py", line 334, in run_check
+    resp = client.messages.create(
+        model=_REVIEW_MODEL,
+    ...<4 lines>...
+        messages=messages,
+    )
+  File "/opt/hostedtoolcache/Python/3.13.14/x64/lib/python3.13/site-packages/anthropic/_utils/_utils.py", line 294, in wrapper
+    return func(*args, **kwargs)
+  File "/opt/hostedtoolcache/Python/3.13.14/x64/lib/python3.13/site-packages/anthropic/resources/messages/messages.py", line 1008, in create
+    return self._post(
+           ~~~~~~~~~~^
+        "/v1/messages",
+        ^^^^^^^^^^^^^^^
+    ...<30 lines>...
+        stream_cls=Stream[RawMessageStreamEvent],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/hostedtoolcache/Python/3.13.14/x64/lib/python3.13/site-packages/anthropic/_base_client.py", line 1374, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.13.14/x64/lib/python3.13/site-packages/anthropic/_base_client.py", line 1147, in request
+    raise self._make_status_error_from_response(err.response) from None
+anthropic.BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdfPALsE88KxP64D9qYoZ'}
+
+[06:59:41] 
+[06:59:41] === VERDICT: ERROR (corrections=0, tool_calls=None, turns=0, elapsed=0s of 1200s budget) ===
