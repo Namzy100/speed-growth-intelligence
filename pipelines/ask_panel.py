@@ -112,7 +112,7 @@ def css() -> str:
 """
 
 
-def html_section(heading: str = "Ask this dashboard", note: str | None = None) -> str:
+def html_section(heading: str = "Ask this tool", note: str | None = None) -> str:
     """The panel markup. Examples/chips are injected by the JS from the config."""
     note = note or "answers computed from the data on this page — nothing leaves your browser"
     return f"""  <section>

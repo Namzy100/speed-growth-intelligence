@@ -211,7 +211,7 @@ _TEMPLATE = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Speed Wallet — Merchant Discovery</title>
+<title>Speed Wallet — Merchant Tool</title>
 <style>
   :root{
     --bg:#0d1117; --panel:#161b22; --panel-2:#1b2230;
@@ -338,7 +338,7 @@ _TEMPLATE = r"""<!doctype html>
   </div>
 
   <div class="title-block">
-    <h1>Merchant Discovery</h1>
+    <h1>Merchant Tool</h1>
     <div class="sub">Outbound discovery of public venues to reach decision-makers at potential merchant businesses. Not tracking — marketing has no merchant activity data (that's the dev backend).</div>
     <div class="freshness" id="freshness"></div>
   </div>

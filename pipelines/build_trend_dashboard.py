@@ -703,7 +703,7 @@ _TEMPLATE = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Speed Wallet — Trend Intelligence (US)</title>
+<title>Speed Wallet — Trend Tool (US)</title>
 <style>
   :root{
     --bg:#0d1117; --panel:#161b22; --panel-2:#1b2230;
@@ -880,7 +880,7 @@ _TEMPLATE = r"""<!doctype html>
     <div class="sync">Synced: <b>/*__SYNC__*/</b></div>
   </div>
   <div class="title-block">
-    <h1>Trend Intelligence — US</h1>
+    <h1>Trend Tool — US</h1>
     <div class="sub">Predict → ship → measure. Track every recommendation from suggestion to results. <span style="color:var(--faint)">/*__COUNTS__*/</span></div>
   </div>
 

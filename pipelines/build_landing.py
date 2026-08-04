@@ -134,7 +134,7 @@ _TEMPLATE = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Naman's Tools — Speed Growth Intelligence</title>
+<title>Growth Tools — Speed Wallet Growth Intelligence</title>
 <meta name="description" content="A hub for the five growth-intelligence tools built for Speed Wallet — what each one does and why it exists.">
 <style>
   :root{
@@ -226,11 +226,11 @@ _TEMPLATE = r"""<!doctype html>
 <div class="wrap">
 
   <span class="brand"><span class="dot"></span>Speed Wallet · Growth Intelligence</span>
-  <h1>Naman's <span class="g">Tools</span></h1>
-  <p class="lede">Five tools I built to answer five real growth questions for Speed Wallet, a
-    Bitcoin + stablecoin payments app: <b>which creators to partner with, what creative is working,
-    where to expand, what's trending now, and which merchants to reach.</b> Each is live, rebuilt from
-    real data, and honest about what it can and can't measure. Pick one below.</p>
+  <h1>Growth <span class="g">Tools</span></h1>
+  <p class="lede">These are in-house agents that help make <b>five recurring decisions</b> for Speed
+    Wallet, a Bitcoin + stablecoin payments app: <b>which creators to partner with, what creative is
+    working, where to expand, what's trending now, and which merchants to reach.</b> Each tool is live,
+    rebuilt from real data every morning, and honest about what it can and can't measure. Pick one below.</p>
   <div class="meta-row">
     <span class="chip"><b>5</b> live tools</span>
     <span class="chip">Real data · <b>no mocks</b></span>
@@ -242,7 +242,7 @@ _TEMPLATE = r"""<!doctype html>
 
     <a class="card" href="creators/">
       <div class="card-top"><div class="ic">🧭</div>
-        <div><h2>Creator Intelligence</h2><div class="tag">Partner scouting</div></div></div>
+        <div><h2>Creator Tool</h2><div class="tag">Partner scouting</div></div></div>
       <p class="what">Every discovered creator, scored 0–100 as a potential Speed partner across four real
         dimensions — audience fit, engagement quality, reach, and sponsorship history.</p>
       <p class="why"><b>Why it's here:</b> influencer marketing is a core Speed channel, but a big following
@@ -253,7 +253,7 @@ _TEMPLATE = r"""<!doctype html>
 
     <a class="card" href="creative_dashboard.html">
       <div class="card-top"><div class="ic">📊</div>
-        <div><h2>Creative Performance</h2><div class="tag">Ad performance</div></div></div>
+        <div><h2>Creative Tool</h2><div class="tag">Ad performance</div></div></div>
       <p class="what">Meta + Adjust campaign performance — spend, installs, retention — with Claude-generated
         insight cards calling out what's actually working and what to reallocate.</p>
       <p class="why"><b>Why it's here:</b> paid spend needs a fast read on what's converting. This turns raw
@@ -263,7 +263,7 @@ _TEMPLATE = r"""<!doctype html>
 
     <a class="card" href="trend/">
       <div class="card-top"><div class="ic">📈</div>
-        <div><h2>Trend Intelligence</h2><div class="tag">Weekly trend scan</div></div></div>
+        <div><h2>Trend Tool</h2><div class="tag">Weekly trend scan</div></div></div>
       <p class="what">A weekly scan across YouTube, TikTok, X and Instagram, scored for real topical relevance
         and Speed-fit, turned into ready-to-shoot hooks — plus a drag-and-drop pipeline board from idea to results.</p>
       <p class="why"><b>Why it's here:</b> organic content moves fast. This surfaces what's trending in Speed's
@@ -273,7 +273,7 @@ _TEMPLATE = r"""<!doctype html>
 
     <a class="card" href="strategy/">
       <div class="card-top"><div class="ic">🗺️</div>
-        <div><h2>Strategy &amp; Markets</h2><div class="tag">Market intelligence</div></div></div>
+        <div><h2>Strategy Tool</h2><div class="tag">Market intelligence</div></div></div>
       <p class="what">EU market-entry intelligence — per-market channel strategy, competitive white space, and
         the highest-leverage tactics, distilled from the research docs.</p>
       <p class="why"><b>Why it's here:</b> expansion decisions (Germany, UK, Portugal) need the strategy in one
@@ -283,7 +283,7 @@ _TEMPLATE = r"""<!doctype html>
 
     <a class="card" href="merchants/">
       <div class="card-top"><div class="ic">🤝</div>
-        <div><h2>Merchant Discovery</h2><div class="tag">Outbound discovery</div></div></div>
+        <div><h2>Merchant Tool</h2><div class="tag">Outbound discovery</div></div></div>
       <p class="what">Real venues — trade publications, associations, events, B2B directories — across iGaming,
         fintech, PSPs and streaming, ranked by how well they put Speed in front of decision-makers.</p>
       <p class="why"><b>Why it's here:</b> merchant adoption needs outbound targets. This finds where the

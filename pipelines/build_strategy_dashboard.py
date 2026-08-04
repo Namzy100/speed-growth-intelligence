@@ -350,7 +350,7 @@ _TEMPLATE = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Speed Wallet — Strategy &amp; Market Intelligence</title>
+<title>Speed Wallet — Strategy Tool</title>
 <style>
   :root{
     --bg:#0d1117; --panel:#161b22; --panel-2:#1b2230;
@@ -463,7 +463,7 @@ _TEMPLATE = r"""<!doctype html>
   </div>
 
   <div class="title-block">
-    <h1>Strategy &amp; Market Intelligence</h1>
+    <h1>Strategy Tool</h1>
     <div class="sub">EU expansion priorities, per-market playbooks, and competitive white space — synthesized from Speed's market &amp; competitor research.</div>
   </div>
 

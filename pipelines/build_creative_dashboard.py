@@ -807,7 +807,7 @@ _TEMPLATE = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Speed Wallet — Creative Performance</title>
+<title>Speed Wallet — Creative Tool</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   :root{
@@ -976,7 +976,7 @@ _TEMPLATE = r"""<!doctype html>
   </div>
 
   <div class="title-block">
-    <h1>Creative Performance</h1>
+    <h1>Creative Tool</h1>
     <div class="sub">User acquisition &amp; retention · last 30 days</div>
   </div>
 

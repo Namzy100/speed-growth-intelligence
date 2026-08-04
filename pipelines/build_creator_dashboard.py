@@ -301,7 +301,7 @@ _TEMPLATE = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Creator Intelligence — Speed Wallet Partner Pipeline</title>
+<title>Creator Tool — Speed Wallet Partner Pipeline</title>
 <style>
   :root{
     --bg:#0d1117; --panel:#161b22; --panel-2:#1b2230;
@@ -479,7 +479,7 @@ _TEMPLATE = r"""<!doctype html>
   </div>
 
   <div class="title-block">
-    <h1>Creator Intelligence</h1>
+    <h1>Creator Tool</h1>
     <div class="sub">Partner scouting across YouTube, TikTok, X &amp; Instagram · scored for Speed's three segments</div>
   </div>
 
