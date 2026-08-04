@@ -46,7 +46,7 @@ _ROOT = Path(__file__).resolve().parent.parent
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from pipelines import ask_panel
+from pipelines import ask_panel, starter_set
 
 from pipelines.json_embed import dumps_for_script
 
@@ -542,6 +542,29 @@ def render_signal(data: dict) -> str:
     return "".join(rows)
 
 
+
+def _starter(state: dict) -> list[dict]:
+    """"Try these 5 first" — biggest estimated reach among concepts still unshipped.
+
+    Restricted to `suggested`: anything briefed or in production is work in flight, not
+    a thing to start. The number is labelled an ESTIMATE because that is what it is, a
+    benchmarked projection rather than a measurement.
+    """
+    items = [it for it in (state.get("items") or {}).values()
+             if it.get("status") == "suggested"]
+    items.sort(key=lambda it: it.get("estimate_num") or 0, reverse=True)
+    out = []
+    for it in items[:5]:
+        r = it.get("estimate_num") or 0
+        rs = f"{r/1_000_000:.1f}M" if r >= 1_000_000 else f"{r/1_000:.0f}k" if r >= 1_000 else str(r)
+        pay = it.get("payload") or {}
+        out.append({"title": (it.get("hook") or "")[:88],
+                    "meta": f"{it.get('type')} \u00b7 {it.get('segment')}"
+                            + (f" \u00b7 {pay.get('platform')}" if pay.get("platform") else ""),
+                    "stat": rs, "stat_label": "estimated reach"})
+    return out
+
+
 def _ask_config(state: dict) -> dict:
     """Question set matched to a CONTENT PIPELINE, not a scored list: these rows are
     briefs moving through suggested -> briefed -> in_production -> posted ->
@@ -624,6 +647,10 @@ def render(data: dict, enrich: dict, candidates: list[dict], state: dict,
         out = out.replace(k, v)
     out = ask_panel.inject(out, _ask_config(state),
                             note="answers computed from the pipeline items on this page")
+    out = starter_set.inject(
+        out, "Try these 5 first",
+        "largest estimated reach among concepts still at \u201csuggested\u201d",
+        _starter(state))
     return out
 
 

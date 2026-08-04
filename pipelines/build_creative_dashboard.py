@@ -28,7 +28,7 @@ _ROOT = Path(__file__).resolve().parent.parent
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from pipelines import ask_panel
+from pipelines import ask_panel, starter_set
 
 from pipelines.json_embed import dumps_for_script
 
@@ -585,6 +585,26 @@ def _meta_status_note() -> str:
 # Render
 # ------------------------------------------------------------------
 
+
+def _starter(data: dict) -> list[dict]:
+    """"Fix these 5 first" — the WORST paid deposit CPA, not the best.
+
+    On a spend tool "first" means where to act, and the money leaks at the expensive
+    end. Same three guards as the CPA cards themselves: paid rows only (organic has no
+    media cost, so its CPA is a meaningless 0), `thin` rows excluded from ranking (a
+    6-deposit row would otherwise win or lose the list on noise), and a missing CPA is
+    skipped rather than read as 0.
+    """
+    rows = [r for r in (data.get("economics") or [])
+            if r.get("paid") and not r.get("thin") and r.get("deposit_cpa")]
+    rows.sort(key=lambda r: r["deposit_cpa"], reverse=True)
+    return [{"title": r.get("campaign"),
+             "meta": f"{r.get('channel')} \u00b7 ${(r.get('cost') or 0):,.0f} spend "
+                     f"\u00b7 {(r.get('deposits') or 0):,} deposits",
+             "stat": f"${r['deposit_cpa']:,.2f}", "stat_label": "deposit CPA (paid)"}
+            for r in rows[:5]]
+
+
 def _ask_config(data: dict) -> dict:
     """Question set matched to what THIS dashboard actually holds: per-channel and
     per-campaign acquisition efficiency, plus the headline KPIs and the retention
@@ -698,8 +718,12 @@ def _ask_config(data: dict) -> dict:
 
 def render_html(data: dict) -> str:
     html = _TEMPLATE.replace("/*__DATA__*/", dumps_for_script(data))
-    return ask_panel.inject(html, _ask_config(data),
+    page = ask_panel.inject(html, _ask_config(data),
                             note="answers computed from the channel/campaign rows on this page")
+    return starter_set.inject(
+        page, "Fix these 5 first",
+        "most expensive paid campaigns by deposit CPA \u2014 organic and thin rows excluded",
+        _starter(data))
 
 
 def main() -> None:
@@ -783,7 +807,7 @@ _TEMPLATE = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Speed Wallet — Creative Performance Dashboard</title>
+<title>Speed Wallet — Creative Performance</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   :root{
@@ -952,7 +976,7 @@ _TEMPLATE = r"""<!doctype html>
   </div>
 
   <div class="title-block">
-    <h1>Creative Performance Dashboard</h1>
+    <h1>Creative Performance</h1>
     <div class="sub">User acquisition &amp; retention · last 30 days</div>
   </div>
 

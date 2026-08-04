@@ -22,7 +22,7 @@ _ROOT = Path(__file__).resolve().parent.parent
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from pipelines import ask_panel
+from pipelines import ask_panel, starter_set
 
 from pipelines.json_embed import dumps_for_script
 
@@ -161,6 +161,31 @@ def _score_bands(scores: list) -> dict:
     }
 
 
+
+def _starter(creators: list[dict]) -> list[dict]:
+    """"Talk to these 5 first" — highest-scoring people we can stand behind and have
+    not already approached.
+
+    Three deliberate exclusions: brand/media accounts (not someone you DM), the
+    bulk-imported placeholder set (`unscraped`, whose audience_fit and engagement are
+    not real measurements), and anyone already contacted — a shortlist that hands back
+    work already done is worse than no shortlist.
+    """
+    pool = [c for c in creators
+            if c.get("is_influencer") and not c.get("unscraped")
+            and c.get("outreach") == "not_contacted"]
+    pool.sort(key=lambda c: c.get("score") or 0, reverse=True)
+    out = []
+    for c in pool[:5]:
+        f = c.get("followers") or 0
+        fs = (f"{f/1_000_000:.1f}M" if f >= 1_000_000
+              else f"{f/1_000:.0f}k" if f >= 1_000 else str(f))
+        out.append({"title": c.get("name"),
+                    "meta": f"{c.get('platform')} \u00b7 {fs} followers \u00b7 {c.get('segment')}",
+                    "stat": f"{c.get('score') or 0:.1f}", "stat_label": "/ 100 partner score"})
+    return out
+
+
 def _ask_config(data: dict) -> dict:
     """Question set for the creator pool: partnership scoring and audience size.
 
@@ -253,9 +278,13 @@ def main() -> None:
 
     _OUT.parent.mkdir(parents=True, exist_ok=True)
     html = _TEMPLATE.replace("/*__DATA__*/", dumps_for_script(data))
-    _OUT.write_text(ask_panel.inject(html, _ask_config(data),
-                                     note="answers computed from the creator rows on this page"),
-                    encoding="utf-8")
+    page = ask_panel.inject(html, _ask_config(data),
+                            note="answers computed from the creator rows on this page")
+    page = starter_set.inject(
+        page, "Talk to these 5 first",
+        "highest-scoring individuals with real scraped data, not yet contacted",
+        _starter(data["creators"]))
+    _OUT.write_text(page, encoding="utf-8")
     print(f"Wrote {_OUT.relative_to(_ROOT)} ({_OUT.stat().st_size:,} bytes)")
     print(f"  total={data['total']} platforms={data['platforms']} "
           f"influencers={data['influencers']} mimanshi={data['mimanshi']} "
@@ -318,7 +347,10 @@ _TEMPLATE = r"""<!doctype html>
   .title-block .sub{color:var(--muted); font-size:13px;}
 
   /* KPI strip */
-  .kpi-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:14px; margin-bottom:8px;}
+  /* Card 2 holds four platform counts, so it gets ~30% more width than the single-number
+     cards. Widening the slot keeps the full platform names; the alternative was
+     abbreviating Instagram to "IG", which reads worse than the extra 60px costs. */
+  .kpi-grid{display:grid; grid-template-columns:1fr 1.32fr 1fr 1fr 1fr; gap:14px; margin-bottom:8px;}
   @media(max-width:880px){.kpi-grid{grid-template-columns:repeat(2,1fr);}}
   .kpi{padding:16px 18px; background:linear-gradient(180deg,var(--panel),rgba(22,27,34,0.6));
     border:1px solid var(--hairline); border-radius:var(--r-md); box-shadow:var(--shadow);
@@ -326,6 +358,16 @@ _TEMPLATE = r"""<!doctype html>
   .kpi .val{font-size:24px; font-weight:760; letter-spacing:-0.02em; font-variant-numeric:tabular-nums;
     background:linear-gradient(180deg,#fff,#cfd6e4); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
   .kpi .lab{font-size:10px; text-transform:uppercase; letter-spacing:0.09em; color:var(--faint); margin-top:7px; font-weight:700;}
+  /* Platform KPI: four real counts in one slot. A 2x2 micro-grid rather than one
+     "310 / 240 / 131 / 15" string, which does not fit a fifth-width card at 24px,
+     and rather than a collapsed "4 platforms", which hides the actual distribution. */
+  .kpi .plat{display:grid; grid-template-columns:repeat(2,1fr); gap:5px 10px;}
+  .kpi .plat-i{display:flex; align-items:baseline; gap:5px; min-width:0;}
+  .kpi .plat-n{font-size:17px; font-weight:760; letter-spacing:-0.02em; font-variant-numeric:tabular-nums;
+    background:linear-gradient(180deg,#fff,#cfd6e4); -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent; flex:0 0 auto;}
+  .kpi .plat-l{font-size:9.5px; color:var(--muted); font-weight:650; text-transform:uppercase;
+    letter-spacing:0.02em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 
   section{margin:40px 0; animation:rise .55s cubic-bezier(.2,.7,.2,1) both;}
   .sec-head{display:flex; align-items:center; gap:11px; margin-bottom:18px; flex-wrap:wrap;}
@@ -438,7 +480,7 @@ _TEMPLATE = r"""<!doctype html>
 
   <div class="title-block">
     <h1>Creator Intelligence</h1>
-    <div class="sub">Partner scouting across YouTube &amp; TikTok · scored for Speed's three segments</div>
+    <div class="sub">Partner scouting across YouTube, TikTok, X &amp; Instagram · scored for Speed's three segments</div>
   </div>
 
   <div class="kpi-grid" id="kpis"></div>
@@ -569,16 +611,28 @@ function breakdown(c){
 
 document.getElementById("syncTime").textContent = DATA.generated_at || "—";
 
+function platformKPI(){
+  // Every platform actually present, largest first, read straight off DATA.platforms
+  // so the card cannot drift from the data the way the old hardcoded
+  // "YouTube / TikTok" pair did once X and Instagram were added.
+  const p = DATA.platforms || {};
+  const rows = Object.keys(p).map(k => [k, p[k]||0]).sort((a,b) => b[1]-a[1]);
+  const cells = rows.map(([name,n]) =>
+    `<div class="plat-i"><span class="plat-n">${esc(n)}</span><span class="plat-l">${esc(name)}</span></div>`
+  ).join("");
+  return `<div class="kpi"><div class="plat">${cells}</div><div class="lab">By platform</div></div>`;
+}
+
 function renderKPIs(){
-  const k = [
-    [DATA.total, "Total creators"],
-    [(DATA.platforms.YouTube||0)+" / "+(DATA.platforms.TikTok||0), "YouTube / TikTok"],
-    [DATA.influencers, "Influencers"],
-    [DATA.mimanshi, "Mimanshi picks"],
-    [DATA.avg_score, "Avg score"],
-  ];
-  document.getElementById("kpis").innerHTML = k.map(([v,l]) =>
-    `<div class="kpi"><div class="val">${esc(v)}</div><div class="lab">${esc(l)}</div></div>`).join("");
+  const simple = (v,l) =>
+    `<div class="kpi"><div class="val">${esc(v)}</div><div class="lab">${esc(l)}</div></div>`;
+  document.getElementById("kpis").innerHTML = [
+    simple(DATA.total, "Total creators"),
+    platformKPI(),
+    simple(DATA.influencers, "Influencers"),
+    simple(DATA.mimanshi, "Mimanshi picks"),
+    simple(DATA.avg_score, "Avg score"),
+  ].join("");
 }
 
 function ring(score){
