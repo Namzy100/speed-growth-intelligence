@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How Speed's Dashboards Actually Work</title>
+<style>
+  /* ---- design tokens: copied verbatim from pipelines/build_*.py so the deck
+         matches the live dashboards exactly ---- */
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel-2:#1b2230;
+    --hairline:rgba(255,255,255,0.09); --hairline-strong:rgba(255,255,255,0.16);
+    --text:#edf1f7; --muted:#9aa4b2; --faint:#6b7585;
+    --accent:#2f5dfb; --accent-2:#6f9dff;
+    --good:#3fb950; --warn:#e3b341; --bad:#f85149; --gold:#f5c400;
+    --grad:linear-gradient(120deg,#2f5dfb,#6f9dff);
+    --shadow:0 10px 30px -14px rgba(0,0,0,0.7);
+    --shadow-lift:0 18px 44px -16px rgba(0,0,0,0.8);
+    --r-lg:16px; --r-md:12px; --r-sm:9px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;}
+  body{
+    margin:0; color:var(--text); overflow:hidden; letter-spacing:-0.005em;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.5; -webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(1100px 600px at 50% -10%, rgba(47,93,251,0.20), transparent 58%),
+      radial-gradient(820px 520px at 100% 0%, rgba(111,157,255,0.09), transparent 52%),
+      radial-gradient(720px 480px at 0% 8%, rgba(63,185,80,0.045), transparent 50%),
+      var(--bg);
+    background-attachment:fixed;
+  }
+  body::before{ content:""; position:fixed; inset:0; z-index:0; pointer-events:none; opacity:0.035;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+  /* ---- deck frame ---- */
+  .deck{position:fixed; inset:0; z-index:1;}
+  .slide{position:absolute; inset:0; display:none; flex-direction:column;
+    padding:clamp(28px,5vh,64px) clamp(28px,6vw,110px) 96px; overflow:hidden;}
+  .slide.active{display:flex; animation:fade .45s ease both;}
+  @keyframes fade{from{opacity:0} to{opacity:1}}
+  .slide-body{flex:1; display:flex; flex-direction:column; justify-content:center; max-width:1180px; margin:0 auto; width:100%;}
+
+  /* kicker = the dashboards' section-head tick + label */
+  .kicker{display:flex; align-items:center; gap:11px; margin-bottom:16px;}
+  .kicker span{font-size:clamp(11px,1.3vw,13px); text-transform:uppercase; letter-spacing:0.13em; color:var(--muted); font-weight:700;}
+  .kicker::before{content:""; width:3px; height:15px; border-radius:2px; background:var(--grad);}
+
+  h1{font-size:clamp(30px,5.6vw,62px); margin:0 0 14px; font-weight:790; letter-spacing:-0.035em; line-height:1.04;
+    background:linear-gradient(180deg,#ffffff,#c9c3e8); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
+  h2.title{font-size:clamp(26px,4.4vw,48px); margin:0 0 22px; font-weight:780; letter-spacing:-0.03em; line-height:1.06;
+    background:linear-gradient(180deg,#ffffff,#c9c3e8); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
+  .lead{font-size:clamp(15px,1.9vw,21px); color:var(--muted); max-width:820px; line-height:1.55;}
+  .foot-note{margin-top:26px; font-size:clamp(12.5px,1.5vw,15px); color:var(--faint); max-width:900px;}
+  .foot-note b{color:var(--text);}
+
+  /* cards (dashboard card style, verbatim gradient/border/shadow) */
+  .card{position:relative; padding:clamp(16px,2vw,22px); background:linear-gradient(180deg,var(--panel),rgba(22,27,34,0.55));
+    border:1px solid var(--hairline); border-radius:var(--r-lg); box-shadow:var(--shadow); overflow:hidden;}
+  .card::before{content:""; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--grad); opacity:.9;}
+  .card h3{margin:0 0 7px; font-size:clamp(15px,1.9vw,20px); font-weight:730; letter-spacing:-0.02em;}
+  .card p{margin:0; font-size:clamp(12.5px,1.5vw,15.5px); color:var(--muted); line-height:1.5;}
+  .card .ic{font-size:clamp(20px,2.4vw,26px); margin-bottom:10px; display:block; line-height:1;}
+  .card .tagno{font-size:11px; font-weight:800; letter-spacing:.09em; color:var(--faint); text-transform:uppercase;}
+
+  .grid{display:grid; gap:clamp(12px,1.6vw,18px);}
+  .g4{grid-template-columns:repeat(4,1fr);}
+  .g3{grid-template-columns:repeat(3,1fr);}
+  .g2{grid-template-columns:repeat(2,1fr);}
+  .g5{grid-template-columns:repeat(5,1fr);}
+  @media(max-width:1000px){.g4,.g5{grid-template-columns:repeat(2,1fr);} .g3{grid-template-columns:1fr;}}
+
+  /* step-flow arrows for slide 2 */
+  .flow{display:grid; grid-template-columns:repeat(4,1fr); gap:clamp(10px,1.4vw,16px); align-items:stretch;}
+  @media(max-width:1000px){.flow{grid-template-columns:repeat(2,1fr);}}
+  .step .num{font-size:clamp(26px,3.4vw,40px); font-weight:800; letter-spacing:-0.03em; font-variant-numeric:tabular-nums;
+    background:var(--grad); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; line-height:1; margin-bottom:8px;}
+
+  /* pill list */
+  .plist{list-style:none; margin:14px 0 0; padding:0; display:flex; flex-direction:column; gap:10px;}
+  .plist li{display:flex; gap:11px; align-items:flex-start; font-size:clamp(13px,1.6vw,16.5px); color:var(--text);}
+  .plist li .dot{flex:0 0 auto; margin-top:.45em; width:8px; height:8px; border-radius:50%; background:var(--accent-2); box-shadow:0 0 8px rgba(111,157,255,.6);}
+  .plist.good li .dot{background:var(--good); box-shadow:0 0 8px rgba(63,185,80,.55);}
+  .plist.warn li .dot{background:var(--warn); box-shadow:0 0 8px rgba(227,179,65,.55);}
+  .plist li span b{color:var(--text);} .plist li span{color:var(--muted);}
+
+  .col-head{font-size:clamp(13px,1.6vw,16px); font-weight:750; letter-spacing:-0.01em; margin:0 0 4px; display:flex; align-items:center; gap:9px;}
+  .col-head.do{color:var(--good);} .col-head.dont{color:var(--muted);} .col-head.eng{color:var(--warn);}
+  .col-head .chip{font-size:20px; line-height:1;}
+
+  .dashname{font-size:clamp(14px,1.7vw,18px); font-weight:760; letter-spacing:-0.02em; margin-bottom:5px; display:flex; align-items:center; gap:9px;}
+  .dashname .sw{width:10px; height:10px; border-radius:3px; flex:0 0 auto;}
+
+  .highlight{background:linear-gradient(120deg,rgba(63,185,80,0.12),rgba(47,93,251,0.10));
+    border:1px solid rgba(63,185,80,0.30); border-radius:var(--r-md); padding:clamp(16px,2vw,22px); margin-top:20px;}
+  .highlight b{color:var(--text);} .highlight{color:var(--muted); font-size:clamp(13px,1.6vw,16.5px); line-height:1.55;}
+
+  /* title slide */
+  .title-slide{align-items:flex-start; justify-content:center;}
+  .brand-hero{display:flex; align-items:center; gap:13px; margin-bottom:26px;}
+  .brand-hero .bolt{font-size:clamp(30px,4vw,44px); background:linear-gradient(180deg,#f5c400,#f0a02a);
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 0 10px rgba(240,160,42,0.5)); line-height:1;}
+  .brand-hero .bn{font-size:clamp(18px,2.2vw,26px); font-weight:770; letter-spacing:-0.02em;}
+  .hintchip{display:inline-flex; align-self:flex-start; align-items:center; gap:8px; margin-top:32px; font-size:clamp(12px,1.4vw,14px);
+    color:var(--muted); background:rgba(47,93,251,0.10); border:1px solid var(--hairline-strong); padding:8px 15px; border-radius:999px;}
+  .brand-hero{align-self:flex-start;}
+  kbd{font-family:inherit; font-size:.92em; font-weight:700; color:var(--text); background:var(--panel-2);
+    border:1px solid var(--hairline-strong); border-radius:6px; padding:1px 7px;}
+
+  /* persistent chrome */
+  .brandmark{position:fixed; left:clamp(20px,3vw,44px); bottom:22px; z-index:5; display:flex; align-items:center; gap:8px;
+    font-size:13px; font-weight:730; color:var(--text); opacity:.9;}
+  .brandmark .bolt{background:linear-gradient(180deg,#f5c400,#f0a02a); -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent; filter:drop-shadow(0 0 6px rgba(240,160,42,0.45)); font-size:15px;}
+  .brandmark .tag{color:var(--faint); font-weight:600;}
+  .counter{position:fixed; right:clamp(20px,3vw,44px); bottom:20px; z-index:5; font-size:12.5px; color:var(--faint);
+    font-variant-numeric:tabular-nums; text-align:right;}
+  .counter .keys{display:block; margin-top:3px; font-size:11px;}
+  .dots{position:fixed; left:50%; transform:translateX(-50%); bottom:24px; z-index:5; display:flex; gap:9px;}
+  .dots button{width:9px; height:9px; border-radius:50%; border:none; padding:0; cursor:pointer;
+    background:var(--hairline-strong); transition:background .2s, transform .2s;}
+  .dots button.on{background:var(--grad); transform:scale(1.25);}
+  .dots button:hover{background:var(--accent-2);}
+
+  /* edge click zones */
+  .zone{position:fixed; top:0; bottom:60px; width:14%; z-index:4; cursor:pointer; background:transparent;}
+  .zone.l{left:0;} .zone.r{right:0;}
+  .zone svg{position:absolute; top:50%; transform:translateY(-50%); opacity:0; transition:opacity .2s; fill:none;
+    stroke:var(--muted); stroke-width:2.4; width:26px; height:26px;}
+  .zone.l svg{left:14px;} .zone.r svg{right:14px;}
+  .zone:hover svg{opacity:.75;}
+
+  /* entrance stagger for revealed children */
+  .slide.active .reveal{animation:rise .5s cubic-bezier(.2,.7,.2,1) both;}
+  .slide.active .reveal:nth-child(1){animation-delay:.05s}
+  .slide.active .reveal:nth-child(2){animation-delay:.11s}
+  .slide.active .reveal:nth-child(3){animation-delay:.17s}
+  .slide.active .reveal:nth-child(4){animation-delay:.23s}
+  .slide.active .reveal:nth-child(5){animation-delay:.29s}
+  @keyframes rise{from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:none;}}
+  @media (prefers-reduced-motion: reduce){*{animation:none!important; transition:none!important;}}
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+  <!-- 1 · TITLE -->
+  <section class="slide title-slide">
+    <div class="slide-body">
+      <div class="brand-hero reveal"><span class="bolt">⚡</span><span class="bn">Speed Wallet</span></div>
+      <h1 class="reveal">How Speed's Dashboards<br>Actually Work</h1>
+      <p class="lead reveal">A plain-English guide to the system behind the numbers — built for Mimanshi &amp; Ranita, who'll be reading and looking after these dashboards.</p>
+      <div class="hintchip reveal">Use <kbd>&larr;</kbd> <kbd>&rarr;</kbd> or <kbd>space</kbd> to move · press <kbd>F</kbd> for full screen</div>
+    </div>
+  </section>
+
+  <!-- 2 · BIG PICTURE -->
+  <section class="slide">
+    <div class="slide-body">
+      <div class="kicker reveal"><span>The big picture</span></div>
+      <h2 class="title reveal">The same four steps, every time</h2>
+      <div class="flow">
+        <div class="card step reveal"><span class="num">1</span><h3>Real data in</h3><p>We collect real numbers from the places creators and campaigns actually live — nothing invented.</p></div>
+        <div class="card step reveal"><span class="num">2</span><h3>Checked &amp; scored</h3><p>Every record is quality-checked and rated, so nothing fake, broken or half-empty gets through.</p></div>
+        <div class="card step reveal"><span class="num">3</span><h3>Built into a page</h3><p>A script turns the checked data into a finished web page — automatically, the same way every time.</p></div>
+        <div class="card step reveal"><span class="num">4</span><h3>Kept current</h3><p>A scheduled job refreshes and re-publishes it every day, on its own, with no one pressing a button.</p></div>
+      </div>
+      <p class="foot-note reveal">No spreadsheets emailed around, no copy-paste. The <b>same pipeline runs start to finish</b> — which is why you can trust that what's on screen is real and current.</p>
+    </div>
+  </section>
+
+  <!-- 3 · DATA SOURCES -->
+  <section class="slide">
+    <div class="slide-body">
+      <div class="kicker reveal"><span>Where the data comes from</span></div>
+      <h2 class="title reveal">Real sources, one shared home</h2>
+      <div class="grid g3">
+        <div class="card reveal"><span class="ic">🎥</span><h3>Creator platforms</h3><p><b>YouTube, TikTok, X.</b> Public creator profiles — how many followers they have, how engaged those followers really are, and what they post about.</p></div>
+        <div class="card reveal"><span class="ic">📈</span><h3>Marketing platforms</h3><p><b>Adjust</b> — how many people install the app and how many stay. <b>Meta</b> — what we spend on ads and what those ads bring back.</p></div>
+        <div class="card reveal"><span class="ic">🗄️</span><h3>The database</h3><p><b>One central store.</b> Everything above lands here, so every dashboard reads from the same single, trusted source — never a private copy.</p></div>
+      </div>
+      <p class="foot-note reveal">Think of it as one filing cabinet everyone shares. If a number is right in the cabinet, it's right on every dashboard.</p>
+    </div>
+  </section>
+
+  <!-- 4 · QUALITY GATE + SCORING -->
+  <section class="slide">
+    <div class="slide-body">
+      <div class="kicker reveal"><span>Before anything becomes a dashboard</span></div>
+      <h2 class="title reveal">Nothing gets in unchecked</h2>
+      <div class="grid g2">
+        <div class="card reveal"><span class="ic">🛡️</span><h3>The credibility check</h3><p>Before a creator is saved, it's checked for real, sensible numbers. Anything fake, empty or broken is <b>refused and logged — never quietly saved</b>. A wrong number is more dangerous than a missing one, so we'd rather leave a gap than guess.</p></div>
+        <div class="card reveal"><span class="ic">⭐</span><h3>The score, 0 to 100</h3><p>Each creator gets a score from four honest signals: <b>how well they fit our audience, how engaged their followers really are, how big their reach is, and their real sponsorship history</b>. If a signal can't be measured honestly, it's left out — not faked to fill the box.</p></div>
+      </div>
+      <p class="foot-note reveal">This is why the scores are worth trusting: they're built only from signal we can actually stand behind.</p>
+    </div>
+  </section>
+
+  <!-- 5 · THE BUILDER -->
+  <section class="slide">
+    <div class="slide-body">
+      <div class="kicker reveal"><span>How data becomes a webpage</span></div>
+      <h2 class="title reveal">The page builds itself</h2>
+      <p class="lead reveal">A "builder" reads the database and writes the finished dashboard — every card, every table, every colour. <b style="color:var(--text)">Nobody edits a dashboard by hand, ever.</b></p>
+      <div class="grid g3" style="margin-top:26px">
+        <div class="card reveal"><span class="ic">🔗</span><h3>Always in sync</h3><p>The page is generated from the live data, so it can't quietly drift away from what's true.</p></div>
+        <div class="card reveal"><span class="ic">🧯</span><h3>No human slips</h3><p>No typos, no broken formatting, no "someone forgot to update tab 3."</p></div>
+        <div class="card reveal"><span class="ic">🔄</span><h3>Repeatable</h3><p>Change the data, run the builder again, the page updates itself — identically, every time.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 · STAYS CURRENT -->
+  <section class="slide">
+    <div class="slide-body">
+      <div class="kicker reveal"><span>How it stays current</span></div>
+      <h2 class="title reveal">Every morning, on its own</h2>
+      <p class="lead reveal">A scheduled job runs in the cloud each morning — <b style="color:var(--text)">not on anyone's laptop</b>, so it works even when every computer in the office is switched off. It refreshes the data, rebuilds the pages and publishes them live.</p>
+      <div class="highlight reveal">
+        <b>And if something goes wrong, it fails loudly.</b> It raises a visible failure rather than quietly publishing stale or half-finished numbers. That's deliberate — a blank or flagged dashboard is honest; a confident-looking wrong one is not.
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 · THE FIVE DASHBOARDS -->
+  <section class="slide">
+    <div class="slide-body">
+      <div class="kicker reveal"><span>The five live dashboards</span></div>
+      <h2 class="title reveal">Five views, five jobs</h2>
+      <div class="grid g5">
+        <div class="card reveal"><div class="dashname"><span class="sw" style="background:var(--accent-2)"></span>Creator</div><p>Who to partner with. Scores and filters creators across YouTube, TikTok and X for our markets.</p></div>
+        <div class="card reveal"><div class="dashname"><span class="sw" style="background:var(--good)"></span>Creative</div><p>Which ads are working. Spend and installs, so we back the winners and cut what's wasting money.</p></div>
+        <div class="card reveal"><div class="dashname"><span class="sw" style="background:var(--gold)"></span>Trend</div><p>What's rising. A weekly scan of what's gaining attention in our space.</p></div>
+        <div class="card reveal"><div class="dashname"><span class="sw" style="background:var(--accent)"></span>Strategy</div><p>Where to focus next. Market priorities and the gaps competitors are leaving open.</p></div>
+        <div class="card reveal"><div class="dashname"><span class="sw" style="background:var(--warn)"></span>Merchant</div><p>Who to sign. Public places to reach businesses that could accept Speed.</p></div>
+      </div>
+      <p class="foot-note reveal">Same look, same rules, same trusted data — each one just answers a different question.</p>
+    </div>
+  </section>
+
+  <!-- 8 · HANDOVER -->
+  <section class="slide">
+    <div class="slide-body">
+      <div class="kicker reveal"><span>What handover means for you</span></div>
+      <h2 class="title reveal">Your part is the easy part</h2>
+      <div class="grid g3">
+        <div class="card reveal">
+          <div class="col-head do"><span class="chip">✅</span>You'll do</div>
+          <ul class="plist good">
+            <li><span class="dot"></span><span>Read the dashboards and trust them</span></li>
+            <li><span class="dot"></span><span>Filter and sort to answer a question</span></li>
+            <li><span class="dot"></span><span>Use the numbers in real decisions</span></li>
+            <li><span class="dot"></span><span>Notice when something looks off — a stale date, an odd count</span></li>
+          </ul>
+        </div>
+        <div class="card reveal">
+          <div class="col-head dont"><span class="chip">🚫</span>You won't touch</div>
+          <ul class="plist">
+            <li><span class="dot"></span><span>Any code</span></li>
+            <li><span class="dot"></span><span>The database directly</span></li>
+            <li><span class="dot"></span><span>Rebuilding pages by hand</span></li>
+            <li><span class="dot"></span><span>Running anything technical</span></li>
+          </ul>
+        </div>
+        <div class="card reveal">
+          <div class="col-head eng"><span class="chip">🛠️</span>Ask an engineer for</div>
+          <ul class="plist warn">
+            <li><span class="dot"></span><span>A new data source</span></li>
+            <li><span class="dot"></span><span>A change to how scoring works</span></li>
+            <li><span class="dot"></span><span>A daily run that failed</span></li>
+            <li><span class="dot"></span><span>A brand-new dashboard</span></li>
+          </ul>
+        </div>
+      </div>
+      <p class="foot-note reveal">Short version: <b>reading and judging is yours; building and fixing is the engineer's.</b></p>
+    </div>
+  </section>
+
+  <!-- 9 · CLOSING -->
+  <section class="slide title-slide">
+    <div class="slide-body">
+      <div class="kicker reveal"><span>Let's look at the real thing</span></div>
+      <h1 class="reveal">Now, the live<br>walkthrough</h1>
+      <p class="lead reveal">We'll open each dashboard together and read it end to end — where to look first, what each number means, and how to tell at a glance that it's current.</p>
+      <div class="hintchip reveal">Questions welcome at any point — nothing here is off-limits.</div>
+    </div>
+  </section>
+
+</div>
+
+<!-- chrome -->
+<div class="zone l" id="zoneL" aria-label="Previous"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></div>
+<div class="zone r" id="zoneR" aria-label="Next"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></div>
+
+<div class="brandmark"><span class="bolt">⚡</span>Speed Wallet <span class="tag">· Dashboard System</span></div>
+<div class="dots" id="dots"></div>
+<div class="counter"><span id="pageno">1 / 9</span><span class="keys">← → · space · F</span></div>
+
+<script>
+(function(){
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const N = slides.length;
+  let i = 0;
+  const dotsWrap = document.getElementById('dots');
+  const pageno = document.getElementById('pageno');
+
+  // build dots
+  slides.forEach((_,k)=>{
+    const b=document.createElement('button');
+    b.setAttribute('aria-label','Slide '+(k+1));
+    b.addEventListener('click',()=>go(k));
+    dotsWrap.appendChild(b);
+  });
+  const dots = Array.from(dotsWrap.children);
+
+  function render(){
+    slides.forEach((s,k)=>s.classList.toggle('active', k===i));
+    dots.forEach((d,k)=>d.classList.toggle('on', k===i));
+    pageno.textContent = (i+1)+' / '+N;
+  }
+  function go(n){ i = Math.max(0, Math.min(N-1, n)); render();
+    try{ history.replaceState(null,'', '?s='+(i+1)); }catch(_){}
+  }
+  function next(){ if(i<N-1) go(i+1); }
+  function prev(){ if(i>0) go(i-1); }
+
+  document.addEventListener('keydown', (e)=>{
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '||e.key==='Spacebar'){ e.preventDefault(); next(); }
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); prev(); }
+    else if(e.key==='Home'){ e.preventDefault(); go(0); }
+    else if(e.key==='End'){ e.preventDefault(); go(N-1); }
+    else if(e.key==='f'||e.key==='F'){ e.preventDefault(); toggleFs(); }
+  });
+  document.getElementById('zoneL').addEventListener('click', prev);
+  document.getElementById('zoneR').addEventListener('click', next);
+
+  function toggleFs(){
+    if(!document.fullscreenElement){ (document.documentElement.requestFullscreen||function(){}).call(document.documentElement); }
+    else { (document.exitFullscreen||function(){}).call(document); }
+  }
+
+  // deep-link: ?s=N opens on slide N (used for present hand-off + QA screenshots)
+  const q = new URLSearchParams(location.search).get('s');
+  if(q){ const n = parseInt(q,10); if(!isNaN(n)) i = Math.max(0, Math.min(N-1, n-1)); }
+  render();
+})();
+</script>
+</body>
+</html>

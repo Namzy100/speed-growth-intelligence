@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Speed Wallet — Growth Intelligence · Leadership Deck</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel-2:#1b2230;
+    --hairline:rgba(255,255,255,0.09); --hairline-strong:rgba(255,255,255,0.16);
+    --text:#edf1f7; --muted:#9aa4b2; --faint:#6b7585;
+    --accent:#6e40c9; --accent-2:#a371f7;
+    --good:#3fb950; --warn:#e3b341; --bad:#f85149; --gold:#ffd66e;
+    --grad:linear-gradient(120deg,#6e40c9,#a371f7);
+    --r-lg:18px; --r-md:13px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%;}
+  body{
+    color:var(--text); overflow:hidden;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    letter-spacing:-0.01em; -webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(1200px 700px at 50% -12%, rgba(110,64,201,0.22), transparent 58%),
+      radial-gradient(900px 560px at 100% 0%, rgba(163,113,245,0.10), transparent 52%),
+      radial-gradient(760px 520px at 0% 10%, rgba(63,185,80,0.05), transparent 50%),
+      var(--bg);
+  }
+
+  .deck{position:fixed; inset:0;}
+  .slide{
+    position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center;
+    padding:6vh 8vw; opacity:0; visibility:hidden; transform:translateY(14px) scale(0.995);
+    transition:opacity .42s cubic-bezier(.2,.7,.2,1), transform .42s cubic-bezier(.2,.7,.2,1), visibility .42s;
+  }
+  .slide.active{opacity:1; visibility:visible; transform:none;}
+
+  /* shared type */
+  .eyebrow{font-size:13px; text-transform:uppercase; letter-spacing:0.18em; color:var(--accent-2); font-weight:750; margin-bottom:22px; display:flex; align-items:center; gap:10px;}
+  .eyebrow::before{content:""; width:26px; height:2px; background:var(--grad); border-radius:2px;}
+  h1{font-size:clamp(34px,5.4vw,68px); font-weight:800; line-height:1.04; letter-spacing:-0.035em;
+    background:linear-gradient(180deg,#ffffff,#c5bdec); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
+  h2{font-size:clamp(28px,4.2vw,50px); font-weight:790; line-height:1.08; letter-spacing:-0.03em; max-width:18ch;}
+  h2 .hl{background:var(--grad); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
+  .lede{font-size:clamp(16px,1.7vw,21px); color:var(--muted); margin-top:18px; max-width:50ch; line-height:1.5;}
+
+  /* brand bolt */
+  .bolt{background:linear-gradient(180deg,#ffd66e,#f0a02a); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 0 10px rgba(240,160,42,0.45));}
+
+  /* SLIDE 1 — title */
+  .title-wrap .brand{font-size:15px; font-weight:740; letter-spacing:-0.01em; display:flex; align-items:center; gap:9px; margin-bottom:34px; color:var(--muted);}
+  .title-wrap .brand .bolt{font-size:20px;}
+  .title-wrap .sub{font-size:clamp(17px,2.1vw,26px); color:var(--text); font-weight:600; margin-top:24px;}
+  .title-wrap .byline{margin-top:40px; font-size:15px; color:var(--faint);}
+  .title-wrap .byline b{color:var(--text); font-weight:650;}
+
+  /* generic grids */
+  .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-top:38px;}
+  .grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:22px; margin-top:40px;}
+  .grid-5{display:grid; grid-template-columns:repeat(5,1fr); gap:18px; margin-top:46px;}
+  @media(max-width:900px){.grid-2,.grid-3,.grid-5{grid-template-columns:1fr 1fr;}}
+
+  .box{background:linear-gradient(180deg,var(--panel),rgba(22,27,34,0.5)); border:1px solid var(--hairline);
+    border-radius:var(--r-lg); padding:26px; position:relative; overflow:hidden;}
+  .box::before{content:""; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--grad);}
+  .box .b-num{font-size:13px; font-weight:800; color:var(--accent-2);}
+  .box .b-title{font-size:clamp(18px,1.9vw,23px); font-weight:740; margin:10px 0 7px; letter-spacing:-0.02em;}
+  .box .b-sub{font-size:14.5px; color:var(--muted); line-height:1.5;}
+
+  /* KPI cards */
+  .kpi{background:linear-gradient(180deg,var(--panel),rgba(22,27,34,0.5)); border:1px solid var(--hairline);
+    border-radius:var(--r-md); padding:24px 20px; text-align:center;}
+  .kpi .v{font-size:clamp(28px,3.6vw,46px); font-weight:800; letter-spacing:-0.03em; font-variant-numeric:tabular-nums;
+    background:linear-gradient(180deg,#fff,#cfd6e4); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
+  .kpi.bad .v{background:none; -webkit-text-fill-color:initial; color:var(--bad);}
+  .kpi .l{font-size:11.5px; text-transform:uppercase; letter-spacing:0.07em; color:var(--faint); margin-top:11px; font-weight:700;}
+
+  /* bar comparison (slide 4) */
+  .bars{margin-top:46px; max-width:1000px;}
+  .bar-row{margin:26px 0;}
+  .bar-head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px;}
+  .bar-name{font-size:clamp(16px,1.8vw,21px); font-weight:680;}
+  .bar-val{font-size:clamp(20px,2.6vw,32px); font-weight:800; font-variant-numeric:tabular-nums;}
+  .bar-track{height:30px; background:rgba(255,255,255,0.05); border-radius:9px; overflow:hidden;}
+  .bar-fill{height:100%; border-radius:9px; min-width:46px; display:flex; align-items:center; justify-content:flex-end;}
+  .bar-fill.good{background:linear-gradient(90deg,#2c8c3c,var(--good));}
+  .bar-fill.bad{background:linear-gradient(90deg,#8c2b27,var(--bad));}
+  .bar-note{margin-top:34px; font-size:clamp(16px,1.7vw,20px); color:var(--muted);}
+  .bar-note b{color:var(--text);}
+
+  /* big number (slide 5) */
+  .funnel{display:flex; align-items:center; gap:clamp(16px,3vw,46px); margin-top:30px; flex-wrap:wrap;}
+  .mega{font-size:clamp(72px,15vw,190px); font-weight:850; line-height:0.9; letter-spacing:-0.05em; color:var(--bad);
+    text-shadow:0 0 60px rgba(248,81,73,0.35);}
+  .funnel-steps{display:flex; align-items:center; gap:18px; font-variant-numeric:tabular-nums;}
+  .fstep .fv{font-size:clamp(26px,3.4vw,44px); font-weight:800;}
+  .fstep .fl{font-size:13px; color:var(--faint); text-transform:uppercase; letter-spacing:0.07em; font-weight:700; margin-top:4px;}
+  .farrow{font-size:34px; color:var(--faint);}
+  .rec{margin-top:34px; display:inline-flex; align-items:center; gap:11px; font-size:clamp(16px,1.8vw,21px); font-weight:700;
+    color:var(--bad); background:rgba(248,81,73,0.12); border:1px solid rgba(248,81,73,0.32); padding:12px 20px; border-radius:12px;}
+
+  /* donut (slide 6) */
+  .donut-wrap{display:flex; align-items:center; gap:clamp(30px,6vw,80px); margin-top:34px; flex-wrap:wrap;}
+  .donut{width:clamp(200px,26vw,300px); aspect-ratio:1; border-radius:50%; position:relative;
+    background:conic-gradient(var(--accent-2) 0 67%, #2a3142 67% 100%);}
+  .donut::after{content:""; position:absolute; inset:24%; border-radius:50%; background:var(--bg);}
+  .donut .center{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:1;}
+  .donut .center .pct{font-size:clamp(34px,4.6vw,58px); font-weight:850; color:var(--accent-2); line-height:1;}
+  .donut .center .cl{font-size:12px; color:var(--faint); text-transform:uppercase; letter-spacing:0.08em; font-weight:700; margin-top:6px;}
+  .legend{display:flex; flex-direction:column; gap:20px;}
+  .leg{display:flex; align-items:center; gap:14px;}
+  .leg .dot{width:16px; height:16px; border-radius:5px; flex:0 0 auto;}
+  .leg .dot.o{background:var(--accent-2);} .leg .dot.p{background:#2a3142;}
+  .leg .lv{font-size:clamp(22px,2.6vw,32px); font-weight:800; font-variant-numeric:tabular-nums;}
+  .leg .ll{font-size:14px; color:var(--muted);}
+
+  /* EU cards (slide 7) */
+  .eu-card{background:linear-gradient(180deg,var(--panel),rgba(22,27,34,0.5)); border:1px solid var(--hairline);
+    border-radius:var(--r-lg); padding:30px 26px; text-align:center; position:relative;}
+  .eu-card .rk{font-size:13px; font-weight:800; letter-spacing:0.06em; color:var(--gold);}
+  .eu-card .country{font-size:clamp(24px,2.8vw,34px); font-weight:790; margin:12px 0 16px; letter-spacing:-0.02em;}
+  .eu-card .inst{font-size:clamp(30px,4vw,46px); font-weight:850; font-variant-numeric:tabular-nums;
+    background:var(--grad); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
+  .eu-card .il{font-size:13px; color:var(--faint); margin-top:7px; text-transform:uppercase; letter-spacing:0.06em; font-weight:700;}
+  .eu-card.first{border-color:rgba(240,160,42,0.4); box-shadow:0 0 0 1px rgba(240,160,42,0.15), 0 18px 50px -20px rgba(240,160,42,0.3);}
+
+  /* white space table (slide 8) */
+  .ws{margin-top:40px; max-width:980px; border:1px solid var(--hairline); border-radius:var(--r-md); overflow:hidden;}
+  .ws table{width:100%; border-collapse:collapse; font-size:clamp(15px,1.7vw,19px);}
+  .ws th,.ws td{padding:18px 22px; border-bottom:1px solid var(--hairline); text-align:center;}
+  .ws th{background:#10151d; color:var(--faint); font-size:12px; text-transform:uppercase; letter-spacing:0.07em; font-weight:750;}
+  .ws th:first-child,.ws td:first-child{text-align:left; font-weight:700;}
+  .ws tbody tr:last-child td{border-bottom:none;}
+  .ws .yes{color:var(--faint); font-weight:700;}
+  .ws .no{color:var(--good); font-weight:800;}
+  .ws-call{margin-top:26px; display:inline-flex; align-items:center; gap:12px; font-size:clamp(17px,1.9vw,22px); font-weight:750;
+    color:var(--good); background:rgba(63,185,80,0.1); border:1px solid rgba(63,185,80,0.3); padding:13px 22px; border-radius:12px;}
+
+  /* segments (slide 9) */
+  .seg-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px; margin-top:30px;}
+  @media(max-width:900px){.seg-grid{grid-template-columns:1fr;}}
+  .seg{background:linear-gradient(180deg,var(--panel),rgba(22,27,34,0.5)); border:1px solid var(--hairline); border-radius:var(--r-lg); padding:26px;}
+  .seg .sv{font-size:clamp(36px,4.6vw,56px); font-weight:850; font-variant-numeric:tabular-nums; letter-spacing:-0.03em;}
+  .seg .sn{font-size:15px; color:var(--muted); margin-top:6px; font-weight:600;}
+  .seg.c .sv{color:var(--accent-2);} .seg.r .sv{color:var(--good);} .seg.i .sv{color:var(--gold);}
+  .pipe-stats{display:flex; gap:clamp(24px,5vw,64px); margin-top:34px; flex-wrap:wrap;}
+  .pipe-stat .pv{font-size:clamp(28px,3.4vw,42px); font-weight:850; font-variant-numeric:tabular-nums;}
+  .pipe-stat .pl{font-size:13px; color:var(--faint); text-transform:uppercase; letter-spacing:0.06em; font-weight:700; margin-top:5px;}
+
+  /* next steps (slide 10) */
+  .steps{display:flex; flex-direction:column; gap:18px; margin-top:36px; max-width:900px;}
+  .step{display:flex; align-items:center; gap:24px; background:linear-gradient(180deg,var(--panel),rgba(22,27,34,0.5));
+    border:1px solid var(--hairline); border-radius:var(--r-md); padding:22px 26px;}
+  .step .n{font-size:clamp(28px,3.4vw,42px); font-weight:850; color:var(--accent-2); font-variant-numeric:tabular-nums; flex:0 0 auto; width:52px;}
+  .step .st{font-size:clamp(18px,2vw,25px); font-weight:740; letter-spacing:-0.02em;}
+  .step .sd{font-size:14.5px; color:var(--muted); margin-top:3px;}
+
+  /* chrome: progress + counter + hint */
+  .progress{position:fixed; top:0; left:0; height:3px; background:var(--grad); width:0; transition:width .42s ease; z-index:10;}
+  .counter{position:fixed; bottom:22px; right:26px; font-size:13px; color:var(--faint); font-variant-numeric:tabular-nums; font-weight:700; z-index:10;}
+  .counter b{color:var(--text);}
+  .hint{position:fixed; bottom:22px; left:26px; font-size:12px; color:var(--faint); z-index:10;}
+  .hint kbd{background:var(--panel-2); border:1px solid var(--hairline); border-radius:5px; padding:1px 7px; font-family:inherit; font-size:11px; color:var(--muted);}
+  .nav{position:fixed; bottom:18px; left:50%; transform:translateX(-50%); display:flex; gap:10px; z-index:10;}
+  .nav button{background:var(--panel); border:1px solid var(--hairline); color:var(--muted); width:38px; height:34px; border-radius:9px; cursor:pointer; font-size:16px; transition:.15s;}
+  .nav button:hover{border-color:var(--accent); color:var(--text);}
+  .footer-brand{position:fixed; top:20px; right:26px; font-size:13px; font-weight:740; color:var(--muted); display:flex; align-items:center; gap:8px; z-index:10;}
+
+  @media (prefers-reduced-motion: reduce){.slide{transition:opacity .15s;} *{transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<div class="footer-brand"><span class="bolt">⚡</span>Speed Wallet</div>
+
+<div class="deck" id="deck">
+
+  <!-- 1 TITLE -->
+  <section class="slide title-wrap">
+    <div class="brand"><span class="bolt">⚡</span>Speed Wallet</div>
+    <h1>Speed Wallet<br>Growth Intelligence</h1>
+    <div class="sub">Marketing &amp; Analytics Internship — Week 4 Update</div>
+    <div class="byline"><b>Naman Behl</b> · June 30, 2026</div>
+  </section>
+
+  <!-- 2 WHAT WAS BUILT -->
+  <section class="slide">
+    <div class="eyebrow">What was built</div>
+    <h2>Four intelligence systems, <span class="hl">running daily</span></h2>
+    <div class="grid-2">
+      <div class="box"><div class="b-num">01</div><div class="b-title">Daily Performance Pipeline</div><div class="b-sub">Adjust + Meta install, spend &amp; retention data — auto-syncing to dashboards every day.</div></div>
+      <div class="box"><div class="b-num">02</div><div class="b-title">Creator Intelligence</div><div class="b-sub">347 creators discovered, scored &amp; ranked as potential Speed partners.</div></div>
+      <div class="box"><div class="b-num">03</div><div class="b-title">Competitive Intelligence</div><div class="b-sub">Ad-library scans across 4 markets — Robinhood, Crypto.com, Kraken &amp; more.</div></div>
+      <div class="box"><div class="b-num">04</div><div class="b-title">EU Market Analysis</div><div class="b-sub">Market prioritization &amp; channel playbooks — Germany ranked #1 to enter.</div></div>
+    </div>
+  </section>
+
+  <!-- 3 THE NUMBERS -->
+  <section class="slide">
+    <div class="eyebrow">The numbers · last 30 days</div>
+    <h2>Where Speed stands <span class="hl">today</span></h2>
+    <div class="grid-5">
+      <div class="kpi"><div class="v">42,260</div><div class="l">Total installs</div></div>
+      <div class="kpi"><div class="v">$3.17</div><div class="l">Best CPI</div></div>
+      <div class="kpi"><div class="v">26.2%</div><div class="l">D1 retention</div></div>
+      <div class="kpi bad"><div class="v">0.09%</div><div class="l">Re-engagement CVR</div></div>
+      <div class="kpi"><div class="v">$6,803</div><div class="l">Meta spend</div></div>
+    </div>
+  </section>
+
+  <!-- 4 FINDING 1 -->
+  <section class="slide">
+    <div class="eyebrow">Finding 1</div>
+    <h2>One campaign is <span class="hl">carrying paid acquisition</span></h2>
+    <div class="bars">
+      <div class="bar-row">
+        <div class="bar-head"><span class="bar-name">Payday Android Broad+</span><span class="bar-val" style="color:var(--good)">$3.17</span></div>
+        <div class="bar-track"><div class="bar-fill good" style="width:4.1%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-head"><span class="bar-name">Cash Deposit</span><span class="bar-val" style="color:var(--bad)">$77</span></div>
+        <div class="bar-track"><div class="bar-fill bad" style="width:100%"></div></div>
+      </div>
+      <div class="bar-note">Cost per install — <b>24× cheaper</b> on the Payday campaign. It is doing the heavy lifting while others bleed.</div>
+    </div>
+  </section>
+
+  <!-- 5 FINDING 2 -->
+  <section class="slide">
+    <div class="eyebrow">Finding 2</div>
+    <h2>Re-engagement is <span class="hl">burning budget</span></h2>
+    <div class="funnel">
+      <div class="mega">0.09%</div>
+      <div>
+        <div class="funnel-steps">
+          <div class="fstep"><div class="fv">68,274</div><div class="fl">Clicks</div></div>
+          <div class="farrow">→</div>
+          <div class="fstep"><div class="fv">60</div><div class="fl">Installs</div></div>
+        </div>
+        <div class="lede" style="margin-top:14px">A conversion rate of basically zero. Spend is going out, almost nothing is coming back.</div>
+        <div class="rec">⚠ Recommendation: pause immediately</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 FINDING 3 -->
+  <section class="slide">
+    <div class="eyebrow">Finding 3</div>
+    <h2>Organic is doing <span class="hl">67% of the work</span> — for free</h2>
+    <div class="donut-wrap">
+      <div class="donut"><div class="center"><div class="pct">67%</div><div class="cl">Organic</div></div></div>
+      <div class="legend">
+        <div class="leg"><span class="dot o"></span><div><div class="lv">27,820</div><div class="ll">Organic installs · zero cost</div></div></div>
+        <div class="leg"><span class="dot p"></span><div><div class="lv">14,440</div><div class="ll">Paid installs</div></div></div>
+      </div>
+    </div>
+    <div class="lede">The product is pulling its own demand. Paid should amplify what's already working — not replace it.</div>
+  </section>
+
+  <!-- 7 EU OPPORTUNITY -->
+  <section class="slide">
+    <div class="eyebrow">EU opportunity</div>
+    <h2>Demand is <span class="hl">already there</span>, unprompted</h2>
+    <div class="grid-3">
+      <div class="eu-card first"><div class="rk">🥇 RANK 1</div><div class="country">Germany</div><div class="inst">1,657</div><div class="il">Organic installs · no paid spend</div></div>
+      <div class="eu-card"><div class="rk">🥈 RANK 2</div><div class="country">United Kingdom</div><div class="inst">873</div><div class="il">Organic installs</div></div>
+      <div class="eu-card"><div class="rk">🥉 RANK 3</div><div class="country">Portugal</div><div class="inst">239</div><div class="il">Organic installs</div></div>
+    </div>
+  </section>
+
+  <!-- 8 COMPETITIVE WHITE SPACE -->
+  <section class="slide">
+    <div class="eyebrow">Competitive white space</div>
+    <h2>Nobody is running <span class="hl">remittance ads</span></h2>
+    <div class="ws">
+      <table>
+        <thead><tr><th>Competitor</th><th>Trading / Bonuses</th><th>Cross-border fees · Remittance</th></tr></thead>
+        <tbody>
+          <tr><td>Robinhood</td><td class="yes">✓ Yes</td><td class="no">✗ Not touching</td></tr>
+          <tr><td>Crypto.com</td><td class="yes">✓ Yes</td><td class="no">✗ Not touching</td></tr>
+          <tr><td>Kraken</td><td class="yes">✓ Yes</td><td class="no">✗ Not touching</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="ws-call">✓ Zero-fee remittance is Speed's open lane — uncontested.</div>
+  </section>
+
+  <!-- 9 CREATOR PIPELINE -->
+  <section class="slide">
+    <div class="eyebrow">Creator pipeline</div>
+    <h2>A scored partner pipeline, <span class="hl">ready to activate</span></h2>
+    <div class="pipe-stats">
+      <div class="pipe-stat"><div class="pv">347</div><div class="pl">Creators scored</div></div>
+      <div class="pipe-stat"><div class="pv">44</div><div class="pl">Mimanshi-vetted</div></div>
+      <div class="pipe-stat"><div class="pv">35</div><div class="pl">Outreach briefs ready</div></div>
+    </div>
+    <div class="seg-grid">
+      <div class="seg c"><div class="sv">189</div><div class="sn">Crypto-curious</div></div>
+      <div class="seg r"><div class="sv">39</div><div class="sn">Remittance</div></div>
+      <div class="seg i"><div class="sv">36</div><div class="sn">iGaming</div></div>
+    </div>
+  </section>
+
+  <!-- 10 WHAT'S NEXT -->
+  <section class="slide">
+    <div class="eyebrow">What's next</div>
+    <h2>Three priorities <span class="hl">to move now</span></h2>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><div><div class="st">Scale Payday Android Broad+</div><div class="sd">Shift budget from the $77-CPI waste into our proven $3.17 winner.</div></div></div>
+      <div class="step"><div class="n">2</div><div><div class="st">Launch the Germany EU push</div><div class="sd">1,657 organic installs already waiting — activate the #1 market.</div></div></div>
+      <div class="step"><div class="n">3</div><div><div class="st">Start creator outreach</div><div class="sd">5 high-fit partners identified and ready to brief.</div></div></div>
+    </div>
+  </section>
+
+</div>
+
+<div class="nav"><button id="prev" aria-label="Previous">‹</button><button id="next" aria-label="Next">›</button></div>
+<div class="counter"><b id="cur">1</b> / <span id="tot">10</span></div>
+<div class="hint"><kbd>←</kbd> <kbd>→</kbd> <kbd>space</kbd> · or click</div>
+
+<script>
+  const slides = Array.from(document.querySelectorAll(".slide"));
+  const total = slides.length;
+  let idx = 0;
+  document.getElementById("tot").textContent = total;
+
+  function show(n){
+    idx = Math.max(0, Math.min(total - 1, n));
+    slides.forEach((s, i) => s.classList.toggle("active", i === idx));
+    document.getElementById("cur").textContent = idx + 1;
+    document.getElementById("progress").style.width = ((idx + 1) / total * 100) + "%";
+  }
+  const next = () => show(idx + 1);
+  const prev = () => show(idx - 1);
+
+  document.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown"){ e.preventDefault(); next(); }
+    else if (e.key === "ArrowLeft" || e.key === "PageUp"){ e.preventDefault(); prev(); }
+    else if (e.key === "Home"){ e.preventDefault(); show(0); }
+    else if (e.key === "End"){ e.preventDefault(); show(total - 1); }
+  });
+
+  // Click anywhere advances; clicking the nav buttons handles its own direction.
+  document.getElementById("deck").addEventListener("click", next);
+  document.getElementById("next").addEventListener("click", e => { e.stopPropagation(); next(); });
+  document.getElementById("prev").addEventListener("click", e => { e.stopPropagation(); prev(); });
+
+  show(0);
+</script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+Outreach Brief — cryptocurrency for beginners (YouTube)
+Segment: crypto-curious | Score: 56.1/100 | 24,500 followers
+------------------------------------------------------------
+The "cryptocurrency for beginners" channel is exactly the kind of partner Speed should be talking to, because their whole brand is built around demystifying Bitcoin for people who are curious but intimidated. That's our crypto-curious segment almost word for word. The audience isn't a room full of traders looking for the next memecoin — they're newcomers trying to figure out what Bitcoin actually does and whether it's for them. Speed answers that question with something tangible: a wallet you can actually use to pay for things.
+
+Given that audience, lead with simplicity and utility, not technical depth. The strongest features to highlight are zero-fee instant Lightning payments (Bitcoin that works in seconds, not the slow expensive thing beginners assume it is), stablecoin support so nervous first-timers can hold steady value, and Speed Stacks, which makes "earning sats on everyday purchases" a concrete, friendly entry point.
+
+Three talking points to anchor the pitch: first, Speed bridges the gap between "I've heard of Bitcoin" and "I just used Bitcoin," which mirrors their channel's exact mission. Second, it's available on iOS and Android and built for everyday people, so there's no scary onboarding. Third, the rewards angle gives them genuinely fun, entertaining content to make — fitting their humour and entertainment leanings.
+
+For the CTA, propose a sponsored walkthrough video where they download Speed and make a real first payment on camera, with a tracked signup link.
+
+One thing to avoid: don't frame this as an investment or trading opportunity. Speed is about spending and using Bitcoin, not speculating on price.

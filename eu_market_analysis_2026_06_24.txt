@@ -1,0 +1,57 @@
+SPEED WALLET — EU MARKET PRIORITIZATION MEMO
+==============================================
+
+EXECUTIVE SUMMARY
+-----------------
+Speed's install data reveals meaningful unpaid demand already present in Germany (1,657) and the UK (873), validating both as high-priority targets before any paid acquisition begins. Layered against Speed's three core segments — remittance, iGaming, and crypto-curious — two markets (UK and Germany) offer multi-segment upside, while Portugal offers a uniquely concentrated single-corridor opportunity in the Brazil remittance segment. Enter these three in ranked order.
+
+
+PER-MARKET ASSESSMENT
+---------------------
+
+United Kingdom
+Diaspora: Unlocks Speed's two strongest source corridors simultaneously. Estimated 1.5M+ Indian-origin residents and 200k+ Nigeria-born residents (plus far larger heritage communities) make UK-to-India and UK-to-Nigeria among Europe's highest-volume remittance corridors. Note: diaspora population figures are estimates and should be verified against ONS data before budget allocation.
+iGaming: Fully legal under the UKGC. Mature, competitive market — Speed's zero-fee and instant-settlement angle is a genuine differentiator, but operator partnership deals will be necessary to compete.
+Operational note: As a non-EU jurisdiction post-Brexit, UK requires a separate regulatory track from EMI licensing within the EU.
+
+Germany
+Diaspora: Fast-growing Indian skilled-migrant community; Nigerian and Brazilian populations are smaller but present. Remittance corridors are less concentrated on Speed's specific sources than the UK, but the sheer market size compensates. Diaspora figures are estimates.
+iGaming: Legal since 2021 under the GlueNeuRStV, but deposit limits and behavioral controls create friction that Lightning's instant, low-value transactions can partially sidestep by positioning Speed as a crypto wallet rather than a gambling payment tool directly.
+Operational note: Highest existing organic install count among EU candidates (1,657) — the demand signal is real and is already there unprompted.
+
+Spain
+Diaspora: Large Latin American diaspora broadly, but Mexican-origin residents are modest. Colombian, Venezuelan, and Ecuadorian communities dominate — corridors Speed does not yet serve.
+iGaming: Regulated and established under DGOJ. Functional but not a breakout opportunity given Speed's current source-country mix.
+Operational note: Lower install count (317) and weak corridor alignment with Speed's four source countries reduce near-term priority.
+
+Portugal
+Diaspora: Brazilian nationals are the single largest foreign community, estimated at 400k+, with full language parity. Portugal-to-Brazil is the most concentrated single corridor available across all five candidates relative to market size. Diaspora figures are estimates.
+iGaming: Regulated under SRIJ; growing but smaller market than UK or Germany.
+Operational note: Small total market, but the Brazil corridor alignment is unusually precise for Speed's existing user base.
+
+Netherlands
+Diaspora: Smaller populations from Speed's specific source countries. Limited corridor concentration.
+iGaming: New regulated market since October 2021 under the KSA — early-mover advantage exists but the diaspora remittance case is weak.
+Operational note: Strong fintech adoption culture, but without corridor depth, Speed's differentiated hook does not land cleanly. Deprioritize.
+
+
+TOP 3 EU MARKETS TO ENTER FIRST
+--------------------------------
+
+Rank 1 — Germany
+Rationale: 1,657 organic installs is the loudest demand signal in the entire EU candidate set. Speed already has users it has not yet activated or monetized. The crypto-curious segment is deep, the Indian remittance corridor is growing, and Germany's market size means even modest penetration is materially valuable. It beats the UK right now because it is inside the EU regulatory perimeter, meaning a single EMI license can serve it alongside future EU expansion.
+
+Rank 2 — United Kingdom
+Rationale: The UK-to-India and UK-to-Nigeria corridors are Speed's two highest-volume source-country matches in Europe, and the iGaming market is the most developed. It ranks second only because it requires a separate regulatory track outside the EU.
+
+Rank 3 — Portugal
+Rationale: The Brazil corridor concentration is unmatched on a per-capita basis. A small, focused launch among Brazilian nationals produces a dense, word-of-mouth-driven install cluster before scaling.
+
+
+SUGGESTED FIRST MOVES
+---------------------
+Germany: Lead with the crypto-curious segment — position Speed as the simplest way to hold and send Bitcoin — then activate the Indian remittance corridor via community and employer partnerships.
+
+United Kingdom: Lead with the Nigerian and Indian remittance corridors directly, using zero-fee messaging in community channels. Layer iGaming operator partnerships in month three onward.
+
+Portugal: Lead entirely on the Brazil corridor. One language, one corridor, one message — zero fees on sends to Brazil. Let organic word-of-mouth among the Brazilian community do the acquisition work.

@@ -1,0 +1,12 @@
+Outreach Brief — Crypto Warehouse (YouTube)
+Segment: crypto-curious | Score: 62.6/100 | 7,010 followers
+------------------------------------------------------------
+Crypto Warehouse sits squarely in the crypto-curious lane, which is exactly where Speed wins. Their channel covers altcoins, ETH, Bitcoin, NFTs, and the broader "how do I actually get into this" investing conversation — and that audience is full of people who understand crypto conceptually but haven't found a reason to use it in daily life. Speed gives them that reason: a Bitcoin Lightning wallet that works for real purchases, not just speculation.
+
+For this audience, the hook is simplicity and utility, not fee math or trading angles. Lead with how Speed makes Bitcoin feel usable — instant Lightning payments that settle in seconds, zero fees, and a clean iOS/Android experience that doesn't require you to be a power user. Speed Stacks is the standout here: earning sats on everyday purchases is a tangible "why bother" answer for someone curious but not yet committed. Stablecoin support (USDT, USDC) is a nice secondary point for viewers nervous about volatility.
+
+Three talking points for the pitch: first, Speed turns the theory their channel teaches into something viewers can actually do today. Second, Speed Stacks gives them a fresh content angle — earning Bitcoin by spending, not buying. Third, the stablecoin option lets cautious viewers participate without diving into price swings.
+
+Recommended CTA: invite them to do a hands-on "I tried using Bitcoin for everyday payments" walkthrough video, with a tracked download link and a Speed Stacks demo.
+
+One thing to avoid: don't frame Speed as a trading or investing tool. This audience already gets that elsewhere — Speed's edge is spending, not speculating.

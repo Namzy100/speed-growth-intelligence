@@ -1,0 +1,12 @@
+[08:11:44] === Speed trend relevance checker (scheduled, Monday cron) ===
+[08:11:44] Wall-clock budget armed: 120s (hard, SIGALRM).
+[08:11:44] Grading 30 candidate items from the latest pipeline output.
+[08:11:44] Deterministic invariants OK for all 30 items (fit=0.4/0.3/0.3, gate enforced).
+[08:11:45] Reusing agent agent_011EhCoJmWLp3hG41igMsmNo + env env_012Shv3pTtHTVM8irkQ8ZHhA
+[08:11:46] Session sesn_018edb5k3r1b7WLTKiSpTksx created.
+[08:11:47] Outcome defined (max_iterations=3); grading 30 items.
+[08:13:44]   BUDGET EXPIRED (hard, SIGALRM): wall-clock budget of 120s exceeded
+[08:13:44]   session sesn_018edb5k3r1b7WLTKiSpTksx: interrupt sent (agent pausing).
+[08:13:49]   session sesn_018edb5k3r1b7WLTKiSpTksx: archived from 'idle' (billing stopped).
+[08:13:49] 
+[08:13:49] === VERDICT: TIMEOUT (iterations=0, rejudge_calls=0, elapsed=125s of 120s budget) ===

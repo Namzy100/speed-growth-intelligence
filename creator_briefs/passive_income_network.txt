@@ -1,0 +1,12 @@
+Outreach Brief — Passive Income Network (YouTube)
+Segment: crypto-curious | Score: 58.1/100 | 5,790 followers
+------------------------------------------------------------
+Passive Income Network sits right in Speed's crypto-curious wheel house, and their audience makes them worth a conversation. With roughly two-thirds of their content focused on Bitcoin, Ethereum, and DeFi, plus that recurring "knowledge" and "society" framing, they've built a following of people who are curious about crypto but mostly approaching it as investors looking in from the outside. That's exactly the gap Speed fills — it turns crypto from something you watch into something you actually use day to day.
+
+Because their viewers lean educational and aspirational rather than degen, the simplicity and everyday-utility angle is the strongest hook. Lead with how Speed lets ordinary people spend Bitcoin over Lightning with zero fees, settled in seconds, no technical headache. The Speed Stacks rewards program is a natural fit too — earning sats on regular purchases speaks directly to a "passive income" audience without overpromising.
+
+Three talking points worth pitching: first, Speed bridges the gap between learning about Bitcoin and putting it to work, which complements their educational content rather than competing with it. Second, stablecoin support (USDT, USDC) gives their more cautious, investment-minded viewers an on-ramp without full price exposure. Third, Speed Stacks reframes everyday spending as a small earn — an easy, honest fit for the channel's brand.
+
+For the CTA, propose a single dedicated walkthrough video where they download Speed, send a payment live, and show Stacks in action, with a tracked link in the description.
+
+One thing to avoid: don't lean into get-rich or passive-income hype around Stacks. It's modest sats-back, and overselling it would damage trust with their audience and ours.

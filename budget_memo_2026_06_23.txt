@@ -1,0 +1,30 @@
+To: Niyati
+From: Naman
+Date: 2026-06-23
+Re: Budget Reallocation Recommendation
+
+---------------------------------------------------------
+CURRENT EFFICIENCY PICTURE
+---------------------------------------------------------
+
+Across our three paid channels, we are running at materially different unit economics. Apple Search Ads is our most efficient channel at $3.91 eCPI, Facebook sits close behind at $4.09 eCPI, and Google Ads is the most expensive at $5.11 eCPI — a 31% premium over Apple. Within Meta specifically, the picture is even more uneven: the Payday Android Broad+ campaign is delivering installs at $3.46 per install, while iOS App Promotion is running at $6.93, Cash Deposit at $53.75, and Re-engagement Android at $24.07. The bulk of our $43,917 in paid spend is concentrated in Google Ads ($27,964 or 64% of total), leaving our most efficient channels relatively underfunded.
+
+---------------------------------------------------------
+RECOMMENDED REALLOCATIONS
+---------------------------------------------------------
+
+1. Reduce Google Ads and fund Apple and Facebook.
+
+Shift $6,000 (21% of Google Ads' $27,964 budget) out of Google Ads and reallocate: $3,500 to Apple Search Ads and $2,500 to Facebook. This brings Google Ads to roughly $21,964, Apple to $12,220, and Facebook to $9,733. The eCPI gap between Google ($5.11) and Apple ($3.91) is $1.20 per install — every dollar moved generates meaningfully more installs.
+
+2. Within Meta, reallocate from inefficient campaigns to Payday Android Broad+.
+
+Pause or cut Cash Deposit ($645, $53.75 CPI) and Re-engagement Android ($144, $24.07 CPI), freeing approximately $789. Redirect the full $789 into Payday Android Broad+ ($3.46 CPI). The iOS App Promotion campaign ($6.93 CPI) sits above the Meta blended average but remains acceptable for iOS user acquisition in the US and EU; hold it flat for now and review after two more weeks of data.
+
+Total paid spend remains flat at approximately $43,917. No net budget increase is required.
+
+---------------------------------------------------------
+EXPECTED IMPACT
+---------------------------------------------------------
+
+Moving $6,000 from Google Ads ($5.11 eCPI) to Apple and Facebook (blended ~$3.97 eCPI) yields an estimated additional 260 installs on the same dollars. The $789 Meta internal shift from paused campaigns ($53.75 and $24.07 CPI) into Payday Broad+ ($3.46 CPI) adds roughly 200 incremental installs. Combined, the reallocation is projected to deliver approximately 460 additional installs per month with zero incremental spend.

@@ -1,0 +1,12 @@
+Outreach Brief — The Moon Show (YouTube)
+Segment: crypto-curious | Score: 48.8/100 | 654,000 followers
+------------------------------------------------------------
+The Moon Show sits squarely in the crypto-curious lane, with a name and content mix (53% Bitcoin) that signals an audience already paying attention to BTC but not necessarily living on-chain. That's exactly the gap Speed fills: people who get the "why" of Bitcoin but haven't found an easy "how." This channel's knowledge-and-society framing means the audience is there to learn, which makes it a good place to show Bitcoin actually doing something useful rather than just sitting in a portfolio.
+
+For this audience, lead with simplicity and everyday utility, not trading or speculation. The strongest hooks are zero-fee Lightning payments that settle in seconds, the fact that it works on iOS and Android for normal people, and Speed Stacks letting viewers earn sats on purchases they're already making. Stablecoin support (USDT, USDC) is worth a mention for anyone nervous about volatility.
+
+Three talking points: first, Speed turns "I own some Bitcoin" into "I can actually spend Bitcoin instantly and for free," which is the natural next step their viewers are looking for. Second, Speed Stacks gives a concrete, low-stakes reason to download and try it — earning sats on coffee beats another explainer video. Third, this is their first brand deal, so position it as a clean, credible product partner rather than a hype play.
+
+Recommend a CTA inviting them to a short call to walk through a demo and discuss a sponsored integration or pinned link.
+
+One thing to avoid: don't frame Speed as an investment or price-pump opportunity — keep it about payments and utility, since their audience trusts them for education.

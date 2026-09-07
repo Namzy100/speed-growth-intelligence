@@ -1,0 +1,1516 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Speed Wallet — Trend Intelligence (US)</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel-2:#1b2230;
+    --hairline:rgba(255,255,255,0.09); --hairline-strong:rgba(255,255,255,0.16);
+    --text:#edf1f7; --muted:#9aa4b2; --faint:#6b7585;
+    --accent:#2f5dfb; --accent-2:#6f9dff;
+    --good:#3fb950; --warn:#e3b341; --bad:#f85149; --gold:#f5c400; --blue:#2f5dfb;
+    --yt:#ff4d4d; --tt:#25f4ee; --ig:#dd2a7b;
+    --grad:linear-gradient(120deg,#2f5dfb,#6f9dff);
+    --shadow:0 10px 30px -14px rgba(0,0,0,0.7);
+    --r-lg:16px; --r-md:12px; --r-sm:9px;
+    --seg-remittance:#3fb950; --seg-cryptocurious:#6f9dff; --seg-iGaming:#e3b341;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    letter-spacing:-0.005em; line-height:1.5; -webkit-font-smoothing:antialiased; min-height:100vh;
+    background:radial-gradient(1100px 600px at 50% -10%, rgba(47,93,251,0.20), transparent 58%),
+      radial-gradient(820px 520px at 100% 0%, rgba(111,157,255,0.09), transparent 52%), var(--bg);
+    background-attachment:fixed;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 24px 90px;}
+  .brandbar{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; padding:20px 0; border-bottom:1px solid var(--hairline);}
+  .brand-left{display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+  .hub-link{font-size:12.5px; font-weight:650; color:var(--accent-2); text-decoration:none;
+    background:rgba(47,93,251,0.10); border:1px solid var(--hairline-strong); padding:5px 12px; border-radius:999px; transition:border-color .15s, transform .15s;}
+  .hub-link:hover{border-color:var(--accent); transform:translateX(-2px);}
+  .brand{font-weight:760; font-size:16px; display:flex; align-items:center; gap:8px;}
+  .brand .bolt{background:linear-gradient(180deg,#f5c400,#f0a02a); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
+  .sync{font-size:12px; color:var(--muted);} .sync b{color:var(--text);}
+  .title-block{margin:34px 0 22px;}
+  h1{font-size:30px; font-weight:790; letter-spacing:-0.03em; background:linear-gradient(180deg,#fff,#c9c3e8); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
+  .title-block .sub{color:var(--muted); font-size:13.5px; margin-top:5px;}
+  section{margin:34px 0;}
+  .sec-head{display:flex; align-items:baseline; gap:11px; margin-bottom:16px; flex-wrap:wrap;}
+  h2{font-size:12.5px; text-transform:uppercase; letter-spacing:0.11em; color:var(--muted); font-weight:700; display:flex; align-items:center; gap:10px;}
+  h2::before{content:""; width:3px; height:13px; border-radius:2px; background:var(--grad);}
+  .sec-note{font-size:12px; color:var(--faint);}
+  details.support > summary{cursor:pointer; list-style:none; color:var(--muted); font-size:12.5px; text-transform:uppercase; letter-spacing:0.11em; font-weight:700; padding:8px 0; display:flex; align-items:center; gap:8px;}
+  details.support > summary::-webkit-details-marker{display:none;}
+  details.support > summary::before{content:"▸"; color:var(--faint);} details.support[open] > summary::before{content:"▾";}
+  .badge{display:inline-flex; align-items:center; font-size:10px; font-weight:800; padding:2px 8px; border-radius:6px; letter-spacing:0.03em;}
+  .badge.yt{background:var(--yt); color:#fff;} .badge.tt{background:var(--tt); color:#04201f;}
+  .badge.ig{background:linear-gradient(120deg,#f58529,#dd2a7b,#8134af); color:#fff;}
+  .badge.x{background:#000; color:#fff; border:1px solid var(--hairline-strong);}
+  .badge.plat{background:var(--panel-2); color:var(--muted);}
+  /* Speed-fit score badge + content-type + off-brand warning (Prompt 57 layer) */
+  .badge.fit{color:#0d1117;} .badge.fit.fit-hi{background:var(--good);} .badge.fit.fit-mid{background:var(--warn);} .badge.fit.fit-lo{background:#6b7585; color:#e9edf3;}
+  .badge.ctype{background:var(--panel-2); color:var(--accent-2); border:1px solid var(--hairline-strong);}
+  .badge.risk{background:var(--bad); color:#fff;}
+  .legend-note{font-size:11.5px; color:var(--muted); line-height:1.7; background:var(--panel-2); border:1px solid var(--hairline); border-radius:var(--r-sm); padding:10px 12px;} .legend-note b{color:var(--text);}
+  .repl-fill.fit-hi{background:linear-gradient(90deg,#2c8c3c,var(--good));} .repl-fill.fit-mid{background:linear-gradient(90deg,#b9862a,var(--warn));} .repl-fill.fit-lo{background:linear-gradient(90deg,#4b5563,#6b7585);}
+  .badge.seg{color:#0d1117;} .badge.seg.remittance{background:var(--seg-remittance);} .badge.seg.cryptocurious{background:var(--seg-cryptocurious);} .badge.seg.iGaming{background:var(--seg-iGaming);}
+  .empty{color:var(--faint); font-size:13px; padding:10px 0;}
+
+  /* status tag */
+  .st{border:none; cursor:pointer; font-size:9.5px; font-weight:800; text-transform:uppercase; letter-spacing:0.04em; padding:3px 9px; border-radius:20px; color:#0d1117;}
+  .st-suggested{background:#6b7585; color:#e9edf3;} .st-briefed{background:var(--accent-2);}
+  .st-in_production{background:var(--warn);} .st-posted{background:var(--blue); color:#fff;}
+  .st-results_in{background:var(--good);}
+
+
+  /* recommendation cards (organic + paid) */
+  .rec-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:14px;}
+  @media(max-width:760px){.rec-grid{grid-template-columns:1fr;}}
+  .rec-card{background:linear-gradient(180deg,var(--panel),rgba(22,27,34,0.55)); border:1px solid var(--hairline); border-radius:var(--r-md); padding:15px 16px;}
+  .rec-top{display:flex; align-items:center; gap:7px; flex-wrap:wrap; margin-bottom:9px;}
+  .carried{font-size:9.5px; font-weight:700; color:var(--gold); text-transform:uppercase; letter-spacing:0.05em;}
+  .rec-hook{font-size:14.5px; font-weight:700; line-height:1.35;}
+  .rec-line{display:flex; gap:10px; align-items:center; margin:8px 0;}
+  .rec-est{font-size:12px; color:var(--gold); font-weight:700;} .rec-est.cpi{color:var(--good);}
+  .expand{background:none; border:none; color:var(--accent-2); font-size:12px; font-weight:600; cursor:pointer; padding:4px 0;}
+  .rec-detail{margin:8px 0; padding:10px 12px; background:var(--panel-2); border-radius:var(--r-sm); font-size:12.5px; color:var(--muted); line-height:1.5;}
+  .rec-beats{white-space:pre-line;} .rec-notes{color:var(--faint); margin-top:7px;}
+  .paid-row{margin:5px 0;} .paid-row .k{display:inline-block; min-width:110px; font-size:9px; text-transform:uppercase; letter-spacing:0.06em; color:var(--faint); font-weight:700;}
+  /* results */
+  .results{margin-top:11px; padding-top:11px; border-top:1px dashed var(--hairline); display:none;}
+  .results.show{display:block;}
+  .res-inputs{display:flex; gap:12px; flex-wrap:wrap;}
+  .res-inputs label{font-size:10px; text-transform:uppercase; letter-spacing:0.05em; color:var(--faint); font-weight:700; display:flex; flex-direction:column; gap:3px;}
+  .res-inputs input{width:80px; background:#0e1117; border:1px solid var(--hairline); border-radius:6px; color:var(--text); padding:5px 7px; font-size:12px; font-family:inherit;}
+  .res-compare{font-size:12px; margin-top:9px; font-weight:600;}
+  .res-compare .beat{color:var(--good);} .res-compare .miss{color:var(--bad);} .res-compare .ontrack{color:var(--muted);}
+  .res-auto{display:none; font-size:12px; font-weight:700; color:var(--good); margin-bottom:9px;}
+  .src-badge{font-size:8.5px; font-weight:800; letter-spacing:0.06em; padding:2px 7px; border-radius:5px;}
+  .src-badge.src-auto{background:rgba(63,185,80,0.16); color:var(--good);}
+  .src-badge.src-manual{background:var(--panel-2); color:var(--faint);}
+  .adref{display:block; font-size:9px; text-transform:uppercase; letter-spacing:0.05em; color:var(--faint); font-weight:700; margin:8px 0 4px;}
+  .adref input{display:block; width:100%; margin-top:4px; background:#0e1117; border:1px solid var(--hairline); border-radius:6px; color:var(--text); padding:6px 8px; font-size:12px; font-family:inherit; text-transform:none; letter-spacing:0;}
+
+  /* top hooks */
+  .hook-card{display:flex; gap:15px; align-items:flex-start; background:linear-gradient(180deg,var(--panel),rgba(22,27,34,0.55)); border:1px solid var(--hairline); border-radius:var(--r-md); padding:14px 16px; margin-bottom:10px;}
+  .hook-rank{font-size:20px; font-weight:850; color:var(--accent-2); min-width:24px; font-variant-numeric:tabular-nums;}
+  .hook-main{flex:1; min-width:0;}
+  .hook-text{display:block; font-size:15px; font-weight:680; color:var(--text); text-decoration:none; line-height:1.35;}
+  .hook-text:hover{color:var(--accent-2);}
+  .hook-meta{display:flex; flex-wrap:wrap; gap:7px; align-items:center; margin:8px 0 6px;}
+  .hook-meta .m{font-size:11px; color:var(--muted); font-variant-numeric:tabular-nums;} .hook-meta .er{color:var(--good); font-weight:700;} .hook-meta .fmt{color:var(--accent-2);}
+  .hook-why{font-size:12px; color:var(--muted); font-style:italic;}
+  .hook-repl{flex:0 0 auto; text-align:right; min-width:90px;}
+  .repl-lab{font-size:9px; text-transform:uppercase; letter-spacing:0.07em; color:var(--faint); font-weight:700; margin-bottom:5px;}
+  .repl{display:inline-block; width:64px; height:6px; background:rgba(255,255,255,0.08); border-radius:5px; overflow:hidden; vertical-align:middle;}
+  .repl-fill{display:block; height:100%; background:linear-gradient(90deg,#2c8c3c,var(--good));}
+  .repl-n{font-size:11px; font-weight:700; color:var(--muted); margin-left:6px;}
+  .traj{font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:0.04em; padding:2px 7px; border-radius:20px;}
+  .traj-new{background:rgba(75,139,245,0.18); color:var(--blue);} .traj-rising{background:rgba(63,185,80,0.16); color:var(--good);}
+  .traj-falling{background:rgba(248,81,73,0.16); color:var(--bad);} .traj-stable{background:var(--panel-2); color:var(--muted);}
+
+  .prev-week .prev-lab{font-size:11px; color:var(--faint); text-transform:uppercase; letter-spacing:0.06em; font-weight:700; margin-bottom:8px;}
+  .prev-week ul{list-style:none; display:flex; flex-direction:column; gap:6px;}
+  .prev-week li{font-size:12.5px; color:var(--muted); background:var(--panel); border:1px solid var(--hairline); border-radius:var(--r-sm); padding:8px 11px;}
+  .prev-week li .m{color:var(--faint); font-size:11px;}
+
+  .died-list{list-style:none; display:flex; flex-direction:column; gap:8px;}
+  .died-list li{background:rgba(248,81,73,0.07); border:1px solid rgba(248,81,73,0.25); border-radius:var(--r-sm); padding:10px 14px; font-size:13px; color:var(--muted);}
+  .died-list li::before{content:"↓ "; color:var(--bad); font-weight:800;}
+  .died-empty{color:var(--faint); font-size:13px; background:var(--panel); border:1px solid var(--hairline); border-radius:var(--r-md); padding:14px;}
+
+  .signal{background:var(--panel); border:1px solid var(--hairline); border-radius:var(--r-md); padding:16px 20px;}
+  .sig-row{display:grid; grid-template-columns:130px 1fr 130px; align-items:center; gap:16px; padding:11px 0; border-top:1px solid var(--hairline);}
+  .sig-row:first-child{border-top:none;} .sig-seg{font-weight:700; font-size:14px;}
+  .sig-bar{display:flex; align-items:center; gap:8px; margin:4px 0;} .sig-lab{font-size:10px; color:var(--faint); font-weight:700; width:20px;}
+  .sig-track{flex:1; height:8px; background:rgba(255,255,255,0.06); border-radius:5px; overflow:hidden;}
+  .sig-fill{height:100%;} .sig-fill.yt{background:var(--yt);} .sig-fill.tt{background:var(--tt);} .sig-fill.ig{background:linear-gradient(90deg,#dd2a7b,#8134af);} .sig-fill.x{background:#e9edf3;}
+  .sig-val{font-size:11px; font-variant-numeric:tabular-nums; color:var(--muted); width:44px; text-align:right;} .sig-win{font-size:12px; font-weight:700; color:var(--accent-2); text-align:right;}
+
+  /* pipeline board (kanban) */
+  .board{display:grid; grid-template-columns:repeat(5,1fr); gap:12px; align-items:start;}
+  @media (max-width:1000px){ .board{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:560px){ .board{grid-template-columns:1fr;} }
+  .bcol{background:var(--panel); border:1px solid var(--hairline); border-radius:var(--r-md); padding:10px; min-height:96px; transition:background .12s,border-color .12s;}
+  .bcol.dragover{background:var(--panel-2); border-color:var(--accent);}
+  .bcol-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:9px; padding:0 2px;}
+  .bcol-title{font-size:11.5px; font-weight:700; letter-spacing:.03em; text-transform:uppercase; color:var(--muted);}
+  .bcol-n{font-size:11px; font-weight:700; color:var(--faint); background:var(--panel-2); border-radius:999px; padding:1px 8px;}
+  .bcol[data-status="posted"] .bcol-title{color:var(--blue);}
+  .bcol[data-status="results_in"] .bcol-title{color:var(--good);}
+  /* Decision accent: Suggested + Briefed are the "needs a decision" columns —
+     subtle left-rail + accent title so that reads at a glance (replaces the old
+     separate "This Week's Actions" section). */
+  .bcol[data-status="suggested"],.bcol[data-status="briefed"]{border-left:3px solid var(--accent-2); background:linear-gradient(180deg,rgba(47,93,251,0.06),transparent);}
+  .bcol[data-status="suggested"] .bcol-title,.bcol[data-status="briefed"] .bcol-title{color:var(--accent-2);}
+  .bcard{background:var(--panel-2); border:1px solid var(--hairline); border-left:3px solid var(--faint); border-radius:var(--r-sm); padding:9px 10px; margin-bottom:8px; cursor:grab; box-shadow:0 2px 8px -6px rgba(0,0,0,.6);}
+  .bcard:last-child{margin-bottom:0;}
+  .bcard.dragging{opacity:.45;}
+  .bcard[data-type="paid"]{border-left-color:var(--warn);}
+  .bcard[data-type="organic"]{border-left-color:var(--accent-2);}
+  .bcard-hook{font-size:12.5px; line-height:1.35; color:var(--text); margin-bottom:7px;}
+  .bcard-meta{display:flex; align-items:center; gap:6px; flex-wrap:wrap;}
+  .bcard-meta .badge{font-size:9px; padding:1px 6px;}
+  .bcard-metric{font-size:10.5px; color:var(--muted); margin-top:6px; font-variant-numeric:tabular-nums;}
+  .bcard:hover{border-color:var(--hairline-strong); background:var(--panel);}
+  .rec-card.bcard-flash{outline:2px solid var(--accent-2); outline-offset:2px;}
+  .bcard .st{cursor:pointer; font-size:9.5px; padding:1px 7px;}
+  .bcard-type{font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--faint);}
+  .bcard-link{display:inline-flex; align-items:center; gap:3px; font-size:10.5px; color:var(--accent-2); text-decoration:none; margin-top:6px; word-break:break-all;}
+  .bcard-link:hover{text-decoration:underline;}
+  .bcol-empty{font-size:11px; color:var(--faint); font-style:italic; padding:6px 2px;}
+  /* posted-url capture on detail cards */
+  .posted-url{margin-bottom:8px;}
+  .posted-url label{display:block; font-size:11px; color:var(--muted); font-weight:600;}
+  .posted-url input{width:100%; margin-top:3px; background:var(--bg); border:1px solid var(--hairline-strong); color:var(--text); border-radius:7px; padding:6px 8px; font-size:12px;}
+  .posted-link{display:inline-block; margin-top:5px; font-size:11px; color:var(--accent-2); text-decoration:none; word-break:break-all;}
+  .posted-link:hover{text-decoration:underline;}
+  .savebar{position:fixed; right:20px; bottom:20px; display:flex; gap:10px; z-index:20;}
+  .savebar button{background:var(--accent); color:#fff; border:none; border-radius:10px; padding:11px 16px; font-size:13px; font-weight:700; cursor:pointer; box-shadow:var(--shadow);}
+  .savebar button.ghost{background:var(--panel); border:1px solid var(--hairline-strong); color:var(--muted);}
+  .savebar .dirty{color:var(--gold);}
+  footer{margin-top:44px; padding-top:18px; border-top:1px solid var(--hairline); font-size:11.5px; color:var(--faint); line-height:1.7;}
+
+  /* Ask panel (shared — pipelines/ask_panel.py) */
+  .ask-wrap{background:var(--panel); border:1px solid var(--hairline); border-radius:var(--r-md,10px); padding:16px 18px; box-shadow:var(--shadow,none);}
+  .ask-row{display:flex; gap:10px; align-items:center;}
+  .ask-row input[type=text]{flex:1; min-width:0; padding:10px 13px; font-size:14px; background:#0e1117;
+    color:var(--text); border:1px solid var(--hairline); border-radius:8px; font-family:inherit;}
+  .ask-row input[type=text]:focus{outline:none; border-color:var(--accent);}
+  .ask-row button{background:var(--accent); color:#fff; border:1px solid var(--accent); border-radius:8px;
+    padding:10px 20px; font-size:13.5px; font-weight:650; cursor:pointer; font-family:inherit; transition:filter .15s;}
+  .ask-row button:hover{filter:brightness(1.12);}
+  .ask-eg{margin-top:11px; font-size:11.5px; color:var(--faint); display:flex; flex-wrap:wrap; gap:7px; align-items:center;}
+  .ask-chip{background:rgba(47,93,251,0.10); border:1px solid var(--hairline-strong,var(--hairline)); color:var(--accent-2,var(--accent));
+    padding:3px 10px; border-radius:999px; cursor:pointer; transition:border-color .15s;}
+  .ask-chip:hover{border-color:var(--accent);}
+  .ask-answer{margin-top:14px; padding-top:14px; border-top:1px solid var(--hairline); font-size:13.5px; line-height:1.55;}
+  .ask-answer.ask-empty{color:var(--faint);}
+  .ask-answer b{color:var(--text); font-weight:700; font-variant-numeric:tabular-nums;}
+  .ask-answer .ask-head{font-size:15px; font-weight:650; color:var(--text); margin-bottom:8px;}
+  .ask-answer .ask-miss{color:var(--warn,#e3b341);}
+  .ask-list{margin:9px 0 0; padding-left:0; list-style:none;}
+  .ask-list li{display:flex; justify-content:space-between; gap:14px; padding:5px 0; border-bottom:1px solid var(--hairline);}
+  .ask-list li:last-child{border-bottom:none;}
+  .ask-list .ask-meta{color:var(--muted,var(--faint)); font-size:12.5px; font-variant-numeric:tabular-nums; white-space:nowrap;}
+  .ask-prov{margin-top:10px; font-size:11px; color:var(--faint);}
+
+  /* Collapsed long lists (shared — pipelines/list_collapse.py) */
+  .lc-more{display:flex; justify-content:center; align-items:center; gap:10px; margin-top:10px;}
+  .lc-btn{background:rgba(47,93,251,0.10); border:1px solid var(--hairline-strong,var(--hairline));
+    color:var(--accent-2,var(--accent)); padding:5px 14px; border-radius:999px; cursor:pointer;
+    font-family:inherit; font-size:12px; font-weight:650; transition:border-color .15s, filter .15s;}
+  .lc-btn:hover{border-color:var(--accent); filter:brightness(1.08);}
+  .lc-count{font-size:11.5px; color:var(--faint);}
+  /* Fade the last visible row so a truncated table reads as truncated rather than
+     as the end of the data. Only applied while collapsed. */
+  .lc-clipped{position:relative;}
+  .lc-clipped::after{content:""; position:absolute; left:0; right:0; bottom:0; height:38px;
+    pointer-events:none; background:linear-gradient(to bottom, transparent, var(--panel));}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brandbar">
+    <div class="brand-left">
+      <a class="hub-link" href="index.html">← Dashboards</a>
+      <div class="brand"><span class="bolt">⚡</span>Speed Wallet</div>
+    </div>
+    <div class="sync">Synced: <b>2026-07-29 09:24 UTC</b></div>
+  </div>
+  <div class="title-block">
+    <h1>Trend Intelligence — US</h1>
+    <div class="sub">Predict → ship → measure. Track every recommendation from suggestion to results. <span style="color:var(--faint)">28 YouTube · 105 TikTok · 83 Instagram (US + English)</span></div>
+  </div>
+
+
+  <section>
+    <div class="sec-head"><h2>Pipeline Board</h2><span class="sec-note">The single task view · Suggested/Briefed (accented) need a decision · drag a card between columns or click the status pill to advance · edits persist (Download state → commit)</span></div>
+    <div class="board" id="board"></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>Organic Content Calendar</h2><span class="sec-note">Hook · estimate · status visible; expand for the full script</span></div>
+    <div class="rec-grid">
+      <div class="rec-card" data-id="organic-hidden-truth-the-remittance-industry-takes-48-bi" data-est="55000">
+        <div class="rec-top">
+          <span class="badge seg remittance">remittance</span>
+          <span class="badge plat">TikTok</span>
+          <button class="st st-suggested" data-act="cycle" data-id="organic-hidden-truth-the-remittance-industry-takes-48-bi" title="Click to advance status">Suggested</button><span class="src-badge" data-role="source"></span>
+        </div>
+        <div class="rec-hook">“Hidden truth: the remittance industry takes $48 billion a year from immigrant families — here&#x27;s the opt-out”</div>
+        <div class="rec-line"><span class="rec-est">Est. reach ~55000</span></div>
+        <button class="expand" data-act="expand">▾ script &amp; notes</button>
+        <div class="rec-detail" hidden>
+          <div class="rec-beats">Beat 1 (0-8s): Text-on-screen over black background: &#x27;$48 BILLION taken in fees from families sending money home. Every year.&#x27; Beat 2 (9-30s): Talking-head creator: &#x27;Western Union, MoneyGram, wire transfers — they all clip 3-7% off every single send. If you earn $3,000 and send $500 home monthly, you lose $400+ a year.&#x27; Beat 3 (31-50s): &#x27;Speed Wallet uses Bitcoin Lightning — mathematically zero fees baked into the protocol.&#x27; Beat 4 (51-60s): &#x27;One app. One download. Keep your money whole.&#x27;</div>
+          <div class="rec-notes">🎬 Creator sits at desk, minimal setup. Stat sourced from World Bank 2024 remittance cost data — cite on screen for credibility. Use red text on black for Beat 1 to trigger thumb-stop. Post Thursday 6pm.</div>
+        </div>
+        
+        <div class="results" data-role="results">
+          <div class="posted-url">
+            <label>Posted URL <input type="url" data-f="posted_url" value=""
+              placeholder="Paste the live post link (marks this as really shipped)"></label>
+            <a class="posted-link" data-role="postedlink" target="_blank" rel="noopener"></a>
+          </div>
+          <div class="res-auto" data-role="autoread"></div>
+          <div class="res-inputs">
+            <label>Views <input type="number" data-f="views" value="" placeholder="—"></label>
+            <label>ER % <input type="number" step="0.1" data-f="er" value="" placeholder="—"></label>
+            <label>Saves <input type="number" data-f="saves" value="" placeholder="—"></label>
+          </div>
+          <div class="res-compare" data-role="compare"></div>
+        </div>
+      </div>
+      <div class="rec-card" data-id="organic-i-sent-bitcoin-to-my-mom-in-the-philippines-in-4" data-est="38000">
+        <div class="rec-top">
+          <span class="badge seg remittance">remittance</span>
+          <span class="badge plat">TikTok</span>
+          <button class="st st-suggested" data-act="cycle" data-id="organic-i-sent-bitcoin-to-my-mom-in-the-philippines-in-4" title="Click to advance status">Suggested</button><span class="src-badge" data-role="source"></span>
+        </div>
+        <div class="rec-hook">“I sent Bitcoin to my mom in the Philippines in 47 seconds — here&#x27;s exactly how”</div>
+        <div class="rec-line"><span class="rec-est">Est. reach ~38000</span></div>
+        <button class="expand" data-act="expand">▾ script &amp; notes</button>
+        <div class="rec-detail" hidden>
+          <div class="rec-beats">Beat 1 (0-6s): Creator on camera: &#x27;My mom needed money at midnight. Banks were closed. I did this.&#x27; Beat 2 (7-25s): Screen-record of Speed Wallet — open app, enter number, enter amount, hit send. Timer on screen counts to 47s. Beat 3 (26-45s): Cut to WhatsApp voice note (or text screenshot) of mom confirming receipt. Beat 4 (46-60s): &#x27;Zero fees. Works anywhere Lightning is live. Download link in bio.&#x27;</div>
+          <div class="rec-notes">🎬 Use actual phone screen-record — authenticity is the asset. WhatsApp screenshot can be staged with a friend&#x27;s number for privacy. Subtitle entire video. Filipino creator or accent adds 30%+ ER in OFW community. Post Friday evening.</div>
+        </div>
+        
+        <div class="results" data-role="results">
+          <div class="posted-url">
+            <label>Posted URL <input type="url" data-f="posted_url" value=""
+              placeholder="Paste the live post link (marks this as really shipped)"></label>
+            <a class="posted-link" data-role="postedlink" target="_blank" rel="noopener"></a>
+          </div>
+          <div class="res-auto" data-role="autoread"></div>
+          <div class="res-inputs">
+            <label>Views <input type="number" data-f="views" value="" placeholder="—"></label>
+            <label>ER % <input type="number" step="0.1" data-f="er" value="" placeholder="—"></label>
+            <label>Saves <input type="number" data-f="saves" value="" placeholder="—"></label>
+          </div>
+          <div class="res-compare" data-role="compare"></div>
+        </div>
+      </div>
+      <div class="rec-card" data-id="organic-pov-you-just-deposited-to-your-casino-account-in" data-est="19000">
+        <div class="rec-top">
+          <span class="badge seg iGaming">iGaming</span>
+          <span class="badge plat">Instagram Reels</span>
+          <button class="st st-suggested" data-act="cycle" data-id="organic-pov-you-just-deposited-to-your-casino-account-in" title="Click to advance status">Suggested</button><span class="src-badge" data-role="source"></span>
+        </div>
+        <div class="rec-hook">“POV: You just deposited to your casino account in 9 seconds and withdrew winnings before the game even ended”</div>
+        <div class="rec-line"><span class="rec-est">Est. reach ~19000</span></div>
+        <button class="expand" data-act="expand">▾ script &amp; notes</button>
+        <div class="rec-detail" hidden>
+          <div class="rec-beats">Beat 1 (0-6s): Screen-record — iGaming site deposit page open. Speed Wallet QR appears. Beat 2 (7-22s): Scan QR with Speed Wallet — payment confirmed notification pops. On-screen timer: &#x27;9 seconds.&#x27; Beat 3 (23-44s): Creator voice-over: &#x27;No 3-day bank holds. No 2% card fees. No &#x27;pending&#x27; anything. Lightning is instant and final.&#x27; Beat 4 (45-60s): &#x27;Speed Wallet — deposit and withdraw at the speed of a game. Link in bio.&#x27;</div>
+          <div class="rec-notes">🎬 Use a demo Lightning-enabled gaming site (e.g., open-source demo) to avoid brand legal exposure. Keep platform name off screen. Timer overlay added in CapCut. Avoid showing gambling wins to stay within Meta content policy — focus purely on payment speed. Post Saturday afternoon.</div>
+        </div>
+        
+        <div class="results" data-role="results">
+          <div class="posted-url">
+            <label>Posted URL <input type="url" data-f="posted_url" value=""
+              placeholder="Paste the live post link (marks this as really shipped)"></label>
+            <a class="posted-link" data-role="postedlink" target="_blank" rel="noopener"></a>
+          </div>
+          <div class="res-auto" data-role="autoread"></div>
+          <div class="res-inputs">
+            <label>Views <input type="number" data-f="views" value="" placeholder="—"></label>
+            <label>ER % <input type="number" step="0.1" data-f="er" value="" placeholder="—"></label>
+            <label>Saves <input type="number" data-f="saves" value="" placeholder="—"></label>
+          </div>
+          <div class="res-compare" data-role="compare"></div>
+        </div>
+      </div>
+      <div class="rec-card" data-id="organic-the-real-reason-your-family-is-getting-less-mone" data-est="42000">
+        <div class="rec-top">
+          <span class="badge seg remittance">remittance</span>
+          <span class="badge plat">TikTok</span>
+          <button class="st st-suggested" data-act="cycle" data-id="organic-the-real-reason-your-family-is-getting-less-mone" title="Click to advance status">Suggested</button><span class="src-badge" data-role="source"></span>
+        </div>
+        <div class="rec-hook">“The real reason your family is getting less money than you sent — and it&#x27;s not the exchange rate”</div>
+        <div class="rec-line"><span class="rec-est">Est. reach ~42000</span></div>
+        <button class="expand" data-act="expand">▾ script &amp; notes</button>
+        <div class="rec-detail" hidden>
+          <div class="rec-beats">Beat 1 (0-8s): Creator holds phone showing a $200 Remitly send — family receives equivalent of $183. Beat 2 (9-25s): Text-on-screen breakdown: &#x27;Service fee $5 + exchange rate markup $12 = $17 stolen.&#x27; Beat 3 (26-45s): Screen-record of Speed Wallet send — same $200, zero fee, full amount lands. Beat 4 (46-60s): Creator to camera: &#x27;Your family deserves every dollar. Link in bio.&#x27;</div>
+          <div class="rec-notes">🎬 Film at home; use actual Remitly receipt (blur personal info) for credibility. Screen-record Speed send in same take. No VO needed — captions carry it. Post Tuesday 7-9pm local diaspora peak.</div>
+        </div>
+        
+        <div class="results" data-role="results">
+          <div class="posted-url">
+            <label>Posted URL <input type="url" data-f="posted_url" value=""
+              placeholder="Paste the live post link (marks this as really shipped)"></label>
+            <a class="posted-link" data-role="postedlink" target="_blank" rel="noopener"></a>
+          </div>
+          <div class="res-auto" data-role="autoread"></div>
+          <div class="res-inputs">
+            <label>Views <input type="number" data-f="views" value="" placeholder="—"></label>
+            <label>ER % <input type="number" step="0.1" data-f="er" value="" placeholder="—"></label>
+            <label>Saves <input type="number" data-f="saves" value="" placeholder="—"></label>
+          </div>
+          <div class="res-compare" data-role="compare"></div>
+        </div>
+      </div>
+      <div class="rec-card" data-id="organic-you-ve-heard-of-bitcoin-this-is-the-version-that" data-est="27000">
+        <div class="rec-top">
+          <span class="badge seg cryptocurious">crypto-curious</span>
+          <span class="badge plat">Instagram Reels</span>
+          <button class="st st-suggested" data-act="cycle" data-id="organic-you-ve-heard-of-bitcoin-this-is-the-version-that" title="Click to advance status">Suggested</button><span class="src-badge" data-role="source"></span>
+        </div>
+        <div class="rec-hook">“You&#x27;ve heard of Bitcoin — this is the version that actually fits in your wallet right now”</div>
+        <div class="rec-line"><span class="rec-est">Est. reach ~27000</span></div>
+        <button class="expand" data-act="expand">▾ script &amp; notes</button>
+        <div class="rec-detail" hidden>
+          <div class="rec-beats">Beat 1 (0-7s): Creator holds up a $5 bill: &#x27;What if this could cross the world in under a minute for free?&#x27; Beat 2 (8-28s): Simple on-screen animation (CapCut template): Bitcoin logo → Lightning bolt → phone → recipient phone. Text: &#x27;Lightning Network = instant, zero fee.&#x27; Beat 3 (29-48s): Creator downloads Speed Wallet live, sends $1 to a friend on camera. Beat 4 (49-60s): &#x27;That&#x27;s it. That&#x27;s Bitcoin in real life. Try it — link in bio.&#x27;</div>
+          <div class="rec-notes">🎬 CapCut &#x27;money transfer&#x27; animation template covers Beat 2 at zero cost. Live download is the trust builder — do not cut around it. Keep total runtime under 58s for Reels algorithm boost. Post Wednesday noon.</div>
+        </div>
+        
+        <div class="results" data-role="results">
+          <div class="posted-url">
+            <label>Posted URL <input type="url" data-f="posted_url" value=""
+              placeholder="Paste the live post link (marks this as really shipped)"></label>
+            <a class="posted-link" data-role="postedlink" target="_blank" rel="noopener"></a>
+          </div>
+          <div class="res-auto" data-role="autoread"></div>
+          <div class="res-inputs">
+            <label>Views <input type="number" data-f="views" value="" placeholder="—"></label>
+            <label>ER % <input type="number" step="0.1" data-f="er" value="" placeholder="—"></label>
+            <label>Saves <input type="number" data-f="saves" value="" placeholder="—"></label>
+          </div>
+          <div class="res-compare" data-role="compare"></div>
+        </div>
+      </div></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>Paid Ad Creative Briefs</h2><span class="sec-note">Expand for the 15s beat breakdown</span></div>
+    <div class="rec-grid">
+      <div class="rec-card" data-id="paid-bitcoin-is-instant-now-most-people-don-t-know-th" data-est="">
+        <div class="rec-top">
+          <span class="badge seg cryptocurious">crypto-curious</span>
+          <button class="st st-suggested" data-act="cycle" data-id="paid-bitcoin-is-instant-now-most-people-don-t-know-th" title="Click to advance status">Suggested</button><span class="src-badge" data-role="source"></span>
+        </div>
+        <div class="rec-hook">“Bitcoin is instant now. Most people don&#x27;t know this yet.”</div>
+        <div class="rec-line"><span class="rec-est cpi">Est. CPI $2.40-$3.10 (5-24% below benchmark — curiosity gap hook strong on TikTok feed; crypto-curious segment has large addressable pool)</span></div>
+        <label class="adref">Meta ad / campaign name (for auto-import)
+          <input type="text" data-f="ad_ref" value="" placeholder="e.g. Payday - Android - Broad+"></label>
+        <button class="expand" data-act="expand">▾ full 15s script</button>
+        <div class="rec-detail" hidden>
+          <div class="paid-row"><span class="k">Problem · 4-8s</span> Talking-head creator, casual tone: &#x27;When people say Bitcoin is slow or expensive, they mean the old layer. In 2024 there&#x27;s a second layer called Lightning — and it settles in under 3 seconds for basically nothing.&#x27;</div>
+          <div class="paid-row"><span class="k">Speed · 9-15s</span> Screen-record of Speed Wallet onboarding: download → set up → receive $1 in 4 seconds. VO: &#x27;Speed Wallet is Lightning, packaged so your grandma could use it. No seed phrases. No exchange account. Just send and receive Bitcoin like a text message.&#x27;</div>
+          <div class="paid-row"><span class="k">CTA · final 3s</span> Get Speed Wallet. Your first Bitcoin receive takes 60 seconds.</div>
+          <div class="paid-row"><span class="k">Audience</span> TikTok: Interest targeting — cryptocurrency beginner, Bitcoin, personal finance, fintech apps; age 18-34; exclude existing crypto wallet users</div>
+        </div>
+        
+        <div class="results" data-role="results">
+          <div class="posted-url">
+            <label>Posted URL <input type="url" data-f="posted_url" value=""
+              placeholder="Paste the live post link (marks this as really shipped)"></label>
+            <a class="posted-link" data-role="postedlink" target="_blank" rel="noopener"></a>
+          </div>
+          <div class="res-auto" data-role="autoread"></div>
+          <div class="res-inputs">
+            <label>Views <input type="number" data-f="views" value="" placeholder="—"></label>
+            <label>ER % <input type="number" step="0.1" data-f="er" value="" placeholder="—"></label>
+            <label>Saves <input type="number" data-f="saves" value="" placeholder="—"></label>
+          </div>
+          <div class="res-compare" data-role="compare"></div>
+        </div>
+      </div>
+      <div class="rec-card" data-id="paid-you-sent-300-your-family-received-271-where-did-" data-est="">
+        <div class="rec-top">
+          <span class="badge seg general">general</span>
+          <button class="st st-suggested" data-act="cycle" data-id="paid-you-sent-300-your-family-received-271-where-did-" title="Click to advance status">Suggested</button><span class="src-badge" data-role="source"></span>
+        </div>
+        <div class="rec-hook">“You sent $300. Your family received $271. Where did $29 go?”</div>
+        <div class="rec-line"><span class="rec-est cpi">Est. CPI $1.80-$2.60 (42-57% below $3.17 benchmark — high personal financial pain point + clear direct comparison drives strong CTR)</span></div>
+        <label class="adref">Meta ad / campaign name (for auto-import)
+          <input type="text" data-f="ad_ref" value="" placeholder="e.g. Payday - Android - Broad+"></label>
+        <button class="expand" data-act="expand">▾ full 15s script</button>
+        <div class="rec-detail" hidden>
+          <div class="paid-row"><span class="k">Problem · 4-8s</span> On-screen calculator visual: $300 send → $5 fee + $24 exchange rate markup = $271 received. VO: &#x27;Every time you send money home, the middlemen take their cut first. Your family gets what&#x27;s left.&#x27;</div>
+          <div class="paid-row"><span class="k">Speed · 9-15s</span> Speed Wallet screen-record: send $300, recipient gets $300. VO: &#x27;Speed Wallet uses Bitcoin Lightning — a protocol with fees measured in fractions of a cent. Your $300 arrives as $300. Every time.&#x27;</div>
+          <div class="paid-row"><span class="k">CTA · final 3s</span> Download Speed Wallet. Send your first transfer free.</div>
+          <div class="paid-row"><span class="k">Audience</span> Meta (Facebook + Instagram): Lookalike 2% of US remittance senders; layered interest: Philippines, Nigeria, Mexico, El Salvador, money transfer apps, age 22-45</div>
+        </div>
+        
+        <div class="results" data-role="results">
+          <div class="posted-url">
+            <label>Posted URL <input type="url" data-f="posted_url" value=""
+              placeholder="Paste the live post link (marks this as really shipped)"></label>
+            <a class="posted-link" data-role="postedlink" target="_blank" rel="noopener"></a>
+          </div>
+          <div class="res-auto" data-role="autoread"></div>
+          <div class="res-inputs">
+            <label>Views <input type="number" data-f="views" value="" placeholder="—"></label>
+            <label>ER % <input type="number" step="0.1" data-f="er" value="" placeholder="—"></label>
+            <label>Saves <input type="number" data-f="saves" value="" placeholder="—"></label>
+          </div>
+          <div class="res-compare" data-role="compare"></div>
+        </div>
+      </div>
+      <div class="rec-card" data-id="paid-your-sportsbook-says-funds-available-in-3-5-days" data-est="">
+        <div class="rec-top">
+          <span class="badge seg iGaming">iGaming</span>
+          <button class="st st-suggested" data-act="cycle" data-id="paid-your-sportsbook-says-funds-available-in-3-5-days" title="Click to advance status">Suggested</button><span class="src-badge" data-role="source"></span>
+        </div>
+        <div class="rec-hook">“Your sportsbook says &#x27;funds available in 3-5 days.&#x27; That&#x27;s not a policy. That&#x27;s a punishment.”</div>
+        <div class="rec-line"><span class="rec-est cpi">Est. CPI $2.90-$3.80 (slightly above benchmark possible due to narrow legal geo targeting, but iGaming LTV is 4-8x remittance — blended CAC/LTV ratio strongly positive)</span></div>
+        <label class="adref">Meta ad / campaign name (for auto-import)
+          <input type="text" data-f="ad_ref" value="" placeholder="e.g. Payday - Android - Broad+"></label>
+        <button class="expand" data-act="expand">▾ full 15s script</button>
+        <div class="rec-detail" hidden>
+          <div class="paid-row"><span class="k">Problem · 4-8s</span> Creator to camera, slightly frustrated: &#x27;You win. You go to withdraw. Then you wait. Three business days. Maybe five. Meanwhile the odds have moved, the moment is gone, and your money is held hostage by a bank that earns interest on it while you wait.&#x27;</div>
+          <div class="paid-row"><span class="k">Speed · 9-15s</span> Speed Wallet screen-record on iGaming deposit/withdrawal: QR scan → confirmed in under 10 seconds. VO: &#x27;Bitcoin Lightning settles instantly and finally. No holds, no reversals, no 3-day float. Speed Wallet connects directly to Lightning-enabled platforms — deposit in a game, withdraw between hands.&#x27;</div>
+          <div class="paid-row"><span class="k">CTA · final 3s</span> Speed Wallet. Instant in. Instant out.</div>
+          <div class="paid-row"><span class="k">Audience</span> TikTok: Interest — online casino, sports betting, cryptocurrency payments, Bitcoin; age 21-40 male skew; geo US states where online gambling is legal (NJ, PA, MI, CO, NV, IL)</div>
+        </div>
+        
+        <div class="results" data-role="results">
+          <div class="posted-url">
+            <label>Posted URL <input type="url" data-f="posted_url" value=""
+              placeholder="Paste the live post link (marks this as really shipped)"></label>
+            <a class="posted-link" data-role="postedlink" target="_blank" rel="noopener"></a>
+          </div>
+          <div class="res-auto" data-role="autoread"></div>
+          <div class="res-inputs">
+            <label>Views <input type="number" data-f="views" value="" placeholder="—"></label>
+            <label>ER % <input type="number" step="0.1" data-f="er" value="" placeholder="—"></label>
+            <label>Saves <input type="number" data-f="saves" value="" placeholder="—"></label>
+          </div>
+          <div class="res-compare" data-role="compare"></div>
+        </div>
+      </div></div>
+  </section>
+
+  <section>
+    <details class="support" open>
+      <summary>Top Hooks This Week — supporting evidence</summary>
+      <div class="legend-note">
+        <b>Speed-fit</b> = 0.4 fintech relevance + 0.3 low-cost/replicability + 0.3 reach; a fit of 0 means the item was gated as off-topic (metaphor/homonym/throwaway) and never surfaces on reach alone.
+        <b>Content type</b> is labelled only where actually detectable: short-form video, long-form video, slideshow, static image, text post. <b>Stories and AI-generated content are not yet detectable</b> via current tooling, so they are never labelled or guessed.
+        A <span class="badge risk">⚠ off-brand</span> badge marks a topically-relevant trend flagged high reputational risk — surfaced for a human call, never hidden.
+      </div>
+      <div style="margin-top:14px;">
+      <div class="hook-card">
+        <div class="hook-rank">1</div>
+        <div class="hook-main">
+          <a class="hook-text" href="https://www.tiktok.com/@carterpcs/video/7638849481139604766" target="_blank" rel="noopener">“The best way to send money is built into your”</a>
+          <div class="hook-meta">
+            <span class="badge tt">TikTok</span>
+            <span class="badge seg remittance">Remittance</span>
+            <span class="badge fit fit-hi" title="Speed-fit (0.4 fintech / 0.3 low-cost / 0.3 reach); 0 = off-topic, gated">fit 8.1</span>
+            <span class="badge ctype cv">Short-form video</span>
+            
+            <span class="traj traj-stable">stable</span>
+            <span class="m">2.1M views</span>
+            <span class="m er">10.2% ER</span>
+            <span class="m fmt">talking-head</span>
+          </div>
+          <div class="hook-why">curiosity gap — incomplete sentence forces viewer to watch through; ultra-high ER + save rate signals strong intent audience</div>
+        </div>
+        <div class="hook-repl"><div class="repl-lab">Speed-fit</div><span class="repl"><span class="repl-fill fit-hi" style="width:81%"></span></span><span class="repl-n">8.1/10</span></div>
+      </div>
+      <div class="hook-card">
+        <div class="hook-rank">2</div>
+        <div class="hook-main">
+          <a class="hook-text" href="https://www.tiktok.com/@daddybunch/video/7615832084397018375" target="_blank" rel="noopener">“The Hidden Truth Behind OFW Remittance Fees#philippines #history #pinoycomics #history”</a>
+          <div class="hook-meta">
+            <span class="badge tt">TikTok</span>
+            <span class="badge seg remittance">Remittance</span>
+            <span class="badge fit fit-hi" title="Speed-fit (0.4 fintech / 0.3 low-cost / 0.3 reach); 0 = off-topic, gated">fit 7.2</span>
+            <span class="badge ctype cv">Short-form video</span>
+            
+            <span class="traj traj-new">new</span>
+            <span class="m">18k views</span>
+            <span class="m er">11.3% ER</span>
+            <span class="m fmt">text-on-screen</span>
+          </div>
+          <div class="hook-why">fear of loss — &#x27;hidden truth&#x27; framing exposes systemic fee injustice, directly priming Speed&#x27;s zero-fee value prop</div>
+        </div>
+        <div class="hook-repl"><div class="repl-lab">Speed-fit</div><span class="repl"><span class="repl-fill fit-hi" style="width:72%"></span></span><span class="repl-n">7.2/10</span></div>
+      </div>
+      <div class="hook-card">
+        <div class="hook-rank">3</div>
+        <div class="hook-main">
+          <a class="hook-text" href="https://www.tiktok.com/@nepalinfocus/video/7644522150560402709" target="_blank" rel="noopener">“Did you know that the true backbone of Nepal&#x27;s economy”</a>
+          <div class="hook-meta">
+            <span class="badge tt">TikTok</span>
+            <span class="badge seg remittance">Remittance</span>
+            <span class="badge fit fit-hi" title="Speed-fit (0.4 fintech / 0.3 low-cost / 0.3 reach); 0 = off-topic, gated">fit 7.2</span>
+            <span class="badge ctype cv">Short-form video</span>
+            
+            
+            <span class="m">394k views</span>
+            <span class="m er">6.8% ER</span>
+            <span class="m fmt">talking-head</span>
+          </div>
+          <div class="hook-why">social proof via macro stat — national economic stake creates emotional resonance and shareability among diaspora</div>
+        </div>
+        <div class="hook-repl"><div class="repl-lab">Speed-fit</div><span class="repl"><span class="repl-fill fit-hi" style="width:72%"></span></span><span class="repl-n">7.2/10</span></div>
+      </div>
+      <div class="hook-card">
+        <div class="hook-rank">4</div>
+        <div class="hook-main">
+          <a class="hook-text" href="https://www.youtube.com/watch?v=TGs6E9Ha8SU" target="_blank" rel="noopener">“Nigerians Abroad Send ₦28 Trillion Home Every Year — 4X”</a>
+          <div class="hook-meta">
+            <span class="badge yt">YouTube</span>
+            <span class="badge seg remittance">Remittance</span>
+            <span class="badge fit fit-hi" title="Speed-fit (0.4 fintech / 0.3 low-cost / 0.3 reach); 0 = off-topic, gated">fit 7.3</span>
+            <span class="badge ctype cv">Short-form video</span>
+            
+            <span class="traj traj-new">new</span>
+            <span class="m">72k views</span>
+            <span class="m er">7.0% ER</span>
+            <span class="m fmt">talking-head</span>
+          </div>
+          <div class="hook-why">fear of loss via shocking statistic — ₦28 Trillion figure reframes remittance fees as a systemic theft at national scale</div>
+        </div>
+        <div class="hook-repl"><div class="repl-lab">Speed-fit</div><span class="repl"><span class="repl-fill fit-hi" style="width:73%"></span></span><span class="repl-n">7.3/10</span></div>
+      </div>
+      <div class="hook-card">
+        <div class="hook-rank">5</div>
+        <div class="hook-main">
+          <a class="hook-text" href="https://www.tiktok.com/@realjackieappiah/video/7603011673133190421" target="_blank" rel="noopener">“Real trust is knowing your money reaches home safely, and”</a>
+          <div class="hook-meta">
+            <span class="badge tt">TikTok</span>
+            <span class="badge seg remittance">Remittance</span>
+            <span class="badge fit fit-hi" title="Speed-fit (0.4 fintech / 0.3 low-cost / 0.3 reach); 0 = off-topic, gated">fit 7.3</span>
+            <span class="badge ctype cv">Short-form video</span>
+            
+            <span class="traj traj-stable">stable</span>
+            <span class="m">103k views</span>
+            <span class="m er">6.7% ER</span>
+            <span class="m fmt">ugc</span>
+          </div>
+          <div class="hook-why">identity signal — &#x27;real trust&#x27; language triggers emotional loyalty and positions the app as a values-aligned brand</div>
+        </div>
+        <div class="hook-repl"><div class="repl-lab">Speed-fit</div><span class="repl"><span class="repl-fill fit-hi" style="width:73%"></span></span><span class="repl-n">7.3/10</span></div>
+      </div>
+      <div class="hook-card">
+        <div class="hook-rank">6</div>
+        <div class="hook-main">
+          <a class="hook-text" href="https://www.tiktok.com/@cryptodailyfeed/video/7660992877249498398" target="_blank" rel="noopener">“This is one of the simplest Bitcoin strategies. Buy 500”</a>
+          <div class="hook-meta">
+            <span class="badge tt">TikTok</span>
+            <span class="badge seg cryptocurious">Crypto-Curious</span>
+            <span class="badge fit fit-hi" title="Speed-fit (0.4 fintech / 0.3 low-cost / 0.3 reach); 0 = off-topic, gated">fit 7.3</span>
+            <span class="badge ctype cs">Slideshow</span>
+            
+            <span class="traj traj-new">new</span>
+            <span class="m">64k views</span>
+            <span class="m er">4.5% ER</span>
+            <span class="m fmt">talking-head</span>
+          </div>
+          <div class="hook-why">curiosity gap — &#x27;simplest strategy&#x27; lowers barrier to entry; high save rate (1.3%) shows crypto-curious audience bookmarking for action</div>
+        </div>
+        <div class="hook-repl"><div class="repl-lab">Speed-fit</div><span class="repl"><span class="repl-fill fit-hi" style="width:73%"></span></span><span class="repl-n">7.3/10</span></div>
+      </div>
+      <div class="hook-card">
+        <div class="hook-rank">7</div>
+        <div class="hook-main">
+          <a class="hook-text" href="https://www.tiktok.com/@thefinancialmaniac/video/7636604574480026910" target="_blank" rel="noopener">“Not all money transfer apps work the same. 💸 Some”</a>
+          <div class="hook-meta">
+            <span class="badge tt">TikTok</span>
+            <span class="badge seg remittance">Remittance</span>
+            <span class="badge fit fit-mid" title="Speed-fit (0.4 fintech / 0.3 low-cost / 0.3 reach); 0 = off-topic, gated">fit 6.7</span>
+            <span class="badge ctype cs">Slideshow</span>
+            
+            
+            <span class="m">20k views</span>
+            <span class="m er">1.4% ER</span>
+            <span class="m fmt">text-on-screen</span>
+          </div>
+          <div class="hook-why">fear of loss — &#x27;not all apps work the same&#x27; seeds doubt about incumbents, creating a switching moment Speed can own</div>
+        </div>
+        <div class="hook-repl"><div class="repl-lab">Speed-fit</div><span class="repl"><span class="repl-fill fit-mid" style="width:67%"></span></span><span class="repl-n">6.7/10</span></div>
+      </div>
+      <div class="hook-card">
+        <div class="hook-rank">8</div>
+        <div class="hook-main">
+          <a class="hook-text" href="https://www.tiktok.com/@thefinemama/video/7667151902320168206" target="_blank" rel="noopener">“Its National Cleaning day but you need to send money”</a>
+          <div class="hook-meta">
+            <span class="badge tt">TikTok</span>
+            <span class="badge seg remittance">Remittance</span>
+            <span class="badge fit fit-hi" title="Speed-fit (0.4 fintech / 0.3 low-cost / 0.3 reach); 0 = off-topic, gated">fit 7.3</span>
+            <span class="badge ctype cv">Short-form video</span>
+            
+            <span class="traj traj-new">new</span>
+            <span class="m">15k views</span>
+            <span class="m er">8.0% ER</span>
+            <span class="m fmt">talking-head</span>
+          </div>
+          <div class="hook-why">curiosity gap via unexpected juxtaposition — pairing a trending moment (National Cleaning Day) with remittance need boosts discoverability</div>
+        </div>
+        <div class="hook-repl"><div class="repl-lab">Speed-fit</div><span class="repl"><span class="repl-fill fit-hi" style="width:73%"></span></span><span class="repl-n">7.3/10</span></div>
+      </div>
+      <div class="hook-card">
+        <div class="hook-rank">9</div>
+        <div class="hook-main">
+          <a class="hook-text" href="https://www.tiktok.com/@carmzrodriguez/video/7650746459083525397" target="_blank" rel="noopener">“I used Remitech app (EEC) 50K max limit a month”</a>
+          <div class="hook-meta">
+            <span class="badge tt">TikTok</span>
+            <span class="badge seg remittance">Remittance</span>
+            <span class="badge fit fit-mid" title="Speed-fit (0.4 fintech / 0.3 low-cost / 0.3 reach); 0 = off-topic, gated">fit 6.8</span>
+            <span class="badge ctype cs">Slideshow</span>
+            
+            
+            <span class="m">22k views</span>
+            <span class="m er">5.3% ER</span>
+            <span class="m fmt">screen-record</span>
+          </div>
+          <div class="hook-why">fear of loss — competitor app limit frustration (50K cap) is a direct pain-point Speed can counter with no-cap Lightning sends</div>
+        </div>
+        <div class="hook-repl"><div class="repl-lab">Speed-fit</div><span class="repl"><span class="repl-fill fit-mid" style="width:68%"></span></span><span class="repl-n">6.8/10</span></div>
+      </div>
+      <div class="hook-card">
+        <div class="hook-rank">10</div>
+        <div class="hook-main">
+          <a class="hook-text" href="https://www.tiktok.com/@coachclemcryptoacademy1/video/7450974860873862442" target="_blank" rel="noopener">“Top 5 cryptos that can make you a millionaire in”</a>
+          <div class="hook-meta">
+            <span class="badge tt">TikTok</span>
+            <span class="badge seg cryptocurious">Crypto-Curious</span>
+            <span class="badge fit fit-hi" title="Speed-fit (0.4 fintech / 0.3 low-cost / 0.3 reach); 0 = off-topic, gated">fit 7.4</span>
+            <span class="badge ctype cv">Short-form video</span>
+            
+            <span class="traj traj-new">new</span>
+            <span class="m">1.3M views</span>
+            <span class="m er">6.2% ER</span>
+            <span class="m fmt">text-on-screen</span>
+          </div>
+          <div class="hook-why">curiosity gap — millionaire aspirational framing drives high crypto-curious reach; replicable as &#x27;Top 5 ways to use Bitcoin today&#x27;</div>
+        </div>
+        <div class="hook-repl"><div class="repl-lab">Speed-fit</div><span class="repl"><span class="repl-fill fit-hi" style="width:74%"></span></span><span class="repl-n">7.4/10</span></div>
+      </div></div>
+    </details>
+  </section>
+
+  <section>
+    <details class="support">
+      <summary>Previous Week's Hooks — trajectory history</summary>
+      <div style="margin-top:14px;"><div class="prev-week"><div class="prev-lab">Week of 2026-07-22</div><ul><li>“Agar aapka JazzCash Salam Account hai aur aap Madina Pak” <span class="m">652k views · 40.4% ER</span></li><li>“Primary Function Of Top 10 Cryptocurrencies! #cryptotrading #crypto #cryptok” <span class="m">1.1M views · 10.1% ER</span></li><li>“The best way to send money is built into your” <span class="m">2.1M views · 10.2% ER</span></li><li>“Another tag coming soon 👀 Cash App Tags are financial” <span class="m">24k views · 8.3% ER</span></li><li>“Bitcoin has been declared dead 472 times. If you had” <span class="m">69k views · 3.2% ER</span></li><li>“Did you know that the true backbone of Nepal&#x27;s economy” <span class="m">391k views · 6.8% ER</span></li><li>“#blazeubah #blazecrypto #crypto blaze talks about recovering a dat file” <span class="m">268k views · 16.8% ER</span></li><li>“Crypto gave me financial freedom #crypto #fyp #foryoupage” <span class="m">467k views · 5.7% ER</span></li><li>“Bitcoin is true money, all fiat money cheats you through” <span class="m">151k views · 3.6% ER</span></li><li>“Real trust is knowing your money reaches home safely, and” <span class="m">101k views · 6.8% ER</span></li></ul></div></div>
+    </details>
+  </section>
+
+  <section>
+    <details class="support">
+      <summary>What's Dying — don't make these</summary>
+      <div style="margin-top:14px;"><ul class="died-list"><li>bitcoin|YouTube: reach fell -49% week-over-week — cooling off.</li><li>money transfer|YouTube: reach fell -71% week-over-week — cooling off.</li><li>fintech|YouTube: reach fell -75% week-over-week — cooling off.</li><li>lightning network|YouTube: reach fell -81% week-over-week — cooling off.</li><li>bitcoin|TikTok: reach fell -100% week-over-week — cooling off.</li><li>#bullrun (TikTok) dropped out of the top hashtags.</li><li>#cryptocrash (TikTok) dropped out of the top hashtags.</li><li>#cryptocurrency (TikTok) dropped out of the top hashtags.</li></ul></div>
+    </details>
+  </section>
+
+  <section>
+    <details class="support">
+      <summary>Platform Signal — engagement by platform &amp; segment</summary>
+      <div class="signal" style="margin-top:14px;">
+      <div class="sig-row">
+        <div class="sig-seg">Remittance</div>
+        <div class="sig-bars">
+          <div class="sig-bar"><span class="sig-lab">YT</span><div class="sig-track"><div class="sig-fill yt" style="width:19%"></div></div><span class="sig-val">2.5%</span></div>
+          <div class="sig-bar"><span class="sig-lab">TT</span><div class="sig-track"><div class="sig-fill tt" style="width:39%"></div></div><span class="sig-val">5.0%</span></div>
+          <div class="sig-bar"><span class="sig-lab">IG</span><div class="sig-track"><div class="sig-fill ig" style="width:100%"></div></div><span class="sig-val">12.7%</span></div>
+          <div class="sig-bar"><span class="sig-lab">X</span><div class="sig-track"><div class="sig-fill x" style="width:71%"></div></div><span class="sig-val">9.0%</span></div>
+        </div>
+        <div class="sig-win">Instagram stronger</div>
+      </div>
+      <div class="sig-row">
+        <div class="sig-seg">Crypto-Curious</div>
+        <div class="sig-bars">
+          <div class="sig-bar"><span class="sig-lab">YT</span><div class="sig-track"><div class="sig-fill yt" style="width:8%"></div></div><span class="sig-val">5.5%</span></div>
+          <div class="sig-bar"><span class="sig-lab">TT</span><div class="sig-track"><div class="sig-fill tt" style="width:7%"></div></div><span class="sig-val">4.8%</span></div>
+          <div class="sig-bar"><span class="sig-lab">IG</span><div class="sig-track"><div class="sig-fill ig" style="width:100%"></div></div><span class="sig-val">67.2%</span></div>
+          <div class="sig-bar"><span class="sig-lab">X</span><div class="sig-track"><div class="sig-fill x" style="width:17%"></div></div><span class="sig-val">11.7%</span></div>
+        </div>
+        <div class="sig-win">Instagram stronger</div>
+      </div>
+      <div class="sig-row">
+        <div class="sig-seg">iGaming</div>
+        <div class="sig-bars">
+          <div class="sig-bar"><span class="sig-lab">YT</span><div class="sig-track"><div class="sig-fill yt" style="width:36%"></div></div><span class="sig-val">5.7%</span></div>
+          <div class="sig-bar"><span class="sig-lab">TT</span><div class="sig-track"><div class="sig-fill tt" style="width:28%"></div></div><span class="sig-val">4.5%</span></div>
+          <div class="sig-bar"><span class="sig-lab">IG</span><div class="sig-track"><div class="sig-fill ig" style="width:100%"></div></div><span class="sig-val">15.8%</span></div>
+          <div class="sig-bar"><span class="sig-lab">X</span><div class="sig-track"><div class="sig-fill x" style="width:59%"></div></div><span class="sig-val">9.2%</span></div>
+        </div>
+        <div class="sig-win">Instagram stronger</div>
+      </div></div>
+    </details>
+  </section>
+
+    <section>
+    <div class="sec-head"><h2>Ask this dashboard</h2><span class="note">answers computed from the pipeline items on this page</span></div>
+    <div class="ask-wrap">
+      <div class="ask-row">
+        <input type="text" id="askQ" autocomplete="off" placeholder="ask a question about this data…">
+        <button id="askGo">Ask</button>
+      </div>
+      <div class="ask-eg" id="askEg">Try:</div>
+      <div id="askA" class="ask-answer ask-empty"></div>
+    </div>
+  </section>
+
+  <footer>
+    Data: YouTube Data API (US, last 7d) + TikTok &amp; Instagram via Apify · enrichment by Claude.<br>
+    Status, posted URLs &amp; results persist in dashboard_state.json. Drag cards on the Pipeline Board to change status.
+    Posted-content detection is manual by design: when a card goes live, paste its real URL on the card — automatic
+    brief-to-post matching isn't reliable across TikTok/IG/YouTube, so we capture the true link rather than guess.
+    Results logging is manual too — enter views/ER/saves on posted cards, then Download state and commit the JSON so the next rebuild keeps it.
+  </footer>
+</div>
+
+<div class="savebar">
+  <span class="dirty" id="dirty"></span>
+  <button class="ghost" id="reset">Discard local edits</button>
+  <button id="download">⭳ Download state</button>
+</div>
+
+<script>
+const BAKED = {"schema": 1, "updated_at": "2026-07-29", "items": {"organic-the-real-reason-your-family-is-getting-less-mone": {"id": "organic-the-real-reason-your-family-is-getting-less-mone", "type": "organic", "hook": "The real reason your family is getting less money than you sent \u2014 and it's not the exchange rate", "segment": "remittance", "estimate": "42000", "estimate_num": 42000, "payload": {"platform": "TikTok", "outline": "Beat 1 (0-8s): Creator holds phone showing a $200 Remitly send \u2014 family receives equivalent of $183. Beat 2 (9-25s): Text-on-screen breakdown: 'Service fee $5 + exchange rate markup $12 = $17 stolen.' Beat 3 (26-45s): Screen-record of Speed Wallet send \u2014 same $200, zero fee, full amount lands. Beat 4 (46-60s): Creator to camera: 'Your family deserves every dollar. Link in bio.'", "production_notes": "Film at home; use actual Remitly receipt (blur personal info) for credibility. Screen-record Speed send in same take. No VO needed \u2014 captions carry it. Post Tuesday 7-9pm local diaspora peak."}, "status": "suggested", "results": {"views": null, "er": null, "saves": null}, "results_source": null, "ad_ref": null, "posted_url": null, "first_seen": "2026-07-29", "last_seen": "2026-07-29"}, "organic-i-sent-bitcoin-to-my-mom-in-the-philippines-in-4": {"id": "organic-i-sent-bitcoin-to-my-mom-in-the-philippines-in-4", "type": "organic", "hook": "I sent Bitcoin to my mom in the Philippines in 47 seconds \u2014 here's exactly how", "segment": "remittance", "estimate": "38000", "estimate_num": 38000, "payload": {"platform": "TikTok", "outline": "Beat 1 (0-6s): Creator on camera: 'My mom needed money at midnight. Banks were closed. I did this.' Beat 2 (7-25s): Screen-record of Speed Wallet \u2014 open app, enter number, enter amount, hit send. Timer on screen counts to 47s. Beat 3 (26-45s): Cut to WhatsApp voice note (or text screenshot) of mom confirming receipt. Beat 4 (46-60s): 'Zero fees. Works anywhere Lightning is live. Download link in bio.'", "production_notes": "Use actual phone screen-record \u2014 authenticity is the asset. WhatsApp screenshot can be staged with a friend's number for privacy. Subtitle entire video. Filipino creator or accent adds 30%+ ER in OFW community. Post Friday evening."}, "status": "suggested", "results": {"views": null, "er": null, "saves": null}, "results_source": null, "ad_ref": null, "posted_url": null, "first_seen": "2026-07-29", "last_seen": "2026-07-29"}, "organic-you-ve-heard-of-bitcoin-this-is-the-version-that": {"id": "organic-you-ve-heard-of-bitcoin-this-is-the-version-that", "type": "organic", "hook": "You've heard of Bitcoin \u2014 this is the version that actually fits in your wallet right now", "segment": "crypto-curious", "estimate": "27000", "estimate_num": 27000, "payload": {"platform": "Instagram Reels", "outline": "Beat 1 (0-7s): Creator holds up a $5 bill: 'What if this could cross the world in under a minute for free?' Beat 2 (8-28s): Simple on-screen animation (CapCut template): Bitcoin logo \u2192 Lightning bolt \u2192 phone \u2192 recipient phone. Text: 'Lightning Network = instant, zero fee.' Beat 3 (29-48s): Creator downloads Speed Wallet live, sends $1 to a friend on camera. Beat 4 (49-60s): 'That's it. That's Bitcoin in real life. Try it \u2014 link in bio.'", "production_notes": "CapCut 'money transfer' animation template covers Beat 2 at zero cost. Live download is the trust builder \u2014 do not cut around it. Keep total runtime under 58s for Reels algorithm boost. Post Wednesday noon."}, "status": "suggested", "results": {"views": null, "er": null, "saves": null}, "results_source": null, "ad_ref": null, "posted_url": null, "first_seen": "2026-07-29", "last_seen": "2026-07-29"}, "organic-hidden-truth-the-remittance-industry-takes-48-bi": {"id": "organic-hidden-truth-the-remittance-industry-takes-48-bi", "type": "organic", "hook": "Hidden truth: the remittance industry takes $48 billion a year from immigrant families \u2014 here's the opt-out", "segment": "remittance", "estimate": "55000", "estimate_num": 55000, "payload": {"platform": "TikTok", "outline": "Beat 1 (0-8s): Text-on-screen over black background: '$48 BILLION taken in fees from families sending money home. Every year.' Beat 2 (9-30s): Talking-head creator: 'Western Union, MoneyGram, wire transfers \u2014 they all clip 3-7% off every single send. If you earn $3,000 and send $500 home monthly, you lose $400+ a year.' Beat 3 (31-50s): 'Speed Wallet uses Bitcoin Lightning \u2014 mathematically zero fees baked into the protocol.' Beat 4 (51-60s): 'One app. One download. Keep your money whole.'", "production_notes": "Creator sits at desk, minimal setup. Stat sourced from World Bank 2024 remittance cost data \u2014 cite on screen for credibility. Use red text on black for Beat 1 to trigger thumb-stop. Post Thursday 6pm."}, "status": "suggested", "results": {"views": null, "er": null, "saves": null}, "results_source": null, "ad_ref": null, "posted_url": null, "first_seen": "2026-07-29", "last_seen": "2026-07-29"}, "organic-pov-you-just-deposited-to-your-casino-account-in": {"id": "organic-pov-you-just-deposited-to-your-casino-account-in", "type": "organic", "hook": "POV: You just deposited to your casino account in 9 seconds and withdrew winnings before the game even ended", "segment": "iGaming", "estimate": "19000", "estimate_num": 19000, "payload": {"platform": "Instagram Reels", "outline": "Beat 1 (0-6s): Screen-record \u2014 iGaming site deposit page open. Speed Wallet QR appears. Beat 2 (7-22s): Scan QR with Speed Wallet \u2014 payment confirmed notification pops. On-screen timer: '9 seconds.' Beat 3 (23-44s): Creator voice-over: 'No 3-day bank holds. No 2% card fees. No 'pending' anything. Lightning is instant and final.' Beat 4 (45-60s): 'Speed Wallet \u2014 deposit and withdraw at the speed of a game. Link in bio.'", "production_notes": "Use a demo Lightning-enabled gaming site (e.g., open-source demo) to avoid brand legal exposure. Keep platform name off screen. Timer overlay added in CapCut. Avoid showing gambling wins to stay within Meta content policy \u2014 focus purely on payment speed. Post Saturday afternoon."}, "status": "suggested", "results": {"views": null, "er": null, "saves": null}, "results_source": null, "ad_ref": null, "posted_url": null, "first_seen": "2026-07-29", "last_seen": "2026-07-29"}, "paid-you-sent-300-your-family-received-271-where-did-": {"id": "paid-you-sent-300-your-family-received-271-where-did-", "type": "paid", "hook": "You sent $300. Your family received $271. Where did $29 go?", "segment": "general", "estimate": "$1.80-$2.60 (42-57% below $3.17 benchmark \u2014 high personal financial pain point + clear direct comparison drives strong CTR)", "estimate_num": null, "payload": {"problem": "On-screen calculator visual: $300 send \u2192 $5 fee + $24 exchange rate markup = $271 received. VO: 'Every time you send money home, the middlemen take their cut first. Your family gets what's left.'", "solution": "Speed Wallet screen-record: send $300, recipient gets $300. VO: 'Speed Wallet uses Bitcoin Lightning \u2014 a protocol with fees measured in fractions of a cent. Your $300 arrives as $300. Every time.'", "cta": "Download Speed Wallet. Send your first transfer free.", "audience": "Meta (Facebook + Instagram): Lookalike 2% of US remittance senders; layered interest: Philippines, Nigeria, Mexico, El Salvador, money transfer apps, age 22-45"}, "status": "suggested", "results": {"views": null, "er": null, "saves": null}, "results_source": null, "ad_ref": null, "posted_url": null, "first_seen": "2026-07-29", "last_seen": "2026-07-29"}, "paid-bitcoin-is-instant-now-most-people-don-t-know-th": {"id": "paid-bitcoin-is-instant-now-most-people-don-t-know-th", "type": "paid", "hook": "Bitcoin is instant now. Most people don't know this yet.", "segment": "crypto-curious", "estimate": "$2.40-$3.10 (5-24% below benchmark \u2014 curiosity gap hook strong on TikTok feed; crypto-curious segment has large addressable pool)", "estimate_num": null, "payload": {"problem": "Talking-head creator, casual tone: 'When people say Bitcoin is slow or expensive, they mean the old layer. In 2024 there's a second layer called Lightning \u2014 and it settles in under 3 seconds for basically nothing.'", "solution": "Screen-record of Speed Wallet onboarding: download \u2192 set up \u2192 receive $1 in 4 seconds. VO: 'Speed Wallet is Lightning, packaged so your grandma could use it. No seed phrases. No exchange account. Just send and receive Bitcoin like a text message.'", "cta": "Get Speed Wallet. Your first Bitcoin receive takes 60 seconds.", "audience": "TikTok: Interest targeting \u2014 cryptocurrency beginner, Bitcoin, personal finance, fintech apps; age 18-34; exclude existing crypto wallet users"}, "status": "suggested", "results": {"views": null, "er": null, "saves": null}, "results_source": null, "ad_ref": null, "posted_url": null, "first_seen": "2026-07-29", "last_seen": "2026-07-29"}, "paid-your-sportsbook-says-funds-available-in-3-5-days": {"id": "paid-your-sportsbook-says-funds-available-in-3-5-days", "type": "paid", "hook": "Your sportsbook says 'funds available in 3-5 days.' That's not a policy. That's a punishment.", "segment": "iGaming", "estimate": "$2.90-$3.80 (slightly above benchmark possible due to narrow legal geo targeting, but iGaming LTV is 4-8x remittance \u2014 blended CAC/LTV ratio strongly positive)", "estimate_num": null, "payload": {"problem": "Creator to camera, slightly frustrated: 'You win. You go to withdraw. Then you wait. Three business days. Maybe five. Meanwhile the odds have moved, the moment is gone, and your money is held hostage by a bank that earns interest on it while you wait.'", "solution": "Speed Wallet screen-record on iGaming deposit/withdrawal: QR scan \u2192 confirmed in under 10 seconds. VO: 'Bitcoin Lightning settles instantly and finally. No holds, no reversals, no 3-day float. Speed Wallet connects directly to Lightning-enabled platforms \u2014 deposit in a game, withdraw between hands.'", "cta": "Speed Wallet. Instant in. Instant out.", "audience": "TikTok: Interest \u2014 online casino, sports betting, cryptocurrency payments, Bitcoin; age 21-40 male skew; geo US states where online gambling is legal (NJ, PA, MI, CO, NV, IL)"}, "status": "suggested", "results": {"views": null, "er": null, "saves": null}, "results_source": null, "ad_ref": null, "posted_url": null, "first_seen": "2026-07-29", "last_seen": "2026-07-29"}}, "hook_history": {"week": "2026-07-29", "hooks": [{"key": "thebestwaytosendmoneyisbuiltintoyour", "hook": "The best way to send money is built into your", "views": 2100000, "er": 0.102}, {"key": "bitcoinhasfallenintothe65000rangereachin", "hook": "Bitcoin has fallen into the $65,000 range, reaching its lowest", "views": 526000, "er": 0.0269}, {"key": "naemusajjagweeebreezythismanwillnotsurvi", "hook": "Nae musajja gweee@BREEZY This man will not survive me today.", "views": 36800, "er": 0.1077}, {"key": "lemfimoneytransferapp", "hook": "Lemfi money transfer app", "views": 253600, "er": 0.0504}, {"key": "top5cryptosthatcanmakeyouamillionairein", "hook": "Top 5 cryptos that can make you a millionaire in", "views": 1300000, "er": 0.0619}, {"key": "itsnationalcleaningdaybutyouneedtosendmo", "hook": "Its National Cleaning day but you need to send money", "views": 15000, "er": 0.0799}, {"key": "nigeriansabroadsend28trillionhomeeveryye", "hook": "Nigerians Abroad Send \u20a628 Trillion Home Every Year \u2014 4X", "views": 72295, "er": 0.07}, {"key": "realtrustisknowingyourmoneyreacheshomesa", "hook": "Real trust is knowing your money reaches home safely, and", "views": 103400, "er": 0.0671}, {"key": "thisisoneofthesimplestbitcoinstrategiesb", "hook": "This is one of the simplest Bitcoin strategies. Buy 500", "views": 64000, "er": 0.0454}, {"key": "thehiddentruthbehindofwremittancefeesphi", "hook": "The Hidden Truth Behind OFW Remittance Fees#philippines #history #pinoycomics #history", "views": 18000, "er": 0.1126}]}};
+const FLOW = ["suggested","briefed","in_production","posted","results_in"];
+const LABEL = {suggested:"Suggested",briefed:"Briefed",in_production:"In Production",posted:"Posted",results_in:"Results In"};
+const LS_KEY = "speed_trend_overrides_v1";
+
+const overrides = JSON.parse(localStorage.getItem(LS_KEY) || "{}");
+function save(){ localStorage.setItem(LS_KEY, JSON.stringify(overrides));
+  document.getElementById("dirty").textContent = Object.keys(overrides).length ? "● unsaved edits" : ""; }
+
+function eff(id){ // effective item = baked merged with local override
+  const base = (BAKED.items && BAKED.items[id]) || {status:"suggested", results:{}};
+  const o = overrides[id] || {};
+  return {status: o.status || base.status,
+          ad_ref: (o.ad_ref !== undefined ? o.ad_ref : (base.ad_ref || "")),
+          posted_url: (o.posted_url !== undefined ? o.posted_url : (base.posted_url || "")),
+          results_source: base.results_source || null,
+          results: Object.assign({}, base.results||{}, o.results||{})};
+}
+
+function applyCard(card){
+  const id = card.dataset.id; if(!id) return;
+  const e = eff(id);
+  // status tag
+  const tag = card.querySelector('.st[data-act="cycle"]');
+  if(tag){ tag.className = "st st-" + e.status; tag.textContent = LABEL[e.status]; }
+  // results block visible only when posted / results_in
+  const res = card.querySelector('[data-role="results"]');
+  if(res){
+    const show = (e.status === "posted" || e.status === "results_in");
+    res.classList.toggle("show", show);
+    res.querySelectorAll("input[data-f]").forEach(inp=>{
+      if(inp.dataset.f === "ad_ref") return;   // ad_ref handled below, not a result
+      const v = e.results[inp.dataset.f];
+      if(document.activeElement !== inp) inp.value = (v==null?"":v);
+    });
+    compare(card, id, e);
+  }
+  // ad_ref input (paid cards)
+  const ar = card.querySelector('input[data-f="ad_ref"]');
+  if(ar && document.activeElement !== ar) ar.value = e.ad_ref || "";
+  // posted URL input + live link (Tier 0 posted-content capture)
+  const pu = card.querySelector('input[data-f="posted_url"]');
+  if(pu && document.activeElement !== pu) pu.value = e.posted_url || "";
+  const pl = card.querySelector('[data-role="postedlink"]');
+  if(pl){
+    if(e.posted_url){ pl.href = e.posted_url; pl.textContent = "↗ open live post"; pl.style.display = "inline-block"; }
+    else { pl.removeAttribute("href"); pl.textContent = ""; pl.style.display = "none"; }
+  }
+  // source badge (AUTO / MANUAL)
+  const sb = card.querySelector('[data-role="source"]');
+  if(sb){
+    if(e.results_source){ sb.textContent = e.results_source.toUpperCase(); sb.className = "src-badge src-" + e.results_source; }
+    else { sb.textContent = ""; sb.className = "src-badge"; }
+  }
+  // auto-import readout
+  const auto = card.querySelector('[data-role="autoread"]');
+  if(auto){
+    const r = e.results || {};
+    if(e.results_source === "auto" && (r.cpi != null || r.spend != null)){
+      auto.innerHTML = `Auto (Meta): $${Number(r.spend||0).toLocaleString()} spend · ${r.installs||0} installs · CPI ${r.cpi!=null?("$"+r.cpi):"n/a"}${r.imported_at?(" · "+r.imported_at):""}`;
+      auto.style.display = "block";
+    } else { auto.innerHTML = ""; auto.style.display = "none"; }
+  }
+}
+
+function compare(card, id, e){
+  const box = card.querySelector('[data-role="compare"]');
+  if(!box) return;
+  const views = parseFloat(e.results.views);
+  if(isNaN(views)){ box.innerHTML=""; return; }   // nothing logged yet
+  const est = parseFloat(card.dataset.est || "");
+  if(!est){                                        // no reach estimate (e.g. paid CPI) — don't fail silently
+    box.innerHTML = `<span class="ontrack">Logged ${views.toLocaleString()} views — no reach estimate to compare (paid CPI tracked separately).</span>`;
+    return;
+  }
+  const dev = (views - est) / est;
+  const pct = Math.round(dev*100);
+  const cls = dev > 0.2 ? "beat" : dev < -0.2 ? "miss" : "ontrack";
+  const word = dev > 0.2 ? "beat estimate" : dev < -0.2 ? "missed estimate" : "on track";
+  box.innerHTML = `<span class="${cls}">Actual ${views.toLocaleString()} vs est ${est.toLocaleString()} — ${pct>=0?"+":""}${pct}% (${word})</span>`;
+}
+
+// single source of truth for a status change — used by click-to-advance AND drag
+function setStatus(id, status){
+  if(!id || FLOW.indexOf(status) < 0) return;
+  overrides[id] = overrides[id] || {}; overrides[id].status = status; save();
+  refreshAll();
+}
+function advanceStatus(id){
+  const cur = eff(id).status;
+  setStatus(id, FLOW[(FLOW.indexOf(cur)+1) % FLOW.length]);
+}
+// re-sync every view (detail cards + the live board) from current effective state
+function refreshAll(){
+  document.querySelectorAll(".rec-card").forEach(applyCard);
+  renderBoard();
+}
+
+// status cycle (rec-card tags and board pills share the .st[data-act="cycle"] hook)
+// Open a board card's full detail by reusing its matching Calendar/Paid-Briefs
+// card (same data-id): scroll to it, expand its script, and flash it.
+function openDetail(id){
+  const sel = (window.CSS && CSS.escape) ? CSS.escape(id) : id.replace(/"/g,'\\"');
+  const card = document.querySelector('.rec-card[data-id="'+sel+'"]');
+  if(!card){ return; }
+  const det = card.querySelector(".rec-detail"), btn = card.querySelector(".expand");
+  if(det && det.hasAttribute("hidden")){ det.removeAttribute("hidden"); if(btn) btn.textContent = btn.textContent.replace("▾","▴"); }
+  card.scrollIntoView({behavior:"smooth", block:"center"});
+  card.classList.add("bcard-flash"); setTimeout(()=>card.classList.remove("bcard-flash"), 1400);
+}
+
+document.body.addEventListener("click", ev=>{
+  const t = ev.target;
+  if(t.matches('.st[data-act="cycle"]')){ advanceStatus(t.dataset.id); return; }
+  if(t.matches('.expand')){
+    const d = t.parentElement.querySelector(".rec-detail");
+    if(d){ const open = d.hasAttribute("hidden"); if(open){ d.removeAttribute("hidden"); t.textContent = t.textContent.replace("▾","▴"); }
+           else { d.setAttribute("hidden",""); t.textContent = t.textContent.replace("▴","▾"); } }
+    return;
+  }
+  // Click anywhere on a board card (except the status pill or the live-post link)
+  // opens its full detail via the existing Calendar/Paid detail view.
+  const bc = t.closest(".bcard");
+  if(bc && !t.closest('[data-act="cycle"]') && !t.closest("a.bcard-link")){ openDetail(bc.dataset.id); }
+});
+
+// results entry
+document.body.addEventListener("input", ev=>{
+  const inp = ev.target;
+  if(inp.matches('input[data-f]')){
+    const card = inp.closest(".rec-card"); const id = card.dataset.id;
+    overrides[id] = overrides[id] || {};
+    if(inp.dataset.f === "ad_ref"){          // item-level match key, not a result
+      overrides[id].ad_ref = inp.value; save(); return;
+    }
+    if(inp.dataset.f === "posted_url"){      // real live link, item-level string
+      overrides[id].posted_url = inp.value; save();
+      applyCard(card); renderBoard(); return;
+    }
+    overrides[id].results = overrides[id].results || {};
+    overrides[id].results[inp.dataset.f] = inp.value === "" ? null : Number(inp.value);
+    save(); compare(card, id, eff(id));
+  }
+});
+
+document.getElementById("download").addEventListener("click", ()=>{
+  const out = JSON.parse(JSON.stringify(BAKED));
+  for(const id in overrides){
+    if(!out.items[id]) continue;
+    if(overrides[id].status) out.items[id].status = overrides[id].status;
+    if(overrides[id].ad_ref !== undefined) out.items[id].ad_ref = overrides[id].ad_ref;
+    if(overrides[id].posted_url !== undefined) out.items[id].posted_url = overrides[id].posted_url;
+    if(overrides[id].results) out.items[id].results = Object.assign(out.items[id].results||{}, overrides[id].results);
+  }
+  out.updated_at = new Date().toISOString().slice(0,10);
+  const blob = new Blob([JSON.stringify(out, null, 2)], {type:"application/json"});
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+  a.download = "dashboard_state.json"; a.click();
+});
+
+document.getElementById("reset").addEventListener("click", ()=>{
+  if(confirm("Discard local (unsaved) status/results edits and revert to the committed state?")){
+    localStorage.removeItem(LS_KEY); location.reload();
+  }
+});
+
+// ---- Pipeline Board (kanban): rendered live from BAKED.items + overrides ----
+function escg(s){ return String(s==null?"":s).replace(/[&<>"]/g,
+  c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+function renderBoard(){
+  const board = document.getElementById("board"); if(!board) return;
+  const items = BAKED.items || {};
+  const cols = {}; FLOW.forEach(s=>cols[s]=[]);
+  Object.keys(items).forEach(id=>{ (cols[eff(id).status] || (cols[eff(id).status]=[])).push(id); });
+  board.innerHTML = FLOW.map(status=>{
+    const ids = cols[status] || [];
+    const cards = ids.map(id=>{
+      const base = items[id] || {}; const e = eff(id);
+      const hook = base.hook || "";
+      const p = base.payload || {};
+      const seg = base.segment || "";
+      const segCls = seg.replace(/-/g,"");
+      const plat = p.platform || "";
+      const platCls = /tiktok/i.test(plat)?"tt":/insta/i.test(plat)?"ig":/youtube/i.test(plat)?"yt":(/twitter/i.test(plat)||/\bx\b/i.test(plat))?"x":"plat";
+      // real signal at a glance: actual results once posted, else the estimate.
+      const r = e.results || {};
+      let metric = "";
+      if(r.views!=null){ metric = Number(r.views).toLocaleString()+" views"+(r.er!=null?" · "+r.er+"% ER":""); }
+      else if(base.type==="paid" && base.estimate){ metric = "Est. CPI "+String(base.estimate).replace(/\s*\(.*$/,"").trim(); }
+      else if(base.estimate_num){ metric = "~"+Number(base.estimate_num).toLocaleString()+" est. reach"; }
+      const segBadge = seg ? `<span class="badge seg ${escg(segCls)}">${escg(seg)}</span>` : "";
+      const platBadge = plat ? `<span class="badge ${platCls}">${escg(plat)}</span>` : "";
+      const metricEl = metric ? `<div class="bcard-metric">${escg(metric)}</div>` : "";
+      const link = e.posted_url
+        ? `<a class="bcard-link" href="${escg(e.posted_url)}" target="_blank" rel="noopener">↗ live post</a>` : "";
+      return `<div class="bcard" draggable="true" data-id="${escg(id)}" data-type="${escg(base.type||'')}" title="Click to open the full script &amp; detail">
+        <div class="bcard-hook">“${escg(hook.slice(0,90))}${hook.length>90?"…":""}”</div>
+        <div class="bcard-meta">${segBadge}${platBadge}
+          <button class="st st-${status}" data-act="cycle" data-id="${escg(id)}" title="Click to advance status">${LABEL[status]}</button>
+        </div>${metricEl}${link}
+      </div>`;
+    }).join("") || `<div class="bcol-empty">nothing here</div>`;
+    return `<div class="bcol" data-status="${status}">
+      <div class="bcol-head"><span class="bcol-title">${LABEL[status]}</span><span class="bcol-n">${ids.length}</span></div>
+      ${cards}</div>`;
+  }).join("");
+}
+
+// Drag-and-drop (listeners live on #board, which survives innerHTML swaps)
+(function(){
+  const board = document.getElementById("board"); if(!board) return;
+  let dragId = null;
+  board.addEventListener("dragstart", e=>{
+    const c = e.target.closest(".bcard"); if(!c) return;
+    dragId = c.dataset.id; c.classList.add("dragging");
+    e.dataTransfer.effectAllowed = "move";
+    try{ e.dataTransfer.setData("text/plain", dragId); }catch(_){}
+  });
+  board.addEventListener("dragend", e=>{
+    const c = e.target.closest(".bcard"); if(c) c.classList.remove("dragging");
+    board.querySelectorAll(".bcol.dragover").forEach(x=>x.classList.remove("dragover"));
+    dragId = null;
+  });
+  board.addEventListener("dragover", e=>{
+    if(e.target.closest(".bcol")){ e.preventDefault(); e.dataTransfer.dropEffect = "move"; }
+  });
+  board.addEventListener("dragenter", e=>{
+    const col = e.target.closest(".bcol"); if(col) col.classList.add("dragover");
+  });
+  board.addEventListener("dragleave", e=>{
+    const col = e.target.closest(".bcol");
+    if(col && !col.contains(e.relatedTarget)) col.classList.remove("dragover");
+  });
+  board.addEventListener("drop", e=>{
+    e.preventDefault();
+    const col = e.target.closest(".bcol"); if(!col) return;
+    col.classList.remove("dragover");
+    const id = dragId || (e.dataTransfer && e.dataTransfer.getData("text/plain"));
+    if(id) setStatus(id, col.dataset.status);   // setStatus -> refreshAll -> renderBoard
+  });
+})();
+
+document.querySelectorAll(".rec-card").forEach(applyCard);
+renderBoard();
+save();
+</script>
+<script>
+
+/* ==========================================================================
+   "Ask this dashboard" — shared engine (pipelines/ask_panel.py).
+   Deliberately NOT a runtime model call: these pages are static and public, so
+   there is nowhere to hold an API key. Every answer is computed from the rows
+   already embedded above, which is why the numbers are checkable against the
+   tables on this page. `answerQuestion` is the seam to swap for a real backend.
+   ========================================================================== */
+const ASK = {"noun": "items", "generated_at": "2026-07-29", "collections": [{"name": "content items", "words": ["item", "content", "hook", "brief", "post", "card"], "rows": [{"hook": "The real reason your family is getting less money than you sent \u2014 and it's not the exchange rate", "status": "suggested", "type": "organic", "segment": "remittance", "platform": "TikTok", "est_reach": 42000, "views": null, "er": null, "first_seen": "2026-07-29", "posted_url": null}, {"hook": "I sent Bitcoin to my mom in the Philippines in 47 seconds \u2014 here's exactly how", "status": "suggested", "type": "organic", "segment": "remittance", "platform": "TikTok", "est_reach": 38000, "views": null, "er": null, "first_seen": "2026-07-29", "posted_url": null}, {"hook": "You've heard of Bitcoin \u2014 this is the version that actually fits in your wallet right now", "status": "suggested", "type": "organic", "segment": "crypto-curious", "platform": "Instagram Reels", "est_reach": 27000, "views": null, "er": null, "first_seen": "2026-07-29", "posted_url": null}, {"hook": "Hidden truth: the remittance industry takes $48 billion a year from immigrant families \u2014 here's the opt-out", "status": "suggested", "type": "organic", "segment": "remittance", "platform": "TikTok", "est_reach": 55000, "views": null, "er": null, "first_seen": "2026-07-29", "posted_url": null}, {"hook": "POV: You just deposited to your casino account in 9 seconds and withdrew winnings before the game even ended", "status": "suggested", "type": "organic", "segment": "iGaming", "platform": "Instagram Reels", "est_reach": 19000, "views": null, "er": null, "first_seen": "2026-07-29", "posted_url": null}, {"hook": "You sent $300. Your family received $271. Where did $29 go?", "status": "suggested", "type": "paid", "segment": "general", "platform": null, "est_reach": null, "views": null, "er": null, "first_seen": "2026-07-29", "posted_url": null}, {"hook": "Bitcoin is instant now. Most people don't know this yet.", "status": "suggested", "type": "paid", "segment": "crypto-curious", "platform": null, "est_reach": null, "views": null, "er": null, "first_seen": "2026-07-29", "posted_url": null}, {"hook": "Your sportsbook says 'funds available in 3-5 days.' That's not a policy. That's a punishment.", "status": "suggested", "type": "paid", "segment": "iGaming", "platform": null, "est_reach": null, "views": null, "er": null, "first_seen": "2026-07-29", "posted_url": null}], "label": "hook", "facets": [{"key": "status", "words": ["status", "stage", "column"], "values": ["suggested"]}, {"key": "type", "words": ["type", "organic", "paid"], "values": ["organic", "paid"]}, {"key": "segment", "words": ["segment", "audience"], "values": ["crypto-curious", "general", "iGaming", "remittance"]}, {"key": "platform", "words": ["platform"], "values": ["Instagram Reels", "TikTok"]}], "metrics": [{"key": "est_reach", "words": ["reach", "estimate", "estimated", "biggest", "projected"], "label": "est. reach", "fmt": "int"}, {"key": "views", "words": ["view", "actual", "result", "performance"], "label": "views", "fmt": "int"}, {"key": "er", "words": ["engagement", "er"], "label": "ER", "fmt": "pct"}], "detail": ["hook", "status", "type", "segment", "platform", "est_reach", "views", "er", "first_seen", "posted_url"]}], "scalars": [{"words": ["how many items in total", "total items", "how many tracked"], "label": "Tracked content items", "value": 8, "fmt": "int"}], "series": [], "examples": ["breakdown by status", "how many paid items?", "top 5 items by estimated reach", "which items are posted?", "how many in the remittance segment?", "breakdown by platform"]};
+const askInt = new Intl.NumberFormat("en-US");
+const askEsc = s => { const d = document.createElement("div"); d.textContent = (s == null ? "" : s); return d.innerHTML; };
+
+function askNum(v){
+  if (typeof v === "number") return v;
+  if (v == null) return null;
+  const n = parseFloat(String(v).replace(/[$,%\s,]/g, ""));
+  return isNaN(n) ? null : n;
+}
+function askFmt(v, fmt){
+  if (v == null) return "—";
+  if (fmt === "money") return "$" + (Math.abs(v) >= 100 ? askInt.format(Math.round(v)) : v.toFixed(2));
+  if (fmt === "pct")   return (Math.round(v * 10) / 10) + "%";
+  if (fmt === "int")   return askInt.format(Math.round(v));
+  return String(Math.round(v * 10) / 10);
+}
+// Matches a whole word, allowing a short inflection (install -> installs,
+// tactic -> tactics). The suffix allowance is withheld from words shorter than 4
+// characters: creator country codes are two letters, and "TH" was matching "the",
+// which made "what is the meaning of life" look like a question about Thailand.
+// Short values must match exactly.
+const askHas = (q, w) => {
+  const lit = String(w).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const tail = String(w).length >= 4 ? "[a-z]{0,3}" : "";
+  return new RegExp("(^|[^a-z0-9])" + lit + tail + "([^a-z0-9]|$)", "i").test(q);
+};
+
+/* ---- parse ------------------------------------------------------------- */
+/* How SPECIFICALLY does a word list match the question?
+
+   Returns [longestMatchedWordLength, numberOfMatchedWords]. Candidates are then
+   compared on that pair, so the most specific claim wins rather than whichever
+   was declared first.
+
+   This exists because word lists legitimately overlap. The creative dashboard
+   has both a "campaigns" collection (owning "campaign") and a "campaign
+   economics" one (owning "deposit cpa"), and a plain first-match picked
+   "campaigns" for EVERY question containing the word campaign, so
+   "highest deposit CPA" silently ranked by cost instead. Same collision between
+   the retention *curve* series ("retention") and the retention CPA *metric*
+   ("retention cpa"). Length is the right signal: a longer matched phrase is a
+   narrower claim on the question. */
+function askScore(q, words){
+  let longest = 0, count = 0;
+  for (const w of (words || [])) if (askHas(q, w)){ count++; if (w.length > longest) longest = w.length; }
+  return [longest, count];
+}
+function askBeats(a, b){ return a[0] > b[0] || (a[0] === b[0] && a[1] > b[1]); }
+function askPick(q, items){
+  let best = null, bestScore = [0, 0];
+  for (const it of (items || [])){
+    const s = askScore(q, it.words);
+    // Strictly-better only, so ties keep declaration order (previous behaviour).
+    if (s[0] > 0 && askBeats(s, bestScore)){ bestScore = s; best = it; }
+  }
+  return {item: best, score: bestScore};
+}
+
+function askParse(raw){
+  const q = " " + raw.toLowerCase().trim() + " ";
+  const f = {filters: [], intent: null, n: null, metric: null, asc: false, group: null};
+
+  // Which collection? The most specific match; else the default (first).
+  const collPick = askPick(q, ASK.collections);
+  f.collMatched = !!collPick.item;
+  f.coll = collPick.item || (ASK.collections || [])[0];
+
+  // A scalar KPI question ("what is total installs") short-circuits everything.
+  const scalarPick = askPick(q, ASK.scalars);
+  f.scalar = scalarPick.item;
+  f.scalarPhrase = !!(f.scalar && (f.scalar.words || []).some(w => w.includes(" ") && askHas(q, w)));
+  const seriesPick = askPick(q, ASK.series);
+  f.series = seriesPick.item;
+  f.seriesScore = seriesPick.score;
+
+  if (f.coll){
+    for (const fac of (f.coll.facets || [])){
+      let mapped = false;
+      for (const m of (fac.map || [])){
+        if ((m.words || []).some(w => askHas(q, w))){
+          f.filters.push({key: fac.key, val: m.val, label: m.label || (m.words || [])[0]});
+          mapped = true; break;
+        }
+      }
+      if (mapped) continue;
+      for (const val of (fac.values || [])){
+        if (askHas(q, String(val).toLowerCase())){ f.filters.push({key: fac.key, val: val}); break; }
+      }
+      for (const w of (fac.words || [])){
+        const m = q.match(new RegExp(w + "\\s+(?:is\\s+|=\\s*)?([a-z0-9_\\- ]{2,24})", "i"));
+        if (m && !f.filters.some(x => x.key === fac.key)){
+          const cand = (fac.values || []).find(v => m[1].trim().startsWith(String(v).toLowerCase()));
+          if (cand) f.filters.push({key: fac.key, val: cand});
+        }
+      }
+    }
+    // Metric: the most specifically-named one wins; otherwise the collection's
+    // first. Specificity matters here too — "cost per deposit" (a deposit_cpa
+    // phrase) must beat a bare "deposit" (the deposits count metric).
+    const metricPick = askPick(q, f.coll.metrics);
+    if (metricPick.item) f.metric = metricPick.item;
+    f.metricScore = metricPick.score;
+
+    // A series and a collection metric can both claim a word: "retention" draws
+    // the retention curve, "retention CPA" ranks campaigns. The more specific
+    // phrase wins, otherwise the curve swallows every CPA question.
+    if (f.series && askBeats(f.metricScore, f.seriesScore)) f.series = null;
+    // Numeric threshold ("over 1000 installs", "under $2 ecpi")
+    const over = q.match(/(?:over|above|more than|at least|>)\s*\$?([\d.,]+)\s*([km])?/);
+    const under = q.match(/(?:under|below|less than|cheaper than|<)\s*\$?([\d.,]+)\s*([km])?/);
+    for (const [m, dir] of [[over, "gte"], [under, "lte"]]){
+      if (!m) continue;
+      let v = parseFloat(m[1].replace(/,/g, ""));
+      if (m[2] === "k") v *= 1e3; if (m[2] === "m") v *= 1e6;
+      f.threshold = {dir, v, metric: f.metric || (f.coll.metrics || [])[0]};
+      f.filters.push({label: (dir === "gte" ? "over " : "under ") + askFmt(v, (f.threshold.metric || {}).fmt)});
+    }
+  }
+
+  const nm = q.match(/\b(?:top|best|bottom|worst|first)\s+(\d+)/);
+  if (nm) f.n = Math.min(parseInt(nm[1], 10), 50);
+
+  if (/\bhow many\b|\bhow much\b|\bcount\b|\bnumber of\b/.test(q)) f.intent = "count";
+  else if (/\baverage\b|\bavg\b|\bmean\b|\btypical\b/.test(q)) f.intent = "average";
+  else if (/\btotal\b|\bsum\b|\bcombined\b|\ball together\b/.test(q)) f.intent = "sum";
+  else if (/\bbreak ?down\b|\bdistribution\b|\bsplit\b/.test(q)) f.intent = "breakdown";
+  else if (/\bcheapest\b|\blowest\b|\bworst\b|\bbottom\b|\bleast\b|\bsmallest\b/.test(q)) { f.intent = "top"; f.want = "low"; }
+  else if (/\btop\b|\bbest\b|\bhighest\b|\bmost\b|\bbiggest\b|\blargest\b|\bstrongest\b/.test(q)) { f.intent = "top"; f.want = "high"; }
+  // LITERAL direction words name a direction on the metric itself rather than a
+  // quality judgement, and must not be inverted by lower_is_better: "most expensive"
+  // means the highest eCPI even though a low eCPI is the good outcome.
+  // "highest"/"lowest" and friends name a direction on the NUMBER, exactly like
+  // "expensive"/"cheapest", so they belong here rather than in the quality group
+  // above. Left in the quality group they got inverted by lower_is_better and
+  // returned the opposite row: "lowest deposit CPA" answered with the most
+  // expensive campaign. Deliberately NOT included: best, worst, top, bottom,
+  // most, least — those ARE quality judgements and must keep their polarity flip
+  // ("best eCPI" is the lowest eCPI, "most efficient" is not the highest number).
+  if (/\bexpensive\b|\bpriciest\b|\bdearest\b|\bcostliest\b|\bhighest\b|\blargest\b|\bbiggest\b|\bmaximum\b/.test(q)) { f.intent = "top"; f.literal = "high"; }
+  else if (/\bcheapest\b|\bcheap\b|\blowest\b|\bsmallest\b|\bminimum\b|\bfewest\b/.test(q)) { f.intent = "top"; f.literal = "low"; }
+  else if (/\blist\b|\bshow me\b|\bwhich\b|\bwho\b|\bwhat are\b/.test(q)) f.weakList = true;
+
+  // Direction. A literal word wins outright. Otherwise a quality word is read
+  // against the metric's polarity: "best eCPI" is the lowest, "worst eCPI" the
+  // highest, while "top installs" is simply the highest.
+  const lib = !!(f.metric || (f.coll && (f.coll.metrics || [])[0]) || {}).lower_is_better;
+  f.asc = f.literal ? (f.literal === "low") : ((f.want === "low") !== lib);
+  f.lib = lib;
+
+  // A weak interrogative only becomes a listing when the question is demonstrably
+  // about this dashboard's data; otherwise it falls through to the refusal.
+  if (f.weakList && !f.intent && (f.collMatched || f.filters.length || f.metric)) f.intent = "top";
+
+  // Naming a collection AND one of its metrics with no verb at all ("retention
+  // CPA by campaign", "deposit CPA by channel") is a ranking request. Without
+  // this it fell through to the refusal, which read as "the page doesn't have
+  // that" about a metric the page demonstrably has. Both conditions are required:
+  // a metric alone, or a collection alone, still refuses.
+  if (!f.intent && f.collMatched && f.metric) f.intent = "top";
+
+  if (f.coll){
+    const g = q.match(/\bby\s+([a-z_ ]+)/);
+    if (g){
+      const want = g[1].trim();
+      // A metric named in "by X" is a ranking instruction, never a grouping one.
+      const isMetric = (f.coll.metrics || []).some(m => [m.key].concat(m.words || [])
+        .some(w => want.startsWith(String(w).toLowerCase())));
+      const fac = isMetric ? null : (f.coll.facets || []).find(x => [x.key].concat(x.words || [])
+        .some(w => { const ww = String(w).toLowerCase(); return want === ww || want.startsWith(ww + " ") || ww.startsWith(want); }));
+      if (fac){ f.group = fac.key; if (!f.intent) f.intent = "breakdown"; }
+      // "by <metric>" is a ranking instruction, not a grouping one — leave the
+      // intent alone so "cheapest channel by eCPI" stays a ranking.
+    }
+  }
+  return f;
+}
+
+function askApply(f){
+  const rows = (f.coll && f.coll.rows) || [];
+  return rows.filter(r => {
+    for (const flt of f.filters){
+      if (flt.key && String(r[flt.key]) !== String(flt.val)) return false;
+    }
+    if (f.threshold){
+      const mk = (f.threshold.metric || {}).key;
+      const v = askNum(r[mk]);
+      if (v == null) return false;
+      if (f.threshold.dir === "gte" && !(v >= f.threshold.v)) return false;
+      if (f.threshold.dir === "lte" && !(v <= f.threshold.v)) return false;
+    }
+    return true;
+  });
+}
+
+const askScope = f => {
+  const parts = f.filters.map(x => x.label || x.val);
+  return parts.length ? parts.join(" · ") : ("all " + ((f.coll && f.coll.name) || ASK.noun || "rows"));
+};
+const askProv = n => `<div class="ask-prov">Computed in-browser from ${askInt.format(n)} row${n === 1 ? "" : "s"} embedded in this page`
+  + (ASK.generated_at ? ` · data baked ${askEsc(ASK.generated_at)}` : "")
+  + ` · cross-check any number against the tables on this page.</div>`;
+
+function askRowLine(coll, r, metric){
+  const name = askEsc(r[coll.label] != null ? r[coll.label] : "(unnamed)");
+  const bits = [];
+  if (metric) bits.push(`${askEsc(metric.label)} ${askFmt(askNum(r[metric.key]), metric.fmt)}`);
+  // Metric-less collection (e.g. strategy tactics): fall back to the first detail
+  // field after the label so the row still says something useful.
+  if (!metric){
+    const k = (coll.detail || []).find(x => x !== coll.label && r[x] != null && r[x] !== "");
+    if (k) return `<li><span>${name}</span><span class="ask-meta">${askEsc(String(r[k]).slice(0, 70))}</span></li>`;
+  }
+  for (const m of (coll.metrics || [])){
+    if (metric && m.key === metric.key) continue;
+    const v = askNum(r[m.key]);
+    if (v != null && bits.length < 3) bits.push(`${askEsc(m.label)} ${askFmt(v, m.fmt)}`);
+  }
+  return `<li><span>${name}</span><span class="ask-meta">${bits.join(" · ")}</span></li>`;
+}
+
+/* ---- answer ----------------------------------------------------------- */
+function answerQuestion(raw){
+  if (!raw.trim()) return `<span class="ask-empty">Type a question.</span>`;
+  const f = askParse(raw);
+
+  // Single scalar KPI. A multi-word trigger ("total installs", "d1 retention") is
+  // specific enough to win even though the phrasing also looks like an aggregation.
+  if (f.scalar && (!f.intent || f.scalarPhrase)) {
+    return `<div class="ask-head">${askEsc(f.scalar.label)}: <b>${askFmt(askNum(f.scalar.value), f.scalar.fmt)}</b></div>`
+      + (f.scalar.note ? askEsc(f.scalar.note) : "") + askProv(1);
+  }
+  // A named series (retention curve etc).
+  if (f.series){
+    const rows = (f.series.labels || []).map((l, i) =>
+      `<li><span>${askEsc(l)}</span><span class="ask-meta">${askFmt(askNum((f.series.values || [])[i]), f.series.fmt)}</span></li>`).join("");
+    return `<div class="ask-head">${askEsc(f.series.label)}</div><ul class="ask-list">${rows}</ul>`
+      + (f.series.note ? `<div class="ask-prov">${askEsc(f.series.note)}</div>` : "")
+      + askProv((f.series.labels || []).length);
+  }
+  if (!f.coll) return askRefuse();
+
+  // A named row beats a generic intent ("tell me about Money20/20").
+  const ql = raw.toLowerCase();
+  let named = null;
+  const order = f.collMatched
+    ? [f.coll].concat((ASK.collections || []).filter(c => c !== f.coll))
+    : (ASK.collections || []);
+  for (const c of order){
+    for (const r of (c.rows || [])){
+      const nm = String(r[c.label] || "").toLowerCase();
+      if (nm.length > 3 && ql.includes(nm) && (!named || nm.length > String(named.r[named.c.label]).length)) named = {c, r};
+    }
+  }
+  if (named && !f.intent){
+    const c = named.c, r = named.r;
+    const lines = (c.detail || Object.keys(r)).filter(k => r[k] != null && String(r[k]) !== "")
+      .map(k => `${askEsc(k.replace(/_/g, " "))}: <b>${askEsc(typeof r[k] === "object" ? JSON.stringify(r[k]) : r[k])}</b>`);
+    return `<div class="ask-head">${askEsc(r[c.label])}</div>${lines.join(" · ")}` + askProv(1);
+  }
+
+  const rows = askApply(f);
+  const metric = f.metric || (f.coll.metrics || [])[0];
+
+  if (f.intent === "count"){
+    const ordered = metric
+      ? rows.slice().sort((a, b) => (askNum(b[metric.key]) || 0) - (askNum(a[metric.key]) || 0))
+      : rows.slice();
+    return `<div class="ask-head"><b>${askInt.format(rows.length)}</b> ${askEsc(f.coll.name)} match ${askEsc(askScope(f))}.</div>`
+      + (rows.length ? `<ul class="ask-list">${ordered
+          .slice(0, 5).map(r => askRowLine(f.coll, r, metric)).join("")}</ul>`
+        + (rows.length > 5 ? `<div class="ask-prov">Showing 5 of ${askInt.format(rows.length)}.</div>` : "") : "")
+      + askProv(rows.length);
+  }
+
+  if (f.intent === "sum" || f.intent === "average"){
+    if (!metric) return `<span class="ask-miss">There is no numeric measure on ${askEsc(f.coll.name)} to total or average.</span>`;
+    const vals = rows.map(r => askNum(r[metric.key]))
+      .filter(v => v != null && !(metric.exclude_zero && v === 0));
+    if (!vals.length) return `<span class="ask-miss">No ${askEsc(f.coll.name)} match ${askEsc(askScope(f))}, so there is nothing to total.</span>`;
+    const total = vals.reduce((a, b) => a + b, 0);
+    if (f.intent === "sum"){
+      return `<div class="ask-head">Total ${askEsc(metric.label)} for ${askEsc(askScope(f))}: <b>${askFmt(total, metric.fmt)}</b></div>`
+        + `Across <b>${askInt.format(vals.length)}</b> ${askEsc(f.coll.name)}.` + askProv(rows.length);
+    }
+    const sorted = vals.slice().sort((a, b) => a - b);
+    const med = sorted.length % 2 ? sorted[(sorted.length - 1) / 2] : (sorted[sorted.length / 2 - 1] + sorted[sorted.length / 2]) / 2;
+    return `<div class="ask-head">Average ${askEsc(metric.label)} for ${askEsc(askScope(f))}: <b>${askFmt(total / vals.length, metric.fmt)}</b></div>`
+      + `Median <b>${askFmt(med, metric.fmt)}</b> · min <b>${askFmt(sorted[0], metric.fmt)}</b> · max <b>${askFmt(sorted[sorted.length - 1], metric.fmt)}</b>`
+      + ` · across <b>${askInt.format(vals.length)}</b> ${askEsc(f.coll.name)}.` + askProv(rows.length);
+  }
+
+  if (f.intent === "breakdown"){
+    const key = f.group || ((f.coll.facets || [])[0] || {}).key;
+    if (!key) return askRefuse();
+    const counts = {};
+    rows.forEach(r => { const k = r[key] == null || r[key] === "" ? "unknown" : r[key]; counts[k] = (counts[k] || 0) + 1; });
+    const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+    if (!entries.length) return `<span class="ask-miss">No ${askEsc(f.coll.name)} match ${askEsc(askScope(f))}.</span>`;
+    return `<div class="ask-head">${askInt.format(rows.length)} ${askEsc(f.coll.name)} by ${askEsc(key.replace(/_/g, " "))}`
+      + (f.filters.length ? ` (${askEsc(askScope(f))})` : "") + `</div><ul class="ask-list">`
+      + entries.map(([k, v]) => `<li><span>${askEsc(k)}</span><span class="ask-meta">${askInt.format(v)} · ${(v / rows.length * 100).toFixed(1)}%</span></li>`).join("")
+      + `</ul>` + askProv(rows.length);
+  }
+
+  if (f.intent === "top"){
+    if (!rows.length) return `<span class="ask-miss">Nothing matches ${askEsc(askScope(f))}. Try loosening the question.</span>`;
+    const n = f.n || 10;
+    let ranked = rows, dropped = 0;
+    if (metric && metric.exclude_zero){
+      ranked = rows.filter(r => { const v = askNum(r[metric.key]); return v != null && v !== 0; });
+      dropped = rows.length - ranked.length;
+      if (!ranked.length) return `<span class="ask-miss">Every matching row has no ${askEsc(metric.label)}, so there is nothing to rank.</span>`;
+    }
+    const sorted = metric ? ranked.slice().sort((a, b) => {
+      const av = askNum(a[metric.key]), bv = askNum(b[metric.key]);
+      if (av == null) return 1; if (bv == null) return -1;
+      return f.asc ? av - bv : bv - av;
+    }) : rows.slice();
+    // Header wording, kept honest three ways: a metric-less collection is "listed"
+    // not "ranked"; ascending on a lower-is-better metric is "Best", not "Lowest"
+    // (rank 1 and the cheapest eCPI are the good end, and "Lowest by rank" read as
+    // if it were the bottom of the list); and when nothing is truncated it says
+    // "All N" rather than the nonsense "Lowest 6 of 6".
+    const showing = Math.min(n, sorted.length);
+    const complete = showing >= ranked.length;
+    const word = metric ? (f.asc ? (f.lib ? "Best" : "Lowest") : "Top") : "Listing";
+    const lead = complete ? `All ${askInt.format(ranked.length)}`
+                          : `${word} ${showing} of ${askInt.format(ranked.length)}`;
+    const order = metric ? ` by ${askEsc(metric.label)}, ${f.asc ? "best" : "highest"} first` : "";
+    return `<div class="ask-head">${lead} ${askEsc(f.coll.name)}${order}`
+      + `${f.filters.length ? " — " + askEsc(askScope(f)) : ""}</div>`
+      + `<ul class="ask-list">${sorted.slice(0, n).map(r => askRowLine(f.coll, r, metric)).join("")}</ul>`
+      + (dropped ? `<div class="ask-prov">${askInt.format(dropped)} row(s) with no ${askEsc(metric.label)} excluded from this ranking (e.g. organic, which has no media cost).</div>` : "")
+      + askProv(rows.length);
+  }
+
+  // Filters but no recognised intent: show what matches rather than guess.
+  if (f.filters.length){
+    return `<div class="ask-head">I did not recognise the question, so here is what matches ${askEsc(askScope(f))}.</div>`
+      + `<b>${askInt.format(rows.length)}</b> ${askEsc(f.coll.name)}.`
+      + `<ul class="ask-list">${rows.slice(0, 10).map(r => askRowLine(f.coll, r, metric)).join("")}</ul>` + askProv(rows.length);
+  }
+  return askRefuse();
+}
+
+function askRefuse(){
+  const cols = (ASK.collections || []).map(c => askEsc(c.name)).join(", ");
+  return `<span class="ask-miss">I can't answer that from the data on this page.</span><br>`
+    + `This panel computes answers from what this dashboard actually carries (${cols}), so it handles counts, `
+    + `totals, averages, rankings, breakdowns, and single-row lookups. It does not do open-ended questions. `
+    + `Try one of the examples above.`;
+}
+
+/* ---- wiring ----------------------------------------------------------- */
+function askRun(q){
+  const el = document.getElementById("askA");
+  el.classList.remove("ask-empty");
+  el.innerHTML = answerQuestion(q);
+}
+(function askInitPanel(){
+  const eg = document.getElementById("askEg");
+  (ASK.examples || []).forEach(x => {
+    const s = document.createElement("span");
+    s.className = "ask-chip"; s.textContent = x;
+    s.addEventListener("click", () => { document.getElementById("askQ").value = x; askRun(x); });
+    eg.appendChild(s);
+  });
+  document.getElementById("askGo").addEventListener("click", () => askRun(document.getElementById("askQ").value));
+  document.getElementById("askQ").addEventListener("keydown", e => { if (e.key === "Enter") askRun(e.target.value); });
+  const total = (ASK.collections || []).reduce((a, c) => a + ((c.rows || []).length), 0);
+  document.getElementById("askA").textContent =
+    `Ask a question about the ${askInt.format(total)} rows on this page.`;
+})();
+
+</script>
+<script>
+
+/* ==========================================================================
+   Collapse long tables to a preview (shared — pipelines/list_collapse.py).
+   Keeps the Ask panel reachable without scrolling a multi-thousand-pixel table.
+   Targets `.table-wrap > table > tbody` only: that is the shared pattern across
+   these dashboards, and it means pages without a long list get no control.
+   ========================================================================== */
+(function(){
+  var LIMIT = 10;
+  var seq = 0;
+
+  function rowsOf(tbody){
+    var out = [], k;
+    for (k = 0; k < tbody.children.length; k++){
+      if (tbody.children[k].tagName === "TR") out.push(tbody.children[k]);
+    }
+    return out;
+  }
+
+  function apply(box, tbody, state){
+    var rows = rowsOf(tbody), i;
+    var expanded = state.expanded;
+    // Nothing to do: fewer rows than the limit. Clean up any stale control so a
+    // filter that narrows the set below the limit doesn't leave one behind.
+    if (rows.length <= LIMIT){
+      for (i = 0; i < rows.length; i++) rows[i].style.display = "";
+      box.classList.remove("lc-clipped");
+      if (state.ctrl) state.ctrl.style.display = "none";
+      return;
+    }
+    for (i = 0; i < rows.length; i++){
+      rows[i].style.display = (expanded || i < LIMIT) ? "" : "none";
+    }
+    if (expanded) box.classList.remove("lc-clipped");
+    else box.classList.add("lc-clipped");
+
+    if (!state.ctrl){
+      var wrap = document.createElement("div");
+      wrap.className = "lc-more";
+      var btn = document.createElement("button");
+      btn.className = "lc-btn";
+      btn.type = "button";
+      var note = document.createElement("span");
+      note.className = "lc-count";
+      wrap.appendChild(btn); wrap.appendChild(note);
+      box.parentNode.insertBefore(wrap, box.nextSibling);
+      state.ctrl = wrap; state.btn = btn; state.note = note;
+      btn.addEventListener("click", function(){
+        state.expanded = !state.expanded;
+        apply(box, tbody, state);
+        if (!state.expanded){
+          // Collapsing from far down the table would otherwise leave the reader
+          // stranded below the content that just disappeared.
+          var y = box.getBoundingClientRect().top + window.scrollY - 90;
+          window.scrollTo({top: y < 0 ? 0 : y, behavior: "smooth"});
+        }
+      });
+    }
+    state.ctrl.style.display = "";
+    state.btn.textContent = expanded ? ("Show first " + LIMIT) : ("Show all " + rows.length);
+    state.btn.setAttribute("aria-expanded", expanded ? "true" : "false");
+    state.note.textContent = expanded
+      ? ("all " + rows.length + " shown")
+      : ("showing " + LIMIT + " of " + rows.length);
+    syncCounters(!expanded);
+  }
+
+  // A dashboard's own "N of M shown" counter becomes a contradiction the moment we
+  // draw only the first 10 of N — the screenshot review caught "93 of 93 shown"
+  // sitting directly above ten rows. Reword it to describe what MATCHED while the
+  // table is truncated, and restore the original wording on expand. Matched by text
+  // pattern rather than per-dashboard id, so it needs no builder-specific wiring.
+  var COUNT_RE = /^\s*([\d,]+) of ([\d,]+) shown\s*$/;
+  function syncCounters(truncated){
+    var all = document.querySelectorAll("span,div,p,small"), i, el, m;
+    for (i = 0; i < all.length; i++){
+      el = all[i];
+      if (el.children.length) continue;
+      m = COUNT_RE.exec(el.textContent || "");
+      if (m){
+        if (truncated) el.textContent = m[1] + " of " + m[2] + " match";
+        continue;
+      }
+      m = /^\s*([\d,]+) of ([\d,]+) match\s*$/.exec(el.textContent || "");
+      if (m && !truncated) el.textContent = m[1] + " of " + m[2] + " shown";
+    }
+  }
+
+  function attach(box){
+    var tbody = box.querySelector("table > tbody");
+    if (!tbody || box.getAttribute("data-lc")) return;
+    box.setAttribute("data-lc", String(++seq));
+    var state = {expanded: false, ctrl: null, btn: null, note: null, busy: false};
+    apply(box, tbody, state);
+    // These tables are redrawn by the page's own filter/sort code, which would
+    // silently undo the collapse. Watch childList ONLY — observing attributes
+    // would re-fire on our own row hiding.
+    if (window.MutationObserver){
+      var mo = new MutationObserver(function(){
+        if (state.busy) return;
+        state.busy = true;
+        apply(box, tbody, state);
+        state.busy = false;
+      });
+      mo.observe(tbody, {childList: true});
+    }
+  }
+
+  function init(){
+    var boxes = document.querySelectorAll(".table-wrap"), i;
+    for (i = 0; i < boxes.length; i++) attach(boxes[i]);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
+})();
+
+</script>
+</body>
+</html>

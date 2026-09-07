@@ -1,0 +1,12 @@
+Outreach Brief — Mexicanos Verdaderos (YouTube)
+Segment: remittance | Score: 24.0/100 | 55,600 followers
+------------------------------------------------------------
+Hey team, here's my read on Mexicanos Verdaderos as a potential Speed partner. Up front, I want to be honest: this is a low-confidence candidate scoring 24/100. Their channel is built around Mexican politics and society, not money or fintech, and their crypto and payments content is essentially nonexistent. So we'd be introducing Speed cold to an audience that hasn't opted into this topic.
+
+That said, there's a real thread worth pulling. A creator covering Mexican society to 55,600 engaged followers — and their engagement is genuinely strong at 40% — is almost certainly talking to people with family ties across the border. Remittances to Mexico are a massive, lived reality for that audience, and the fees they pay through traditional services are brutal. That's our angle: zero-fee Lightning transfers and the stablecoin option for anyone who wants to avoid Bitcoin's volatility while sending money home.
+
+Three talking points for the pitch: first, frame this as a consumer-rights and savings story, not a crypto story — it fits their society-focused lens. Second, lead with concrete numbers on how much families lose to remittance fees annually. Third, point to Speed working on regular phones for regular people, no crypto expertise needed.
+
+For the CTA, I'd propose a single sponsored segment or a tutorial-style explainer on sending money home with zero fees, so we can test audience response before committing further.
+
+One thing to avoid: don't pitch this as a Bitcoin investment or trading opportunity. That misreads their audience and feels off-brand. Keep it grounded in saving families money.

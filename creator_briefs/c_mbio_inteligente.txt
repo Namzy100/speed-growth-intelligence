@@ -1,0 +1,12 @@
+Outreach Brief — Câmbio Inteligente (YouTube)
+Segment: remittance | Score: 25.2/100 | 22,100 followers
+------------------------------------------------------------
+Câmbio Inteligente sits right in our wheelhouse on paper—an audience built around remessa and the practical mechanics of moving money internationally. People who follow this channel are already thinking hard about exchange rates, transfer costs, and getting more value home, which is exactly the mindset Speed serves. The honest caveat is that the channel's content has zero crypto or fintech-product coverage so far, and the partnership score reflects that gap. The audience intent is there, but we'd be introducing a new product category, so we'd want to test rather than overcommit.
+
+The feature that matters most here is fee savings. Lightning transfers cost nothing and settle in seconds, which is a sharp contrast to the spreads and fees their audience already complains about. Stablecoin support (USDT, USDC) is the second hook—for viewers nervous about Bitcoin volatility, a way to hold and send stable value lowers the barrier.
+
+Three talking points to lead with: first, a concrete cost comparison showing what their audience loses to traditional remittance fees versus zero on Lightning; second, the speed angle—money arriving in seconds, not days; third, stablecoins as the "stable money" option for people who want predictability, not crypto speculation.
+
+For the ask, propose a single sponsored explainer or a "how to send money home cheaper" segment as a paid test, with performance benchmarks before we scale.
+
+One thing to avoid: don't pitch this as a Bitcoin or investing story. Their audience cares about saving money on transfers, not crypto upside—lead with utility, not the asset.

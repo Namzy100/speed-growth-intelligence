@@ -1,0 +1,50 @@
+======================================================================
+SPEED WALLET — PAID SPEND OPTIMIZATION MEMO
+Generated 2026-07-01 16:10 UTC · figures live from Google Sheet
+======================================================================
+
+MEMORANDUM
+
+TO: Niyati
+FROM: Naman
+DATE: [Date]
+RE: Meta Budget Reallocation — Immediate Action Required
+
+---
+
+1. BOTTOM LINE
+
+We should pause three underperforming Meta campaigns immediately — Cash Deposit, Re-engagement - Android, and Re-targeting Campaign Android & iOS — and redirect the full $1,575.63 in freed budget into our best-performing campaign, Payday - Android - Broad+. Those three campaigns are collectively generating only 39 installs at a blended cost that is dragging our overall efficiency down; routing that same capital into Payday - Android - Broad+ at its proven CPI of $3.15 is projected to produce 499 installs instead, a net lift of 460 installs with no incremental spend and a blended CPI improvement from $4.04 to $3.15.
+
+2. THE REALLOCATION
+
+The three campaigns to pause and the capital each returns: Cash Deposit contributes $1,051.36 (currently delivering 13 installs at $80.87 CPI), Re-engagement - Android contributes $144.42 (6 installs at $24.07 CPI), and Re-targeting Campaign Android & iOS contributes $379.85 (20 installs at $18.99 CPI). Combined, that is $1,575.63 freed from campaigns producing 39 installs. Redirected entirely into Payday - Android - Broad+, which has demonstrated a CPI of $3.15 across 1,601 installs and $5,047.17 in spend, that same $1,575.63 is projected to yield 499 installs. The net install gain is +460. Blended CPI across the reallocated pool moves from $4.04 before the shift to $3.15 after — a meaningful efficiency gain achieved purely through reallocation, not additional budget.
+
+3. APPLE SEARCH ADS VS. FACEBOOK
+
+On an Adjust eCPI basis, Facebook is marginally more efficient at $3.46 across 1,611 installs versus Apple Search Ads at $3.52 across 2,660 installs — a $0.06 difference per install. Facebook edges Apple on unit cost, but Apple carries nearly 65% more install volume at a still-competitive rate. Given the small gap in eCPI, no immediate wholesale budget shift between the two channels is warranted. The better near-term move is the Meta reallocation described above. That said, if Meta spend scales into Payday - Android - Broad+ and CPI begins to drift upward due to audience saturation, Apple Search Ads represents a credible overflow channel with proven scale and an eCPI close enough to Facebook to absorb incremental budget without material efficiency loss.
+
+4. RISKS AND CAVEATS
+
+Payday - Android - Broad+ CPI of $3.15 is observed at its current spend level of $5,047.17; adding $1,575.63 represents a roughly 31% budget increase to that campaign, and CPI may rise as the audience broadens or the algorithm exits its current learning phase. The 499 projected installs and $3.15 post-reallocation CPI should therefore be treated as a best-case ceiling, not a guarantee, and actual results should be reviewed within the first 7 days post-reallocation. Additionally, pausing Re-engagement - Android entirely removes any retargeting coverage for lapsed users on that platform, which carries a retention risk that is not reflected in install metrics alone.
+
+
+--------------------------------
+APPENDIX — COMPUTED FIGURES (use these exact numbers — do not invent others):
+
+Best campaign — Payday - Android - Broad+: $5,047.17 spend, 1,601 installs, CPI $3.15
+
+Underperformers to drain:
+  - Cash Deposit: $1,051.36 spend, 13 installs, CPI $80.87, 3,228 clicks
+  - Re-engagement - Android: $144.42 spend, 6 installs, CPI $24.07, 180 clicks
+  - Re-targeting Campaign Andoid & iOS: $379.85 spend, 20 installs, CPI $18.99, 911 clicks
+
+Budget freed by pausing those: $1,575.63
+Installs those currently produce: 39
+Installs if that $1,575.63 ran at the best CPI ($3.15): 499
+Net projected install lift: +460
+Blended CPI over the reallocated pool — before: $4.04, after: $3.15
+
+Apple Search Ads vs Facebook (Adjust eCPI):
+  Apple: eCPI $3.52 on 2,660 installs
+  Facebook: eCPI $3.46 on 1,611 installs

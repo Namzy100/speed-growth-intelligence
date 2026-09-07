@@ -1,0 +1,12 @@
+Outreach Brief — Thinking Crypto (YouTube)
+Segment: crypto-curious | Score: 63.6/100 | 194,000 followers
+------------------------------------------------------------
+Thinking Crypto has built a 194K-strong audience that's genuinely curious about Bitcoin, blockchain, and Web3 — but here's the gap worth leaning into: this channel spends most of its energy explaining the *what* and *why* of crypto, and almost none on the *how do I actually use this in real life*. That's exactly where Speed fits. Their viewers understand Bitcoin conceptually; they just haven't been shown a clean, practical way to spend it. Speed answers that.
+
+Because this is a crypto-curious audience, the messaging should center on simplicity and everyday utility rather than fee-savings or transaction speed (those land better with remittance and iGaming crowds). The hooks here are Lightning payments that settle in seconds, the option to hold stable value through USDT and USDC for people nervous about volatility, and Speed Stacks letting them earn sats on normal purchases — a low-stakes way to start stacking without buying in at a price.
+
+Three talking points for the pitch: first, Speed turns abstract Bitcoin knowledge into something his audience can actually do today, on iOS or Android. Second, the stablecoin support speaks directly to viewers who are interested but spooked by price swings. Third, Speed Stacks gamifies the on-ramp — earning sats on coffee is a far easier first step than a buy order.
+
+Recommend a dedicated walkthrough video where he sets up Speed and makes a real payment on camera, since his audience trusts demonstrations over endorsements.
+
+One thing to avoid: don't pitch this as a trading or investment play. This audience wants to understand and use Bitcoin, not speculate — keep it utility-first.

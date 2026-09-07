@@ -1,0 +1,196 @@
+======================================================================
+SPEED WALLET — TREND-TO-ACTION PIPELINE (YouTube + TikTok)
+Generated 2026-07-01 19:19 UTC · 63 YouTube + 105 TikTok items · 7 categories
+======================================================================
+
+FEEDBACK LOOP (week-over-week)
+--------------------------------
+Compared against snapshot from 2026-07-01:
+  NEW tracked: bitcoin|YouTube
+  NEW tracked: fintech|YouTube
+  NEW tracked: send money|YouTube
+  NEW tracked: money transfer|YouTube
+  NEW tracked: crypto|YouTube
+  NEW tracked: lightning network|YouTube
+  NEW tracked: remittance|YouTube
+  bitcoin|TikTok: reach ▲ +118% | emerging: #bullrun, #dollar, #finance, #hanocrypto | faded: #bitcoinpriceprediction, #investing, #michaelsaylor, #usa
+  crypto|TikTok: reach ▲ +20% | emerging: #foryou, #shibaarmy, #shibainu, #shibaswap, #top | faded: #cryptok, #ethereum, #finance, #investing, #solana
+  remittance|TikTok: reach ▲ +217% | emerging: #africa, #african, #hundi, #ideapreneurnepal, #nepalipaisa | faded: #banking, #economy, #migration, #new, #storytime
+  send money|TikTok: reach ▼ -35% | emerging: #asmr, #dustyfreezone, #energyhealing, #protection, #reiki | faded: #cashapp, #education, #explore, #protectyourself, #viralvideos
+  money transfer|TikTok: reach ▲ +19% | emerging: #carterpcs, #cashapp, #couplecomedy, #groceryshopping, #relationshiphumor | faded: #banktransfer, #comedy, #couple, #couplegoals, #fyp
+  lightning network|TikTok: reach ▲ +213% | emerging: #blockchain, #joy, #lightning, #lightningstrike, #stormchasing | faded: #bigcomfy, #bitcoineducation, #crypto, #fyp, #postepay
+  fintech|TikTok: reach ▲ +48% | emerging: #banking, #business, #founder, #money | faded: #bankindonesia, #fyp, #transaksidigital, #urangjabar
+
+
+ACTIONABLE CREATIVE BRIEFS (ranked)
+--------------------------------
+
+MOMENTUM SUMMARY
+
+Remittance reach exploded +217% week-over-week with emerging tags anchored in specific diaspora communities (Nepal, Africa, hundi corridors), signaling an urgent, high-intent audience actively searching alternatives to broken transfer rails right now. Lightning Network reach is up +213% simultaneously, meaning the infrastructure story is breaking into mainstream curiosity at the exact moment the remittance pain point is peaking — act on both this week before CPMs rise.
+
+---
+
+TREND IDENTIFICATION AND CLASSIFICATION
+
+Trend 1: Remittance TikTok surge (+217% reach, emerging tags #africa #nepalipaisa #hundi #ideapreneurnepal)
+DIRECTLY USABLE. Diaspora communities are actively talking about informal and costly transfer methods right now.
+
+Trend 2: Lightning Network TikTok surge (+213% reach, emerging tags #blockchain #lightning)
+ADAPTABLE with a Speed angle. Reach is real but current content is scattered (storm chasing, hobby crypto). Speed Wallet is the consumer face of this infrastructure.
+
+Trend 3: Bitcoin volatility / crash narrative (YouTube crypto-curious cluster — "I Just Sold Everything," "5 Greatest Crashes," $300B Elon loss, combined 4M+ views at 2.5–4.9% ER; TikTok 826K views 9.2% ER on chart conspiracy hook)
+ADAPTABLE with a Speed angle. Fear-of-loss and FOMO energy is peaking; pivot from holding/speculation to spending/utility reframes Bitcoin as something you use, not just something you lose.
+
+Trend 4: iGaming Bitcoin price drop signal (TikTok, 380K views, 2.4% ER, price-dip framing)
+DIRECTLY USABLE. iGaming players actively monitor price; low balance moments are the highest-friction deposit point — instant Lightning deposits solve this exactly.
+
+Trend 5: Bitcoin regret/missed-fortune storytelling (TikTok — Lily Allen 853K views, "Compro bitcoin 16 años" 333K views, "Lost his inheritance" YouTube 460K views 2.6% ER)
+ADAPTABLE with a Speed angle. Regret narrative is proven to hook; flip it — instead of what you lost holding, show what you gain using.
+
+Trend 6: Fintech TikTok reach +48%, emerging tags #founder #business #banking #money
+ADAPTABLE with a Speed angle. Founder/builder identity is rising; position Speed Wallet as the payment layer builders and freelancers actually use.
+
+Trend 7: "send money" TikTok reach -35%, emerging tags #asmr #energyhealing #reiki #dustyfreezone
+IRRELEVANT. The keyword has been hijacked by spiritual/wellness content; no viable Speed angle in this noise, skip this cycle.
+
+---
+
+RANKED CREATIVE BRIEFS
+
+---
+
+RANK 1
+
+Trend and evidence: Remittance TikTok surge, reach +217%, emerging tags #africa #nepalipaisa #hundi #ideapreneurnepal. Validated by YouTube remittance cluster (1.2M views Korean banking frustration video, 270K TapTapSend Telugu creator). Real diaspora pain, real search volume, right now.
+
+Classification: DIRECTLY USABLE
+
+Exact hook line: "Your family is waiting. The bank is not."
+
+15-second script:
+Beat 1 (0–3s): Open on phone screen showing a transfer pending for 3 days, notification says "fees deducted: $18." Text overlay: "This is why families go without."
+Beat 2 (3–8s): Cut to sender opening Speed Wallet, typing amount, hitting send. Clock graphic: 0 seconds. Fee graphic: $0.
+Beat 3 (8–13s): Cut to recipient's phone lighting up with funds received. Real face, real reaction, no acting needed — shoot UGC-style.
+Beat 4 (13–15s): Logo lockup. "Speed Wallet. Zero fees. Instant. Download now."
+
+Speed segment: Remittance
+
+Paid channel to test first: Meta (Facebook and Instagram feed, Android, broad targeting layered with expat interest signals — Nepal, Philippines, Nigeria, Mexico — and income bracket $25K–$55K). Rationale: Meta's Payday Android Broad+ is already your $3.17 CPI benchmark winner. This brief rides the same placement with a segment-specific creative that should tighten relevance scores and lower CPM. TikTok is tempting given the reach spike but the #nepalipaisa and #hundi tags suggest organic discovery mode, not paid readiness yet.
+
+Estimated CPI impact: $2.10–$2.60 vs $3.17 benchmark. Rationale: Diaspora remittance creatives consistently outperform generic crypto on Meta because the pain point is concrete and the audience is identifiable via interest and language signals. Emotional hook plus zero-fee USP is a proven Meta conversion pattern. Expect 20–35% CPI improvement if creative is shot authentically (UGC over polished).
+
+---
+
+RANK 2
+
+Trend and evidence: Bitcoin volatility/crash narrative dominating both platforms — YouTube cluster totaling 4M+ views across "I Just Sold Everything," "5 Greatest Crashes," "$300B Elon loss," and TikTok's 826K views at 9.2% ER on the chart conspiracy hook (highest ER in the entire TikTok set this week).
+
+Classification: ADAPTABLE with a Speed angle
+
+Exact hook line: "Stop watching Bitcoin. Start spending it."
+
+15-second script:
+Beat 1 (0–3s): Fast-cut montage of red price charts, phone notifications of losses, panicked crypto Twitter screenshots. No voiceover — just the chaos.
+Beat 2 (3–7s): Hard cut to black. Single text: "What if you just used it?"
+Beat 3 (7–12s): Calm scene. Someone pays for coffee, sends money, tops up a game account — all via Speed Wallet Lightning. Each transaction: instant, confirmed, done.
+Beat 4 (12–15s): "Speed Wallet. Bitcoin that works. Not just sits." App store CTA.
+
+Speed segment: Crypto-curious (with crossover to iGaming on the gaming beat)
+
+Paid channel to test first: TikTok. Rationale: The 9.2% ER on the Bitcoin chart conspiracy video is an outlier signal — this audience is highly reactive on TikTok right now. The volatility anxiety is peaking this week specifically. TikTok's in-feed TopView and Spark Ads on creator accounts already posting crash commentary would let Speed Wallet intercept an active emotional state. Meta is better for conversion at lower funnel; TikTok wins on cultural moment capture here.
+
+Estimated CPI impact: $2.80–$3.40 vs $3.17 benchmark. Rationale: Crypto-curious is a noisier audience with higher CPMs on TikTok, so CPI improvement is modest and uncertain. The upside is brand salience and volume — this is a reach play as much as an install play. If the hook lands, expect CPI at low end of range; if creative feels too polished, it will scroll-stop poorly and push toward high end.
+
+---
+
+RANK 3
+
+Trend and evidence: Lightning Network TikTok reach +213%, emerging tags #blockchain #lightning. Currently dominated by storm chasing and hobby crypto content — meaning the keyword has volume but no strong competitor yet. First-mover paid opportunity before a bigger brand notices.
+
+Classification: ADAPTABLE with a Speed angle
+
+Exact hook line: "Lightning Network is real. This is what it actually feels like."
+
+15-second script:
+Beat 1 (0–3s): Creator on camera, casual, slightly conspiratorial tone: "Everyone talks about the Lightning Network. Nobody shows you what it does."
+Beat 2 (3–9s): Screen record on phone — opens Speed Wallet, sends $50 internationally, recipient gets it. Timer visible: 1.2 seconds. Fee visible: $0.00.
+Beat 3 (9–13s): Creator back on camera: "That's not a demo. That's just Tuesday."
+Beat 4 (13–15s): Speed Wallet logo. "Download. Try it. Be surprised."
+
+Speed segment: Crypto-curious, with secondary pull toward remittance
+
+Paid channel to test first: TikTok. Rationale: The reach spike is native to TikTok and the content gap is real — storm chasing is owning the #lightning hashtag right now, not fintech. A Spark Ad boosting a creator-style screen-record video can hijack the hashtag with relevance. Meta would work but the Lightning Network signal is TikTok-native this week.
+
+Estimated CPI impact: $2.50–$3.00 vs $3.17 benchmark. Rationale: The content gap is an advantage. Low competition on the hashtag means lower CPM in TikTok's auction. The risk is that #lightning audience intent is still fuzzy (storm chasers vs Bitcoin people), so targeting needs to layer #blockchain and #bitcoin interests to clean the audience. With proper targeting, expect 5–20% CPI improvement.
+
+---
+
+RANK 4
+
+Trend and evidence: iGaming Bitcoin price dip signal — TikTok 380K views, 2.4% ER, framing Bitcoin as entering a dip/low range. iGaming players deposit when prices dip because they're buying opportunity or topping up accounts at a perceived discount.
+
+Classification: DIRECTLY USABLE
+
+Exact hook line: "Bitcoin just dipped. Your casino account shouldn't."
+
+15-second script:
+Beat 1 (0–3s): Price chart showing dip. Voiceover: "Bitcoin just dropped. You know what that means."
+Beat 2 (3–8s): Player at online game, balance low, tries to deposit via bank — loading spinner, then error. Frustrated face.
+Beat 3 (8–13s): Same player opens Speed Wallet. Deposits Lightning. Balance updates instantly. Game loads. Smile.
+Beat 4 (13–15s): "Speed Wallet. Instant crypto deposits. No bank. No wait." CTA.
+
+Speed segment: iGaming
+
+Paid channel to test first: Meta (Facebook feed, Android, interest targeting: online casino, sports betting, crypto trading, 25–44 male). Rationale: iGaming audiences are heavily indexed on Meta. TikTok's iGaming ad policy is more restrictive in many regions. Meta allows the full targeting precision needed to reach the depositing player versus the casual viewer.
+
+Estimated CPI impact: $2.40–$2.90 vs $3.17 benchmark. Rationale: iGaming is a high-intent, high-LTV segment. The creative solves a specific moment (dip + deposit friction) rather than a generic pitch. Problem-solution creative format in paid social historically drives strong CTR and conversion lift. Expect 10–25% CPI improvement over benchmark.
+
+---
+
+RANK 5
+
+Trend and evidence: Bitcoin regret/missed-fortune storytelling — TikTok Lily Allen 853K views, "Compro bitcoin 16 años" 333K views, YouTube "Lost his inheritance in Bitcoin" 460K views 2.6% ER. Regret and narrative drama are consistently the highest-view format in crypto content across both platforms.
+
+Classification: ADAPTABLE with a Speed angle
+
+Exact hook line: "She didn't miss Bitcoin. She missed what to do with it."
+
+15-second script:
+Beat 1 (0–4s): Text on screen over moody visual: "In 2009, someone offered Lily Allen Bitcoin for a concert. She said no." Pause. "But that's not the real story."
+Beat 2 (4–9s): "The real story is what Bitcoin is for. Not to hold. To use. To send. To pay."
+Beat 3 (9–13s): Montage of Speed Wallet in action — payment sent, money received, game funded — all in seconds.
+Beat 4 (13–15s): "Speed Wallet. This is what Bitcoin was always for."
+
+Speed segment: Crypto-curious
+
+Paid channel to test first: TikTok. Rationale: The regret/storytelling format is native to TikTok's culture of narrative hooks and "you won't believe" content. This creative mimics the organic videos driving 800K+ views, which means it can run as a Spark Ad on a creator's account with minimal friction loss. Meta would work but this format lives and dies on the hook, and TikTok's algorithm rewards the format more aggressively.
+
+Estimated CPI impact: $3.00–$3.60 vs $3.17 benchmark. Rationale: This is a brand and
+
+
+--- RAW TREND SIGNALS ---
+
+YouTube — top 10 of 63 by views:
+  [crypto-curious] 3,028,056 views, 4.9% ER, 2026-06-25 — $300 Billion GONE! Elon Musk Lost This Much in One Week! Biggest Fall of Wealth Ever #shor
+  [general] 2,601,643 views, 6.1% ER, 2026-06-25 — India Shines Once Again! ‘Simple’ Indian Became GLOBAL CEO Of WhatsApp! India Supremacy #s
+  [remittance] 1,219,572 views, 3.9% ER, 2026-06-25 — 은행에서 돈 보내려고 하는데..갑자기 돈을 뺏은 남성의 놀라운 대응
+  [crypto-curious] 460,655 views, 2.6% ER, 2026-06-27 — Parte 1   La Prueba del Millón   ¡Perdió su herencia en Bitcoin! 💰🏎️📉 #StoryTime  #storyti
+  [crypto-curious] 396,692 views, 2.6% ER, 2026-06-29 — "I Just Sold Everything” - WTF Happened To Bitcoin?!
+  [remittance] 300,685 views, 5.0% ER, 2026-06-30 — He Transferred His Grandma's Brain to Find Hidden Money! 🧠💰 #Funny #Shorts
+  [remittance] 270,998 views, 3.5% ER, 2026-06-27 — * అనుకోకుండా India 🇮🇳 వచ్చాను😍❤️send money with taptapsend 💸❤️ #india #uk #india #transfer
+  [crypto-curious] 251,585 views, 2.5% ER, 2026-06-25 — Bitcoin's 5 Greatest Crashes, What Always Happened Next?
+  [crypto-curious] 224,051 views, 3.0% ER, 2026-06-30 — Trump's New Fed Chair Just Crushed Gold, Silver, Bitcoin
+  [crypto-curious] 210,805 views, 6.8% ER, 2026-06-26 — ¿BITCOIN, a cero? ¿ORO, a 3500? José Luis Cava
+
+TikTok — top 10 of 105 by views:
+  [crypto-curious] 853,300 views, 2.3% ER, 2026-01-28 — Lily Allen missed out on a potential fortune after turning down a Bitcoin payment in 2009.
+  [crypto-curious] 826,800 views, 2.0% ER, 2025-10-05 — #bullrun #btc
+  [crypto-curious] 826,000 views, 9.2% ER, 2026-06-29 — This kid went missing after exposing this bitcoin chart trend! #bitcoin #btc #crypto #cryp
+  [crypto-curious] 623,600 views, 4.8% ER, 2026-06-06 — Bitcoin under sixty-five thousand. XRP back at a dollar twenty. Solana down near seventy. 
+  [crypto-curious] 599,700 views, 4.5% ER, 2026-06-19 — crypto futures trading#crypto #bitcoin #fyp
+  [iGaming] 380,200 views, 2.4% ER, 2026-06-03 — Bitcoin has fallen into the $65,000 range, reaching its lowest level in two months as a fr
+  [crypto-curious] 333,700 views, 1.9% ER, 2026-06-26 — Compro bitcoin hace 16 años y no vas a creer lo que le paso.. 🤯
+  [crypto-curious] 166,300 views, 3.5% ER, 2026-06-23 — Markets turned lower today as investors faced a barrage of major headlines. Google posted 
+  [crypto-curious] 126,000 views, 4.3% ER, 2026-06-08 — Today, over $1 trillion was added to the U.S. stock market as stocks and crypto rallied. T
+  [crypto-curious] 106,800 views, 1.4% ER, 2026-05-06 — Bitcoin😂#fyp #viral #comedy #mallamjubrilcomedy1 #bitcoin

@@ -1,0 +1,12 @@
+Outreach Brief — Crypto Daily News (TikTok)
+Segment: crypto-curious | Score: 59.7/100 | 961,100 followers
+------------------------------------------------------------
+Crypto Daily News sits in a sweet spot for us. With 961K followers who are crypto-curious and a content mix that's heavily Bitcoin-focused, their audience is exactly the kind of person who's heard about BTC and Lightning but hasn't taken the step of actually using it for anything practical. That gap between curiosity and action is where Speed lives, and their 14.6% engagement rate tells me this audience genuinely listens when this creator talks.
+
+The pitch here should lean hard into simplicity and real-world utility, not trading or price speculation. Speed turns "I own some Bitcoin" into "I can actually spend it." The features that matter most for their crypto-curious audience are zero-fee Lightning payments, instant settlement in seconds, and Speed Stacks, which lets people earn sats on everyday purchases. That last one is a great bridge for an audience that follows Bitcoin news but hasn't found a reason to use a wallet daily.
+
+Three talking points worth building the conversation around: first, Speed is built for everyday people, not just crypto natives, so their followers won't feel out of their depth. Second, you can earn sats just by buying things you'd buy anyway. Third, no fees and instant payments make Bitcoin feel like an actual payment method, not a science project.
+
+For the CTA, I'd propose a sponsored demo where they download Speed, make a real Lightning payment on camera, and walk through Speed Stacks live.
+
+One thing to avoid: don't frame this as an investment or price play. Keep it about spending and utility.

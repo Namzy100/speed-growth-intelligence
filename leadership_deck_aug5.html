@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Speed Growth Intelligence — Leadership Review (draft)</title>
+<style>
+  /* tokens copied verbatim from pipelines/build_*.py — matches the live dashboards */
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel-2:#1b2230;
+    --hairline:rgba(255,255,255,0.09); --hairline-strong:rgba(255,255,255,0.16);
+    --text:#edf1f7; --muted:#9aa4b2; --faint:#6b7585;
+    --accent:#2f5dfb; --accent-2:#6f9dff;
+    --good:#3fb950; --warn:#e3b341; --bad:#f85149; --gold:#f5c400;
+    --grad:linear-gradient(120deg,#2f5dfb,#6f9dff);
+    --shadow:0 10px 30px -14px rgba(0,0,0,0.7); --shadow-lift:0 18px 44px -16px rgba(0,0,0,0.8);
+    --r-lg:16px; --r-md:12px; --r-sm:9px;
+    --seg-crypto:#6f9dff; --seg-general:#6b7585; --seg-igaming:#e3b341; --seg-remit:#3fb950;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;}
+  body{
+    margin:0; color:var(--text); overflow:hidden; letter-spacing:-0.005em;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.5; -webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(1100px 600px at 50% -10%, rgba(47,93,251,0.20), transparent 58%),
+      radial-gradient(820px 520px at 100% 0%, rgba(111,157,255,0.09), transparent 52%),
+      radial-gradient(720px 480px at 0% 8%, rgba(63,185,80,0.045), transparent 50%),
+      var(--bg);
+    background-attachment:fixed;
+  }
+  body::before{ content:""; position:fixed; inset:0; z-index:0; pointer-events:none; opacity:0.035;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+  .deck{position:fixed; inset:0; z-index:1;}
+  .slide{position:absolute; inset:0; display:none; flex-direction:column;
+    padding:clamp(28px,5vh,64px) clamp(28px,6vw,110px) 96px; overflow:hidden;}
+  .slide.active{display:flex; animation:fade .45s ease both;}
+  @keyframes fade{from{opacity:0} to{opacity:1}}
+  .slide-body{flex:1; display:flex; flex-direction:column; justify-content:center; max-width:1180px; margin:0 auto; width:100%;}
+
+  .kicker{display:flex; align-items:center; gap:11px; margin-bottom:16px;}
+  .kicker span{font-size:clamp(11px,1.3vw,13px); text-transform:uppercase; letter-spacing:0.13em; color:var(--muted); font-weight:700;}
+  .kicker::before{content:""; width:3px; height:15px; border-radius:2px; background:var(--grad);}
+
+  h1{font-size:clamp(30px,5.4vw,60px); margin:0 0 14px; font-weight:790; letter-spacing:-0.035em; line-height:1.05;
+    background:linear-gradient(180deg,#ffffff,#c9c3e8); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
+  h2.title{font-size:clamp(26px,4.2vw,46px); margin:0 0 20px; font-weight:780; letter-spacing:-0.03em; line-height:1.07;
+    background:linear-gradient(180deg,#ffffff,#c9c3e8); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
+  .lead{font-size:clamp(15px,1.9vw,21px); color:var(--muted); max-width:840px; line-height:1.55;}
+  .lead b{color:var(--text); font-weight:650;}
+  .foot-note{margin-top:24px; font-size:clamp(12px,1.5vw,15px); color:var(--faint); max-width:900px;}
+  .foot-note b{color:var(--text);}
+
+  /* KPI tiles */
+  .kpis{display:grid; gap:clamp(12px,1.6vw,18px); margin-top:8px;}
+  .k4{grid-template-columns:repeat(4,1fr);} .k3{grid-template-columns:repeat(3,1fr);} .k2{grid-template-columns:repeat(2,1fr);}
+  @media(max-width:900px){.k4,.k3{grid-template-columns:repeat(2,1fr);}}
+  .kpi{padding:clamp(16px,2vw,24px); background:linear-gradient(180deg,var(--panel),rgba(22,27,34,0.55));
+    border:1px solid var(--hairline); border-radius:var(--r-lg); box-shadow:var(--shadow); position:relative; overflow:hidden;}
+  .kpi::before{content:""; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--grad);}
+  .kpi .val{font-size:clamp(30px,4.4vw,52px); font-weight:800; letter-spacing:-0.03em; line-height:1; font-variant-numeric:tabular-nums;
+    background:linear-gradient(180deg,#fff,#cfd6e4); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
+  .kpi .lab{font-size:clamp(11px,1.3vw,13.5px); color:var(--muted); margin-top:9px; line-height:1.35;}
+  .kpi .lab b{color:var(--text); font-weight:650;}
+
+  /* one huge number (X-growth slide) */
+  .bignum{display:flex; align-items:baseline; gap:18px; flex-wrap:wrap; margin:6px 0 4px;}
+  .bignum .n{font-size:clamp(64px,15vw,168px); font-weight:820; letter-spacing:-0.05em; line-height:0.9; font-variant-numeric:tabular-nums;
+    background:var(--grad); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
+  .bignum .cap{font-size:clamp(16px,2.4vw,26px); font-weight:700; color:var(--text); letter-spacing:-0.02em;}
+  .fromto{display:inline-flex; align-items:center; gap:14px; margin-top:16px; font-size:clamp(15px,2vw,22px); color:var(--muted);}
+  .fromto .pill{font-weight:750; color:var(--text); background:var(--panel); border:1px solid var(--hairline-strong); padding:6px 16px; border-radius:999px; font-variant-numeric:tabular-nums;}
+  .fromto .arw{color:var(--accent-2); font-size:1.4em;}
+
+  /* segment distribution bars */
+  .bars{display:flex; flex-direction:column; gap:14px; margin-top:8px; max-width:900px;}
+  .bar-row{display:grid; grid-template-columns:170px 1fr 66px; align-items:center; gap:16px;}
+  .bar-row .name{font-size:clamp(13px,1.6vw,16px); font-weight:640; color:var(--text);}
+  .bar-track{height:26px; background:rgba(255,255,255,0.05); border-radius:8px; overflow:hidden;}
+  .bar-fill{height:100%; border-radius:8px; transition:width .6s cubic-bezier(.2,.7,.2,1);}
+  .bar-row .cnt{font-size:clamp(14px,1.8vw,19px); font-weight:750; text-align:right; font-variant-numeric:tabular-nums;}
+  .seg-crypto{background:var(--seg-crypto);} .seg-general{background:var(--seg-general);}
+  .seg-igaming{background:var(--seg-igaming);} .seg-remit{background:var(--seg-remit);}
+
+  /* dashboard/list cards */
+  .grid{display:grid; gap:clamp(12px,1.6vw,18px);}
+  .g5{grid-template-columns:repeat(5,1fr);} .g4{grid-template-columns:repeat(4,1fr);} .g3{grid-template-columns:repeat(3,1fr);}
+  @media(max-width:1000px){.g5,.g4{grid-template-columns:repeat(2,1fr);} .g3{grid-template-columns:1fr;}}
+  .card{position:relative; padding:clamp(15px,1.9vw,20px); background:linear-gradient(180deg,var(--panel),rgba(22,27,34,0.55));
+    border:1px solid var(--hairline); border-radius:var(--r-lg); box-shadow:var(--shadow); overflow:hidden;}
+  .card .ic{font-size:clamp(19px,2.2vw,24px); display:block; margin-bottom:9px; line-height:1;}
+  .card h3{margin:0 0 6px; font-size:clamp(14px,1.8vw,18px); font-weight:730; letter-spacing:-0.02em;}
+  .card h3 .sw{display:inline-block; width:9px; height:9px; border-radius:3px; margin-right:8px; vertical-align:middle;}
+  .card p{margin:0; font-size:clamp(12px,1.45vw,15px); color:var(--muted); line-height:1.5;}
+
+  .plist{list-style:none; margin:12px 0 0; padding:0; display:flex; flex-direction:column; gap:12px;}
+  .plist li{display:flex; gap:12px; align-items:flex-start; font-size:clamp(14px,1.75vw,18px); color:var(--text);}
+  .plist li .dot{flex:0 0 auto; margin-top:.5em; width:8px; height:8px; border-radius:50%; background:var(--accent-2); box-shadow:0 0 8px rgba(111,157,255,.6);}
+  .plist li b{color:var(--text);} .plist li span{color:var(--muted);}
+
+  /* title slide */
+  .title-slide{align-items:flex-start; justify-content:center;}
+  .brand-hero{display:flex; align-self:flex-start; align-items:center; gap:13px; margin-bottom:24px;}
+  .brand-hero .bolt{font-size:clamp(30px,4vw,44px); background:linear-gradient(180deg,#f5c400,#f0a02a);
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 0 10px rgba(240,160,42,0.5)); line-height:1;}
+  .brand-hero .bn{font-size:clamp(18px,2.2vw,26px); font-weight:770; letter-spacing:-0.02em;}
+  .draft{align-self:flex-start; display:inline-flex; align-items:center; gap:8px; margin-top:30px; font-size:clamp(12px,1.4vw,14px);
+    color:var(--warn); background:rgba(227,179,65,0.10); border:1px solid rgba(227,179,65,0.32); padding:8px 15px; border-radius:999px; font-weight:600;}
+  .subline{margin-top:18px; font-size:clamp(14px,1.7vw,18px); color:var(--muted);}
+  .subline b{color:var(--text); font-weight:650;}
+
+  /* persistent chrome */
+  .brandmark{position:fixed; left:clamp(20px,3vw,44px); bottom:22px; z-index:5; display:flex; align-items:center; gap:8px;
+    font-size:13px; font-weight:730; color:var(--text); opacity:.9;}
+  .brandmark .bolt{background:linear-gradient(180deg,#f5c400,#f0a02a); -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent; filter:drop-shadow(0 0 6px rgba(240,160,42,0.45)); font-size:15px;}
+  .brandmark .tag{color:var(--faint); font-weight:600;}
+  .counter{position:fixed; right:clamp(20px,3vw,44px); bottom:20px; z-index:5; font-size:12.5px; color:var(--faint);
+    font-variant-numeric:tabular-nums; text-align:right;}
+  .counter .keys{display:block; margin-top:3px; font-size:11px;}
+  .dots{position:fixed; left:50%; transform:translateX(-50%); bottom:24px; z-index:5; display:flex; gap:9px;}
+  .dots button{width:9px; height:9px; border-radius:50%; border:none; padding:0; cursor:pointer;
+    background:var(--hairline-strong); transition:background .2s, transform .2s;}
+  .dots button.on{background:var(--grad); transform:scale(1.25);}
+  .dots button:hover{background:var(--accent-2);}
+  .zone{position:fixed; top:0; bottom:60px; width:14%; z-index:4; cursor:pointer; background:transparent;}
+  .zone.l{left:0;} .zone.r{right:0;}
+  .zone svg{position:absolute; top:50%; transform:translateY(-50%); opacity:0; transition:opacity .2s; fill:none; stroke:var(--muted); stroke-width:2.4; width:26px; height:26px;}
+  .zone.l svg{left:14px;} .zone.r svg{right:14px;}
+  .zone:hover svg{opacity:.75;}
+
+  .slide.active .reveal{animation:rise .5s cubic-bezier(.2,.7,.2,1) both;}
+  .slide.active .reveal:nth-child(1){animation-delay:.05s}
+  .slide.active .reveal:nth-child(2){animation-delay:.11s}
+  .slide.active .reveal:nth-child(3){animation-delay:.17s}
+  .slide.active .reveal:nth-child(4){animation-delay:.23s}
+  .slide.active .reveal:nth-child(5){animation-delay:.29s}
+  @keyframes rise{from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:none;}}
+  @media (prefers-reduced-motion: reduce){*{animation:none!important; transition:none!important;}}
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+  <!-- 1 · TITLE -->
+  <section class="slide title-slide">
+    <div class="slide-body">
+      <div class="brand-hero reveal"><span class="bolt">⚡</span><span class="bn">Speed Wallet</span></div>
+      <h1 class="reveal">Growth Intelligence,<br>built to last</h1>
+      <div class="subline reveal">What the growth-intelligence internship shipped — the system, the numbers, and the handover.</div>
+      <div class="draft reveal">● WORKING DRAFT · for Niyati's review · ahead of the leadership presentation Aug 5</div>
+    </div>
+  </section>
+
+  <!-- 2 · OVERVIEW -->
+  <section class="slide">
+    <div class="slide-body">
+      <div class="kicker reveal"><span>In one line</span></div>
+      <h2 class="title reveal">A self-updating growth-intelligence system — real data, honest about its limits</h2>
+      <div class="kpis k4">
+        <div class="kpi reveal"><div class="val">692</div><div class="lab"><b>creators</b> scored for partnership</div></div>
+        <div class="kpi reveal"><div class="val">5</div><div class="lab"><b>live dashboards</b>, rebuilt every morning</div></div>
+        <div class="kpi reveal"><div class="val">4</div><div class="lab"><b>platforms</b> — YouTube, TikTok, X, Instagram</div></div>
+        <div class="kpi reveal"><div class="val">0</div><div class="lab"><b>manual steps</b> to keep it current</div></div>
+      </div>
+      <p class="foot-note reveal">Not a demo or a one-off report — <b>infrastructure that runs itself</b> and is built to survive handover.</p>
+    </div>
+  </section>
+
+  <!-- 3 · CREATOR DATABASE -->
+  <section class="slide">
+    <div class="slide-body">
+      <div class="kicker reveal"><span>Creator intelligence</span></div>
+      <h2 class="title reveal">692 creators, scored and segmented</h2>
+      <div class="bars reveal">
+        <div class="bar-row"><span class="name">Crypto-curious</span><div class="bar-track"><div class="bar-fill seg-crypto" style="width:98%"></div></div><span class="cnt">338</span></div>
+        <div class="bar-row"><span class="name">General</span><div class="bar-track"><div class="bar-fill seg-general" style="width:85%"></div></div><span class="cnt">292</span></div>
+        <div class="bar-row"><span class="name">iGaming</span><div class="bar-track"><div class="bar-fill seg-igaming" style="width:14%"></div></div><span class="cnt">46</span></div>
+        <div class="bar-row"><span class="name">Remittance</span><div class="bar-track"><div class="bar-fill seg-remit" style="width:5%"></div></div><span class="cnt">16</span></div>
+      </div>
+      <p class="foot-note reveal">Each creator scored 0–100 on four real signals — audience fit, engagement quality, reach, and sponsorship history — across Speed's three target segments plus general.</p>
+    </div>
+  </section>
+
+  <!-- 4 · X GROWTH -->
+  <section class="slide">
+    <div class="slide-body">
+      <div class="kicker reveal"><span>Building from near-zero</span></div>
+      <h2 class="title reveal">The X creator base, this internship</h2>
+      <div class="bignum reveal"><span class="n">310</span><span class="cap">X creators discovered &amp; scored</span></div>
+      <div class="fromto reveal"><span class="pill">~4 at the start</span><span class="arw">→</span><span class="pill">310 today</span></div>
+      <p class="foot-note reveal">A real X creator pipeline built from almost nothing — discovered, scored, and de-duplicated into the same system as YouTube and TikTok.</p>
+    </div>
+  </section>
+
+  <!-- 5 · REAL DATA, HONEST -->
+  <section class="slide">
+    <div class="slide-body">
+      <div class="kicker reveal"><span>Trustworthy by design</span></div>
+      <h2 class="title reveal">Real numbers, honestly labeled</h2>
+      <div class="kpis k3">
+        <div class="kpi reveal"><div class="val">52.6%</div><div class="lab"><b>real sponsorship coverage</b> — measured brand-deal history, not guessed</div></div>
+        <div class="kpi reveal"><div class="val">100%</div><div class="lab"><b>of fetches gated</b> by a data-quality validator — fabricated or broken records are refused, never saved</div></div>
+        <div class="kpi reveal"><div class="val">✓</div><div class="lab"><b>every dashboard</b> says plainly when a number is estimated vs. measured</div></div>
+      </div>
+      <p class="foot-note reveal">The rule throughout: <b>real signal or an honest gap</b> — never a mocked number to fill a chart.</p>
+    </div>
+  </section>
+
+  <!-- 6 · FIVE DASHBOARDS -->
+  <section class="slide">
+    <div class="slide-body">
+      <div class="kicker reveal"><span>The product</span></div>
+      <h2 class="title reveal">Five live dashboards, self-updating every morning</h2>
+      <div class="grid g5">
+        <div class="card reveal"><span class="ic">🧭</span><h3>Creator</h3><p>Who to partner with</p></div>
+        <div class="card reveal"><span class="ic">📊</span><h3>Creative</h3><p>Which ads are working</p></div>
+        <div class="card reveal"><span class="ic">📈</span><h3>Trend</h3><p>What's rising weekly</p></div>
+        <div class="card reveal"><span class="ic">🗺️</span><h3>Strategy</h3><p>Where to expand next</p></div>
+        <div class="card reveal"><span class="ic">🤝</span><h3>Merchant</h3><p>Who to sign</p></div>
+      </div>
+      <p class="foot-note reveal">Rebuilt automatically in the cloud each morning — no laptop, no manual step. If a rebuild fails, it flags the failure rather than publishing stale numbers.</p>
+    </div>
+  </section>
+
+  <!-- 7 · EU EXPANSION -->
+  <section class="slide">
+    <div class="slide-body">
+      <div class="kicker reveal"><span>Market expansion</span></div>
+      <h2 class="title reveal">EU entry research — live on the strategy dashboard</h2>
+      <div class="kpis k3">
+        <div class="kpi reveal"><div class="val">DE</div><div class="lab"><b>Germany</b> — largest untapped organic base; one licence opens the EU</div></div>
+        <div class="kpi reveal"><div class="val">GB</div><div class="lab"><b>United Kingdom</b> — strongest India + Nigeria remittance corridors</div></div>
+        <div class="kpi reveal"><div class="val">PT</div><div class="lab"><b>Portugal</b> — densest Brazil-corridor concentration</div></div>
+      </div>
+      <p class="foot-note reveal">Per-market channel strategy, messaging angle, and competitive white space — distilled from research into one readable view.</p>
+    </div>
+  </section>
+
+  <!-- 8 · MERCHANT DISCOVERY -->
+  <section class="slide">
+    <div class="slide-body">
+      <div class="kicker reveal"><span>Outbound partnerships</span></div>
+      <h2 class="title reveal">Merchant discovery across four verticals</h2>
+      <div class="grid g4">
+        <div class="card reveal"><span class="ic">🎰</span><h3>iGaming</h3><p>Operators &amp; platforms</p></div>
+        <div class="card reveal"><span class="ic">🏦</span><h3>Fintech</h3><p>Payments &amp; wallets</p></div>
+        <div class="card reveal"><span class="ic">💳</span><h3>PSPs</h3><p>Acquirers &amp; processors</p></div>
+        <div class="card reveal"><span class="ic">🎬</span><h3>Streaming</h3><p>Creator-economy platforms</p></div>
+      </div>
+      <p class="foot-note reveal">Real public venues — trade press, associations, events, B2B directories — ranked by how well they put Speed in front of decision-makers. Not consumer targeting.</p>
+    </div>
+  </section>
+
+  <!-- 9 · BUILT TO LAST -->
+  <section class="slide">
+    <div class="slide-body">
+      <div class="kicker reveal"><span>Built to survive handover</span></div>
+      <h2 class="title reveal">Infrastructure, not a demo</h2>
+      <ul class="plist">
+        <li class="reveal"><span class="dot"></span><span><b>Automated scheduling</b> — runs unattended in the cloud, and flags failures instead of silently shipping stale data.</span></li>
+        <li class="reveal"><span class="dot"></span><span><b>A data-quality validator</b> gates every fetch — nothing fabricated or broken reaches a dashboard.</span></li>
+        <li class="reveal"><span class="dot"></span><span><b>Honest labeling throughout</b> — measured vs. estimated is always visible, so the next person can trust it.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 10 · HANDOVER + CLOSE -->
+  <section class="slide title-slide">
+    <div class="slide-body">
+      <div class="kicker reveal"><span>Where it's going</span></div>
+      <h1 class="reveal">Handover in progress</h1>
+      <div class="subline reveal">Migrating to Speed's own GitHub org, <b>pending engineering review</b> — so the whole system keeps running after the internship, owned by the team.</div>
+      <div class="draft reveal">● Working draft — Niyati's feedback shapes what goes to Sumit, then the Aug 5 final</div>
+    </div>
+  </section>
+
+</div>
+
+<div class="zone l" id="zoneL" aria-label="Previous"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></div>
+<div class="zone r" id="zoneR" aria-label="Next"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></div>
+
+<div class="brandmark"><span class="bolt">⚡</span>Speed Wallet <span class="tag">· Growth Intelligence</span></div>
+<div class="dots" id="dots"></div>
+<div class="counter"><span id="pageno">1 / 10</span><span class="keys">← → · space · F</span></div>
+
+<script>
+(function(){
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const N = slides.length;
+  let i = 0;
+  const dotsWrap = document.getElementById('dots');
+  const pageno = document.getElementById('pageno');
+
+  slides.forEach((_,k)=>{
+    const b=document.createElement('button');
+    b.setAttribute('aria-label','Slide '+(k+1));
+    b.addEventListener('click',()=>go(k));
+    dotsWrap.appendChild(b);
+  });
+  const dots = Array.from(dotsWrap.children);
+
+  function render(){
+    slides.forEach((s,k)=>s.classList.toggle('active', k===i));
+    dots.forEach((d,k)=>d.classList.toggle('on', k===i));
+    pageno.textContent = (i+1)+' / '+N;
+  }
+  function go(n){ i = Math.max(0, Math.min(N-1, n)); render();
+    try{ history.replaceState(null,'', '?s='+(i+1)); }catch(_){}
+  }
+  function next(){ if(i<N-1) go(i+1); }
+  function prev(){ if(i>0) go(i-1); }
+
+  document.addEventListener('keydown', (e)=>{
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '||e.key==='Spacebar'){ e.preventDefault(); next(); }
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); prev(); }
+    else if(e.key==='Home'){ e.preventDefault(); go(0); }
+    else if(e.key==='End'){ e.preventDefault(); go(N-1); }
+    else if(e.key==='f'||e.key==='F'){ e.preventDefault(); toggleFs(); }
+  });
+  document.getElementById('zoneL').addEventListener('click', prev);
+  document.getElementById('zoneR').addEventListener('click', next);
+
+  function toggleFs(){
+    if(!document.fullscreenElement){ (document.documentElement.requestFullscreen||function(){}).call(document.documentElement); }
+    else { (document.exitFullscreen||function(){}).call(document); }
+  }
+
+  const q = new URLSearchParams(location.search).get('s');
+  if(q){ const n = parseInt(q,10); if(!isNaN(n)) i = Math.max(0, Math.min(N-1, n-1)); }
+  render();
+})();
+</script>
+</body>
+</html>

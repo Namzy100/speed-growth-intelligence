@@ -1,0 +1,12 @@
+Outreach Brief — Crypto Daily Trade Signals (YouTube)
+Segment: crypto-curious | Score: 59.1/100 | 83,100 followers
+------------------------------------------------------------
+Crypto Daily Trade Signals sits in a sweet spot for Speed. Their 83K subscribers are crypto-curious people who already follow Bitcoin, Ethereum, and trading content, which means they understand the concepts but may not have a clean, practical way to actually use Bitcoin day to day. That's exactly the gap Speed fills — it takes the theory their audience consumes and turns it into something they can hold in their pocket and spend.
+
+Because this is a crypto-curious audience, lean hard on simplicity and real-world utility rather than fee math or speed stats. The hooks that matter most here are how easy Speed makes it to get started, the Lightning wallet experience that settles in seconds, and Speed Stacks letting viewers earn sats on everyday purchases — a tangible reason to actually open the app. Stablecoin support (USDT, USDC) is also worth a mention since trading-focused viewers will appreciate the option to hold stable value.
+
+Three talking points for the pitch: first, Speed bridges the gap between watching Bitcoin content and actually using Bitcoin, which is a natural next step for their viewers. Second, Speed Stacks gives the creator a concrete, rewarding demo moment — earn sats while you spend. Third, it's available on iOS and Android and built for everyday people, so it won't alienate the less technical end of their audience.
+
+Recommend a CTA of a sponsored walkthrough video where they download Speed, make a real Lightning payment, and show Speed Stacks in action, paired with a trackable signup link.
+
+Avoid framing Speed as a trading or investment tool — it's a payments wallet, and overpromising returns would misrepresent it and clash with their signals-heavy content.

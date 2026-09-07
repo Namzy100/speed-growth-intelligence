@@ -1,0 +1,320 @@
+======================================================================
+SPEED WALLET — EU GO-TO-MARKET PLAN (5 MARKETS)
+Generated 2026-07-01 16:16 UTC · install data live from Adjust · US benchmark CPI $3.17
+======================================================================
+
+MARKET PRIORITY (by real organic install demand)
+--------------------------------
+  #1  Germany            1,700 installs   corridor: Indian diaspora → India (plus Nigerian)
+  #2  United Kingdom       862 installs   corridor: Nigerian & Indian diaspora → Nigeria / India
+  #3  Netherlands          365 installs   corridor: Surinamese & Turkish diaspora → Suriname / Türkiye
+  #4  Spain                286 installs   corridor: Latin American diaspora (Colombian/Venezuelan/Ecuadorian) → LatAm
+  #5  Portugal             233 installs   corridor: Brazilian diaspora → Brazil
+
+
+======================================================================
+MARKET #1: GERMANY  ·  1,700 organic installs
+======================================================================
+SNAPSHOT
+Germany: 1,700 organic installs already without a single paid euro spent, validating real pull demand. Primary corridor is Germany→India (Indian diaspora concentrated in Berlin, Munich, Frankfurt, Stuttgart), with Germany→Nigeria as a meaningful secondary corridor. Competitor ad scans show Crypto.com, Kraken, and Robinhood collectively running 105 active creatives, all anchored on trading incentives and crypto rewards — none are owning the remittance search surface or diaspora community channels. Regulatory position is clean: Speed operates under a single EU EMI license, no additional German licensing layer required, and iGaming deposits are legal under GlüNeuRStV 2021 with enforced limits that actually favor instant-settlement rails.
+
+CORRIDOR MESSAGING
+The frame is not "crypto" — it is "your family gets the full amount, today." Indian diaspora in Germany are already paying Wise, Western Union, or their bank 1.5–4% plus a transfer lag of 1–3 days. The message is purely economic and immediate. Lead with the corridor by name. Literal ad line: "Send money from Germany to India — zero fees, arrives in seconds. Keep every euro you send." Secondary Nigerian corridor ad line: "Germany to Nigeria, no fees, no waiting. Your family gets exactly what you send." Do not mention Bitcoin or Lightning in the first touchpoint for this audience — surface them as trust builders in onboarding step 2. The zero-fee hook is the entire door; everything else is retention.
+
+RECOMMENDED CHANNEL MIX
+1. WhatsApp diaspora seeding — existing trusted community infrastructure in Indian and Nigerian networks in Germany; referral trust converts faster than any paid channel and CPIs will be near zero in Month 1.
+2. Paid search, corridor-specific keywords — "send money Germany to India," "cheapest remittance Germany India," "Geld nach Indien schicken ohne Gebühren" are uncontested by current competitor ad spend; low CPC, high intent, captures decision-ready users.
+3. Indian and Nigerian YouTube creators (Germany-based or Germany-audience) — finance and diaspora-life creators have direct audience trust; a 5-minute honest review from a credible creator outperforms 50 banner impressions for this cohort.
+4. Meta paid social (Instagram/Facebook), corridor-targeted — Indian and Nigerian community groups on Facebook are large and targetable; use for reach amplification of the zero-fee message after organic proof points are established.
+5. iGaming operator outreach (Month 3 layer only) — deposit and cashout friction is a real pain point for German iGaming users under the €1,000/month deposit cap; Speed's instant settlement is a genuine product differentiator here, but this is a B2B2C channel requiring partnership lead time.
+
+MONTH 1
+Action 1: Identify and personally brief 15–20 community admins across WhatsApp groups serving Indian diaspora in Berlin, Munich, Frankfurt, and Stuttgart. Offer each admin a referral code that gives their members a first-send bonus (suggest €5 credit on first send, structurally funded as CAC budget). Target: seed into groups with a combined membership of at least 8,000.
+Action 2: Launch paid search campaign on Google Germany with a tightly scoped keyword list of 20–30 corridor-specific and fee-comparison terms in both German and English. Initial daily budget €150, no broad match. Landing page must be a dedicated Germany→India corridor page with the zero-fee message above the fold, load time under 2 seconds on mobile.
+Action 3: Brief and onboard 2 Germany-based Indian-diaspora YouTube or Instagram creators (minimum 15,000 engaged subscribers in target demo) for an honest product walkthrough. Compensate on a hybrid flat fee plus per-install basis; €500–€800 flat plus €2 per attributed install. Brief them on the zero-fee send, not the crypto angle.
+Action 4: Instrument all Month 1 channels in Adjust with distinct campaign tags so first-send rate, not just installs, is visible by source from Day 1.
+
+MONTH 2
+Action 1: Take the WhatsApp referral mechanic from community seeding and formalize it into an in-app referral feature if not already live — "invite a friend, both get €3 on their next send." Reactivate the Month 1 community admins with updated creative and fresh codes. Add 10 new Nigerian-diaspora WhatsApp groups in Frankfurt and Hamburg.
+Action 2: Analyze paid search performance from Month 1. Cut any keyword with CPI above €8 or first-send rate below 25%. Reallocate budget toward the top 8–10 converting terms. Introduce one new ad variant per top keyword with a direct fee comparison ("Wise charges €4.50. Speed charges €0. Same send.").
+Action 3: Launch Meta paid social targeting Indian and Nigerian community interest segments in Germany. Start at €200/day. Use the creator content from Month 1 as the primary video creative — social proof from a trusted face converts better than brand-direct creative for this audience. A/B test a static fee-comparison carousel against the video.
+Action 4: Begin outreach to 5 Indian-owned small businesses in Germany (restaurants, travel agents, import traders) about using Speed for supplier payments to India. Not a primary growth vector yet but a signal-gathering exercise and a potential referral multiplier if even 2 adopt it.
+
+MONTH 3
+Action 1: Scale the paid search and Meta mix using Month 2 CPI and first-send data. If Meta social is delivering CPI below €6 with first-send rate above 30%, increase Meta daily budget to €400. If search is below €5 CPI, increase to €250/day. Do not scale channels that have not hit first-send rate threshold — installs without sends are vanity.
+Action 2: Activate the Nigeria corridor explicitly. Dedicate a separate landing page, separate creator brief, and separate WhatsApp seeding effort for Germany→Nigeria. The corridor is smaller than India but organic installs confirm real pull; a focused 4-week sprint will establish whether it can carry meaningful volume.
+Action 3: Initiate iGaming operator outreach. Contact 3–5 German-licensed online casino or sportsbook operators about integrating Speed as a deposit/withdrawal rail. Lead with instant settlement and the structural fit with the €1,000/month cap (Speed enables frictionless smaller, more frequent transactions within the cap). Aim for at least one signed letter of intent by end of Month 3. This is a pipeline action, not a revenue action.
+Action 4: Run a 90-day performance review against KPI targets. If first-send rate is below 35% across all channels, audit the onboarding flow between install and first send — the bottleneck is almost certainly KYC friction or wallet funding friction, not acquisition messaging.
+
+BUDGET ALLOCATION
+Monthly total recommended: €18,000–€22,000 at mature Month 3 run rate. Month 1 should start at €10,000–€12,000 and scale as channel performance is validated.
+
+Paid search (Google, corridor keywords): 30% — €5,400–€6,600/month. Highest-intent, lowest competitive pressure, most directly measurable.
+Meta paid social (Instagram/Facebook): 25% — €4,500–€5,500/month. Reach amplification and retargeting after organic proof is in.
+Creator/influencer fees and production: 20% — €3,600–€4,400/month. One-time creative assets that compound over time; do not cut this.
+Referral and community incentives (the €5 first-send credit pool): 15% — €2,700–€3,300/month. This is effectively a paid CAC but distributed through trust networks; track it as such
+
+======================================================================
+MARKET #2: UNITED KINGDOM  ·  862 organic installs
+======================================================================
+SNAPSHOT
+862 organic installs already confirmed via Adjust with zero paid spend — real pull from UK-Nigerian and UK-Indian communities acting without prompting. These two corridors (UK→Nigeria, UK→India) rank among Europe's highest-volume remittance lanes by both headcount and transaction frequency. Competitors Crypto.com, Kraken, and Robinhood are all running UK paid campaigns but none are positioning on corridor-specific remittance messaging — their creative is generic crypto trading and rewards, leaving "send money to Nigeria/India for free" entirely unowned in paid search and paid social. Regulatory note: UK sits outside the EU EMI framework post-Brexit; Speed needs standalone UK FCA registration (or equivalent exemption audit) confirmed before any paid acquisition spend is activated.
+
+CORRIDOR MESSAGING
+The frame is not crypto. The frame is cost and arrival speed against the incumbent pain: Western Union, WorldRemit, and Wise all charge visible fees and add 1–3 day settlement windows on high-demand corridors. Speed's message collapses both objections simultaneously. The Nigerian diaspora frame is pride and reliability — money reaching family the same minute it is sent, with nothing skimmed. The Indian diaspora frame is precision and value — the full amount, instantly, no conversion spread hidden in the rate. One literal ad line for UK→Nigeria: "Send £200 to Lagos. They get ₦200 worth. Not ₦194. Zero fees, arrives in seconds." One literal ad line for UK→India: "Your family in Mumbai gets every penny. Zero fees. Instant. That's it."
+
+RECOMMENDED CHANNEL MIX
+Ranked in order of priority:
+
+WhatsApp diaspora seeding — first because the 862 organic installs almost certainly originated here; the distribution infrastructure already exists inside Nigerian and Indian community groups and Speed simply needs to formalize and reward it with a structured referral mechanic.
+
+Corridor-specific paid search — second because "send money to Nigeria UK," "cheapest way to send money to India from UK," and "zero fee remittance Nigeria" are uncontested by current competitor ad sets; this is the single highest-intent, lowest-competition slot available right now.
+
+Meta paid social (Instagram + Facebook) — third because both Nigerian and Indian diaspora communities in the UK are heavily active on both platforms and the visual ad format supports a simple fee-comparison creative that is immediately legible without crypto fluency.
+
+Nigerian and Indian YouTube/creator content — fourth and slower-build; UK-based Nigerian finance and lifestyle creators (and Indian UK-resident creators on personal finance) have mid-size but highly targeted audiences who actively discuss remittance and are not yet receiving outreach from crypto-native competitors.
+
+iGaming operator outreach — fifth and parallel track; approach three to five UKGC-licensed operators with a zero-fee instant-settlement pitch as a deposit/withdrawal rail; this is a B2B channel that scales without paid media spend once one anchor deal closes.
+
+MONTH 1
+Identify and DM 20 to 30 active admins of UK-based Nigerian and Indian WhatsApp groups and Telegram communities with a referral seeder offer: the admin drops a referral link, earns £5 per activated install (first send completed), and their community members each get a £3 send credit on signup. Set a cap of 200 seeded installs to control cost while validating conversion to first-send.
+
+Launch a tight paid search campaign on Google targeting 8 to 12 high-intent corridor terms across two ad groups — UK→Nigeria and UK→India — with a daily budget of £40 to £60 total. Ad copy leads with the zero-fee message and links to a corridor-specific landing page that shows a live fee comparison against Western Union and Wise on a £100 send. No crypto language on the page.
+
+Build and publish two corridor-specific landing pages (one Nigeria, one India) with a fee-comparison table, a step-by-step "how fast does it arrive" explainer, and a single CTA to download the app. These pages serve both paid search quality score and organic SEO from day one.
+
+Confirm FCA registration status internally and obtain written sign-off from legal that paid acquisition spend in the UK is permissible under current licensing posture before any campaign goes live.
+
+MONTH 2
+Run a structured A/B test across three Meta ad creatives targeting UK users aged 22 to 45 with Nigerian or Indian demographic signals: creative A is a fee-comparison static (£200 sent, they receive X with Speed vs. X minus fee with competitor), creative B is a 15-second video showing a phone notification arriving in Lagos or Mumbai instantly, creative C is a testimonial-format still from a real UK-based sender. Allocate £50 per day split equally across three creatives, pause bottom performer at day 10, scale the top two.
+
+Activate two to three UK-based Nigerian or Indian content creators in the personal finance or lifestyle category — target channels with 10,000 to 80,000 subscribers and high comment engagement. Brief them on a genuine use-case walkthrough, not a scripted ad. Offer a flat fee of £400 to £600 per video plus a unique referral code to track attributed installs.
+
+Launch an email and LinkedIn outreach sequence to five UKGC-licensed iGaming operators focused on Speed's instant-settlement and zero-fee withdrawal proposition. The pitch is operational — faster player withdrawals reduce churn, zero fees improve player lifetime value. Goal for Month 2 is two discovery calls booked, not a signed deal.
+
+Analyze the Month 1 WhatsApp seeder data: which community clusters converted to first send at the highest rate, and what was the average time from install to first send. Use this to prioritize which community types to scale in Month 3.
+
+MONTH 3
+Scale the winning Meta creative to £120 to £150 per day and expand targeting to a lookalike audience built from the confirmed first-send user list. Layer in retargeting for landing page visitors who did not convert, with a single creative variant that adds urgency ("Send today — your family gets it in seconds").
+
+Scale the creator content channel by adding two to three additional creators based on Month 2 performance data. Prioritize creators whose referral codes generated installs that converted to first send within 48 hours — those audiences are the highest-quality cohort.
+
+If at least one iGaming operator discovery call from Month 2 shows genuine interest, prepare a commercial term sheet for a pilot integration. Target a go-live of one operator partnership by the end of a 60-day post-Month-3 window. This is the iGaming layer — it does not require paid media spend and adds a B2B install channel that is structurally insulated from CPI volatility.
+
+Activate a push notification and in-app referral loop for users who have completed at least one send: "Know someone in the UK sending money home? Give them £3, you get £3." This converts the existing user base into a compounding organic channel and reduces blended CPI on net new installs.
+
+BUDGET ALLOCATION
+Monthly budget recommendation at a controlled test scale of £8,000 to £10,000 per month across Months 1 through 3:
+
+Paid search (Google, corridor terms): 30% — approximately £2,400 to £3,000/month. Highest intent, lowest CPI expected, uncontested by current competitors.
+
+Meta paid social (Instagram + Facebook): 35% — approximately £2,800 to £3,500/month. Largest reachable diaspora audience, scalable once creative winner is identified.
+
+Creator/influencer content: 15% — approximately £1,200 to £1,500/month. Higher trust signal for a financial product; tracked by referral code so ROI is measurable.
+
+WhatsApp/community referral seeder payouts: 10% — approximately £800 to £1,000/month. Direct cost-per-activated-install model; spend scales only when installs
+
+======================================================================
+MARKET #3: NETHERLANDS  ·  365 organic installs
+======================================================================
+# SPEED WALLET — NETHERLANDS GO-TO-MARKET
+
+---
+
+**1. SNAPSHOT**
+
+365 organic installs confirm latent pull in a market of 17.9M with two high-value corridors: Surinamese diaspora (~350K community) sending to Paramaribo, and Turkish diaspora (~400K) sending to Istanbul and Ankara. No competitor ad scan on file, but Wise, Western Union, and Remitly dominate Dutch-language search for "geld sturen Suriname" and "para gönder Türkiye" — Speed's zero-fee angle is structurally unmatched on cost and Speed has not yet contested any of these terms. Netherlands operates inside the EU EMI framework (Speed is already licensed to operate), and KSA-regulated iGaming since October 2021 creates a live second segment with no additional licensing burden — early-mover window is open now.
+
+---
+
+**2. CORRIDOR MESSAGING**
+
+The Surinamese corridor is the sharper first hook: Wise charges €1.50–€3.50 plus a 0.4–0.7% FX margin on EUR→SRD; Western Union charges up to €4.90 per transfer. Speed charges zero. For the Turkish corridor, Remitly's Express fee runs €2.99–€3.99 per send to Türkiye. Both communities are fee-conscious, mobile-first, and transfer frequently in smaller amounts where flat fees hit harder.
+
+**Primary ad line (Surinamese corridor, Dutch-language):**
+*"Stuur geld naar Suriname. Geen kosten. Geen wachttijd. Alleen bitcoin — gratis, direct."*
+*(Send money to Suriname. Zero fees. No waiting. Just bitcoin — free, instant.)*
+
+**Primary ad line (Turkish corridor, Dutch-language):**
+*"Türkiye'ye para gönder — sıfır ücret, anında."*
+*(Send money to Türkiye — zero fee, instant. Running in Turkish to hit community feeds natively.)*
+
+Secondary frame for both: "Wise rekent €3 per overschrijving. Wij rekenen €0." (Wise charges €3 per transfer. We charge €0.) — direct fee comparison, localized, legally defensible as factually accurate.
+
+---
+
+**3. RECOMMENDED CHANNEL MIX**
+
+**Rank 1 — WhatsApp community seeding (Surinamese networks):** The Surinamese-Dutch community coordinates overwhelmingly on WhatsApp; transfer advice circulates in family and neighborhood groups. This is the lowest-CAC channel available and mirrors organic behavior already producing 365 installs without any spend.
+
+**Rank 2 — Meta paid social (Facebook/Instagram, Dutch + Turkish language targeting):** Turkish-Dutch community over-indexes on Facebook (35–50 age cohort, established remittance senders). Surinamese community is active on Instagram. Both can be geo-targeted within Netherlands with language and interest layering. Direct-response creative on fee comparison.
+
+**Rank 3 — Google Search (Dutch-language fee-comparison terms):** "Geld sturen naar Suriname goedkoop," "goedkoopste manier geld sturen Turkije," "remittance Suriname kosten" — these terms have commercial intent, limited crypto-native advertiser presence, and can be owned cheaply before competitors notice the gap.
+
+**Rank 4 — Surinamese and Turkish community content creators (YouTube/TikTok):** Smaller ecosystem than UK or Germany but highly trusted; a 20K-subscriber Surinamese-Dutch personal finance or lifestyle creator has outsized community credibility. Slower build, Month 2+ activation.
+
+**Rank 5 — iGaming operator outreach (KSA-licensed platforms):** KSA licensed ~30 operators as of 2024. Speed's instant settlement is a genuine B2B differentiator for withdrawal speed. One signed operator partnership generates installs at near-zero marginal CPI. Parallel track starting Month 1, closes Month 2–3.
+
+---
+
+**4. MONTH 1**
+
+**Action 1 — Community manager hire or contractor (Surinamese-Dutch, Amsterdam-based):** Source one trusted person embedded in the Surinamese community in Amsterdam-Zuidoost (Bijlmer) or The Hague. Task: map 10 active WhatsApp remittance or community groups, request admin permission to post, execute one structured referral drop with a €5 BTC welcome bonus framing. Target: 50 seeded installs from organic referral chains in 30 days. Budget: €1,500–€2,000 for contractor + referral bonus pool.
+
+**Action 2 — Launch Dutch-language Google Search campaign on 15–20 exact-match corridor terms:** Focus on Suriname and Türkiye send corridors. Daily budget cap of €50 (€1,500/month). Bid on "geld sturen Suriname" family, monitor CPC; expected CPC €0.40–€0.90 in this niche. Goal: establish baseline conversion data and Quality Score before scaling.
+
+**Action 3 — Build two localized landing pages:** One for each corridor (suriname-remittance.nl path and turkije-remittance.nl path or equivalent subdirectory). Each page: fee comparison table (Speed vs. Wise vs. Western Union vs. Remitly), one testimonial placeholder, App Store/Play Store deep link with UTM tagging. This is a prerequisite for paid search quality and conversion tracking.
+
+**Action 4 — iGaming operator cold outreach, first wave:** Pull the KSA operator license list (public registry). Identify 10 operators with Dutch-facing consumer apps. Send a one-page partnership brief: "Instant BTC withdrawals via Speed — settlement in seconds, zero operator fee." Goal is not a signed deal in Month 1; goal is 3 meetings scheduled.
+
+---
+
+**5. MONTH 2**
+
+**Action 1 — Launch Meta paid social, two creative sets (Dutch + Turkish language):** Use Month 1 search data to confirm which corridor converts faster, weight Meta spend accordingly. Creative A: fee comparison static (€0 vs. €3.99). Creative B: 15-second video showing a send completing in real time. Audience: ages 25–55, Netherlands, language-targeted. Daily budget: €75–€100 (€2,250–€3,000/month). A/B test landing page variants from Month 1.
+
+**Action 2 — Activate first community creator partnership:** Brief 1–2 Surinamese-Dutch or Turkish-Dutch creators (YouTube or Instagram, 10K–50K followers) on an affiliate or flat-fee basis. Content brief: "Show me sending money home for free." Negotiate a unique referral link. Budget: €500–€1,000 flat per creator. Measure attributed installs over 4 weeks.
+
+**Action 3 — Referral mechanic activation (in-app):** Confirm Speed's referral feature is live with Dutch-language push notification copy. Set up a triggered nudge at 48 hours post-first-send: "Heeft u familie die ook gratis geld wil sturen? Nodig ze uit." (Do you have family who also want to send money for free? Invite them.) This converts the highest-intent users — people who have already sent — into a structured acquisition channel.
+
+**Action 4 — Close at least one iGaming operator partnership (or advance to trial terms):** Convert a Month 1 meeting into a pilot agreement. Even one mid-size KSA operator running a 30-day Speed withdrawal pilot generates measurable installs and validates the B2B channel before Month 3 investment increases.
+
+---
+
+**6.
+
+======================================================================
+MARKET #4: SPAIN  ·  286 organic installs
+======================================================================
+SPAIN GO-TO-MARKET — SPEED WALLET
+EU Growth Lead | Execution Draft | 2026-06-24
+
+---
+
+SNAPSHOT
+
+Spain holds 286 unprompted organic installs, a meaningful baseline given zero paid activity, signaling latent pull from the Latin American diaspora concentrated in Madrid, Barcelona, and Valencia. The primary corridor is Spain-to-Colombia, Spain-to-Venezuela, and Spain-to-Ecuador — three of the highest-frequency, highest-emotion remittance flows in Europe, where families depend on regular small-to-mid sends and where incumbent fees (Western Union, Wise, Remitly) typically run 2–5% per transaction. No competitor-specific ad data is on file for Spain, which is an actionable gap: Speed can own corridor-specific search and social inventory before rivals establish presence. Regulatory footing is clean — Speed operates under EU EMI licensing, so Spain is in-scope with no additional regulatory track required; iGaming is legal and regulated under DGOJ, creating a secondary segment opportunity from Month 3 onward.
+
+---
+
+CORRIDOR MESSAGING
+
+The emotional frame for this corridor is not technology or fees — it is dignity and reliability. Colombian, Venezuelan, and Ecuadorian senders in Spain are often supporting parents, children, or siblings in economies with currency instability or banking fragility. The zero-fee message lands hardest when it is translated into what the recipient actually receives, not what the sender saves in abstract percentage terms.
+
+Primary message architecture: "Every euro you send, they receive. Zero fees. Instant." Secondary layer for Venezuelan and Ecuadorian senders specifically: anchor on arrival speed and certainty, because distrust of banking infrastructure in those corridors makes "instant" as powerful as "free."
+
+Literal ad line (Spanish, for Meta and WhatsApp placements):
+"Envía dinero a Colombia, Venezuela o Ecuador — sin comisiones, sin esperas. Todo lo que mandas, llega."
+(English: "Send money to Colombia, Venezuela or Ecuador — no fees, no waiting. Everything you send, arrives.")
+
+---
+
+RECOMMENDED CHANNEL MIX
+
+Ranked in execution order:
+
+1. WhatsApp community seeding — The primary coordination and trust channel for Latin American diaspora in Spain. Community groups for Colombianos en Madrid, Venezolanos en Barcelona, and Ecuatorianos en España are active and high-trust. Organic referral drops and community manager relationships convert faster here than any paid channel because sender trust is the actual barrier, not awareness.
+
+2. Meta (Facebook + Instagram) paid — Facebook retains dominant usage among 28–45-year-old Latin American migrants in Spain, the exact demographic profile of the primary sender. Instagram Stories and Reels reach the younger sender cohort (22–32). Corridor-specific creative (Colombia flag, Venezuelan flag, Ecuadorian flag in-ad) dramatically outperforms generic crypto creative in this segment based on analogous diaspora campaign data.
+
+3. Google Search paid — Bid on high-intent Spanish-language terms: "enviar dinero a Colombia sin comisiones," "transferencia a Venezuela barata España," "enviar dinero Ecuador desde España." These terms have commercial intent and likely low CPCs given the absence of a confirmed competitor presence in Spain specifically.
+
+4. TikTok (secondary, Month 2 onward) — Growing penetration among 20–35 Latin American diaspora in Spain. Short-form testimonial content ("I sent €200, they received €200") is the format; influencer-seeded rather than pure paid.
+
+5. Latin American diaspora media and community partnerships — Paid placements or content partnerships with Spanish-language local media (e.g., Latino en España, diaspora Facebook pages with 50k+ members) to establish legitimacy before scaling paid spend.
+
+---
+
+MONTH 1
+
+Action 1: Identify and contact 10–15 active WhatsApp and Telegram community admins for Colombian, Venezuelan, and Ecuadorian groups in Madrid and Barcelona. Offer a structured referral incentive (e.g., €5 in BTC credit per referred first-send user, funded from acquisition budget). Do not broadcast-spam; negotiate a pinned post or admin endorsement in each group. Target 5 live community placements by end of Month 1.
+
+Action 2: Launch Google Search campaigns on 15–20 corridor-specific Spanish-language keywords. Set daily budget at €40–60 per day (approximately €1,200–1,800 for the month), bidding on exact and phrase match. Exclude generic crypto terms — focus entirely on remittance-intent queries. Install conversion tracking on the App Store and Play Store download events before a single euro is spent.
+
+Action 3: Produce 3 pieces of corridor-specific creative for Meta: one Colombian-flag creative, one Venezuelan, one Ecuadorian. Each ad leads with the literal euro-to-recipient amount ("Send €100, they get €100") and a single CTA: download and send. Run as A/B test across 25–45 age bracket, Spain geography, Spanish language. Starting daily Meta budget: €30–50.
+
+Action 4: Establish a baseline KPI dashboard tracking installs by channel (Adjust), first-send rate by cohort week, and cost per first-send (not just cost per install). First-send rate is the real metric — an install that never sends is worthless. Set the Week 4 review gate before committing Month 2 budget.
+
+---
+
+MONTH 2
+
+Action 1: Optimize Meta campaigns based on Month 1 creative performance data. Kill the underperforming corridor creative; double budget on the winning variant. Introduce a Reels format with a 15-second testimonial video (real sender or actor-as-sender, authentic tone, Spanish dialect matched to target corridor — Colombian Spanish for Colombian-targeted ads).
+
+Action 2: Launch TikTok paid and organic in parallel. Identify 3–5 micro-influencers (10k–80k followers) in the Latin American Spain diaspora community — personal finance, lifestyle, or immigration-topic creators. Brief them on a single message: zero fees, show the app, show the send. Paid amplification budget behind the best-performing organic post.
+
+Action 3: Expand Google Search keyword set to include competitor brand terms if competitor presence is confirmed by Month 2 ad scans. Add terms like "alternativa a Wise para Colombia" and "mejor que Western Union España." This is a lower-funnel capture play for users already in-market and researching.
+
+Action 4: Run a referral program in-app targeting the existing 286 organic install base plus Month 1 new installs. Offer a €5 credit for each referred user who completes a first send within 14 days. This cohort is already self-selected and motivated — activating them as a referral engine costs a fraction of paid CPI.
+
+---
+
+MONTH 3
+
+Action 1: Scale the highest-performing paid channel (Meta or Search, determined by Month 2 data) by 30–40% budget increase. Introduce lookalike audience targeting on Meta using the first-send user list as seed — these are the highest-value users and lookalikes will be more efficient than broad interest targeting.
+
+Action 2: Activate iGaming vertical under DGOJ regulatory frame. Identify 2–3 DGOJ-licensed online casino or sportsbook operators and open a partnership conversation around Speed as a deposit and withdrawal method. Positioning: zero-fee, instant settlement, no chargebacks. This is a B2B motion in Month 3 — operator integration is the goal, not end-user acquisition yet. Even one live integration creates a new acquisition surface for Q2.
+
+Action 3: Launch a community ambassador program — identify 3–5 power users (high send frequency, active in diaspora communities) and recruit them as paid community ambassadors at a nominal monthly stipend (€100–150/month each) plus performance bonuses per referred first-send.
+
+======================================================================
+MARKET #5: PORTUGAL  ·  233 organic installs
+======================================================================
+SNAPSHOT
+Portugal sits at 233 organic installs with zero paid spend, confirming latent pull from the Brazilian diaspora corridor — estimated 250,000–300,000 Brazilian-born residents concentrated in Lisbon, Porto, and Setúbal. Competitors (Crypto.com, Kraken, Robinhood) are running ecosystem-breadth and security-brand plays with no visible corridor-specific creative targeting Brazil; none are owning the "send to Brazil" search or social space. Regulatory position is clean: Speed operates under EU EMI passporting, no additional Portuguese license required for remittance; iGaming is legal under SRIJ but the market is smaller and lower-priority than the corridor opportunity, so treat it as a Month 3 test only.
+
+CORRIDOR MESSAGING
+The frame is not crypto. The frame is: a Brazilian in Lisbon sending money home pays zero fees and the family receives it in seconds, not days, with no Wise cut and no Western Union queue. The corridor identity is Lisbon → São Paulo / Lisbon → Fortaleza / Lisbon → everywhere. The emotional trigger is reliability and respect — your hard-earned money arrives whole.
+
+Literal ad line: "Mandou. Chegou. Zero taxas. Envie reais do seu telemóvel agora." (Sent it. It arrived. Zero fees. Send reais from your phone right now.)
+
+Secondary line for performance creative: "Wise cobra. Western Union cobra. Speed não cobra nada. Testa agora."
+
+RECOMMENDED CHANNEL MIX
+1. WhatsApp community seeding — Brazilian diaspora in Portugal is organized in neighborhood, church, and professional WhatsApp groups; this is where trust transfers fastest and CAC is near zero if seeding is done by a credible Brazilian community voice, not a brand account.
+2. Instagram and TikTok paid social (PT-BR language targeting) — Brazilian-born users in Portugal skew heavily toward Instagram Reels and TikTok; competitors are running Portuguese-language (European) creative and missing the Brazilian vernacular entirely, which is a direct creative gap to exploit.
+3. Google Search on corridor-specific terms — "enviar dinheiro para o Brasil Portugal," "transferência Portugal Brasil sem taxa," "melhor app remessa Brasil" — these are low-competition, high-intent terms with no visible Speed presence and weak competitor bids.
+4. Brazilian micro-influencers resident in Portugal — creators with 5K–50K followers who document life as a Brazilian in Portugal have authentic audiences and strong referral trust; cheaper and more targeted than macro influencers.
+5. Church and community partnership (offline → digital) — Brazilian evangelical and Catholic communities in Lisbon are large, organized, and have existing financial mutual-aid behaviors; a referral code drop via a trusted community leader converts at unusually high rates.
+
+MONTH 1
+Action 1: Identify and contract 3–5 Brazilian community managers already embedded in Lisbon/Porto WhatsApp networks; brief them with a referral code structure (e.g., R$20 equivalent credit on first send for referrer and referee) and seed Speed into 10–15 active groups organically by end of week 3.
+Action 2: Launch Google Search campaigns on 15–20 exact-match and phrase-match PT-BR corridor terms; daily budget capped at €50 while Quality Scores establish; goal is impression share data and first CPI reads, not volume.
+Action 3: Produce 3 short-form video creatives (30–45 seconds, PT-BR voiceover, shot in Lisbon visual context — recognizable streets, phone screens, WhatsApp notifications) for Instagram Reels and TikTok; messaging anchors on the zero-fee contrast against Wise/Western Union by name.
+Action 4: Instrument the funnel end-to-end before spending scales — confirm Adjust event tracking fires correctly on PT installs, first-open, KYC-complete, and first-send; establish baseline conversion rates from the 233 organic cohort.
+
+MONTH 2
+Action 1: Activate 2–3 Brazilian micro-influencers resident in Portugal; negotiate cost-per-install or flat fee with usage rights for paid amplification; brief them to show an actual send to Brazil on screen — authentic demonstration outperforms brand-speak for this audience.
+Action 2: Scale the top-performing paid social creative (determined by Month 1 ROAS/CPI data) to a €150–200/day budget; kill the bottom performer; introduce a second creative variant testing urgency ("Sua família recebe hoje") against the fee-contrast angle.
+Action 3: Launch one retargeting campaign on Meta targeting users who clicked but did not install, and a separate audience of Brazilian-born users in Portugal aged 22–45 using interest and location signals; budget €30–40/day.
+Action 4: Initiate outreach to 3 Brazilian community organizations or churches in Lisbon for a referral partnership; offer a small community donation (€200–500) tied to installs driven — this converts community goodwill into a trackable acquisition channel.
+
+MONTH 3
+Action 1: Scale total paid social budget based on verified CPI from Month 2; if CPI is at or below €5, double the budget on the best-performing channel; if above €7, pause and rebrief creative before scaling.
+Action 2: Test one iGaming-adjacent campaign targeting SRIJ-licensed platform users — small budget (€20/day), messaging around instant deposits and withdrawals; measure CPI and first-send rate separately from the remittance cohort to keep segments clean; do not scale unless CPI is competitive and first-send rate exceeds 40%.
+Action 3: Launch a "member-get-member" push to the installed base: in-app notification to all PT users with a referral incentive, timed to a Brazilian cultural moment (e.g., a holiday, a major football match) to maximize open rate and social sharing.
+Action 4: Compile full 90-day cohort analysis — install source, CPI by channel, KYC completion rate, first-send rate, 30-day retention — and produce a written readout that either validates Portugal as a corridor template to replicate (e.g., Angolan diaspora in Portugal as a secondary corridor) or flags structural conversion issues before budget increases further.
+
+BUDGET ALLOCATION
+Month 1 total: €3,000–4,000
+— Google Search: 30% (€900–1,200) — data-gathering priority, low waste
+— Paid social (Meta/TikTok): 35% (€1,050–1,400) — creative testing at controlled scale
+— Community manager fees and referral credit pool: 25% (€750–1,000) — highest expected ROI channel
+— Influencer outreach / production costs: 10% (€300–400) — groundwork for Month 2 activation
+
+Month 2 total: €6,000–8,000
+— Paid social scaled: 45% (€2,700–3,600)
+— Influencer fees and content: 20% (€1,200–1,600)
+— Google Search: 20% (€1,200–1,600)
+— Retargeting: 10% (€600–800)
+— Community partnerships: 5% (€300–400)
+
+Month 3 total: €8,000–12,000 (contingent on Month 2 CPI validation)
+— Paid social (remittance): 40%
+— Paid social (iGaming test): 10%
+— Google Search: 20%
+— Influencer and community: 20%
+— Referral incentive pool: 10%
+
+EXPECTED CPI RANGE
+Portugal expected CPI: €3.80–€5.50, with a realistic working assumption of €4

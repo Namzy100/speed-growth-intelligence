@@ -1,0 +1,12 @@
+Outreach Brief — Bitcoin.com - Official Channel (YouTube)
+Segment: crypto-curious | Score: 47.7/100 | 105,000 followers
+------------------------------------------------------------
+Bitcoin.com's channel has spent years explaining Bitcoin to people who are curious but cautious—exactly the crypto-curious mainstream audience Speed is built for. Their content leans educational (those "knowledge" and "satoshi" tags tell the story), which means their viewers aren't degenerate traders chasing the next altcoin. They're people trying to understand whether Bitcoin actually does anything useful in real life. That's a clean match for Speed, because we're the answer to "okay, now what can I actually do with it?"
+
+The features that matter most here are the ones that lower the intimidation barrier: instant Lightning payments settled in seconds, zero fees, and Speed Stacks letting everyday purchases earn sats. The stablecoin support (USDT, USDC) is also worth raising for viewers nervous about Bitcoin's volatility—it gives the cautious crowd a stable on-ramp.
+
+Three talking points for the pitch: first, Speed turns their educational content into something actionable—they explain Bitcoin, we let viewers use it, which closes a loop their audience is already primed for. Second, Speed Stacks gives them a genuinely fresh angle (earning sats on coffee and groceries) that hasn't been done to death. Third, it's iOS and Android, built for normal people, so there's no awkward "you'll need a hardware wallet and a seed phrase" friction in the demo.
+
+The ask: a single integrated walkthrough video showing Speed being used for a real everyday purchase, with a tracked download link.
+
+One thing to avoid: don't pitch this as a trading or investment play. Their audience is here to learn and use, not speculate—lean into utility, not price.

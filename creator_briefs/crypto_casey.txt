@@ -1,0 +1,12 @@
+Outreach Brief — Crypto Casey (YouTube)
+Segment: crypto-curious | Score: 60.7/100 | 677,000 followers
+------------------------------------------------------------
+Crypto Casey has spent years doing exactly what makes her a strong fit for Speed: turning intimidating crypto concepts into something a newcomer can actually understand. Her 677K subscribers skew crypto-curious — people who've heard of Bitcoin and Ethereum but haven't found a reason to use either in daily life. That's precisely the gap Speed fills, and her educational, explainer-driven style is a natural vehicle for showing what Bitcoin can do beyond price charts.
+
+Because her audience is curious but cautious, the messaging should lean into simplicity and real-world utility rather than speed or fee arbitrage. The hooks that matter here are how easy Speed makes it to send a Lightning payment in seconds, the fact that it's available on iOS and Android for regular people, and stablecoin support (USDT, USDC) for viewers nervous about volatility. Speed Stacks is also a great fit — earning sats on everyday purchases is a low-stakes, tangible way for her audience to start using Bitcoin.
+
+Three talking points worth building the pitch around: first, Speed turns "I own some Bitcoin" into "I actually use Bitcoin," which is the exact next step her viewers are stuck on. Second, zero-fee instant Lightning payments make the wallet legitimately useful, not just another app. Third, stablecoins give hesitant viewers an on-ramp without the volatility fear.
+
+The recommended CTA: a hands-on demo or tutorial video walking through a first Lightning payment and earning sats via Speed Stacks.
+
+One thing to avoid: don't frame this as a trading or investing play — her audience wants utility and education, not speculation hype.

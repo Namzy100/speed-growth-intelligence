@@ -1,0 +1,12 @@
+Outreach Brief — Diaspora Careers and Investments (YouTube)
+Segment: remittance | Score: 27.2/100 | 17,000 followers
+------------------------------------------------------------
+Diaspora Careers and Investments speaks directly to people living abroad who are thinking seriously about money — how to earn it, move it, and put it to work back home. That remittance-and-investment angle is genuinely interesting for Speed, because the core pain point their audience already lives with is the cost of sending money internationally. The fit isn't about crypto hype; it's about a practical tool that solves a problem this audience talks about constantly.
+
+The features worth leading with are zero-fee Lightning transactions and instant settlement. For a diaspora viewer wiring money to family, the comparison that lands is what they currently lose to remittance fees versus sending the same amount on Speed for free, settled in seconds. Stablecoin support (USDT, USDC) is a smart secondary hook here, since it addresses the worry about volatility — they can hold and send stable value without touching Bitcoin's price swings.
+
+Three talking points for the pitch: first, frame Speed as a fee-savings tool, not a crypto product — "keep more of every dollar you send home." Second, lean on the stablecoin option as the reassurance for an audience that's financially cautious. Third, position it as everyday-people software available on iOS and Android, not something requiring technical know-how.
+
+For the CTA, propose a single dedicated explainer video walking through a real remittance send, with a trackable link and their own promo angle for Speed Stacks rewards.
+
+One thing to avoid: don't pitch this as an investment or speculation play. This audience is risk-aware, and "get into Bitcoin" framing will undercut trust.

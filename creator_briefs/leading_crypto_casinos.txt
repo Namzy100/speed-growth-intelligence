@@ -1,0 +1,12 @@
+Outreach Brief — Leading Crypto Casinos (YouTube)
+Segment: iGaming | Score: 24.2/100 | 12,900 followers
+------------------------------------------------------------
+Leading Crypto Casinos sits right in the middle of one of our core audiences. Their viewers are already comfortable with crypto and actively looking for casino platforms that pay out fast and cleanly — which is exactly the pain point Speed solves. The overlap between "people who gamble with crypto" and "people who care about deposit and withdrawal speed" is basically total, so the audience fit here is genuine even if the channel is on the smaller side.
+
+The features to lead with are the iGaming ones: instant Lightning payments settled in seconds, and zero fees on transactions. For someone funding a casino account or pulling winnings out, waiting on confirmations and eating network fees is the worst part of the experience. Speed kills both. Stablecoin support (USDT, USDC) is a nice secondary angle for viewers who want to hold winnings without crypto volatility between sessions.
+
+Three talking points worth raising: first, instant withdrawals mean their audience actually keeps what they win without delay or fee leakage; second, zero-fee deposits make smaller, more frequent play sessions viable; third, Speed Stacks lets viewers earn sats on everyday purchases, so the wallet stays useful between casino visits.
+
+For the CTA, propose a single sponsored video or integrated segment showing a real deposit-and-withdrawal flow on a casino site using Speed, with a tracked signup link. Keep it concrete and demo-driven given they've never run a brand deal.
+
+One thing to avoid: don't frame Speed as a gambling product or imply we endorse specific casinos. Position it as the payment rail, not the bet.

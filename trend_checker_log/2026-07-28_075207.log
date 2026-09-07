@@ -1,0 +1,5 @@
+[07:52:07] === Speed trend relevance checker (scheduled, Monday cron) ===
+[07:52:07] Wall-clock budget armed: 45s (hard, SIGALRM).
+[07:52:54] CHECKER TIMEOUT: wall-clock budget of 45s exceeded
+[07:52:54] 
+[07:52:54] === VERDICT: TIMEOUT (iterations=0, rejudge_calls=None, elapsed=47s of 45s budget) ===

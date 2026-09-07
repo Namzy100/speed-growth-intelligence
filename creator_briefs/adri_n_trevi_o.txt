@@ -1,0 +1,12 @@
+Outreach Brief — Adrián Treviño (TikTok)
+Segment: crypto-curious | Score: 54.8/100 | 50,600 followers
+------------------------------------------------------------
+Adrián's audience sits right in the crypto-curious sweet spot, which is exactly who Speed is built for. His content leans heavily into Bitcoin and Lightning specifically — that lightning tag matters here, since Speed is a Lightning wallet first. People following him aren't hardened crypto traders looking for the next altcoin; they're folks who get the appeal of Bitcoin but haven't taken the leap into actually using it day to day. That's the gap Speed fills, and it's why his 86% audience fit score holds up.
+
+Because his viewers are still in the "interested but unsure where to start" phase, the messaging should center on simplicity and real-world utility, not investment upside. The features that land hardest for this crowd: instant Lightning payments that settle in seconds, zero fees, and Speed Stacks, which lets people earn sats on everyday purchases — a concrete, low-stakes way to start stacking without buying a coin.
+
+Three talking points worth building the pitch around: first, that Speed turns Bitcoin from a thing you hold into a thing you actually spend, which speaks directly to his Lightning-focused content. Second, that earning sats through Stacks gives his audience an easy first action with no learning curve. Third, that it works on iOS and Android like any normal app — no crypto gymnastics required.
+
+For the CTA, ask him to do a walkthrough showing his first real Lightning payment plus a Stacks reward, with a tracked signup link.
+
+One thing to avoid: price-and-pump or "get rich" framing. His crypto-curious audience wants confidence and clarity, not hype, and that tone would undercut the trust he's built.

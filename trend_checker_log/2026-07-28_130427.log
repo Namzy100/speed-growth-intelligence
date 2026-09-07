@@ -1,0 +1,23 @@
+[13:04:27] === Speed trend relevance checker (reviewer pass) ===
+[13:04:27] Producing real judged candidate set from cached pipeline output (no re-scrape)...
+[13:04:27] Selected 30 candidate items to grade (22 on-topic surfaced, 8 gated).
+[13:04:27] MODE: --rejudge-stub (cap test — corrections will NOT converge)
+[13:04:27] Wall-clock budget armed: 600s (hard, SIGALRM).
+[13:04:27] Deterministic invariants OK for all 30 items (fit=0.4/0.3/0.3, gate enforced).
+[13:04:27] Reviewer pass: claude-opus-5 (effort=high) over 30 items.
+[13:04:56]   reviewer: I'll review all 31 items, then issue corrections for the ones whose stated reasoning contradicts their score or whose on/off-topic call is wrong. Key problems I found: - **t53** and **t47**: both judged as severe brand risk / unreplicable in their own reasons, yet scored 8.2 and 8.1 — near the top of the whole set, above core remittance tutorials. - **t2**: crypto tax treatment is the actual subst
+[13:04:56]   rejudge_items called: ids=['t53', 't47'] feedback="Fit scores contradict the stated reasoning. t53 (beaten 'Crypto King' apologizing for $45M in invest"
+[13:04:56]     [stub] returning unchanged judgments (forcing non-convergence)
+[13:04:56]   rejudge_items called: ids=['t2'] feedback="on_topic=false is indefensible. The video's subject is whether a tax immunity deal applies to crypto"
+[13:04:56]     [stub] returning unchanged judgments (forcing non-convergence)
+[13:05:05]   reviewer: I reviewed all 31 items. I flagged three judgments as indefensible and submitted them for re-judgment: **t53** and **t47**, whose fit scores (8.2 / 8.1) sit at the top of the set despite their own reasons calling them brand-unsafe crime narratives Speed cannot replicate, and **t2**, marked off-topic even though crypto tax treatment is the story's actual subject. However, the tool returned "stub: u
+[13:05:05]   reviewer finished on turn 2 (stop_reason=end_turn).
+[13:05:05] Reviewer pass done: 0 correction(s) across 2 tool call(s) in 2 turn(s).
+[13:05:05] 
+[13:05:05] === VERDICT ===
+[13:05:05]   result: CLEAN
+[13:05:05]   corrections applied: 0
+[13:05:05]   rejudge_items calls: 2
+[13:05:05]   reviewer turns: 2
+[13:05:05]   elapsed: 38s of 600s budget
+[13:05:05] (log written to docs/trend_checker_log/2026-07-28_130427.log)

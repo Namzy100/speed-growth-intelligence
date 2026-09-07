@@ -1,0 +1,12 @@
+Outreach Brief — DIASPORA ELITE FINANCE (YouTube)
+Segment: remittance | Score: 25.2/100 | 203,000 followers
+------------------------------------------------------------
+DIASPORA ELITE FINANCE sits right in the middle of a conversation Speed wants to be part of. Their 203K audience is built around diaspora finance and remittance, which means these viewers are already thinking hard about how to move money across borders and how much it costs them to do it. That's the exact pain point Speed solves. With a 9.7% engagement rate, the audience is genuinely listening, not just scrolling past, even if the channel hasn't done brand deals before.
+
+The hook here is fees, plain and simple. For people regularly sending money home, the difference between a 5-10% remittance cut and zero-fee Lightning transactions adds up to real money over a year. Pair that with instant settlement — money arriving in seconds instead of days — and the stablecoin support so families on the receiving end aren't exposed to Bitcoin's volatility. Those three things speak directly to their viewers' lives.
+
+For the pitch, I'd lean on three points: the annual savings a typical remittance sender could keep by skipping traditional transfer fees; how stablecoins (USDT, USDC) let recipients hold steady value while still using fast Lightning rails; and that Speed works on iOS and Android for everyday people, no crypto background needed.
+
+The call to action: propose a dedicated walkthrough video showing a real remittance transfer end to end, with a trackable signup link so we can measure conversions.
+
+One thing to avoid — don't frame this as a crypto or investment play. Their audience cares about sending money home affordably, not speculation. Keep the focus on utility and savings.

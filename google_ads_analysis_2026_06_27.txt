@@ -1,0 +1,62 @@
+======================================================================
+SPEED WALLET — GOOGLE ADS ANALYSIS
+Generated 2026-06-27 22:10 UTC
+======================================================================
+
+SPEED WALLET — GOOGLE ADS PERFORMANCE ANALYSIS
+================================================
+
+
+1. PERFORMING CAMPAIGNS
+-----------------------
+Two campaigns are driving all measurable paid volume.
+
+New - Android Brand US is the top performer by volume: 3,699 installs at $18,647, CPI $5.04. It accounts for 65% of total Google Ads installs and is the backbone of current acquisition.
+
+XAUT Offers is the second contributor and actually the more efficient of the two: 1,902 installs at $9,232, CPI $4.85. It delivers a 4% lower CPI than the brand campaign while generating meaningful volume, making it a strong non-brand proof point.
+
+Combined, these two campaigns produced 5,601 installs at a blended CPI of $4.97, very close to the channel-level eCPI of $4.90 reported in Adjust, which confirms the data is reasonably consistent.
+
+
+2. UNDERPERFORMING / FLAGGED CAMPAIGNS
+---------------------------------------
+Android - Brand US: 82 installs, $0 cost reported — almost certainly a disconnected spend integration; real CPI is unknown and this data should not be trusted for optimization decisions.
+
+Cash Deposit: 3 installs, $0 cost reported — same disconnected spend issue, plus near-zero install volume suggests either a nascent test or a dead campaign; flag for audit before any budget is allocated.
+
+Google Ads (Website) sub-channel: 1,796 clicks with zero installs and zero impressions recorded — this is a tracking or attribution gap, not a zero-performing channel. Those clicks are unaccounted for and may be inflating the effective install-rate calculation on the main Google Ads line.
+
+
+3. KEYWORD-THEME EFFICIENCY
+----------------------------
+With only two paid campaigns in the data, cluster comparisons map directly to campaign performance.
+
+Brand cluster (New - Android Brand US): 3,699 installs, CPI $5.04.
+Non-brand / offer cluster (XAUT Offers): 1,902 installs, CPI $4.85.
+
+Non-brand is the single most efficient cluster at $4.85, beating brand by $0.19 per install. This is noteworthy because non-brand typically costs more in paid search; the XAUT offer angle appears to convert well enough to offset higher click costs.
+
+Brand is the least efficient cluster at $5.04, though the gap is narrow. Both clusters benefit from a strong channel-level install rate of 39.32%, meaning roughly two in five clicks convert to an install, which is healthy for a financial app.
+
+Platform data is incomplete — Android is the only explicitly tracked OS, and the unspecified bucket likely includes iOS or web traffic without OS tagging, which limits platform-level conclusions.
+
+
+4. CREATIVE ANGLES FROM CAMPAIGN NAMES
+----------------------------------------
+New - Android Brand US signals a brand-defense strategy targeting users already searching for Speed Wallet or related Bitcoin Lightning terms on Android. The word "New" suggests this replaced or supplemented an older brand campaign (Android - Brand US), possibly with updated creative or bidding logic.
+
+XAUT Offers signals an incentive-led or asset-specific angle — XAUT is a gold-backed token, so this campaign appears to target users interested in crypto asset variety or specific earning/exchange offers within the app. The strong CPI ($4.85) suggests offer-based messaging resonates and should be expanded.
+
+Cash Deposit points to a utility/fiat on-ramp angle. Despite near-zero current data, the theme is strategically important because fiat deposit functionality is a major acquisition hook for mainstream crypto users. This angle deserves a proper funded test.
+
+Angles to double down on: offer/incentive-led creative tied to specific assets or rewards, given XAUT Offers CPI performance.
+Angles to test next: iOS-explicit campaigns mirroring the Android Brand structure; a funded Cash Deposit campaign with proper tracking before scaling.
+
+
+5. THREE RECOMMENDATIONS
+-------------------------
+1. Fix spend integration on Android - Brand US and Cash Deposit immediately. Two campaigns are reporting real installs with zero cost. Until resolved, budget allocation and true CPI calculations across the account are unreliable. Audit the Adjust-to-Google Ads cost import and re-pull historical data once corrected.
+
+2. Scale XAUT Offers budget. At $4.85 CPI and 1,902 installs, it is the most efficient paid cluster and has room to grow before hitting diminishing returns. Test additional offer-based variants — other assets, referral incentives, or deposit bonuses — using XAUT Offers as the creative benchmark.
+
+3. Launch a funded iOS brand campaign. The entire paid install base is Android-tagged or unspecified. A mirrored iOS brand campaign would close the platform gap, generate comparable CPI benchmarks, and address the EU market where iOS share is higher. Set a 30-day test at comparable spend to New - Android Brand US to allow a direct CPI comparison.

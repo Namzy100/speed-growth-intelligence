@@ -1,0 +1,20 @@
+SPEED INTELLIGENCE — EVALUATION REPORT  2026-07-02
+========================================================
+Overall Score: 9.6/10   (baseline run)
+
+[PASS] Data freshness: Fresh — last sync 10.5h ago.
+[PASS] Dashboard integrity: creative: 10/10 (clean) | creator: 10/10 (clean) | trend: 10/10 (clean)
+[PASS] KPI sanity: Baseline — total_installs=42,412 (no prior run to compare).
+[PASS] Creator DB health: 0 issue(s): 0 zero-score, 0 zero-followers(non-Mimanshi), 0 duplicate-name, 0 brand-name hits (of 347 creators).
+[PASS] Language filter: 14 cards checked, 0 non-English.
+[PASS] Code syntax: all .py files parse cleanly.
+[PASS] Output completeness: all weekly outputs present.
+
+CONTENT QUALITY
+Brief score: 8.0/10 — Excellent metric specificity and clear budget reallocation instruction; lacks source verification for competitor positioning and retention benchmarking context.
+Trend score: 8.7/10 — Highly targeted trend analysis with actionable creative briefs grounded in real data; minor truncation at end prevents perfect scores, but core messaging, hook lines, and channel strategy are immediately implementable for Speed Wallet's remittance segment.
+
+ISSUES TO FIX:
+  None — all systems healthy
+
+SCORE TREND: baseline  (baseline run)

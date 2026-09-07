@@ -1,0 +1,46 @@
+TOP 5 CAMPAIGNS BY INSTALLS
+=================================
+
+1. Google Ads / New - Android Brand US — 3,204 installs, eCPI $5.25 (Source: Adjust)
+2. Google Ads / XAUT offers — 1,825 installs, eCPI $4.91 (Source: Adjust)
+3. Meta / Payday - Android - Broad+ — 1,649 installs, cost/install $3.46 (Source: Meta); Adjust also credits this campaign with 1,577 installs at $3.62 eCPI, confirming it as the most efficient paid campaign across both views
+4. Apple / US - Brand - Exact — 1,250 installs, eCPI $3.38 (Source: Adjust) — lowest paid eCPI in the entire dataset
+5. Website / Home banner Android — 907 installs, $0 cost (Source: Adjust) — organic/owned, no eCPI calculable but strong free volume
+
+Notable: Apple / US - Brand - Exact at $3.38 eCPI is the best-performing paid campaign on efficiency. Payday - Android - Broad+ wins on raw volume and also holds a strong eCPI near $3.50 across both sources.
+
+
+UNDERPERFORMING CAMPAIGNS
+==========================
+
+1. Meta / Cash Deposit
+Spend: $645.02 | Installs: 12 | CPI: $53.75
+Generating 2,279 clicks and 95,967 impressions but converting to only 12 installs. That is a 0.5% click-to-install rate, suggesting a severe creative-to-landing-page mismatch or a fundamentally weak audience fit. CPI is roughly 15x the benchmark set by Payday - Android - Broad+.
+
+2. Meta / Re-engagement - Android
+Spend: $144.42 | Installs: 6 | CPI: $24.07
+Only 180 clicks from 25,928 impressions — a 0.69% CTR — meaning the ad itself is not compelling lapsed users to engage. Six installs for the period is negligible return.
+
+3. Meta / Re-targeting Campaign Android and iOS
+Spend: $217.74 | Installs: 16 | CPI: $13.61
+Better than the two above but still nearly 4x the cost of Payday - Android - Broad+. Low install volume relative to 22,257 impressions served suggests audience overlap or creative fatigue.
+
+4. Facebook / iOS - App Promotion Campaign (Adjust view)
+Spend: $1,379.75 | Installs: 161 | eCPI: $8.57
+This is the single largest dollar gap from the portfolio average among Facebook campaigns. Meta reports only 199 installs at $6.93, confirming weak performance regardless of attribution source. High spend with below-average conversion.
+
+
+RECOMMENDED ACTION PER UNDERPERFORMER
+=======================================
+
+1. Meta / Cash Deposit — Pause immediately.
+At $53.75 CPI with only 12 installs on $645 spent, there is no scenario where continued spend is defensible. Reallocate that budget to Payday - Android - Broad+, which delivers installs at $3.46.
+
+2. Meta / Re-engagement - Android — Pause and audit the audience list.
+Six installs at $24.07 each indicates the lapsed-user segment is either too small, too stale, or mis-targeted. Rebuild the audience using a fresh 90-day lapsed window before any reactivation.
+
+3. Meta / Re-targeting Android and iOS — Cut budget by 50% and refresh creative.
+The 0.07% install rate on 22,257 impressions points to creative fatigue. Reduce spend to $100 and test a new ad concept before scaling again.
+
+4. Facebook / iOS App Promotion Campaign — Reduce budget by 40% and test a new creative angle borrowed from Payday - Android - Broad+.
+At $8.57 eCPI versus $3.62 on Payday, iOS creative is underdelivering. Apply the Payday campaign's messaging framework to iOS assets to close the efficiency gap before committing further spend.

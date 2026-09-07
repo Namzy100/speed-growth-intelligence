@@ -1,0 +1,12 @@
+Outreach Brief — Sports over CryptoAndForex (YouTube)
+Segment: iGaming | Score: 12.0/100 | 6,160 followers
+------------------------------------------------------------
+I'll be honest about where this one stands before we invest time. Sports over CryptoAndForex sits at the very bottom of our scoring (12/100), and the numbers explain why: roughly 6,200 followers, a 1.6% engagement rate, no prior brand deals, and zero crypto or fintech content in the mix. The iGaming classification is a soft signal too — it came from a reclassification rather than strong, consistent audience cues. So this is a low-priority outreach, and I'd treat it as exploratory rather than a near-term deal.
+
+That said, if there's a genuine iGaming-curious audience behind the channel, the hook for them is speed of money movement. Online bettors care about getting funds in fast and cashing out without waiting days, so the pitch leans on instant Lightning deposits and withdrawals settled in seconds, zero transaction fees, and stablecoin support (USDT/USDC) for anyone who wants to sit in stable value between plays.
+
+Three talking points if we open the conversation: first, instant deposit and withdrawal as the core benefit for gaming audiences; second, zero fees meaning more of their money stays in play; third, Speed Stacks letting them earn sats on everyday spending outside of gaming.
+
+For a call to action, keep it low-commitment — invite them to try the Speed app themselves and do a short, honest first impressions segment, with a small flat-fee trial rather than a revenue-share commitment we can't justify at this audience size.
+
+One thing to avoid: don't promote Speed as a gambling product or imply we facilitate betting. Position it strictly as a fast, low-cost payment tool.

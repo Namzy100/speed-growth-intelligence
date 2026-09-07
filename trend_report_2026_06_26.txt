@@ -1,0 +1,103 @@
+======================================================================
+SPEED WALLET — US TIKTOK TREND REPORT
+Generated 2026-06-26 21:10 UTC
+(TikTok only; US approximated via English search terms)
+======================================================================
+
+RAW SIGNAL
+----------
+CRYPTO — top 20 videos by views (max 904,300, median 134,350 views)
+  top hashtags: #crypto(14), #bitcoin(7), #cryptocurrency(4), #xrp(3), #solana(3), #finance(2), #investing(2), #memecoin(2), #cryptotrading(2), #altcoins(2), #fyp(2), #saaspocalypse(1)
+  top captions by views:
+    [   904,300 views, 0s] Today $665B was wiped from the markets, $575B from US stocks and $90B from crypto. The selloff was led by enterprise software and tech, hit by a second straight
+    [   593,500 views, 41s] Bitcoin under sixty-five thousand. XRP back at a dollar twenty. Solana down near seventy. Different coins, same cause. Wall Street is quietly trading crypto for
+    [   558,900 views, 0s] What is next price? What will be in 2025?😱🪙💰#blockchain #crypto #cryptocurrency #cryptomarket #bitcoin #bitcoingrowth
+    [   475,600 views, 0s] XRP has broken out on the 4 hour chart today while the rest of the crypto market has traded sideways. There are some new announcements that could be playing a p
+    [   401,200 views, 0s] My top 5 cryptos for 2024!! #crypto #bitcoin #investing #finance #stocks #money #profit
+    [   284,700 views, 0s] When did you first invest in crypto? #crypto #bitcoin #binance
+
+BITCOIN — top 20 videos by views (max 963,300, median 78,200 views)
+  top hashtags: #bitcoin(14), #crypto(8), #btc(4), #cryptonews(4), #finance(2), #cryptocrash(2), #cryptocurrency(2), #solana(1), #xrp(1), #hanocrypto(1), #dollar(1), #fyp(1)
+  top captions by views:
+    [   963,300 views, 5s] POV: You wasted 5 years of your life 😂🤯! #crypto #bitcoin #solana #xrp
+    [   853,300 views, 0s] Lily Allen missed out on a potential fortune after turning down a Bitcoin payment in 2009. The singer was offered 200,000 Bitcoins to perform a virtual gig on S
+    [   593,500 views, 41s] Bitcoin under sixty-five thousand. XRP back at a dollar twenty. Solana down near seventy. Different coins, same cause. Wall Street is quietly trading crypto for
+    [   495,100 views, 9s] crypto futures trading#crypto #bitcoin #fyp
+    [   383,600 views, 0s] Today $3.25T was wiped from the markets, with $1.75T erased from US stocks, nearly $1T from gold, $300B from silver and another $200B from crypto. The Nasdaq pl
+    [   367,500 views, 0s] Bitcoin has fallen into the $65,000 range, reaching its lowest level in two months as a fresh wave of selling pressure hit the crypto market. BTC dropped more t
+
+REMITTANCE — top 20 videos by views (max 1,200,000, median 91,400 views)
+  top hashtags: #remittance(4), #money(2), #ofw(2), #fyp(2), #stitch(1), #latinotiktok(1), #hundi(1), #nepalipaisa(1), #ideapreneurnepal(1), #greenscreen(1), #economy(1), #nigeria(1)
+  top captions by views:
+    [ 1,200,000 views, 271s] #stitch with @@genzxelcambio this is too nuanced of a take to tske seriously but I havent uploaded in a while so here you go #latinotiktok
+    [   950,900 views, 158s] Understanding Hundi, how does it work and what would be its consequences. #hundi #remittance #nepalipaisa #ideapreneurnepal #money
+    [   777,100 views, 149s] #greenscreen The Naira has been gaining against the US dollar due to an increase in foreign currency coming into the country through various means. The oil prod
+    [   420,300 views, 157s] Zero remittance week #ofw #viral_video
+    [   414,800 views, 54s] Nagpapadala ka ng pera sa pinas? Dapat alam mo to
+    [   413,000 views, 144s] Battle ng mga Remittance App sa UK. #Remitly vs #Sendwave vs #wise vs #taptapsend #UKofw #ofwtiktokersworldwide #perapadala #pinoy
+
+MONEY TRANSFER — top 20 videos by views (max 254,700, median 26,350 views)
+  top hashtags: #money(4), #fyp(4), #moneytransfer(3), #finance(3), #moneytips(2), #fypシ(2), #postthecontent(1), #manifesting(1), #anythingcanhappen(1), #sponsored(1), #westernunion(1), #westernunionpartner(1)
+  top captions by views:
+    [   254,700 views, 5s] It’ll always get better!!!! #postthecontent #manifesting #anythingcanhappen
+    [   121,400 views, 23s] Now that’s a well-executed money transfer thanks to @WesternUnion New customers get $0 transfer fee on their first online money transfer!* *Exchange rates apply
+    [    50,900 views, 0s] 
+    [    39,500 views, 32s] #OnePayPartner Never Transfer Money Abroad Until You Know This 💸🚫 If you’ve ever sent money overseas to family or friends, OnePay makes the whole process way ea
+    [    39,100 views, 0s] Moving money made simple. ✅ #fyp #fypシ #finance #money #resources
+    [    37,900 views, 78s] How to send money via bank transfer super safely. Send a small amount first (under 10 cents) - once they have received it get them to confirm the amount. Becaus
+
+======================================================================
+TRENDS
+------
+SPEED WALLET TIKTOK CONTENT TRENDS
+=====================================
+
+TREND 1 — "Missed the Boat" Regret Storytelling
+-------------------------------------------------
+Evidence: The top Bitcoin video at 963,300 views uses a POV regret hook ("You wasted 5 years of your life"). The Lily Allen Bitcoin miss story hit 853,300 views. Both are short (5-9 seconds to hook) and lean on emotional regret and FOMO, not technical detail.
+
+Format/Hook: 15-30 seconds, talking-head or text-overlay style. Opening line: "POV: You're still paying 5% fees to send money home when Lightning exists."
+
+Speed Use: Remittance segment. Brief a creator from a Filipino, Nigerian, or Latino community to do a mock-regret reel — they "discover" Speed after years of paying Western Union fees. Contrast old fees vs. zero fees visually on screen. End with a soft CTA: "I switched. Never looked back."
+
+
+TREND 2 — App Comparison Explainers (Community-Specific)
+----------------------------------------------------------
+Evidence: "Battle ng mga Remittance App sa UK" hit 413,000 views with a 54-second format comparing Remitly, Wise, Sendwave, and others. Caption is in Tagalog, signaling tight diaspora community targeting works even in English-dominant search results.
+
+Format/Hook: 45-60 seconds, talking-head with on-screen text cards. Opening line: "I tested every remittance app so you don't have to — here's what nobody tells you about fees."
+
+Speed Use: Remittance segment. Commission a Filipino, Nigerian, or Latin American creator to do an honest "Speed vs. the rest" comparison focused on one metric: total cost to send $200 home. Speed wins on fees — let the math do the talking. Keep the creator's native language in audio, English captions for reach.
+
+
+TREND 3 — Market Chaos / Macro News Reaction
+---------------------------------------------
+Evidence: The highest-view crypto content is macro-news-driven: $665B market wipeout (904,300 views), $3.25T erased (383,600 views), Bitcoin dropping to $65K (367,500 views). These videos thrive on urgency and real-time relevance, not education.
+
+Format/Hook: 20-40 seconds, fast news-anchor tone or screen-record style. Opening line: "Billions wiped from crypto today — here's why Bitcoin on Lightning still moved instantly for free."
+
+Speed Use: Crypto-curious segment. When a major market event hits, deploy a rapid-response creative: "While markets crashed, Lightning transactions didn't stop. Speed processed payments in seconds, zero fees, no volatility on the transfer itself." Positions Speed as infrastructure, not a speculative asset — a useful distinction during panic cycles.
+
+
+TREND 4 — "Zero Fee" Protest / Awareness Moment
+-------------------------------------------------
+Evidence: "Zero remittance week" reached 420,300 views with a 157-second OFW-focused video. The concept of collective action around fees resonates strongly with diaspora audiences who feel exploited by transfer services.
+
+Format/Hook: 30-60 seconds, community-rallying tone, user-generated feel. Opening line: "What if you never paid a remittance fee again — not just this week, forever?"
+
+Speed Use: Remittance segment. Seed a "Send for Free" challenge tied to Speed — creators demonstrate sending a real amount home using Speed with zero fees, show the recipient confirming it arrived. Encourage duets/stitches. Lean into OFW, Pinoy, and Nigerian creator networks specifically.
+
+
+TREND 5 — Hundi / Informal Transfer Education
+----------------------------------------------
+Evidence: The Hundi explainer video hit 950,900 views at nearly 3 minutes long, showing that diaspora audiences will watch long-form educational content about money systems they actually use. Informal transfer methods are a real competitor to apps like Speed.
+
+Format/Hook: 90-120 seconds, calm explainer with graphics or green-screen. Opening line: "People use Hundi because banks and apps charge too much — but there's a legal, instant, zero-fee alternative now."
+
+Speed Use: Remittance segment, specifically South Asian and African communities. Create an educational video that acknowledges why informal transfers exist (fees, distrust), then positions Speed as the solution that addresses those same pain points legitimately.
+
+
+=====================================
+CATEGORY SIGNAL NOTE
+
+Remittance was clearly the strongest category — highest individual view counts, longest watch times, and emotionally engaged niche communities. Money Transfer was the thinnest, with low median views and content that looked largely sponsored or generic, suggesting organic creator interest is weak there and paid placements dominate.

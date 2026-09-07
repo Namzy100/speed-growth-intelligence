@@ -1,0 +1,1194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Speed Wallet — Creative Tool</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#0a0c11;
+    --surface:rgba(255,255,255,0.026);
+    --surface-2:rgba(255,255,255,0.05);
+    --hairline:rgba(255,255,255,0.09);
+    --hairline-strong:rgba(255,255,255,0.15);
+    --text:#edf1f7; --muted:#9aa4b2; --faint:#6b7585;
+    --accent:#2f5dfb; --accent-2:#6f9dff;
+    --good:#3fb950; --good-2:#56d364; --warn:#e3b341;
+    --bad:#f85149; --bad-2:#ff7b72;
+    --grad:linear-gradient(120deg,#2f5dfb,#6f9dff);
+    --shadow:0 10px 30px -14px rgba(0,0,0,0.65);
+    --shadow-lift:0 18px 44px -16px rgba(0,0,0,0.75);
+    --r-lg:16px; --r-md:12px; --r-sm:9px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; color:var(--text); min-height:100vh;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.5; -webkit-font-smoothing:antialiased; letter-spacing:-0.005em;
+    background:
+      radial-gradient(1100px 600px at 50% -8%, rgba(47,93,251,0.22), transparent 58%),
+      radial-gradient(820px 520px at 100% 2%, rgba(111,157,255,0.10), transparent 52%),
+      radial-gradient(720px 480px at 0% 10%, rgba(63,185,80,0.05), transparent 50%),
+      var(--bg);
+    background-attachment:fixed;
+  }
+  body::before{ /* film grain */
+    content:""; position:fixed; inset:0; z-index:0; pointer-events:none; opacity:0.035;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .wrap{position:relative; z-index:1; max-width:1180px; margin:0 auto; padding:0 24px 80px;}
+
+  /* Brand bar */
+  .brandbar{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; padding:20px 0; border-bottom:1px solid var(--hairline);}
+  .brand-left{display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+  .hub-link{font-size:12.5px; font-weight:650; color:var(--accent-2); text-decoration:none;
+    background:rgba(47,93,251,0.10); border:1px solid var(--hairline-strong); padding:5px 12px; border-radius:999px; transition:border-color .15s, transform .15s;}
+  .hub-link:hover{border-color:var(--accent); transform:translateX(-2px);}
+  .brand{font-weight:750; font-size:16px; letter-spacing:-0.02em; display:flex; align-items:center;}
+  .brand .bolt{
+    margin-right:8px; font-size:17px;
+    background:linear-gradient(180deg,#f5c400,#f0a02a); -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent; filter:drop-shadow(0 0 6px rgba(240,160,42,0.45));
+  }
+  .brandbar .sync{font-size:12px; color:var(--muted);}
+  .brandbar .sync b{color:var(--text); font-weight:600;}
+
+  /* Title */
+  .title-block{margin:32px 0 24px;}
+  h1{
+    font-size:27px; margin:0 0 5px; font-weight:760; letter-spacing:-0.03em;
+    background:linear-gradient(180deg,#ffffff,#c9c3e8); -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
+  .title-block .sub{color:var(--muted); font-size:13px;}
+
+  /* KPI cards */
+  .kpi-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:16px;}
+  @media(max-width:880px){.kpi-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:480px){.kpi-grid{grid-template-columns:1fr;}}
+  .kpi{
+    position:relative; overflow:hidden; padding:20px;
+    background:linear-gradient(180deg,var(--surface),rgba(255,255,255,0.008));
+    border:1px solid var(--hairline); border-radius:var(--r-lg);
+    box-shadow:var(--shadow); transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+    animation:rise .5s cubic-bezier(.2,.7,.2,1) both;
+  }
+  .kpi::before{content:""; position:absolute; inset:0 0 auto 0; height:2px; background:var(--grad); opacity:.85;}
+  .kpi:has(.val.good)::before{background:linear-gradient(90deg,var(--good),var(--good-2));}
+  .kpi:has(.val.bad)::before{background:linear-gradient(90deg,var(--bad),var(--bad-2));}
+  .kpi:hover{transform:translateY(-3px); border-color:var(--hairline-strong); box-shadow:var(--shadow-lift);}
+  .kpi.flag{border-color:rgba(248,81,73,0.42); box-shadow:0 0 0 1px rgba(248,81,73,0.12), var(--shadow);}
+  .kpi .val{font-size:clamp(28px,3.4vw,34px); font-weight:760; letter-spacing:-0.03em; line-height:1.04; font-variant-numeric:tabular-nums;}
+  .kpi .val:not(.good):not(.bad){background:linear-gradient(180deg,#ffffff,#cfd6e4); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
+  .kpi .val.good{color:var(--good);} .kpi .val.bad{color:var(--bad);}
+  .kpi .lab{font-size:10.5px; text-transform:uppercase; letter-spacing:0.09em; color:var(--faint); margin-top:10px; font-weight:700;}
+  .kpi .sub{font-size:12px; color:var(--muted); margin-top:7px;}
+
+  section{margin:52px 0; animation:rise .55s cubic-bezier(.2,.7,.2,1) both;}
+  .sec-head{display:flex; align-items:center; gap:11px; margin-bottom:18px;}
+  h2{font-size:12.5px; text-transform:uppercase; letter-spacing:0.11em; color:var(--muted); margin:0; font-weight:700; display:flex; align-items:center; gap:10px;}
+  h2::before{content:""; width:3px; height:13px; border-radius:2px; background:var(--grad);}
+  .note{font-size:12px; color:var(--faint);}
+  .panel{
+    background:linear-gradient(180deg,var(--surface),rgba(255,255,255,0.006));
+    border:1px solid var(--hairline); border-radius:var(--r-lg); padding:22px;
+    box-shadow:var(--shadow); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  }
+  .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:24px;}
+  @media(max-width:880px){.grid-2{grid-template-columns:1fr;}}
+
+  /* Channel table */
+  .table-wrap{overflow-x:auto;}
+  table{width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums; min-width:520px;}
+  th,td{text-align:right; padding:8px 12px; border-bottom:1px solid var(--hairline); font-size:13px;}
+  th{color:var(--faint); font-weight:700; font-size:10px; text-transform:uppercase; letter-spacing:0.07em;}
+  th:first-child,td:first-child{text-align:left;}
+  tbody tr{transition:background .15s ease;}
+  tbody tr:hover{background:rgba(255,255,255,0.03);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr.eff{background:linear-gradient(90deg,rgba(63,185,80,0.10),transparent 75%); box-shadow:inset 3px 0 0 var(--good);}
+  td.ch{font-weight:600;}
+  .badge{display:inline-block; font-size:10px; font-weight:700; padding:2px 8px; border-radius:20px; margin-left:8px; vertical-align:middle; letter-spacing:0.03em;}
+  .badge.good{background:rgba(63,185,80,0.16); color:var(--good);}
+  .badge.bad{background:rgba(248,81,73,0.16); color:var(--bad);}
+  .num-good{color:var(--good); font-weight:650;}
+  .num-bad{color:var(--bad); font-weight:650;}
+  .muted{color:var(--muted);}
+  .chart-box{position:relative; height:340px;}
+
+  /* Stale-data banner (e.g. Meta token expired) */
+  .stale-banner{margin-bottom:12px; padding:9px 14px; border-radius:var(--r-sm);
+    background:rgba(227,179,65,0.10); border:1px solid rgba(227,179,65,0.34);
+    color:var(--warn); font-size:12.5px; font-weight:600;}
+
+  /* Insight cards */
+  .ins-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  @media(max-width:880px){.ins-grid{grid-template-columns:1fr;}}
+  .ins-card{
+    display:flex; gap:13px; padding:17px 18px;
+    background:linear-gradient(180deg,var(--surface),rgba(255,255,255,0.006));
+    border:1px solid var(--hairline); border-radius:var(--r-md);
+    box-shadow:var(--shadow); transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+    animation:rise .5s cubic-bezier(.2,.7,.2,1) both;
+  }
+  .ins-card:hover{transform:translateY(-2px); border-color:var(--hairline-strong); box-shadow:var(--shadow-lift);}
+  .ins-card.critical{border-color:rgba(248,81,73,0.5); background:linear-gradient(120deg,rgba(248,81,73,0.10),rgba(255,255,255,0.006) 70%); box-shadow:0 0 0 1px rgba(248,81,73,0.14), var(--shadow);}
+  .ins-ico{flex:0 0 auto; width:30px; height:30px; border-radius:var(--r-sm); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700;}
+  .ins-positive{color:var(--good); background:rgba(63,185,80,0.15);}
+  .ins-warning{color:var(--warn); background:rgba(227,179,65,0.15);}
+  .ins-neutral{color:var(--accent-2); background:rgba(47,93,251,0.18);}
+  .ins-card.critical .ins-ico{color:#fff; background:linear-gradient(180deg,var(--bad-2),var(--bad));}
+  .ins-head{font-size:14.5px; font-weight:680; letter-spacing:-0.01em; margin-bottom:4px;}
+  .ins-detail{font-size:12.5px; color:var(--muted); line-height:1.5;}
+  .src{font-size:11px; color:var(--faint); margin-top:16px; text-align:right;}
+
+  /* Meta empty state */
+  .empty{
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:52px 20px; text-align:center; border:1px dashed var(--hairline-strong); border-radius:var(--r-lg);
+    background:radial-gradient(420px 200px at 50% 0%, rgba(47,93,251,0.10), transparent 70%);
+  }
+  .empty .ico{color:var(--accent-2); margin-bottom:14px; opacity:0.85;}
+  .empty .msg{color:var(--muted); font-size:14px; max-width:440px;}
+
+  .fallback{color:var(--warn); font-size:13px; padding:20px; text-align:center;}
+  footer{margin-top:52px; padding-top:18px; border-top:1px solid var(--hairline); font-size:11.5px; color:var(--faint);}
+  code{background:var(--surface-2); padding:1px 6px; border-radius:5px; font-size:12px; color:var(--accent-2);}
+
+  /* Motion */
+  @keyframes rise{from{opacity:0; transform:translateY(12px);} to{opacity:1; transform:none;}}
+  .kpi:nth-child(1){animation-delay:.05s} .kpi:nth-child(2){animation-delay:.11s}
+  .kpi:nth-child(3){animation-delay:.17s} .kpi:nth-child(4){animation-delay:.23s}
+  .kpi:nth-child(5){animation-delay:.29s} .kpi:nth-child(6){animation-delay:.35s}
+  .ins-card:nth-child(2){animation-delay:.06s} .ins-card:nth-child(3){animation-delay:.12s}
+  .ins-card:nth-child(4){animation-delay:.18s} .ins-card:nth-child(5){animation-delay:.24s}
+  @media (prefers-reduced-motion: reduce){ *{animation:none!important; transition:none!important;} }
+
+  /* Ask panel (shared — pipelines/ask_panel.py) */
+  .ask-wrap{background:var(--panel); border:1px solid var(--hairline); border-radius:var(--r-md,10px); padding:16px 18px; box-shadow:var(--shadow,none);}
+  .ask-row{display:flex; gap:10px; align-items:center;}
+  .ask-row input[type=text]{flex:1; min-width:0; padding:10px 13px; font-size:14px; background:#0e1117;
+    color:var(--text); border:1px solid var(--hairline); border-radius:8px; font-family:inherit;}
+  .ask-row input[type=text]:focus{outline:none; border-color:var(--accent);}
+  .ask-row button{background:var(--accent); color:#fff; border:1px solid var(--accent); border-radius:8px;
+    padding:10px 20px; font-size:13.5px; font-weight:650; cursor:pointer; font-family:inherit; transition:filter .15s;}
+  .ask-row button:hover{filter:brightness(1.12);}
+  .ask-eg{margin-top:11px; font-size:11.5px; color:var(--faint); display:flex; flex-wrap:wrap; gap:7px; align-items:center;}
+  .ask-chip{background:rgba(47,93,251,0.10); border:1px solid var(--hairline-strong,var(--hairline)); color:var(--accent-2,var(--accent));
+    padding:3px 10px; border-radius:999px; cursor:pointer; transition:border-color .15s;}
+  .ask-chip:hover{border-color:var(--accent);}
+  .ask-answer{margin-top:14px; padding-top:14px; border-top:1px solid var(--hairline); font-size:13.5px; line-height:1.55;}
+  .ask-answer.ask-empty{color:var(--faint);}
+  .ask-answer b{color:var(--text); font-weight:700; font-variant-numeric:tabular-nums;}
+  .ask-answer .ask-head{font-size:15px; font-weight:650; color:var(--text); margin-bottom:8px;}
+  .ask-answer .ask-miss{color:var(--warn,#e3b341);}
+  .ask-list{margin:9px 0 0; padding-left:0; list-style:none;}
+  .ask-list li{display:flex; justify-content:space-between; gap:14px; padding:5px 0; border-bottom:1px solid var(--hairline);}
+  .ask-list li:last-child{border-bottom:none;}
+  .ask-list .ask-meta{color:var(--muted,var(--faint)); font-size:12.5px; font-variant-numeric:tabular-nums; white-space:nowrap;}
+  .ask-prov{margin-top:10px; font-size:11px; color:var(--faint);}
+
+  /* Collapsed long lists (shared — pipelines/list_collapse.py) */
+  .lc-more{display:flex; justify-content:center; align-items:center; gap:10px; margin-top:10px;}
+  .lc-btn{background:rgba(47,93,251,0.10); border:1px solid var(--hairline-strong,var(--hairline));
+    color:var(--accent-2,var(--accent)); padding:5px 14px; border-radius:999px; cursor:pointer;
+    font-family:inherit; font-size:12px; font-weight:650; transition:border-color .15s, filter .15s;}
+  .lc-btn:hover{border-color:var(--accent); filter:brightness(1.08);}
+  .lc-count{font-size:11.5px; color:var(--faint);}
+  /* Fade the last visible row so a truncated table reads as truncated rather than
+     as the end of the data. Only applied while collapsed. */
+  .lc-clipped{position:relative;}
+  .lc-clipped::after{content:""; position:absolute; left:0; right:0; bottom:0; height:38px;
+    pointer-events:none; background:linear-gradient(to bottom, transparent, var(--panel));}
+
+  /* "Start here" strip (shared — pipelines/starter_set.py) */
+  .sh-wrap{margin:0 0 22px;}
+  .sh-head{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:11px;}
+  .sh-head h2{margin:0; font-size:16px; font-weight:720; letter-spacing:-0.02em; color:var(--text);}
+  .sh-head .sh-note{font-size:12px; color:var(--muted);}
+  .sh-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:10px;}
+  @media(max-width:1100px){.sh-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:620px){.sh-grid{grid-template-columns:1fr;}}
+  .sh-card{position:relative; padding:12px 13px; border:1px solid var(--hairline);
+    border-radius:var(--r-sm,9px); background:var(--panel); overflow:hidden;}
+  .sh-card::before{content:""; position:absolute; left:0; top:0; bottom:0; width:2px;
+    background:var(--accent); opacity:.85;}
+  .sh-rank{font-size:10px; font-weight:800; letter-spacing:.1em; color:var(--faint); text-transform:uppercase;}
+  .sh-title{margin:3px 0 4px; font-size:13.5px; font-weight:680; color:var(--text); line-height:1.32;
+    overflow-wrap:anywhere;}
+  .sh-meta{font-size:11.5px; color:var(--muted); line-height:1.4;}
+  .sh-stat{margin-top:7px; font-size:12px; color:var(--accent-2,var(--accent)); font-weight:650;
+    font-variant-numeric:tabular-nums;}
+  .sh-stat span{color:var(--faint); font-weight:600;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="brandbar">
+    <div class="brand-left">
+      <a class="hub-link" href="index.html">← Tools</a>
+      <div class="brand"><span class="bolt">⚡</span>Speed Wallet</div>
+    </div>
+    <div class="sync">Synced: <b id="syncTime">—</b></div>
+  </div>
+
+  <div class="title-block">
+    <h1>Creative Tool</h1>
+    <div class="sub">User acquisition &amp; retention · last 30 days</div>
+  </div>
+
+  <!-- KPI summary row -->
+  <div class="kpi-grid" id="kpis"></div>
+
+  <!-- 1. Channel Performance -->
+    <section class="sh-wrap">
+    <div class="sh-head"><h2>Fix these 5 first</h2><span class="sh-note">most expensive paid campaigns by deposit CPA — organic and thin rows excluded</span></div>
+    <div class="sh-grid">
+      <div class="sh-card"><div class="sh-rank">1</div><div class="sh-title">Payday - Android - Broad+</div><div class="sh-meta">Facebook · $4,662 spend · 201 deposits</div><div class="sh-stat">$23.20<span> deposit CPA (paid)</span></div></div>
+      <div class="sh-card"><div class="sh-rank">2</div><div class="sh-title">XAUT offers</div><div class="sh-meta">Google Ads · $607 spend · 38 deposits</div><div class="sh-stat">$15.98<span> deposit CPA (paid)</span></div></div>
+      <div class="sh-card"><div class="sh-rank">3</div><div class="sh-title">Payday android Video</div><div class="sh-meta">Facebook · $1,807 spend · 114 deposits</div><div class="sh-stat">$15.85<span> deposit CPA (paid)</span></div></div>
+      <div class="sh-card"><div class="sh-rank">4</div><div class="sh-title">New - Android Brand US</div><div class="sh-meta">Google Ads · $17,781 spend · 1,375 deposits</div><div class="sh-stat">$12.93<span> deposit CPA (paid)</span></div></div>
+      <div class="sh-card"><div class="sh-rank">5</div><div class="sh-title">US - Streaks</div><div class="sh-meta">Google Ads · $11,315 spend · 935 deposits</div><div class="sh-stat">$12.10<span> deposit CPA (paid)</span></div></div>
+    </div>
+  </section>
+  <section>
+    <div class="sec-head"><h2>Channel Performance</h2><span class="note" id="chNote"></span></div>
+    <div class="panel"><div class="table-wrap"><table id="chTable">
+      <thead><tr><th>Channel</th><th>Installs</th><th>eCPI</th><th>Impressions</th><th>Clicks</th></tr></thead>
+      <tbody></tbody>
+    </table></div></div>
+  </section>
+
+  <div class="grid-2">
+    <!-- 2. Campaign Breakdown -->
+    <section>
+      <div class="sec-head"><h2>Campaign Breakdown</h2><span class="note" id="cmpNote"></span></div>
+      <div class="panel"><div class="chart-box"><canvas id="cmpChart"></canvas></div></div>
+    </section>
+
+    <!-- 3. Retention Curve -->
+    <section>
+      <div class="sec-head"><h2>Retention Curve</h2><span class="note" id="retNote"></span></div>
+      <div class="panel"><div class="chart-box"><canvas id="retChart"></canvas></div></div>
+    </section>
+  </div>
+
+  <!-- 3b. Campaign Economics -->
+  <section>
+    <div class="sec-head"><h2>Campaign Economics</h2><span class="note" id="econNote"></span></div>
+    <div class="panel"><div class="table-wrap"><table id="econTable">
+      <thead><tr><th>Campaign</th><th>Channel</th><th>Spend</th><th>Installs</th>
+        <th>Deposits</th><th>Deposit CPA</th><th>Retained D7</th><th>Retention CPA</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+    <div class="src" id="econSrc"></div></div>
+  </section>
+
+  <!-- 4. Meta Campaign Performance -->
+  <section>
+    <div class="sec-head"><h2>Meta Campaign Performance</h2><span class="note" id="metaNote"></span></div>
+    <div class="stale-banner" id="metaStale" style="display:none"></div>
+    <div class="panel"><div class="table-wrap"><table id="metaTable">
+      <thead><tr><th>Campaign</th><th>Spend</th><th>Impressions</th><th>Clicks</th><th>App Installs</th><th>Creative Score</th></tr></thead>
+      <tbody></tbody>
+    </table></div></div>
+  </section>
+
+  <!-- 5. Key Insights -->
+  <section>
+    <div class="sec-head"><h2>Key Insights</h2></div>
+    <div class="ins-grid" id="insights"></div>
+    <div class="src" id="insightsSrc"></div>
+  </section>
+
+  <!-- 6. Meta Creative Analysis -->
+  <section>
+    <div class="sec-head"><h2>Meta Creative Analysis</h2><span class="note" id="metaCreativeNote"></span></div>
+    <div class="panel"><div class="table-wrap"><table id="metaCreativeTable">
+      <thead><tr><th>Ad</th><th>Campaign</th><th>Spend</th><th>Impressions</th><th>Clicks</th><th>Installs</th><th>CTR</th><th>CPI</th></tr></thead>
+      <tbody></tbody>
+    </table></div></div>
+  </section>
+
+    <section>
+    <div class="sec-head"><h2>Ask this tool</h2><span class="note">answers computed from the channel/campaign rows on this page</span></div>
+    <div class="ask-wrap">
+      <div class="ask-row">
+        <input type="text" id="askQ" autocomplete="off" placeholder="ask a question about this data…">
+        <button id="askGo">Ask</button>
+      </div>
+      <div class="ask-eg" id="askEg">Try:</div>
+      <div id="askA" class="ask-answer ask-empty"></div>
+    </div>
+  </section>
+
+  <footer>
+    Data pulled live from Google Sheets at build time and inlined into this file.
+    Charts via Chart.js (cdnjs). Insights by <code id="modelName">—</code>.
+    Built <span id="builtAt">—</span>.
+  </footer>
+</div>
+
+<script>
+const DATA = {"generated_at": "2026-09-07 12:00:43 UTC", "last_updated": "2026-09-07 12:00:39 UTC", "kpis": {"total_installs": 65771, "channel_count": 16, "best_paid": {"channel": "Apple", "installs": 4041, "impressions": 53149, "clicks": 4841, "ecpi": 2.1065}, "d1_retention": 0.2706, "d1_above": true, "d1_target": 0.25, "matured_cohorts": 28, "reengagement": {"channel": "Re-engagement campaigns", "clicks": 67968, "installs": 19, "cvr": 0.028}, "econ": {"cost": 45347.63, "deposits": 3816, "retained_d7": 1376, "deposit_cpa": 11.88, "retention_cpa": 32.96, "paid_campaigns": 11, "thin_campaigns": 3, "organic_deposits": 6703, "all_deposits": 10519, "organic_share": 0.6372, "min_meaningful_deposits": 10}}, "channels": [{"channel": "Organic", "installs": 45399, "impressions": 0, "clicks": 0, "ecpi": 0.0}, {"channel": "Google Ads", "installs": 7635, "impressions": 1084001, "clicks": 16580, "ecpi": 3.9772}, {"channel": "Apple", "installs": 4041, "impressions": 53149, "clicks": 4841, "ecpi": 2.1065}, {"channel": "Website", "installs": 2595, "impressions": 0, "clicks": 30340, "ecpi": 0.0}, {"channel": "Partnership", "installs": 2177, "impressions": 0, "clicks": 17322, "ecpi": 0.0}, {"channel": "Facebook", "installs": 1916, "impressions": 182111, "clicks": 11546, "ecpi": 3.3766}, {"channel": "Google Organic Search", "installs": 1526, "impressions": 0, "clicks": 0, "ecpi": 0.0}, {"channel": "Meta Retargeting Campaign", "installs": 143, "impressions": 0, "clicks": 5223, "ecpi": 0.0}, {"channel": "Social Media", "installs": 142, "impressions": 0, "clicks": 4932, "ecpi": 0.0}, {"channel": "Untrusted Devices", "installs": 116, "impressions": 0, "clicks": 0, "ecpi": 0.0}, {"channel": "MiniBet", "installs": 36, "impressions": 0, "clicks": 1102, "ecpi": 0.0}, {"channel": "Re-engagement campaigns", "installs": 19, "impressions": 0, "clicks": 67968, "ecpi": 0.0}, {"channel": "Perform[cb]", "installs": 15, "impressions": 2027047, "clicks": 375174, "ecpi": 0.0}, {"channel": "Las Vegas Billboard", "installs": 7, "impressions": 0, "clicks": 29, "ecpi": 0.0}, {"channel": "Chrome Wallet", "installs": 3, "impressions": 0, "clicks": 38, "ecpi": 0.0}, {"channel": "Flipit New", "installs": 1, "impressions": 0, "clicks": 20, "ecpi": 0.0}], "total_installs": 65771, "most_efficient": "Apple", "most_efficient_detail": {"channel": "Apple", "installs": 4041, "impressions": 53149, "clicks": 4841, "ecpi": 2.1065}, "facebook_flag": {"facebook_ecpi": 3.3766, "apple_ecpi": 2.1065, "flagged": true}, "min_meaningful_installs": 100, "reengagement": {"channel": "Re-engagement campaigns", "clicks": 67968, "installs": 19, "cvr": 0.028}, "campaigns": [{"campaign": "New - Android Brand US", "channel": "Google Ads", "installs": 4482, "cost": 17781.08, "deposits": 1375, "retained_d7": 529, "paid": true, "deposit_cpa": 12.93, "retention_cpa": 33.61, "thin": false}, {"campaign": "US - Streaks", "channel": "Google Ads", "installs": 2899, "cost": 11315.17, "deposits": 935, "retained_d7": 325, "paid": true, "deposit_cpa": 12.1, "retention_cpa": 34.82, "thin": false}, {"campaign": "US - Brand - Exact", "channel": "Apple", "installs": 2414, "cost": 3480.13, "deposits": 739, "retained_d7": 255, "paid": true, "deposit_cpa": 4.71, "retention_cpa": 13.65, "thin": false}, {"campaign": "Fumb", "channel": "Partnership", "installs": 1656, "cost": 0.0, "deposits": 211, "retained_d7": 126, "paid": false, "deposit_cpa": null, "retention_cpa": null, "thin": false}, {"campaign": "Home\u003ebanner\u003eandroid", "channel": "Website", "installs": 1390, "cost": 0.0, "deposits": 197, "retained_d7": 207, "paid": false, "deposit_cpa": null, "retention_cpa": null, "thin": false}, {"campaign": "Payday - Android - Broad+", "channel": "Facebook", "installs": 1251, "cost": 4662.22, "deposits": 201, "retained_d7": 50, "paid": true, "deposit_cpa": 23.2, "retention_cpa": 93.24, "thin": false}, {"campaign": "US - Max Conversion Campaign", "channel": "Apple", "installs": 872, "cost": 2859.28, "deposits": 283, "retained_d7": 94, "paid": true, "deposit_cpa": 10.1, "retention_cpa": 30.42, "thin": false}, {"campaign": "Global - Brand - Exact", "channel": "Apple", "installs": 713, "cost": 1218.97, "deposits": 119, "retained_d7": 72, "paid": true, "deposit_cpa": 10.24, "retention_cpa": 16.93, "thin": false}, {"campaign": "Payday android Video", "channel": "Facebook", "installs": 549, "cost": 1807.43, "deposits": 114, "retained_d7": 27, "paid": true, "deposit_cpa": 15.85, "retention_cpa": 66.94, "thin": false}, {"campaign": "Home\u003ebanner\u003eiOS", "channel": "Website", "installs": 512, "cost": 0.0, "deposits": 151, "retained_d7": 86, "paid": false, "deposit_cpa": null, "retention_cpa": null, "thin": false}], "excluded_organic_rows": 4, "economics": [{"campaign": "New - Android Brand US", "channel": "Google Ads", "installs": 4482, "cost": 17781.08, "deposits": 1375, "retained_d7": 529, "paid": true, "deposit_cpa": 12.93, "retention_cpa": 33.61, "thin": false}, {"campaign": "US - Streaks", "channel": "Google Ads", "installs": 2899, "cost": 11315.17, "deposits": 935, "retained_d7": 325, "paid": true, "deposit_cpa": 12.1, "retention_cpa": 34.82, "thin": false}, {"campaign": "Payday - Android - Broad+", "channel": "Facebook", "installs": 1251, "cost": 4662.22, "deposits": 201, "retained_d7": 50, "paid": true, "deposit_cpa": 23.2, "retention_cpa": 93.24, "thin": false}, {"campaign": "US - Brand - Exact", "channel": "Apple", "installs": 2414, "cost": 3480.13, "deposits": 739, "retained_d7": 255, "paid": true, "deposit_cpa": 4.71, "retention_cpa": 13.65, "thin": false}, {"campaign": "US - Max Conversion Campaign", "channel": "Apple", "installs": 872, "cost": 2859.28, "deposits": 283, "retained_d7": 94, "paid": true, "deposit_cpa": 10.1, "retention_cpa": 30.42, "thin": false}, {"campaign": "Payday android Video", "channel": "Facebook", "installs": 549, "cost": 1807.43, "deposits": 114, "retained_d7": 27, "paid": true, "deposit_cpa": 15.85, "retention_cpa": 66.94, "thin": false}, {"campaign": "Global - Brand - Exact", "channel": "Apple", "installs": 713, "cost": 1218.97, "deposits": 119, "retained_d7": 72, "paid": true, "deposit_cpa": 10.24, "retention_cpa": 16.93, "thin": false}, {"campaign": "Competitor - Wallets (US)", "channel": "Apple", "installs": 42, "cost": 953.95, "deposits": 5, "retained_d7": 3, "paid": true, "deposit_cpa": 190.79, "retention_cpa": 317.98, "thin": true}, {"campaign": "XAUT offers", "channel": "Google Ads", "installs": 149, "cost": 607.2, "deposits": 38, "retained_d7": 19, "paid": true, "deposit_cpa": 15.98, "retention_cpa": 31.96, "thin": false}, {"campaign": "USD Deposit LTV", "channel": "Google Ads", "installs": 47, "cost": 452.86, "deposits": 6, "retained_d7": 1, "paid": true, "deposit_cpa": 75.48, "retention_cpa": 452.86, "thin": true}, {"campaign": "US Streaks", "channel": "Google Ads", "installs": 24, "cost": 209.34, "deposits": 1, "retained_d7": 1, "paid": true, "deposit_cpa": 209.34, "retention_cpa": 209.34, "thin": true}], "econ_totals": {"cost": 45347.63, "deposits": 3816, "retained_d7": 1376, "deposit_cpa": 11.88, "retention_cpa": 32.96, "paid_campaigns": 11, "thin_campaigns": 3, "organic_deposits": 6703, "all_deposits": 10519, "organic_share": 0.6372, "min_meaningful_deposits": 10}, "best_deposit_cpa": {"campaign": "US - Brand - Exact", "channel": "Apple", "installs": 2414, "cost": 3480.13, "deposits": 739, "retained_d7": 255, "paid": true, "deposit_cpa": 4.71, "retention_cpa": 13.65, "thin": false}, "worst_deposit_cpa": {"campaign": "Payday - Android - Broad+", "channel": "Facebook", "installs": 1251, "cost": 4662.22, "deposits": 201, "retained_d7": 50, "paid": true, "deposit_cpa": 23.2, "retention_cpa": 93.24, "thin": false}, "retention": {"labels": ["D1", "D2", "D3", "D4", "D5", "D6", "D7"], "values": [0.2706, 0.2184, 0.1866, 0.1712, 0.1581, 0.1491, 0.1417], "cohort_count": 28, "excluded_days": ["2026-09-05", "2026-09-06"]}, "meta": {"campaigns": [{"campaign": "Payday - Android - Broad+", "spend": 4662.43, "impressions": 146145, "clicks": 7762, "installs": 1348, "creative_score": 84.0}, {"campaign": "Payday android Video", "spend": 1807.8, "impressions": 35999, "clicks": 3785, "installs": 516, "creative_score": 93.4}, {"campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 1272.96, "impressions": 92923, "clicks": 4472, "installs": 66, "creative_score": 10.0}, {"campaign": "Cash Deposit", "spend": 125.1, "impressions": 17621, "clicks": 421, "installs": 0, "creative_score": 0.0}], "totals": {"spend": 7868.29, "impressions": 292688, "clicks": 16440, "installs": 1930}}, "meta_creatives": {"ads": [{"ad_name": "Android - FREE $50", "campaign": "Payday - Android - Broad+", "spend": 3168.74, "impressions": 81994, "clicks": 7205, "installs": 1209, "ctr": 8.79, "cpi": 2.62}, {"ad_name": "Buy bitcoin $10 v2", "campaign": "Payday android Video", "spend": 1764.5, "impressions": 34709, "clicks": 3722, "installs": 501, "ctr": 10.72, "cpi": 3.52}, {"ad_name": "Static - Build a streak v1", "campaign": "Payday - Android - Broad+", "spend": 579.36, "impressions": 26502, "clicks": 236, "installs": 54, "ctr": 0.89, "cpi": 10.73}, {"ad_name": "Video- Natalie Streaks", "campaign": "Payday - Android - Broad+", "spend": 573.34, "impressions": 21318, "clicks": 182, "installs": 53, "ctr": 0.85, "cpi": 10.82}, {"ad_name": "Static ad 2", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 571.72, "impressions": 33184, "clicks": 1725, "installs": 38, "ctr": 5.2, "cpi": 15.05}, {"ad_name": "Static ad 2", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 433.44, "impressions": 30782, "clicks": 1856, "installs": 21, "ctr": 6.03, "cpi": 20.64}, {"ad_name": "Static - Recurring streaks", "campaign": "Payday - Android - Broad+", "spend": 108.28, "impressions": 5743, "clicks": 46, "installs": 9, "ctr": 0.8, "cpi": 12.03}, {"ad_name": "Cash Deposit Educate", "campaign": "Cash Deposit", "spend": 106.45, "impressions": 15103, "clicks": 360, "installs": 0, "ctr": 2.38, "cpi": null}, {"ad_name": "Static GET $10 on $25", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 87.48, "impressions": 7472, "clicks": 250, "installs": 1, "ctr": 3.35, "cpi": 87.48}, {"ad_name": "Everything bitcoin One wallet", "campaign": "Payday - Android - Broad+", "spend": 81.41, "impressions": 3262, "clicks": 29, "installs": 10, "ctr": 0.89, "cpi": 8.14}, {"ad_name": "Static ad 2", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 65.52, "impressions": 8706, "clicks": 276, "installs": 3, "ctr": 3.17, "cpi": 21.84}, {"ad_name": "Lowest fees Static V2", "campaign": "Payday - Android - Broad+", "spend": 59.3, "impressions": 2863, "clicks": 23, "installs": 8, "ctr": 0.8, "cpi": 7.41}, {"ad_name": "Static 10% on $500", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 47.11, "impressions": 2759, "clicks": 186, "installs": 1, "ctr": 6.74, "cpi": 47.11}, {"ad_name": "Static - longer your streak", "campaign": "Payday - Android - Broad+", "spend": 46.51, "impressions": 1705, "clicks": 16, "installs": 2, "ctr": 0.94, "cpi": 23.25}, {"ad_name": "Video- Streaks Social media", "campaign": "Payday android Video", "spend": 26.61, "impressions": 768, "clicks": 36, "installs": 8, "ctr": 4.69, "cpi": 3.33}, {"ad_name": "Buy $25 Bitcoin v1", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 21.63, "impressions": 7051, "clicks": 63, "installs": 1, "ctr": 0.89, "cpi": 21.63}, {"ad_name": "Static streaks  recurring", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 16.12, "impressions": 999, "clicks": 28, "installs": 0, "ctr": 2.8, "cpi": null}, {"ad_name": "Video- Streaks Social media", "campaign": "Payday - Android - Broad+", "spend": 14.12, "impressions": 1471, "clicks": 15, "installs": 2, "ctr": 1.02, "cpi": 7.06}, {"ad_name": "Cash Deposit Retailers Nationwide", "campaign": "Cash Deposit", "spend": 11.09, "impressions": 1529, "clicks": 30, "installs": 0, "ctr": 1.96, "cpi": null}, {"ad_name": "Still Paying High Fees Static", "campaign": "Payday - Android - Broad+", "spend": 10.83, "impressions": 405, "clicks": 5, "installs": 1, "ctr": 1.23, "cpi": 10.83}, {"ad_name": "Buy $25 Bitcoin v1", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 9.28, "impressions": 586, "clicks": 31, "installs": 0, "ctr": 5.29, "cpi": null}, {"ad_name": "Lowest Fees Static", "campaign": "Payday - Android - Broad+", "spend": 8.37, "impressions": 263, "clicks": 1, "installs": 0, "ctr": 0.38, "cpi": null}, {"ad_name": "Static ad 1", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 6.59, "impressions": 394, "clicks": 14, "installs": 0, "ctr": 3.55, "cpi": null}, {"ad_name": "Cash Deposit educate v3", "campaign": "Cash Deposit", "spend": 4.8, "impressions": 496, "clicks": 18, "installs": 0, "ctr": 3.63, "cpi": null}, {"ad_name": "Buy BTC Video Ads", "campaign": "Payday android Video", "spend": 4.53, "impressions": 162, "clicks": 11, "installs": 2, "ctr": 6.79, "cpi": 2.27}, {"ad_name": "Bitcoin With Zero Hidden fees Static", "campaign": "Payday - Android - Broad+", "spend": 4.22, "impressions": 246, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "No Spread Fees UGC Ads", "campaign": "Payday android Video", "spend": 4.14, "impressions": 128, "clicks": 2, "installs": 0, "ctr": 1.56, "cpi": null}, {"ad_name": "Emily Influencer V3", "campaign": "Payday android Video", "spend": 3.95, "impressions": 104, "clicks": 5, "installs": 2, "ctr": 4.81, "cpi": 1.98}, {"ad_name": "BUY Bitcoin $10 on $25 v1", "campaign": "Payday - Android - Broad+", "spend": 3.4, "impressions": 140, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Video- Natalie Streaks", "campaign": "Payday android Video", "spend": 3.21, "impressions": 103, "clicks": 6, "installs": 2, "ctr": 5.83, "cpi": 1.6}, {"ad_name": "Static - Build a Habit v1", "campaign": "Payday - Android - Broad+", "spend": 3.21, "impressions": 196, "clicks": 3, "installs": 0, "ctr": 1.53, "cpi": null}, {"ad_name": "Buy $25 Bitcoin v1", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 2.01, "impressions": 129, "clicks": 7, "installs": 1, "ctr": 5.43, "cpi": 2.01}, {"ad_name": "Static ad 1", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 1.91, "impressions": 74, "clicks": 6, "installs": 0, "ctr": 8.11, "cpi": null}, {"ad_name": "Static ad 3", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 1.79, "impressions": 76, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Static ad 3", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 1.62, "impressions": 216, "clicks": 10, "installs": 0, "ctr": 4.63, "cpi": null}, {"ad_name": "Static -  streaks stacking", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 1.58, "impressions": 119, "clicks": 8, "installs": 0, "ctr": 6.72, "cpi": null}, {"ad_name": "Cash Deposit offer 2", "campaign": "Cash Deposit", "spend": 1.36, "impressions": 355, "clicks": 9, "installs": 0, "ctr": 2.54, "cpi": null}, {"ad_name": "Static GET $10 on $25", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 1.33, "impressions": 74, "clicks": 3, "installs": 0, "ctr": 4.05, "cpi": null}, {"ad_name": "Static ad 3", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 1.26, "impressions": 78, "clicks": 5, "installs": 0, "ctr": 6.41, "cpi": null}, {"ad_name": "static streaks recurring", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 0.85, "impressions": 81, "clicks": 2, "installs": 0, "ctr": 2.47, "cpi": null}, {"ad_name": "Static 10% on $500", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 0.65, "impressions": 44, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Static $10 with Kyc Instructions", "campaign": "Payday - Android - Broad+", "spend": 0.61, "impressions": 16, "clicks": 1, "installs": 0, "ctr": 6.25, "cpi": null}, {"ad_name": "Cash Deposit educate v2", "campaign": "Cash Deposit", "spend": 0.49, "impressions": 35, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Static - Sell BTC v1", "campaign": "Payday - Android - Broad+", "spend": 0.44, "impressions": 5, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Static GET $10 on $25", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 0.42, "impressions": 30, "clicks": 1, "installs": 0, "ctr": 3.33, "cpi": null}, {"ad_name": "Cash Deposit offers", "campaign": "Cash Deposit", "spend": 0.42, "impressions": 36, "clicks": 2, "installs": 0, "ctr": 5.56, "cpi": null}, {"ad_name": "Static $10 on $25", "campaign": "Cash Deposit", "spend": 0.38, "impressions": 50, "clicks": 2, "installs": 0, "ctr": 4.0, "cpi": null}, {"ad_name": "Emily Influencer V2", "campaign": "Payday android Video", "spend": 0.36, "impressions": 10, "clicks": 2, "installs": 1, "ctr": 20.0, "cpi": 0.36}, {"ad_name": "Static 10% on $500", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 0.35, "impressions": 46, "clicks": 1, "installs": 0, "ctr": 2.17, "cpi": null}, {"ad_name": "Emily Influencer Video", "campaign": "Payday android Video", "spend": 0.31, "impressions": 7, "clicks": 1, "installs": 0, "ctr": 14.29, "cpi": null}, {"ad_name": "Static ad 1", "campaign": "Re-targeting Campaign Andoid \u0026 iOS", "spend": 0.3, "impressions": 23, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Buy Video New Screen - Android - Broad+", "campaign": "Payday android Video", "spend": 0.18, "impressions": 7, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Static GET $10 on $25 v2", "campaign": "Payday - Android - Broad+", "spend": 0.16, "impressions": 4, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Static $10 on $25 v2", "campaign": "Cash Deposit", "spend": 0.11, "impressions": 17, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Static GET $10 on $100", "campaign": "Payday - Android - Broad+", "spend": 0.05, "impressions": 3, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Static - Sell BTC v2", "campaign": "Payday - Android - Broad+", "spend": 0.05, "impressions": 5, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Android - FREE $50 v1", "campaign": "Payday - Android - Broad+", "spend": 0.03, "impressions": 1, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Coffee shop Influencer Video", "campaign": "Payday android Video", "spend": 0.01, "impressions": 1, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Static BTC v1", "campaign": "Payday - Android - Broad+", "spend": 0.0, "impressions": 1, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Static Bonus v1", "campaign": "Payday - Android - Broad+", "spend": 0.0, "impressions": 1, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}, {"ad_name": "Skip the fees Static v1", "campaign": "Payday - Android - Broad+", "spend": 0.0, "impressions": 1, "clicks": 0, "installs": 0, "ctr": 0.0, "cpi": null}], "totals": {"spend": 7868.29, "impressions": 292688, "clicks": 16440, "installs": 1930, "ad_count": 61}}, "meta_note": "", "insights": [{"type": "positive", "headline": "Organic Dominates at Zero Acquisition Cost", "detail": "Organic installs account for 35,904 of ~54,569 total installs (65.8%), dwarfing every paid channel combined and delivering users at $0 eCPI, signaling strong brand pull in Speed Wallet's core US, Mexico, and Brazil markets."}, {"type": "warning", "headline": "Re-Engagement Campaigns Burning Budget for Nothing", "detail": "Re-engagement campaigns generated 59,808 clicks but only 25 installs \u2014 a 0.042% CVR \u2014 meaning nearly 60K click-throughs produced almost zero conversions, making this the highest-priority funnel to audit or pause immediately."}, {"type": "warning", "headline": "Meta 'Cash Deposit' Campaign Is a Money Pit", "detail": "The Meta 'Cash Deposit' campaign spent $1,505.37 to generate just 7 mobile app installs (a $214.77 cost-per-install with a creative score of 0.0), while 'Payday - Android - Broad+' delivered 1,542 installs on $3,912.45 spend ($2.54 CPI) \u2014 pause Cash Deposit and reallocate budget immediately."}, {"type": "warning", "headline": "Meta Retargeting CPI Is 15x the Payday Benchmark", "detail": "The Meta 'Re-targeting Campaign Android \u0026 iOS' spent $1,442.87 for only 96 installs ($15.03 CPI, creative score 48.7), versus $2.54 CPI on 'Payday - Android - Broad+', indicating the retargeting audience or creative is severely underperforming across the US and EU paid markets."}, {"type": "neutral", "headline": "D1\u2013D7 Retention Decay Demands Early Activation Fix", "detail": "Across 28 matured cohorts, D1 retention sits at 25.75% but collapses to 13.75% by D7 \u2014 a 47% drop in one week \u2014 suggesting that paid installs costing up to $4.26 eCPI (Google Ads) are churning before users establish a payment habit."}], "insights_critical_index": 1, "insights_source": "claude-sonnet-4-6 (cached; regen failed)"};
+
+const intFmt = new Intl.NumberFormat("en-US");
+const fmtInt = n => intFmt.format(Math.round(n||0));
+const fmtEcpi = v => (v && v > 0) ? "$" + Number(v).toFixed(2) : "—";
+const fmtCost = v => (v && v > 0) ? "$" + intFmt.format(Math.round(v)) : "—";
+const usdFmt = new Intl.NumberFormat("en-US", {minimumFractionDigits:2, maximumFractionDigits:2});
+const fmtMoney = v => (v || v === 0) ? "$" + usdFmt.format(Number(v)) : "—";
+const esc = s => { const d=document.createElement("div"); d.textContent = (s==null?"":s); return d.innerHTML; };
+
+function kpiCard(val, valCls, lab, sub, cardCls, count){
+  const data = count
+    ? ` data-count="${count.target}" data-prefix="${count.prefix||""}" data-suffix="${count.suffix||""}" data-decimals="${count.decimals||0}"`
+    : "";
+  return `<div class="kpi ${cardCls||""}">
+    <div class="val ${valCls||""}"${data}>${val}</div>
+    <div class="lab">${lab}</div>
+    <div class="sub">${sub}</div>
+  </div>`;
+}
+
+// Animated count-up for KPI numbers (eased), respecting reduced-motion.
+function animateVal(el){
+  const target = parseFloat(el.dataset.count);
+  if (isNaN(target)) return;
+  const dec = parseInt(el.dataset.decimals||"0", 10);
+  const pre = el.dataset.prefix||"", suf = el.dataset.suffix||"";
+  const fmt = v => pre + (dec>0 ? v.toFixed(dec) : intFmt.format(Math.round(v))) + suf;
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches){ el.textContent = fmt(target); return; }
+  const dur = 950, t0 = performance.now();
+  el.textContent = fmt(0);
+  requestAnimationFrame(function step(now){
+    const p = Math.min(1, (now-t0)/dur), e = 1 - Math.pow(1-p, 3);
+    el.textContent = fmt(target * e);
+    if (p < 1) requestAnimationFrame(step); else el.textContent = fmt(target);
+  });
+}
+
+function renderKPIs(){
+  const k = DATA.kpis, g = document.getElementById("kpis");
+  const cards = [];
+  cards.push(kpiCard(fmtInt(k.total_installs), "", "Total Installs",
+    `Last 30 days · ${k.channel_count} active channels`, "",
+    {target:k.total_installs, decimals:0}));
+
+  if (k.best_paid)
+    cards.push(kpiCard("$" + k.best_paid.ecpi.toFixed(2), "good", "Best Paid eCPI",
+      `${esc(k.best_paid.channel)} · ${fmtInt(k.best_paid.installs)} installs`, "",
+      {target:k.best_paid.ecpi, prefix:"$", decimals:2}));
+  else
+    cards.push(kpiCard("—", "", "Best Paid eCPI", "no paid channels", ""));
+
+  const above = k.d1_above;
+  cards.push(kpiCard((k.d1_retention*100).toFixed(1) + "%", above ? "good" : "bad",
+    "D1 Retention",
+    `${above ? "▲" : "▼"} ${above ? "above" : "below"} ${Math.round(k.d1_target*100)}% target · ${k.matured_cohorts} cohorts`,
+    "", {target:k.d1_retention*100, suffix:"%", decimals:1}));
+
+  if (k.reengagement)
+    cards.push(kpiCard(k.reengagement.cvr.toFixed(2) + "%", "bad", "Re-engagement CVR",
+      `⚠ ${fmtInt(k.reengagement.clicks)} clicks → ${fmtInt(k.reengagement.installs)} installs`, "flag",
+      {target:k.reengagement.cvr, suffix:"%", decimals:2}));
+  else
+    cards.push(kpiCard("—", "", "Re-engagement CVR", "no re-engagement channel", ""));
+
+  // Paid-only cost per outcome. The sub-line states the organic share out loud,
+  // because the same totals blended with organic would read ~$12 instead of ~$27
+  // and that difference is the whole point.
+  const e = k.econ || {};
+  if (e.deposit_cpa != null)
+    cards.push(kpiCard("$" + e.deposit_cpa.toFixed(2), "", "Deposit CPA (paid)",
+      `${fmtInt(e.deposits)} deposits across ${e.paid_campaigns} paid campaigns · `
+      + `${Math.round((e.organic_share||0)*100)}% of all deposits were organic and are excluded`, "",
+      {target:e.deposit_cpa, prefix:"$", decimals:2}));
+  else
+    cards.push(kpiCard("—", "", "Deposit CPA (paid)", "no paid deposits in window", ""));
+
+  if (e.retention_cpa != null)
+    cards.push(kpiCard("$" + e.retention_cpa.toFixed(2), "", "Retention CPA (paid)",
+      `cost per user still active at D7 · ${fmtInt(e.retained_d7)} retained`, "",
+      {target:e.retention_cpa, prefix:"$", decimals:2}));
+  else
+    cards.push(kpiCard("—", "", "Retention CPA (paid)", "no retained users in window", ""));
+
+  g.innerHTML = cards.join("");
+  g.querySelectorAll(".val[data-count]").forEach(animateVal);
+}
+
+function renderChannels(){
+  const tb = document.querySelector("#chTable tbody");
+  const eff = DATA.most_efficient;
+  const fb = DATA.facebook_flag;
+  DATA.channels.forEach(c => {
+    const tr = document.createElement("tr");
+    if (c.channel === eff) tr.className = "eff";
+    let badge = "";
+    if (c.channel === eff) badge = '<span class="badge good">★ Most efficient</span>';
+    if (fb && fb.flagged && c.channel.toLowerCase() === "facebook")
+      badge += '<span class="badge bad">⚠ eCPI above Apple</span>';
+    const ecpiCls = (c.channel === eff) ? "num-good"
+      : ((fb && fb.flagged && c.channel.toLowerCase()==="facebook") ? "num-bad" : "");
+    tr.innerHTML =
+      `<td class="ch">${esc(c.channel)}${badge}</td>` +
+      `<td>${fmtInt(c.installs)}</td>` +
+      `<td class="${ecpiCls}">${fmtEcpi(c.ecpi)}</td>` +
+      `<td class="muted">${fmtInt(c.impressions)}</td>` +
+      `<td class="muted">${fmtInt(c.clicks)}</td>`;
+    tb.appendChild(tr);
+  });
+  const parts = [];
+  if (DATA.most_efficient_detail)
+    parts.push(`Most efficient: ${eff} ($${DATA.most_efficient_detail.ecpi.toFixed(2)} eCPI)`);
+  if (fb && fb.flagged)
+    parts.push(`Facebook $${fb.facebook_ecpi.toFixed(2)} > Apple $${fb.apple_ecpi.toFixed(2)}`);
+  parts.push(`${DATA.channels.length} channels with installs`);
+  document.getElementById("chNote").textContent = parts.join("  ·  ");
+}
+
+function renderCampaigns(){
+  document.getElementById("cmpNote").textContent =
+    `Top ${DATA.campaigns.length} by installs (excl. ${DATA.excluded_organic_rows} unattributed Organic)`;
+  if (typeof Chart === "undefined"){ chartFallback("cmpChart"); return; }
+  const trunc = s => s.length > 25 ? s.slice(0, 25) + "..." : s;
+  const labels = DATA.campaigns.map(c => trunc(c.campaign));
+  const installs = DATA.campaigns.map(c => c.installs);
+  const ctx = document.getElementById("cmpChart").getContext("2d");
+  const grad = ctx.createLinearGradient(0, 0, 560, 0);
+  grad.addColorStop(0, "#2f5dfb"); grad.addColorStop(1, "#6f9dff");
+  new Chart(ctx, {
+    type:"bar",
+    data:{labels, datasets:[{
+      label:"Installs", data:installs,
+      backgroundColor:grad, borderRadius:4, maxBarThickness:24,
+    }]},
+    options:{
+      indexAxis:"y", responsive:true, maintainAspectRatio:false,
+      layout:{padding:{left:10, right:16, top:4, bottom:4}},
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:"rgba(14,16,24,0.96)", borderColor:"rgba(255,255,255,0.10)", borderWidth:1,
+          cornerRadius:9, padding:11, titleColor:"#edf1f7", bodyColor:"#9aa4b2", displayColors:false,
+          callbacks:{
+            title:(items)=> DATA.campaigns[items[0].dataIndex].campaign,
+            afterLabel:(c)=>{
+              const x = DATA.campaigns[c.dataIndex];
+              return `Channel: ${x.channel}\nCost: ${fmtCost(x.cost)}`;
+            },
+          }},
+      },
+      scales:{
+        x:{ticks:{color:"#8b949e"}, grid:{color:"rgba(255,255,255,0.06)"}},
+        y:{ticks:{color:"#e6edf3", font:{size:11}, autoSkip:false}, grid:{display:false}},
+      },
+    },
+  });
+}
+
+function renderRetention(){
+  const r = DATA.retention;
+  document.getElementById("retNote").textContent =
+    `Avg of ${r.cohort_count} matured cohorts (excl. ${r.excluded_days.length} most-recent days)`;
+  if (typeof Chart === "undefined"){ chartFallback("retChart"); return; }
+  const rctx = document.getElementById("retChart").getContext("2d");
+  const fill = rctx.createLinearGradient(0, 0, 0, 340);
+  fill.addColorStop(0, "rgba(111,157,255,0.42)");
+  fill.addColorStop(1, "rgba(47,93,251,0.02)");
+  new Chart(rctx, {
+    type:"line",
+    data:{labels:r.labels, datasets:[{
+      label:"Retention", data:r.values.map(v=>+(v*100).toFixed(2)),
+      borderColor:"#6f9dff", backgroundColor:fill, borderWidth:2.5,
+      fill:true, tension:0.35,
+      pointRadius:4, pointHoverRadius:6, pointBackgroundColor:"#6f9dff",
+      pointBorderColor:"#0a0c11", pointBorderWidth:2,
+    }]},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:"rgba(14,16,24,0.96)", borderColor:"rgba(255,255,255,0.10)", borderWidth:1,
+          cornerRadius:9, padding:11, titleColor:"#edf1f7", bodyColor:"#9aa4b2", displayColors:false,
+          callbacks:{label:(c)=>` ${c.parsed.y.toFixed(1)}% retained`}},
+      },
+      scales:{
+        x:{ticks:{color:"#e6edf3"}, grid:{color:"rgba(255,255,255,0.06)"}},
+        y:{ticks:{color:"#8b949e", callback:v=>v+"%"}, grid:{color:"rgba(255,255,255,0.06)"}, beginAtZero:true},
+      },
+    },
+  });
+}
+
+function renderEconomics(){
+  const rows = DATA.economics || [], t = DATA.econ_totals || {};
+  const tb = document.querySelector("#econTable tbody");
+  const note = document.getElementById("econNote");
+  if (!rows.length){
+    note.textContent = "No paid campaigns in this window";
+    tb.innerHTML = `<tr><td colspan="8" class="muted">No campaign carried spend in this period, so no cost-per-outcome is computable.</td></tr>`;
+    return;
+  }
+  const best = DATA.best_deposit_cpa, worst = DATA.worst_deposit_cpa;
+  rows.forEach(c => {
+    const tr = document.createElement("tr");
+    // A thin row keeps its real CPA but is marked, and is never the best/worst
+    // pick — see _MIN_MEANINGFUL_DEPOSITS.
+    const thin = c.thin ? ` <span class="muted" title="under ${t.min_meaningful_deposits} deposits — CPA is arithmetically right but statistically thin">⚠</span>` : "";
+    let dcls = "";
+    if (!c.thin && best && c.campaign === best.campaign && c.channel === best.channel) dcls = "num-good";
+    else if (!c.thin && worst && c.campaign === worst.campaign && c.channel === worst.channel) dcls = "num-bad";
+    tr.innerHTML =
+      `<td class="ch">${esc(c.campaign)}${thin}</td>` +
+      `<td class="muted">${esc(c.channel)}</td>` +
+      `<td>${fmtMoney(c.cost)}</td>` +
+      `<td class="muted">${fmtInt(c.installs)}</td>` +
+      `<td>${fmtInt(c.deposits)}</td>` +
+      `<td class="${dcls}">${c.deposit_cpa == null ? "—" : fmtMoney(c.deposit_cpa)}</td>` +
+      `<td class="muted">${fmtInt(c.retained_d7)}</td>` +
+      `<td>${c.retention_cpa == null ? "—" : fmtMoney(c.retention_cpa)}</td>`;
+    tb.appendChild(tr);
+  });
+  const tr = document.createElement("tr");
+  tr.className = "tot";
+  tr.innerHTML =
+    `<td class="ch">Paid total</td><td></td>` +
+    `<td>${fmtMoney(t.cost)}</td><td></td>` +
+    `<td>${fmtInt(t.deposits)}</td>` +
+    `<td>${t.deposit_cpa == null ? "—" : fmtMoney(t.deposit_cpa)}</td>` +
+    `<td>${fmtInt(t.retained_d7)}</td>` +
+    `<td>${t.retention_cpa == null ? "—" : fmtMoney(t.retention_cpa)}</td>`;
+  tb.appendChild(tr);
+
+  note.textContent = `${t.paid_campaigns} paid campaigns`
+    + (t.thin_campaigns ? ` · ${t.thin_campaigns} flagged thin` : "");
+  // State the exclusion rather than performing it silently: a reader who sees
+  // "3,343 deposits" elsewhere needs to know why this table says 1,524.
+  document.getElementById("econSrc").textContent =
+    `Cost and both denominators come from the same Adjust request, so spend and conversions share one attribution model. `
+    + `Measured: unique depositors in month 0 of their install cohort, and users still active at D7. `
+    + `CPA is shown only for campaigns with spend — ${fmtInt(t.organic_deposits)} of ${fmtInt(t.all_deposits)} deposits `
+    + `(${Math.round((t.organic_share||0)*100)}%) came from zero-cost organic sources and are excluded from every CPA here. `
+    + `Rows under ${t.min_meaningful_deposits} deposits are marked ⚠ and excluded from the best/worst highlight.`;
+}
+
+function renderMeta(){
+  const m = DATA.meta;
+  const tb = document.querySelector("#metaTable tbody");
+  const stale = document.getElementById("metaStale");
+  if (DATA.meta_note){ stale.textContent = DATA.meta_note; stale.style.display = "block"; }
+  if (!m || !m.campaigns || !m.campaigns.length){
+    document.getElementById("metaNote").textContent = "No active Meta campaigns this period";
+    tb.innerHTML = `<tr><td colspan="6" class="muted">No Meta campaign data for this period.</td></tr>`;
+    return;
+  }
+  m.campaigns.forEach(c => {
+    const tr = document.createElement("tr");
+    const score = (c.creative_score == null) ? "—" : c.creative_score.toFixed(1);
+    tr.innerHTML =
+      `<td class="ch">${esc(c.campaign)}</td>` +
+      `<td>${fmtMoney(c.spend)}</td>` +
+      `<td class="muted">${fmtInt(c.impressions)}</td>` +
+      `<td class="muted">${fmtInt(c.clicks)}</td>` +
+      `<td class="num-good">${fmtInt(c.installs)}</td>` +
+      `<td>${score}</td>`;
+    tb.appendChild(tr);
+  });
+  const t = m.totals;
+  document.getElementById("metaNote").textContent =
+    `${m.campaigns.length} active campaigns  ·  ${fmtMoney(t.spend)} spend  ·  ${fmtInt(t.installs)} installs`;
+}
+
+function renderMetaCreatives(){
+  const mc = DATA.meta_creatives;
+  const tb = document.querySelector("#metaCreativeTable tbody");
+  if (!mc || !mc.ads || !mc.ads.length){
+    document.getElementById("metaCreativeNote").textContent = "No ad-level Meta data this period";
+    tb.innerHTML = `<tr><td colspan="8" class="muted">No creative-level Meta data for this period.</td></tr>`;
+    return;
+  }
+  mc.ads.forEach(a => {
+    const tr = document.createElement("tr");
+    const ctr = (a.ctr && a.ctr > 0) ? a.ctr.toFixed(2) + "%" : "—";
+    const cpi = (a.cpi == null) ? "—" : fmtMoney(a.cpi);
+    tr.innerHTML =
+      `<td class="ch">${esc(a.ad_name)}</td>` +
+      `<td class="muted">${esc(a.campaign)}</td>` +
+      `<td>${fmtMoney(a.spend)}</td>` +
+      `<td class="muted">${fmtInt(a.impressions)}</td>` +
+      `<td class="muted">${fmtInt(a.clicks)}</td>` +
+      `<td class="num-good">${fmtInt(a.installs)}</td>` +
+      `<td>${ctr}</td>` +
+      `<td>${cpi}</td>`;
+    tb.appendChild(tr);
+  });
+  const t = mc.totals;
+  document.getElementById("metaCreativeNote").textContent =
+    `${t.ad_count} ads  ·  ${fmtMoney(t.spend)} spend  ·  ${fmtInt(t.installs)} installs`;
+}
+
+function renderInsights(){
+  const g = document.getElementById("insights");
+  const ICON = {positive:"▲", warning:"⚠", neutral:"●"};
+  if (!DATA.insights || !DATA.insights.length){
+    g.innerHTML = '<div class="ins-card"><div class="ins-detail">Insights unavailable for this build.</div></div>';
+  } else {
+    g.innerHTML = DATA.insights.map((c, i) => {
+      const crit = (i === DATA.insights_critical_index) ? "critical" : "";
+      const head = c.headline || c.detail;
+      const detail = c.headline ? c.detail : "";
+      return `<div class="ins-card ${crit}">
+        <div class="ins-ico ins-${c.type}">${ICON[c.type] || "●"}</div>
+        <div>
+          <div class="ins-head">${esc(head)}</div>
+          ${detail ? `<div class="ins-detail">${esc(detail)}</div>` : ""}
+        </div>
+      </div>`;
+    }).join("");
+  }
+  document.getElementById("insightsSrc").textContent = "Generated by " + DATA.insights_source;
+  document.getElementById("modelName").textContent = DATA.insights_source;
+}
+
+function chartFallback(id){
+  const cv = document.getElementById(id);
+  const d = document.createElement("div");
+  d.className = "fallback";
+  d.textContent = "Chart.js failed to load (offline?). Data is present; reconnect to render charts.";
+  cv.replaceWith(d);
+}
+
+function init(){
+  try{
+    document.getElementById("syncTime").textContent = DATA.last_updated || "—";
+    document.getElementById("builtAt").textContent = DATA.generated_at || "—";
+    renderKPIs();
+    renderChannels();
+    renderCampaigns();
+    renderRetention();
+    renderEconomics();
+    renderMeta();
+    renderMetaCreatives();
+    renderInsights();
+    console.log("Dashboard rendered OK:",
+      DATA.channels.length, "channels,",
+      DATA.campaigns.length, "campaigns,",
+      DATA.retention.cohort_count, "retention cohorts,",
+      (DATA.insights||[]).length, "insights");
+  }catch(e){
+    console.error("Dashboard render error:", e);
+  }
+}
+document.addEventListener("DOMContentLoaded", init);
+</script>
+<script>
+
+/* ==========================================================================
+   "Ask this tool" — shared engine (pipelines/ask_panel.py).
+   Deliberately NOT a runtime model call: these pages are static and public, so
+   there is nowhere to hold an API key. Every answer is computed from the rows
+   already embedded above, which is why the numbers are checkable against the
+   tables on this page. `answerQuestion` is the seam to swap for a real backend.
+   ========================================================================== */
+const ASK = {"noun": "rows", "generated_at": "2026-09-07 12:00:43 UTC", "collections": [{"name": "channels", "words": ["channel", "network", "source", "ecpi", "cpi"], "rows": [{"channel": "Organic", "installs": 45399, "impressions": 0, "clicks": 0, "ecpi": 0.0}, {"channel": "Google Ads", "installs": 7635, "impressions": 1084001, "clicks": 16580, "ecpi": 3.9772}, {"channel": "Apple", "installs": 4041, "impressions": 53149, "clicks": 4841, "ecpi": 2.1065}, {"channel": "Website", "installs": 2595, "impressions": 0, "clicks": 30340, "ecpi": 0.0}, {"channel": "Partnership", "installs": 2177, "impressions": 0, "clicks": 17322, "ecpi": 0.0}, {"channel": "Facebook", "installs": 1916, "impressions": 182111, "clicks": 11546, "ecpi": 3.3766}, {"channel": "Google Organic Search", "installs": 1526, "impressions": 0, "clicks": 0, "ecpi": 0.0}, {"channel": "Meta Retargeting Campaign", "installs": 143, "impressions": 0, "clicks": 5223, "ecpi": 0.0}, {"channel": "Social Media", "installs": 142, "impressions": 0, "clicks": 4932, "ecpi": 0.0}, {"channel": "Untrusted Devices", "installs": 116, "impressions": 0, "clicks": 0, "ecpi": 0.0}, {"channel": "MiniBet", "installs": 36, "impressions": 0, "clicks": 1102, "ecpi": 0.0}, {"channel": "Re-engagement campaigns", "installs": 19, "impressions": 0, "clicks": 67968, "ecpi": 0.0}, {"channel": "Perform[cb]", "installs": 15, "impressions": 2027047, "clicks": 375174, "ecpi": 0.0}, {"channel": "Las Vegas Billboard", "installs": 7, "impressions": 0, "clicks": 29, "ecpi": 0.0}, {"channel": "Chrome Wallet", "installs": 3, "impressions": 0, "clicks": 38, "ecpi": 0.0}, {"channel": "Flipit New", "installs": 1, "impressions": 0, "clicks": 20, "ecpi": 0.0}], "label": "channel", "facets": [{"key": "channel", "words": ["channel"], "values": ["Apple", "Chrome Wallet", "Facebook", "Flipit New", "Google Ads", "Google Organic Search", "Las Vegas Billboard", "Meta Retargeting Campaign", "MiniBet", "Organic", "Partnership", "Perform[cb]", "Re-engagement campaigns", "Social Media", "Untrusted Devices", "Website"]}], "metrics": [{"key": "ecpi", "words": ["ecpi", "cpi", "cost per install", "efficiency", "cheap", "expensive"], "label": "eCPI", "fmt": "money", "lower_is_better": true, "exclude_zero": true}, {"key": "installs", "words": ["install", "volume"], "label": "installs", "fmt": "int"}, {"key": "clicks", "words": ["click"], "label": "clicks", "fmt": "int"}, {"key": "impressions", "words": ["impression", "reach"], "label": "impressions", "fmt": "int"}], "detail": ["channel", "installs", "clicks", "impressions", "ecpi"]}, {"name": "campaigns", "words": ["campaign", "spend", "cost", "budget"], "rows": [{"campaign": "New - Android Brand US", "channel": "Google Ads", "installs": 4482, "cost": 17781.08, "deposits": 1375, "retained_d7": 529, "paid": true, "deposit_cpa": 12.93, "retention_cpa": 33.61, "thin": false}, {"campaign": "US - Streaks", "channel": "Google Ads", "installs": 2899, "cost": 11315.17, "deposits": 935, "retained_d7": 325, "paid": true, "deposit_cpa": 12.1, "retention_cpa": 34.82, "thin": false}, {"campaign": "US - Brand - Exact", "channel": "Apple", "installs": 2414, "cost": 3480.13, "deposits": 739, "retained_d7": 255, "paid": true, "deposit_cpa": 4.71, "retention_cpa": 13.65, "thin": false}, {"campaign": "Fumb", "channel": "Partnership", "installs": 1656, "cost": 0.0, "deposits": 211, "retained_d7": 126, "paid": false, "deposit_cpa": null, "retention_cpa": null, "thin": false}, {"campaign": "Home\u003ebanner\u003eandroid", "channel": "Website", "installs": 1390, "cost": 0.0, "deposits": 197, "retained_d7": 207, "paid": false, "deposit_cpa": null, "retention_cpa": null, "thin": false}, {"campaign": "Payday - Android - Broad+", "channel": "Facebook", "installs": 1251, "cost": 4662.22, "deposits": 201, "retained_d7": 50, "paid": true, "deposit_cpa": 23.2, "retention_cpa": 93.24, "thin": false}, {"campaign": "US - Max Conversion Campaign", "channel": "Apple", "installs": 872, "cost": 2859.28, "deposits": 283, "retained_d7": 94, "paid": true, "deposit_cpa": 10.1, "retention_cpa": 30.42, "thin": false}, {"campaign": "Global - Brand - Exact", "channel": "Apple", "installs": 713, "cost": 1218.97, "deposits": 119, "retained_d7": 72, "paid": true, "deposit_cpa": 10.24, "retention_cpa": 16.93, "thin": false}, {"campaign": "Payday android Video", "channel": "Facebook", "installs": 549, "cost": 1807.43, "deposits": 114, "retained_d7": 27, "paid": true, "deposit_cpa": 15.85, "retention_cpa": 66.94, "thin": false}, {"campaign": "Home\u003ebanner\u003eiOS", "channel": "Website", "installs": 512, "cost": 0.0, "deposits": 151, "retained_d7": 86, "paid": false, "deposit_cpa": null, "retention_cpa": null, "thin": false}], "label": "campaign", "facets": [{"key": "channel", "words": ["channel", "network"], "values": ["Apple", "Facebook", "Google Ads", "Partnership", "Website"]}], "metrics": [{"key": "cost", "words": ["cost", "spend", "budget", "expensive", "cheap"], "label": "cost", "fmt": "money", "lower_is_better": true, "exclude_zero": true}, {"key": "installs", "words": ["install", "volume"], "label": "installs", "fmt": "int"}], "detail": ["campaign", "channel", "cost", "installs"]}, {"name": "campaign economics", "words": ["deposit", "deposits", "deposit cpa", "cpa", "cost per deposit", "cost per acquisition", "retention cpa", "cost per retained", "retained", "economics", "unit economics"], "rows": [{"campaign": "New - Android Brand US", "channel": "Google Ads", "installs": 4482, "cost": 17781.08, "deposits": 1375, "retained_d7": 529, "paid": true, "deposit_cpa": 12.93, "retention_cpa": 33.61, "thin": false}, {"campaign": "US - Streaks", "channel": "Google Ads", "installs": 2899, "cost": 11315.17, "deposits": 935, "retained_d7": 325, "paid": true, "deposit_cpa": 12.1, "retention_cpa": 34.82, "thin": false}, {"campaign": "Payday - Android - Broad+", "channel": "Facebook", "installs": 1251, "cost": 4662.22, "deposits": 201, "retained_d7": 50, "paid": true, "deposit_cpa": 23.2, "retention_cpa": 93.24, "thin": false}, {"campaign": "US - Brand - Exact", "channel": "Apple", "installs": 2414, "cost": 3480.13, "deposits": 739, "retained_d7": 255, "paid": true, "deposit_cpa": 4.71, "retention_cpa": 13.65, "thin": false}, {"campaign": "US - Max Conversion Campaign", "channel": "Apple", "installs": 872, "cost": 2859.28, "deposits": 283, "retained_d7": 94, "paid": true, "deposit_cpa": 10.1, "retention_cpa": 30.42, "thin": false}, {"campaign": "Payday android Video", "channel": "Facebook", "installs": 549, "cost": 1807.43, "deposits": 114, "retained_d7": 27, "paid": true, "deposit_cpa": 15.85, "retention_cpa": 66.94, "thin": false}, {"campaign": "Global - Brand - Exact", "channel": "Apple", "installs": 713, "cost": 1218.97, "deposits": 119, "retained_d7": 72, "paid": true, "deposit_cpa": 10.24, "retention_cpa": 16.93, "thin": false}, {"campaign": "Competitor - Wallets (US)", "channel": "Apple", "installs": 42, "cost": 953.95, "deposits": 5, "retained_d7": 3, "paid": true, "deposit_cpa": 190.79, "retention_cpa": 317.98, "thin": true}, {"campaign": "XAUT offers", "channel": "Google Ads", "installs": 149, "cost": 607.2, "deposits": 38, "retained_d7": 19, "paid": true, "deposit_cpa": 15.98, "retention_cpa": 31.96, "thin": false}, {"campaign": "USD Deposit LTV", "channel": "Google Ads", "installs": 47, "cost": 452.86, "deposits": 6, "retained_d7": 1, "paid": true, "deposit_cpa": 75.48, "retention_cpa": 452.86, "thin": true}, {"campaign": "US Streaks", "channel": "Google Ads", "installs": 24, "cost": 209.34, "deposits": 1, "retained_d7": 1, "paid": true, "deposit_cpa": 209.34, "retention_cpa": 209.34, "thin": true}], "label": "campaign", "facets": [{"key": "channel", "words": ["channel", "network"], "values": ["Apple", "Facebook", "Google Ads"]}], "metrics": [{"key": "deposit_cpa", "words": ["deposit cpa", "cost per deposit", "cpa", "cost per acquisition", "cheapest deposit", "expensive deposit"], "label": "deposit CPA", "fmt": "money", "lower_is_better": true, "exclude_zero": true}, {"key": "retention_cpa", "words": ["retention cpa", "cost per retained", "cost per retained user"], "label": "retention CPA", "fmt": "money", "lower_is_better": true, "exclude_zero": true}, {"key": "deposits", "words": ["deposit", "deposits", "depositor"], "label": "deposits", "fmt": "int"}, {"key": "retained_d7", "words": ["retained", "retained users", "d7 retained"], "label": "retained at D7", "fmt": "int"}, {"key": "cost", "words": ["spend", "cost", "budget"], "label": "spend", "fmt": "money", "lower_is_better": true}, {"key": "installs", "words": ["install"], "label": "installs", "fmt": "int"}], "detail": ["campaign", "channel", "cost", "deposits", "deposit_cpa", "retained_d7", "retention_cpa"]}], "scalars": [{"words": ["total installs", "how many installs overall", "installs overall"], "label": "Total installs (last 30 days)", "value": 65771, "fmt": "int"}, {"words": ["active channels", "how many channels"], "label": "Active channels", "value": 16, "fmt": "int"}, {"words": ["d1 retention", "day 1 retention"], "label": "D1 retention", "value": 0.2706, "fmt": "pct"}, {"words": ["most efficient", "best channel"], "label": "Most efficient channel", "value": null, "fmt": "int", "note": "Most efficient channel: Apple"}, {"words": ["deposit cpa overall", "blended deposit cpa", "overall deposit cpa", "average deposit cpa"], "label": "Deposit CPA (paid campaigns only)", "value": 11.88, "fmt": "money", "note": "Paid spend divided by paid deposits only. 6,703 of 10,519 deposits came from zero-cost organic sources and are excluded."}, {"words": ["retention cpa overall", "blended retention cpa", "overall retention cpa"], "label": "Retention CPA (paid campaigns only)", "value": 32.96, "fmt": "money", "note": "Paid spend divided by users still active at D7."}], "series": [{"words": ["retention curve", "retention", "d7", "d30", "cohort"], "label": "Retention curve", "labels": ["D1", "D2", "D3", "D4", "D5", "D6", "D7"], "values": [0.2706, 0.2184, 0.1866, 0.1712, 0.1581, 0.1491, 0.1417], "fmt": "pct", "note": "28 cohorts."}], "examples": ["cheapest channel by eCPI", "lowest deposit CPA campaign", "top 5 channels by installs", "total installs", "which campaigns cost over $500?", "retention CPA by campaign", "retention curve"]};
+const askInt = new Intl.NumberFormat("en-US");
+const askEsc = s => { const d = document.createElement("div"); d.textContent = (s == null ? "" : s); return d.innerHTML; };
+
+function askNum(v){
+  if (typeof v === "number") return v;
+  if (v == null) return null;
+  const n = parseFloat(String(v).replace(/[$,%\s,]/g, ""));
+  return isNaN(n) ? null : n;
+}
+function askFmt(v, fmt){
+  if (v == null) return "—";
+  if (fmt === "money") return "$" + (Math.abs(v) >= 100 ? askInt.format(Math.round(v)) : v.toFixed(2));
+  if (fmt === "pct")   return (Math.round(v * 10) / 10) + "%";
+  if (fmt === "int")   return askInt.format(Math.round(v));
+  return String(Math.round(v * 10) / 10);
+}
+// Matches a whole word, allowing a short inflection (install -> installs,
+// tactic -> tactics). The suffix allowance is withheld from words shorter than 4
+// characters: creator country codes are two letters, and "TH" was matching "the",
+// which made "what is the meaning of life" look like a question about Thailand.
+// Short values must match exactly.
+const askHas = (q, w) => {
+  const lit = String(w).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const tail = String(w).length >= 4 ? "[a-z]{0,3}" : "";
+  return new RegExp("(^|[^a-z0-9])" + lit + tail + "([^a-z0-9]|$)", "i").test(q);
+};
+
+/* ---- parse ------------------------------------------------------------- */
+/* How SPECIFICALLY does a word list match the question?
+
+   Returns [longestMatchedWordLength, numberOfMatchedWords]. Candidates are then
+   compared on that pair, so the most specific claim wins rather than whichever
+   was declared first.
+
+   This exists because word lists legitimately overlap. The creative dashboard
+   has both a "campaigns" collection (owning "campaign") and a "campaign
+   economics" one (owning "deposit cpa"), and a plain first-match picked
+   "campaigns" for EVERY question containing the word campaign, so
+   "highest deposit CPA" silently ranked by cost instead. Same collision between
+   the retention *curve* series ("retention") and the retention CPA *metric*
+   ("retention cpa"). Length is the right signal: a longer matched phrase is a
+   narrower claim on the question. */
+function askScore(q, words){
+  let longest = 0, count = 0;
+  for (const w of (words || [])) if (askHas(q, w)){ count++; if (w.length > longest) longest = w.length; }
+  return [longest, count];
+}
+function askBeats(a, b){ return a[0] > b[0] || (a[0] === b[0] && a[1] > b[1]); }
+function askPick(q, items){
+  let best = null, bestScore = [0, 0];
+  for (const it of (items || [])){
+    const s = askScore(q, it.words);
+    // Strictly-better only, so ties keep declaration order (previous behaviour).
+    if (s[0] > 0 && askBeats(s, bestScore)){ bestScore = s; best = it; }
+  }
+  return {item: best, score: bestScore};
+}
+
+function askParse(raw){
+  const q = " " + raw.toLowerCase().trim() + " ";
+  const f = {filters: [], intent: null, n: null, metric: null, asc: false, group: null};
+
+  // Which collection? The most specific match; else the default (first).
+  const collPick = askPick(q, ASK.collections);
+  f.collMatched = !!collPick.item;
+  f.coll = collPick.item || (ASK.collections || [])[0];
+
+  // A scalar KPI question ("what is total installs") short-circuits everything.
+  const scalarPick = askPick(q, ASK.scalars);
+  f.scalar = scalarPick.item;
+  f.scalarPhrase = !!(f.scalar && (f.scalar.words || []).some(w => w.includes(" ") && askHas(q, w)));
+  const seriesPick = askPick(q, ASK.series);
+  f.series = seriesPick.item;
+  f.seriesScore = seriesPick.score;
+
+  if (f.coll){
+    for (const fac of (f.coll.facets || [])){
+      let mapped = false;
+      for (const m of (fac.map || [])){
+        if ((m.words || []).some(w => askHas(q, w))){
+          f.filters.push({key: fac.key, val: m.val, label: m.label || (m.words || [])[0]});
+          mapped = true; break;
+        }
+      }
+      if (mapped) continue;
+      for (const val of (fac.values || [])){
+        if (askHas(q, String(val).toLowerCase())){ f.filters.push({key: fac.key, val: val}); break; }
+      }
+      for (const w of (fac.words || [])){
+        const m = q.match(new RegExp(w + "\\s+(?:is\\s+|=\\s*)?([a-z0-9_\\- ]{2,24})", "i"));
+        if (m && !f.filters.some(x => x.key === fac.key)){
+          const cand = (fac.values || []).find(v => m[1].trim().startsWith(String(v).toLowerCase()));
+          if (cand) f.filters.push({key: fac.key, val: cand});
+        }
+      }
+    }
+    // Metric: the most specifically-named one wins; otherwise the collection's
+    // first. Specificity matters here too — "cost per deposit" (a deposit_cpa
+    // phrase) must beat a bare "deposit" (the deposits count metric).
+    const metricPick = askPick(q, f.coll.metrics);
+    if (metricPick.item) f.metric = metricPick.item;
+    f.metricScore = metricPick.score;
+
+    // A series and a collection metric can both claim a word: "retention" draws
+    // the retention curve, "retention CPA" ranks campaigns. The more specific
+    // phrase wins, otherwise the curve swallows every CPA question.
+    if (f.series && askBeats(f.metricScore, f.seriesScore)) f.series = null;
+    // Numeric threshold ("over 1000 installs", "under $2 ecpi")
+    const over = q.match(/(?:over|above|more than|at least|>)\s*\$?([\d.,]+)\s*([km])?/);
+    const under = q.match(/(?:under|below|less than|cheaper than|<)\s*\$?([\d.,]+)\s*([km])?/);
+    for (const [m, dir] of [[over, "gte"], [under, "lte"]]){
+      if (!m) continue;
+      let v = parseFloat(m[1].replace(/,/g, ""));
+      if (m[2] === "k") v *= 1e3; if (m[2] === "m") v *= 1e6;
+      f.threshold = {dir, v, metric: f.metric || (f.coll.metrics || [])[0]};
+      f.filters.push({label: (dir === "gte" ? "over " : "under ") + askFmt(v, (f.threshold.metric || {}).fmt)});
+    }
+  }
+
+  const nm = q.match(/\b(?:top|best|bottom|worst|first)\s+(\d+)/);
+  if (nm) f.n = Math.min(parseInt(nm[1], 10), 50);
+
+  if (/\bhow many\b|\bhow much\b|\bcount\b|\bnumber of\b/.test(q)) f.intent = "count";
+  else if (/\baverage\b|\bavg\b|\bmean\b|\btypical\b/.test(q)) f.intent = "average";
+  else if (/\btotal\b|\bsum\b|\bcombined\b|\ball together\b/.test(q)) f.intent = "sum";
+  else if (/\bbreak ?down\b|\bdistribution\b|\bsplit\b/.test(q)) f.intent = "breakdown";
+  else if (/\bcheapest\b|\blowest\b|\bworst\b|\bbottom\b|\bleast\b|\bsmallest\b/.test(q)) { f.intent = "top"; f.want = "low"; }
+  else if (/\btop\b|\bbest\b|\bhighest\b|\bmost\b|\bbiggest\b|\blargest\b|\bstrongest\b/.test(q)) { f.intent = "top"; f.want = "high"; }
+  // LITERAL direction words name a direction on the metric itself rather than a
+  // quality judgement, and must not be inverted by lower_is_better: "most expensive"
+  // means the highest eCPI even though a low eCPI is the good outcome.
+  // "highest"/"lowest" and friends name a direction on the NUMBER, exactly like
+  // "expensive"/"cheapest", so they belong here rather than in the quality group
+  // above. Left in the quality group they got inverted by lower_is_better and
+  // returned the opposite row: "lowest deposit CPA" answered with the most
+  // expensive campaign. Deliberately NOT included: best, worst, top, bottom,
+  // most, least — those ARE quality judgements and must keep their polarity flip
+  // ("best eCPI" is the lowest eCPI, "most efficient" is not the highest number).
+  if (/\bexpensive\b|\bpriciest\b|\bdearest\b|\bcostliest\b|\bhighest\b|\blargest\b|\bbiggest\b|\bmaximum\b/.test(q)) { f.intent = "top"; f.literal = "high"; }
+  else if (/\bcheapest\b|\bcheap\b|\blowest\b|\bsmallest\b|\bminimum\b|\bfewest\b/.test(q)) { f.intent = "top"; f.literal = "low"; }
+  else if (/\blist\b|\bshow me\b|\bwhich\b|\bwho\b|\bwhat are\b/.test(q)) f.weakList = true;
+
+  // Direction. A literal word wins outright. Otherwise a quality word is read
+  // against the metric's polarity: "best eCPI" is the lowest, "worst eCPI" the
+  // highest, while "top installs" is simply the highest.
+  const lib = !!(f.metric || (f.coll && (f.coll.metrics || [])[0]) || {}).lower_is_better;
+  f.asc = f.literal ? (f.literal === "low") : ((f.want === "low") !== lib);
+  f.lib = lib;
+
+  // A weak interrogative only becomes a listing when the question is demonstrably
+  // about this dashboard's data; otherwise it falls through to the refusal.
+  if (f.weakList && !f.intent && (f.collMatched || f.filters.length || f.metric)) f.intent = "top";
+
+  // Naming a collection AND one of its metrics with no verb at all ("retention
+  // CPA by campaign", "deposit CPA by channel") is a ranking request. Without
+  // this it fell through to the refusal, which read as "the page doesn't have
+  // that" about a metric the page demonstrably has. Both conditions are required:
+  // a metric alone, or a collection alone, still refuses.
+  if (!f.intent && f.collMatched && f.metric) f.intent = "top";
+
+  if (f.coll){
+    const g = q.match(/\bby\s+([a-z_ ]+)/);
+    if (g){
+      const want = g[1].trim();
+      // A metric named in "by X" is a ranking instruction, never a grouping one.
+      const isMetric = (f.coll.metrics || []).some(m => [m.key].concat(m.words || [])
+        .some(w => want.startsWith(String(w).toLowerCase())));
+      const fac = isMetric ? null : (f.coll.facets || []).find(x => [x.key].concat(x.words || [])
+        .some(w => { const ww = String(w).toLowerCase(); return want === ww || want.startsWith(ww + " ") || ww.startsWith(want); }));
+      if (fac){ f.group = fac.key; if (!f.intent) f.intent = "breakdown"; }
+      // "by <metric>" is a ranking instruction, not a grouping one — leave the
+      // intent alone so "cheapest channel by eCPI" stays a ranking.
+    }
+  }
+  return f;
+}
+
+function askApply(f){
+  const rows = (f.coll && f.coll.rows) || [];
+  return rows.filter(r => {
+    for (const flt of f.filters){
+      if (flt.key && String(r[flt.key]) !== String(flt.val)) return false;
+    }
+    if (f.threshold){
+      const mk = (f.threshold.metric || {}).key;
+      const v = askNum(r[mk]);
+      if (v == null) return false;
+      if (f.threshold.dir === "gte" && !(v >= f.threshold.v)) return false;
+      if (f.threshold.dir === "lte" && !(v <= f.threshold.v)) return false;
+    }
+    return true;
+  });
+}
+
+const askScope = f => {
+  const parts = f.filters.map(x => x.label || x.val);
+  return parts.length ? parts.join(" · ") : ("all " + ((f.coll && f.coll.name) || ASK.noun || "rows"));
+};
+const askProv = n => `<div class="ask-prov">Computed in-browser from ${askInt.format(n)} row${n === 1 ? "" : "s"} embedded in this page`
+  + (ASK.generated_at ? ` · data baked ${askEsc(ASK.generated_at)}` : "")
+  + ` · cross-check any number against the tables on this page.</div>`;
+
+function askRowLine(coll, r, metric){
+  const name = askEsc(r[coll.label] != null ? r[coll.label] : "(unnamed)");
+  const bits = [];
+  if (metric) bits.push(`${askEsc(metric.label)} ${askFmt(askNum(r[metric.key]), metric.fmt)}`);
+  // Metric-less collection (e.g. strategy tactics): fall back to the first detail
+  // field after the label so the row still says something useful.
+  if (!metric){
+    const k = (coll.detail || []).find(x => x !== coll.label && r[x] != null && r[x] !== "");
+    if (k) return `<li><span>${name}</span><span class="ask-meta">${askEsc(String(r[k]).slice(0, 70))}</span></li>`;
+  }
+  for (const m of (coll.metrics || [])){
+    if (metric && m.key === metric.key) continue;
+    const v = askNum(r[m.key]);
+    if (v != null && bits.length < 3) bits.push(`${askEsc(m.label)} ${askFmt(v, m.fmt)}`);
+  }
+  return `<li><span>${name}</span><span class="ask-meta">${bits.join(" · ")}</span></li>`;
+}
+
+/* ---- answer ----------------------------------------------------------- */
+function answerQuestion(raw){
+  if (!raw.trim()) return `<span class="ask-empty">Type a question.</span>`;
+  const f = askParse(raw);
+
+  // Single scalar KPI. A multi-word trigger ("total installs", "d1 retention") is
+  // specific enough to win even though the phrasing also looks like an aggregation.
+  if (f.scalar && (!f.intent || f.scalarPhrase)) {
+    return `<div class="ask-head">${askEsc(f.scalar.label)}: <b>${askFmt(askNum(f.scalar.value), f.scalar.fmt)}</b></div>`
+      + (f.scalar.note ? askEsc(f.scalar.note) : "") + askProv(1);
+  }
+  // A named series (retention curve etc).
+  if (f.series){
+    const rows = (f.series.labels || []).map((l, i) =>
+      `<li><span>${askEsc(l)}</span><span class="ask-meta">${askFmt(askNum((f.series.values || [])[i]), f.series.fmt)}</span></li>`).join("");
+    return `<div class="ask-head">${askEsc(f.series.label)}</div><ul class="ask-list">${rows}</ul>`
+      + (f.series.note ? `<div class="ask-prov">${askEsc(f.series.note)}</div>` : "")
+      + askProv((f.series.labels || []).length);
+  }
+  if (!f.coll) return askRefuse();
+
+  // A named row beats a generic intent ("tell me about Money20/20").
+  const ql = raw.toLowerCase();
+  let named = null;
+  const order = f.collMatched
+    ? [f.coll].concat((ASK.collections || []).filter(c => c !== f.coll))
+    : (ASK.collections || []);
+  for (const c of order){
+    for (const r of (c.rows || [])){
+      const nm = String(r[c.label] || "").toLowerCase();
+      if (nm.length > 3 && ql.includes(nm) && (!named || nm.length > String(named.r[named.c.label]).length)) named = {c, r};
+    }
+  }
+  if (named && !f.intent){
+    const c = named.c, r = named.r;
+    const lines = (c.detail || Object.keys(r)).filter(k => r[k] != null && String(r[k]) !== "")
+      .map(k => `${askEsc(k.replace(/_/g, " "))}: <b>${askEsc(typeof r[k] === "object" ? JSON.stringify(r[k]) : r[k])}</b>`);
+    return `<div class="ask-head">${askEsc(r[c.label])}</div>${lines.join(" · ")}` + askProv(1);
+  }
+
+  const rows = askApply(f);
+  const metric = f.metric || (f.coll.metrics || [])[0];
+
+  if (f.intent === "count"){
+    const ordered = metric
+      ? rows.slice().sort((a, b) => (askNum(b[metric.key]) || 0) - (askNum(a[metric.key]) || 0))
+      : rows.slice();
+    return `<div class="ask-head"><b>${askInt.format(rows.length)}</b> ${askEsc(f.coll.name)} match ${askEsc(askScope(f))}.</div>`
+      + (rows.length ? `<ul class="ask-list">${ordered
+          .slice(0, 5).map(r => askRowLine(f.coll, r, metric)).join("")}</ul>`
+        + (rows.length > 5 ? `<div class="ask-prov">Showing 5 of ${askInt.format(rows.length)}.</div>` : "") : "")
+      + askProv(rows.length);
+  }
+
+  if (f.intent === "sum" || f.intent === "average"){
+    if (!metric) return `<span class="ask-miss">There is no numeric measure on ${askEsc(f.coll.name)} to total or average.</span>`;
+    const vals = rows.map(r => askNum(r[metric.key]))
+      .filter(v => v != null && !(metric.exclude_zero && v === 0));
+    if (!vals.length) return `<span class="ask-miss">No ${askEsc(f.coll.name)} match ${askEsc(askScope(f))}, so there is nothing to total.</span>`;
+    const total = vals.reduce((a, b) => a + b, 0);
+    if (f.intent === "sum"){
+      return `<div class="ask-head">Total ${askEsc(metric.label)} for ${askEsc(askScope(f))}: <b>${askFmt(total, metric.fmt)}</b></div>`
+        + `Across <b>${askInt.format(vals.length)}</b> ${askEsc(f.coll.name)}.` + askProv(rows.length);
+    }
+    const sorted = vals.slice().sort((a, b) => a - b);
+    const med = sorted.length % 2 ? sorted[(sorted.length - 1) / 2] : (sorted[sorted.length / 2 - 1] + sorted[sorted.length / 2]) / 2;
+    return `<div class="ask-head">Average ${askEsc(metric.label)} for ${askEsc(askScope(f))}: <b>${askFmt(total / vals.length, metric.fmt)}</b></div>`
+      + `Median <b>${askFmt(med, metric.fmt)}</b> · min <b>${askFmt(sorted[0], metric.fmt)}</b> · max <b>${askFmt(sorted[sorted.length - 1], metric.fmt)}</b>`
+      + ` · across <b>${askInt.format(vals.length)}</b> ${askEsc(f.coll.name)}.` + askProv(rows.length);
+  }
+
+  if (f.intent === "breakdown"){
+    const key = f.group || ((f.coll.facets || [])[0] || {}).key;
+    if (!key) return askRefuse();
+    const counts = {};
+    rows.forEach(r => { const k = r[key] == null || r[key] === "" ? "unknown" : r[key]; counts[k] = (counts[k] || 0) + 1; });
+    const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+    if (!entries.length) return `<span class="ask-miss">No ${askEsc(f.coll.name)} match ${askEsc(askScope(f))}.</span>`;
+    return `<div class="ask-head">${askInt.format(rows.length)} ${askEsc(f.coll.name)} by ${askEsc(key.replace(/_/g, " "))}`
+      + (f.filters.length ? ` (${askEsc(askScope(f))})` : "") + `</div><ul class="ask-list">`
+      + entries.map(([k, v]) => `<li><span>${askEsc(k)}</span><span class="ask-meta">${askInt.format(v)} · ${(v / rows.length * 100).toFixed(1)}%</span></li>`).join("")
+      + `</ul>` + askProv(rows.length);
+  }
+
+  if (f.intent === "top"){
+    if (!rows.length) return `<span class="ask-miss">Nothing matches ${askEsc(askScope(f))}. Try loosening the question.</span>`;
+    const n = f.n || 10;
+    let ranked = rows, dropped = 0;
+    if (metric && metric.exclude_zero){
+      ranked = rows.filter(r => { const v = askNum(r[metric.key]); return v != null && v !== 0; });
+      dropped = rows.length - ranked.length;
+      if (!ranked.length) return `<span class="ask-miss">Every matching row has no ${askEsc(metric.label)}, so there is nothing to rank.</span>`;
+    }
+    const sorted = metric ? ranked.slice().sort((a, b) => {
+      const av = askNum(a[metric.key]), bv = askNum(b[metric.key]);
+      if (av == null) return 1; if (bv == null) return -1;
+      return f.asc ? av - bv : bv - av;
+    }) : rows.slice();
+    // Header wording, kept honest three ways: a metric-less collection is "listed"
+    // not "ranked"; ascending on a lower-is-better metric is "Best", not "Lowest"
+    // (rank 1 and the cheapest eCPI are the good end, and "Lowest by rank" read as
+    // if it were the bottom of the list); and when nothing is truncated it says
+    // "All N" rather than the nonsense "Lowest 6 of 6".
+    const showing = Math.min(n, sorted.length);
+    const complete = showing >= ranked.length;
+    const word = metric ? (f.asc ? (f.lib ? "Best" : "Lowest") : "Top") : "Listing";
+    const lead = complete ? `All ${askInt.format(ranked.length)}`
+                          : `${word} ${showing} of ${askInt.format(ranked.length)}`;
+    const order = metric ? ` by ${askEsc(metric.label)}, ${f.asc ? "best" : "highest"} first` : "";
+    return `<div class="ask-head">${lead} ${askEsc(f.coll.name)}${order}`
+      + `${f.filters.length ? " — " + askEsc(askScope(f)) : ""}</div>`
+      + `<ul class="ask-list">${sorted.slice(0, n).map(r => askRowLine(f.coll, r, metric)).join("")}</ul>`
+      + (dropped ? `<div class="ask-prov">${askInt.format(dropped)} row(s) with no ${askEsc(metric.label)} excluded from this ranking (e.g. organic, which has no media cost).</div>` : "")
+      + askProv(rows.length);
+  }
+
+  // Filters but no recognised intent: show what matches rather than guess.
+  if (f.filters.length){
+    return `<div class="ask-head">I did not recognise the question, so here is what matches ${askEsc(askScope(f))}.</div>`
+      + `<b>${askInt.format(rows.length)}</b> ${askEsc(f.coll.name)}.`
+      + `<ul class="ask-list">${rows.slice(0, 10).map(r => askRowLine(f.coll, r, metric)).join("")}</ul>` + askProv(rows.length);
+  }
+  return askRefuse();
+}
+
+function askRefuse(){
+  const cols = (ASK.collections || []).map(c => askEsc(c.name)).join(", ");
+  return `<span class="ask-miss">I can't answer that from the data on this page.</span><br>`
+    + `This panel computes answers from what this tool actually carries (${cols}), so it handles counts, `
+    + `totals, averages, rankings, breakdowns, and single-row lookups. It does not do open-ended questions. `
+    + `Try one of the examples above.`;
+}
+
+/* ---- wiring ----------------------------------------------------------- */
+function askRun(q){
+  const el = document.getElementById("askA");
+  el.classList.remove("ask-empty");
+  el.innerHTML = answerQuestion(q);
+}
+(function askInitPanel(){
+  const eg = document.getElementById("askEg");
+  (ASK.examples || []).forEach(x => {
+    const s = document.createElement("span");
+    s.className = "ask-chip"; s.textContent = x;
+    s.addEventListener("click", () => { document.getElementById("askQ").value = x; askRun(x); });
+    eg.appendChild(s);
+  });
+  document.getElementById("askGo").addEventListener("click", () => askRun(document.getElementById("askQ").value));
+  document.getElementById("askQ").addEventListener("keydown", e => { if (e.key === "Enter") askRun(e.target.value); });
+  const total = (ASK.collections || []).reduce((a, c) => a + ((c.rows || []).length), 0);
+  document.getElementById("askA").textContent =
+    `Ask a question about the ${askInt.format(total)} rows on this page.`;
+})();
+
+</script>
+<script>
+
+/* ==========================================================================
+   Collapse long tables to a preview (shared — pipelines/list_collapse.py).
+   Keeps the Ask panel reachable without scrolling a multi-thousand-pixel table.
+   Targets `.table-wrap > table > tbody` only: that is the shared pattern across
+   these dashboards, and it means pages without a long list get no control.
+   ========================================================================== */
+(function(){
+  var LIMIT = 10;
+  var seq = 0;
+
+  function rowsOf(tbody){
+    var out = [], k;
+    for (k = 0; k < tbody.children.length; k++){
+      if (tbody.children[k].tagName === "TR") out.push(tbody.children[k]);
+    }
+    return out;
+  }
+
+  function apply(box, tbody, state){
+    var rows = rowsOf(tbody), i;
+    var expanded = state.expanded;
+    // Nothing to do: fewer rows than the limit. Clean up any stale control so a
+    // filter that narrows the set below the limit doesn't leave one behind.
+    if (rows.length <= LIMIT){
+      for (i = 0; i < rows.length; i++) rows[i].style.display = "";
+      box.classList.remove("lc-clipped");
+      if (state.ctrl) state.ctrl.style.display = "none";
+      return;
+    }
+    for (i = 0; i < rows.length; i++){
+      rows[i].style.display = (expanded || i < LIMIT) ? "" : "none";
+    }
+    if (expanded) box.classList.remove("lc-clipped");
+    else box.classList.add("lc-clipped");
+
+    if (!state.ctrl){
+      var wrap = document.createElement("div");
+      wrap.className = "lc-more";
+      var btn = document.createElement("button");
+      btn.className = "lc-btn";
+      btn.type = "button";
+      var note = document.createElement("span");
+      note.className = "lc-count";
+      wrap.appendChild(btn); wrap.appendChild(note);
+      box.parentNode.insertBefore(wrap, box.nextSibling);
+      state.ctrl = wrap; state.btn = btn; state.note = note;
+      btn.addEventListener("click", function(){
+        state.expanded = !state.expanded;
+        apply(box, tbody, state);
+        if (!state.expanded){
+          // Collapsing from far down the table would otherwise leave the reader
+          // stranded below the content that just disappeared.
+          var y = box.getBoundingClientRect().top + window.scrollY - 90;
+          window.scrollTo({top: y < 0 ? 0 : y, behavior: "smooth"});
+        }
+      });
+    }
+    state.ctrl.style.display = "";
+    state.btn.textContent = expanded ? ("Show first " + LIMIT) : ("Show all " + rows.length);
+    state.btn.setAttribute("aria-expanded", expanded ? "true" : "false");
+    state.note.textContent = expanded
+      ? ("all " + rows.length + " shown")
+      : ("showing " + LIMIT + " of " + rows.length);
+    syncCounters(!expanded);
+  }
+
+  // A dashboard's own "N of M shown" counter becomes a contradiction the moment we
+  // draw only the first 10 of N — the screenshot review caught "93 of 93 shown"
+  // sitting directly above ten rows. Reword it to describe what MATCHED while the
+  // table is truncated, and restore the original wording on expand. Matched by text
+  // pattern rather than per-dashboard id, so it needs no builder-specific wiring.
+  var COUNT_RE = /^\s*([\d,]+) of ([\d,]+) shown\s*$/;
+  function syncCounters(truncated){
+    var all = document.querySelectorAll("span,div,p,small"), i, el, m;
+    for (i = 0; i < all.length; i++){
+      el = all[i];
+      if (el.children.length) continue;
+      m = COUNT_RE.exec(el.textContent || "");
+      if (m){
+        if (truncated) el.textContent = m[1] + " of " + m[2] + " match";
+        continue;
+      }
+      m = /^\s*([\d,]+) of ([\d,]+) match\s*$/.exec(el.textContent || "");
+      if (m && !truncated) el.textContent = m[1] + " of " + m[2] + " shown";
+    }
+  }
+
+  function attach(box){
+    var tbody = box.querySelector("table > tbody");
+    if (!tbody || box.getAttribute("data-lc")) return;
+    box.setAttribute("data-lc", String(++seq));
+    var state = {expanded: false, ctrl: null, btn: null, note: null, busy: false};
+    apply(box, tbody, state);
+    // These tables are redrawn by the page's own filter/sort code, which would
+    // silently undo the collapse. Watch childList ONLY — observing attributes
+    // would re-fire on our own row hiding.
+    if (window.MutationObserver){
+      var mo = new MutationObserver(function(){
+        if (state.busy) return;
+        state.busy = true;
+        apply(box, tbody, state);
+        state.busy = false;
+      });
+      mo.observe(tbody, {childList: true});
+    }
+  }
+
+  function init(){
+    var boxes = document.querySelectorAll(".table-wrap"), i;
+    for (i = 0; i < boxes.length; i++) attach(boxes[i]);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
+})();
+
+</script>
+</body>
+</html>

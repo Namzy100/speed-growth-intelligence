@@ -1,0 +1,12 @@
+Outreach Brief — CrYPtO SPECULATION (YouTube)
+Segment: iGaming | Score: 34.5/100 | 5,630 followers
+------------------------------------------------------------
+CrYPtO SPECULATION sits right at the intersection of crypto and gambling, which is exactly where Speed's iGaming angle lives. Their audience is already comfortable moving ETH and other crypto around, and a good chunk of them are presumably depositing into and cashing out of gambling platforms — a flow that's notoriously slow and clunky with traditional rails. That's the wedge for us.
+
+The hook here is speed and friction, not philosophy. For an iGaming-leaning audience, the pitch is instant deposits and withdrawals settled in seconds, plus zero fees on Lightning so winnings don't get nibbled away by transfer costs. Stablecoin support (USDT, USDC) is also worth flagging, since gamblers who want to lock in a balance without crypto volatility will care about that.
+
+Three talking points to lead with: first, instant settlement means no waiting around to play or to pull money out after a session. Second, zero Lightning fees mean more of their bankroll stays intact across frequent deposits and withdrawals. Third, Speed Stacks lets them earn sats on everyday spending, which fits the lifestyle thread in their content beyond just the table.
+
+For the CTA, I'd propose a sponsored segment or honest walkthrough video where they actually deposit and withdraw on camera to show the speed — that demo is more convincing than any script for this crowd.
+
+One thing to avoid: don't position Speed as a gambling product or imply it endorses betting. Frame it as the fast, low-fee wallet they happen to use — keep it about payments, not promoting gambling itself.

@@ -1,0 +1,12 @@
+Outreach Brief — Crypto Tech Gaming (YouTube)
+Segment: crypto-curious | Score: 64.6/100 | 88,600 followers
+------------------------------------------------------------
+Crypto Tech Gaming is a solid match for Speed because their audience sits right in our crypto-curious sweet spot. These are viewers who clearly find blockchain, web3, and Bitcoin interesting — they're watching content about altcoins, DeFi, NFTs, and play-to-earn — but a lot of them are still on the sidelines when it comes to actually using crypto day to day. That gap between curiosity and action is exactly where Speed lives, and with an 88.6k audience and a healthy 5.5% engagement rate, there's real opportunity to convert interest into wallet downloads.
+
+Because this is a crypto-curious crowd, the messaging should lean on simplicity and real utility rather than fee structures or trading. The hook is that Speed turns Bitcoin from a thing you read about into something you can actually spend — instant Lightning payments settled in seconds, no fees, and Speed Stacks letting them earn sats on everyday purchases. Stablecoin support (USDT, USDC) is also worth mentioning for the part of their audience that follows DeFi and wants stable value without the volatility.
+
+For the pitch, I'd focus on three points: first, Speed is the bridge from "I follow crypto" to "I use crypto," which fits their educational, knowledge-forward content style. Second, the play-to-earn and gaming angle in their tags pairs naturally with earning sats through Stacks. Third, this is their first brand deal, so we can build something authentic rather than a one-off read.
+
+Recommended CTA: a hands-on walkthrough video where they download Speed and make a real Lightning payment on camera.
+
+Avoid framing this as a trading or investing play — their audience wants utility, not speculation.

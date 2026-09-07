@@ -1,0 +1,12 @@
+Outreach Brief — Self Made Traders (TikTok)
+Segment: crypto-curious | Score: 59.2/100 | 38,100 followers
+------------------------------------------------------------
+Self Made Traders is a strong cultural fit for Speed even with a moderate 59.2 score. Their 38K-follower audience is crypto-curious — people who follow Bitcoin and Ethereum content because they're interested but haven't necessarily taken the leap into actually using crypto day to day. That gap is exactly where Speed lives. Their content skews heavily educational and crypto-first (67%), and a 10.2% engagement rate with an EQ of 9/10 tells me their followers actually trust what they say, which matters far more than raw reach here.
+
+For this audience, the hook isn't trading or speculation — it's simplicity and real-world utility. The strongest features to lead with are zero-fee instant Lightning payments and Speed Stacks, the rewards program that earns sats on everyday purchases. Stablecoin support (USDT, USDC) is a good secondary point for followers who like the idea of Bitcoin but get nervous about volatility.
+
+Three talking points worth building the pitch around: first, Speed bridges the "I'm interested but where do I start" problem their audience clearly has; second, earning sats on normal spending turns crypto curiosity into a daily habit with zero learning curve; third, it's a genuine iOS/Android app built for regular people, so they can demo it live rather than just talk theory.
+
+For the CTA, propose a single sponsored video where they set up the wallet on camera and make a real purchase with Speed Stacks, since this is their first brand deal and authenticity will carry it.
+
+Avoid framing Speed as a trading or investment play — that misreads their audience and undercuts the utility angle.
