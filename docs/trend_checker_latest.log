@@ -1,10 +1,10 @@
-[09:30:40] === Speed trend relevance checker (scheduled, Monday cron) ===
-[09:30:40] Wall-clock budget armed: 1200s (hard, SIGALRM).
-[09:30:40] Grading 30 candidate items from the latest pipeline output.
-[09:30:40] Deterministic invariants OK for all 30 items (fit=0.4/0.3/0.3, gate enforced).
-[09:30:40] Reviewer pass: claude-opus-5 (effort=high) over 30 items.
-[09:30:40] CHECKER ERROR: BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CgQcd1kf5wyEHyQkcZCVf'}
-[09:30:40] Traceback (most recent call last):
+[11:51:45] === Speed trend relevance checker (scheduled, Monday cron) ===
+[11:51:45] Wall-clock budget armed: 1200s (hard, SIGALRM).
+[11:51:45] Grading 30 candidate items from the latest pipeline output.
+[11:51:45] Deterministic invariants OK for all 30 items (fit=0.4/0.3/0.3, gate enforced).
+[11:51:45] Reviewer pass: claude-opus-5 (effort=high) over 30 items.
+[11:51:46] CHECKER ERROR: BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cge43UBGsDmPvd9MPeMB1'}
+[11:51:46] Traceback (most recent call last):
   File "/home/runner/work/speed-growth-intelligence/speed-growth-intelligence/intelligence/trend_checker.py", line 468, in check_pipeline_output
     verdict = run_check(items, log, deadline=started + budget)
   File "/home/runner/work/speed-growth-intelligence/speed-growth-intelligence/intelligence/trend_checker.py", line 334, in run_check
@@ -13,9 +13,9 @@
     ...<4 lines>...
         messages=messages,
     )
-  File "/opt/hostedtoolcache/Python/3.13.16/x64/lib/python3.13/site-packages/anthropic/_utils/_utils.py", line 294, in wrapper
+  File "/opt/hostedtoolcache/Python/3.13.17/x64/lib/python3.13/site-packages/anthropic/_utils/_utils.py", line 294, in wrapper
     return func(*args, **kwargs)
-  File "/opt/hostedtoolcache/Python/3.13.16/x64/lib/python3.13/site-packages/anthropic/resources/messages/messages.py", line 1008, in create
+  File "/opt/hostedtoolcache/Python/3.13.17/x64/lib/python3.13/site-packages/anthropic/resources/messages/messages.py", line 1008, in create
     return self._post(
            ~~~~~~~~~~^
         "/v1/messages",
@@ -25,12 +25,12 @@
         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     )
     ^
-  File "/opt/hostedtoolcache/Python/3.13.16/x64/lib/python3.13/site-packages/anthropic/_base_client.py", line 1374, in post
+  File "/opt/hostedtoolcache/Python/3.13.17/x64/lib/python3.13/site-packages/anthropic/_base_client.py", line 1374, in post
     return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
                            ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.13.16/x64/lib/python3.13/site-packages/anthropic/_base_client.py", line 1147, in request
+  File "/opt/hostedtoolcache/Python/3.13.17/x64/lib/python3.13/site-packages/anthropic/_base_client.py", line 1147, in request
     raise self._make_status_error_from_response(err.response) from None
-anthropic.BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CgQcd1kf5wyEHyQkcZCVf'}
+anthropic.BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cge43UBGsDmPvd9MPeMB1'}
 
-[09:30:40] 
-[09:30:40] === VERDICT: ERROR (corrections=0, tool_calls=None, turns=0, elapsed=0s of 1200s budget) ===
+[11:51:46] 
+[11:51:46] === VERDICT: ERROR (corrections=0, tool_calls=None, turns=0, elapsed=0s of 1200s budget) ===
