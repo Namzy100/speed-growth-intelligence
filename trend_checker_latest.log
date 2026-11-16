@@ -1,10 +1,10 @@
-[15:18:03] === Speed trend relevance checker (scheduled, Monday cron) ===
-[15:18:03] Wall-clock budget armed: 1200s (hard, SIGALRM).
-[15:18:03] Grading 17 candidate items from the latest pipeline output.
-[15:18:03] Deterministic invariants OK for all 17 items (fit=0.4/0.3/0.3, gate enforced).
-[15:18:03] Reviewer pass: claude-opus-5 (effort=high) over 17 items.
-[15:18:03] CHECKER ERROR: BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CgsaSHgvQs2coYHzocHgP'}
-[15:18:03] Traceback (most recent call last):
+[16:50:43] === Speed trend relevance checker (scheduled, Monday cron) ===
+[16:50:43] Wall-clock budget armed: 1200s (hard, SIGALRM).
+[16:50:43] Grading 14 candidate items from the latest pipeline output.
+[16:50:43] Deterministic invariants OK for all 14 items (fit=0.4/0.3/0.3, gate enforced).
+[16:50:43] Reviewer pass: claude-opus-5 (effort=high) over 14 items.
+[16:50:44] CHECKER ERROR: BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ch6xAcSD4MFaED3vesRMh'}
+[16:50:44] Traceback (most recent call last):
   File "/Users/namzysacc/Documents/Speed/intelligence/trend_checker.py", line 468, in check_pipeline_output
     verdict = run_check(items, log, deadline=started + budget)
   File "/Users/namzysacc/Documents/Speed/intelligence/trend_checker.py", line 334, in run_check
@@ -30,7 +30,7 @@
                            ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "/Users/namzysacc/Documents/Speed/venv/lib/python3.13/site-packages/anthropic/_base_client.py", line 1147, in request
     raise self._make_status_error_from_response(err.response) from None
-anthropic.BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CgsaSHgvQs2coYHzocHgP'}
+anthropic.BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ch6xAcSD4MFaED3vesRMh'}
 
-[15:18:03] 
-[15:18:03] === VERDICT: ERROR (corrections=0, tool_calls=None, turns=0, elapsed=0s of 1200s budget) ===
+[16:50:45] 
+[16:50:45] === VERDICT: ERROR (corrections=0, tool_calls=None, turns=0, elapsed=1s of 1200s budget) ===
